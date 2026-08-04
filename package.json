@@ -1,0 +1,23 @@
+{
+  "name": "openreel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": { "openreel": "bin/openreel.mjs" },
+  "scripts": {
+    "dev": "node server.mjs",
+    "test": "node --test",
+    "smoke:http": "node scripts/agent-smoke.mjs",
+    "smoke:cli": "node scripts/cli-smoke.mjs",
+    "smoke:render": "node scripts/render-smoke.mjs",
+    "smoke:render-negative": "node scripts/render-negative-smoke.mjs",
+    "smoke:http-negative": "node scripts/http-negative-smoke.mjs",
+    "smoke:cli-negative": "node scripts/cli-negative-smoke.mjs",
+    "smoke:workflow": "node scripts/terminal-smoke.mjs workflow",
+    "smoke:budget": "node scripts/terminal-smoke.mjs budget",
+    "smoke:auth": "node scripts/terminal-smoke.mjs auth",
+    "smoke:tenant": "node scripts/terminal-smoke.mjs tenant",
+    "smoke:import": "node scripts/terminal-smoke.mjs import",
+    "check": "npm test"
+  }
+}

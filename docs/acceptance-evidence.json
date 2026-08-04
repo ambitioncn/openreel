@@ -1,0 +1,24 @@
+{
+  "contract": "project-completion-contract.md@2.0",
+  "ledger": "project-acceptance-ledger.json@1",
+  "status": "implemented_and_verified",
+  "supersedes": "The former v1 implemented_and_verified decision and unmet=[] claim; authenticated LibTV review established additional terminal requirements.",
+  "locallyVerifiedThisCheckpoint": [
+    {"id":"P0.1","evidence":["schema-v3 nodes/edges/groups","persisted browser graph with edge/group selection and editing","per-node runs/resultVersions","graph restart/stale/cycle/invalid-position negatives","npm test 27/27"]},
+    {"id":"P0.2","evidence":["provider-neutral registry wired through createJob","credential-free local execution","credential/cost/invalid-result gates","structured failure/cancel tests"]},
+    {"id":"P0.3","evidence":["local ffmpeg 8.1 deterministic H.264 MP4 composition","AAC stream when timeline audio is present","render manifest/SHA-256/download","HTTP video/mp4 download smoke","ffprobe format/stream evidence","render and HTTP negative smokes"]},
+    {"id":"P0.4","evidence":["first-class CLI resources and structured help/errors","CLI video render/download replay: 20 positive and 3 negative commands","independent CLI negative smoke"]},
+    {"id":"P1.1","evidence":["executable script-storyboard-image-video test","shared-reference continuity and result provenance metadata"]},
+    {"id":"P1.2","evidence":["adapter capability schema drives browser fields","domain/API INCOMPATIBLE_PARAMETERS rejection","mode/aspect/resolution/duration/audio/reference negatives"]},
+    {"id":"P1.3","evidence":["search/filter history and asset APIs/UI","immutable node result versions","copy provenance and restart test"]},
+    {"id":"P1.5","evidence":["documented local template","openreel-workflow/v1 validation","SHA-256 reproducible import replay","no publishing"]},
+    {"id":"P2.1","evidence":["durable local pricing/wallet/reservation/settlement ledger","preflight quote and hard ceiling","concurrency, insufficient-budget, replay and restart tests"]},
+    {"id":"P2.2","evidence":["salted scrypt passwords and opaque sessions","team invite/membership/role conflicts","authorization negatives and non-production boundary"]},
+    {"id":"P1.4","evidence":["intent-preserving plan and ordered nodes","budget-backed run status/failure/cost","idempotent replay smoke"]},
+    {"id":"P2.3","evidence":["local object/database adapters","tenant isolation negatives","threat model, migration/backup guidance and production blockers"]}
+  ],
+  "verificationCommands": ["npm test","npm run smoke:http","npm run smoke:cli","npm run smoke:render","npm run smoke:render-negative","npm run smoke:http-negative","npm run smoke:cli-negative","npm run smoke:workflow","npm run smoke:budget","npm run smoke:auth","npm run smoke:tenant","npm run smoke:import"],
+  "unmet": [],
+  "blockers": [],
+  "productionClaims": []
+}

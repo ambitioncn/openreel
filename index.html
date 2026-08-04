@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenReel Workspace</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div><span class="mark">OR</span><strong>OpenReel</strong><span id="project-name" class="crumb">/ Loading…</span></div>
+        <div class="project-actions"><button id="rename-project">Rename</button><button id="archive-project">Archive</button><div class="status"><span></span> Local durable</div></div>
+      </header>
+      <aside class="toolbox" aria-label="Node toolbox">
+        <p class="eyebrow">ADD NODE</p>
+        <div id="node-tools"></div>
+        <p class="eyebrow">GRAPH</p>
+        <button id="create-edge" type="button">Connect selected nodes</button>
+        <button id="create-group" type="button">Group selected nodes</button>
+        <p class="hint">Drag space to pan<br />Wheel to zoom</p>
+      </aside>
+      <section id="viewport" class="viewport" aria-label="Infinite canvas">
+        <div id="canvas" class="canvas"></div>
+        <div class="zoom"><button id="zoom-out" aria-label="Zoom out">−</button><output id="zoom-label">100%</output><button id="zoom-in" aria-label="Zoom in">+</button></div>
+      </section>
+      <aside id="inspector" class="inspector" aria-label="Node inspector">
+        <p class="eyebrow">INSPECTOR</p>
+        <section class="workflow" aria-label="Creation workflow">
+          <button id="build-story" type="button">1 · Create story + shot</button>
+          <button id="export-edl" type="button">2 · Export timeline manifest</button>
+          <p id="workflow-state" role="status">Empty: create a story, generate media, then export.</p>
+          <a id="export-download" hidden download="openreel-edl.json">Download EDL</a>
+        </section>
+        <div id="inspector-empty">Select a node to edit its details.</div>
+        <form id="graph-form" hidden>
+          <label>Graph title<input id="graph-title" /></label>
+          <p id="graph-meta"></p>
+        </form>
+        <form id="node-form" hidden>
+          <label>Title<input id="node-title" name="title" /></label>
+          <label>Content<textarea id="node-content" name="content" rows="8"></textarea></label>
+          <p id="node-meta"></p>
+          <section><p class="eyebrow">RUN / RESULT HISTORY</p><ol id="node-history"></ol></section>
+          <section id="generation-panel" class="generation" hidden>
+            <label>Multimodal reference<input id="reference-upload" type="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,audio/mpeg,audio/wav" /></label>
+            <p id="upload-state" role="status">No reference uploaded.</p>
+            <label>Prompt<textarea id="generation-prompt" rows="3">A cinematic local simulation</textarea></label>
+            <fieldset id="parameter-fields"><legend>Model parameters</legend><label>Model<select id="generation-model"></select></label><label>Mode<select id="generation-mode"></select></label><label>Aspect<select id="generation-aspect"></select></label><label>Resolution<select id="generation-resolution"></select></label><label>Duration<select id="generation-duration"></select></label><label><input id="generation-audio" type="checkbox" /> Audio</label><output id="reference-limit"></output></fieldset>
+            <label class="failure-toggle"><input id="simulate-failure" type="checkbox" /> Simulate failure</label>
+            <button id="generate" type="button">Generate locally</button>
+            <p id="generation-state" role="status">Ready</p>
+            <a id="result-download" hidden>Download result</a>
+          </section>
+          <section><p class="eyebrow">ASSET LIBRARY</p><label>Search history/assets<input id="library-search" /></label><label>Kind<select id="library-kind"><option value="">All</option><option>image</option><option>video</option><option>audio</option></select></label><button id="library-refresh" type="button">Search</button><ol id="asset-library"></ol></section>
+        </form>
+      </aside>
+    </main>
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>
