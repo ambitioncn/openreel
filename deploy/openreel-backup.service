@@ -1,0 +1,17 @@
+[Unit]
+Description=Create an immutable OpenReel backup snapshot
+ConditionPathExists=/var/lib/openreel/openreel.sqlite
+
+[Service]
+Type=oneshot
+User=openreel
+Group=openreel
+WorkingDirectory=/opt/openreel/current
+UMask=0077
+ExecStart=/opt/openreel/current/deploy/run-backup
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadOnlyPaths=/var/lib/openreel
+ReadWritePaths=/var/backups/openreel

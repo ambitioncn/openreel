@@ -1,14 +1,16 @@
 # OpenReel
 
+Production persistence configuration and its single-VPS SQLite boundary are documented in [docs/production-persistence.md](docs/production-persistence.md). Local OPS-1/OPS-2 configuration, observability, backup/restore, deployment rehearsal, rollback, and human-gated DNS/HTTPS procedures are in [docs/production-operations.md](docs/production-operations.md).
+
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
-Project status: **v0.1.0 local product baseline complete**. The terminal contract and acceptance ledger are in `docs/project-completion-contract.md` and `docs/project-acceptance-ledger.json`.
+Project status: **v0.2.0 public multi-user production baseline live at [openreel.io](https://openreel.io)**. The production launch contract and acceptance ledger are in `docs/production-launch-contract.md` and `docs/production-acceptance-ledger.json`.
 
-OpenReel is an independently implemented, local-first AI-native video workspace. The complete local baseline joins project management, canvas nodes, structured storyboards, deterministic multimodal generation, timeline decisions, permissions, persistence, and a versioned agent API in one creation-to-export workflow. It uses no paid model or credential and makes no production codec or security claim.
+OpenReel is an independently implemented, AI-native video workspace. The production baseline joins public registration and secure sessions with project management, canvas nodes, structured storyboards, deterministic multimodal generation, timeline decisions, tenant isolation, durable persistence, and a versioned agent API in one creation-to-export workflow. It uses no paid model or credential; deterministic local providers validate the workflow but do not claim commercial AI output quality.
 
 ## Run and verify
 
-Requires Node.js 20+ and has no runtime dependencies.
+The production server requires a pinned Node.js 22 release (for built-in SQLite) and has no package runtime dependencies. Library consumers may still use the in-memory/legacy test stores on Node.js 20+.
 
 ```bash
 npm run dev
@@ -18,7 +20,7 @@ npm run smoke:cli
 npm run smoke:render
 ```
 
-The server atomically persists schema-versioned JSON to `.data/openreel.json`. Override it with `OPENREEL_DATA=/absolute/path/state.json`; setting a temporary path is recommended for test runs. A schema-v1 state is migrated to v2 on load and durably rewritten on the next mutation. The test suite uses isolated temporary directories.
+The server persists metadata to `.data/openreel.sqlite` and asset bytes to `.data/openreel.sqlite.assets`. Override these with `OPENREEL_DATABASE` and `OPENREEL_ASSETS`. `OPENREEL_LEGACY_JSON` selects a replayable v1-v3 JSON baseline to import into an empty database. See the production persistence document for transaction, migration, storage, and runtime limits. The legacy JSON store remains available only as a compatibility/test adapter.
 
 ## Product workflow
 
@@ -29,7 +31,7 @@ The server atomically persists schema-versioned JSON to `.data/openreel.json`. O
 5. Put generated assets into ordered video/audio tracks with trim and start ranges.
 6. Retrieve the `openreel-edl/v1` edit manifest or render and download a deterministic local H.264 MP4 preview with AAC audio when an audio track is present.
 
-The desktop UI retains canvas pan/zoom and node editing, adds project rename/archive and story/export controls, has loading/empty/error/success states, and collapses to a narrow-screen layout at 760 px. The local roles baseline uses `X-OpenReel-User`: owner/editor may write; viewer may read/export; only owner manages membership. This is local authorization, not production authentication.
+The desktop UI retains canvas pan/zoom and node editing, adds project rename/archive and story/export controls, has loading/empty/error/success states, and collapses to a narrow-screen layout at 760 px. In production, protected API routes derive identity from expiring server-side sessions; spoofed identity headers are ignored. Owner/editor may write, viewer may read/export, and only owners manage membership. Cookie mutations require CSRF protection.
 
 ## API and evidence
 

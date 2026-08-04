@@ -7,10 +7,27 @@
     <link rel="stylesheet" href="src/styles.css" />
   </head>
   <body>
-    <main class="app-shell">
+    <main id="auth-shell" class="auth-shell">
+      <section class="auth-card">
+        <div class="auth-brand"><span class="mark">OR</span><div><h1>OpenReel</h1><p>Build stories, shots, media, and final reels in one visual workspace.</p></div></div>
+        <div class="auth-tabs"><button id="show-login" class="active" type="button">Sign in</button><button id="show-register" type="button">Create account</button></div>
+        <form id="login-form" class="auth-form">
+          <label>Email<input id="login-email" type="email" autocomplete="email" required /></label>
+          <label>Password<input id="login-password" type="password" autocomplete="current-password" minlength="8" required /></label>
+          <button type="submit">Sign in</button>
+        </form>
+        <form id="register-form" class="auth-form" hidden>
+          <label>Email<input id="register-email" type="email" autocomplete="email" required /></label>
+          <label>Password<input id="register-password" type="password" autocomplete="new-password" minlength="8" required /></label>
+          <button type="submit">Create account</button>
+        </form>
+        <p id="auth-state" role="status">Sign in or create an account to continue.</p>
+      </section>
+    </main>
+    <main id="workspace-shell" class="app-shell" hidden>
       <header class="topbar">
         <div><span class="mark">OR</span><strong>OpenReel</strong><span id="project-name" class="crumb">/ Loading…</span></div>
-        <div class="project-actions"><button id="rename-project">Rename</button><button id="archive-project">Archive</button><div class="status"><span></span> Local durable</div></div>
+        <div class="project-actions"><button id="rename-project">Rename</button><button id="archive-project">Archive</button><button id="logout" type="button">Sign out</button><div class="status"><span></span> Secure workspace</div></div>
       </header>
       <aside class="toolbox" aria-label="Node toolbox">
         <p class="eyebrow">ADD NODE</p>

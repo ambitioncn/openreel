@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily OpenReel database and asset backup
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+RandomizedDelaySec=15m
+Unit=openreel-backup.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,32 @@
+[Unit]
+Description=OpenReel production service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=openreel
+Group=openreel
+WorkingDirectory=/opt/openreel/current
+EnvironmentFile=/etc/openreel/openreel.env
+ExecStart=/usr/bin/node /opt/openreel/current/server.mjs
+Restart=on-failure
+RestartSec=5s
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+LockPersonality=true
+CapabilityBoundingSet=
+SystemCallArchitectures=native
+ReadWritePaths=/var/lib/openreel
+
+[Install]
+WantedBy=multi-user.target

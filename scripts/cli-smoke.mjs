@@ -20,7 +20,7 @@ try {
   run = await call("run", "tick", run.id); run = await call("run", "tick", run.id); assert.equal(run.state, "succeeded");
   const canvas = await call("canvas", "get", project.id); assert.equal(canvas.edges.length, 1); assert.equal(canvas.nodes.find(n => n.id === video.id).runs.length, 1);
   assert.equal((await call("model-schema", "list")).length, 3);
-  const dir = mkdtempSync(join(tmpdir(), "openreel-cli-")), input = join(dir, "ref.png"), output = join(dir, "result.bin"); writeFileSync(input, "png");
+  const dir = mkdtempSync(join(tmpdir(), "openreel-cli-")), input = join(dir, "ref.png"), output = join(dir, "result.bin"); writeFileSync(input, Buffer.from("89504e470d0a1a0a00000000", "hex"));
   await call("upload", "--project", project.id, "--session", session.id, "--file", input, "--mime", "image/png");
   const asset = canvas.assets.find(a => a.id === run.assetId); await call("download", "--url", asset.downloadUrl, "--out", output); assert.ok(readFileSync(output).length > 0);
   await fetch(`${baseArgs[1]}/api/v1/projects/${project.id}/timeline`, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ version: 1, tracks: [{ kind: "video", clips: [{ assetId: run.assetId, inPoint: 0, outPoint: 1, start: 0 }] }] }) });

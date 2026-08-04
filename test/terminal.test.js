@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createPersistentStore } from "../src/core.js";
@@ -46,6 +46,24 @@ test("P2.2 password sessions, invites, membership roles and conflicts form a rea
   platform.register({ email: "viewer@example.test", password: "viewer-pass-123" }); const viewer = platform.login({ email: "viewer@example.test", password: "viewer-pass-123" }).token, invite = platform.invite(owner, team.id, { email: "viewer@example.test", role: "viewer" });
   assert.throws(() => platform.invite(owner, team.id, { email: "viewer@example.test", role: "viewer" }), e => e.code === "CONFLICT"); platform.acceptInvite(viewer, invite.id);
   assert.throws(() => platform.reserve(viewer, team.id, { kind: "image" }), e => e.code === "FORBIDDEN"); assert.throws(() => platform.authenticate("bad"), e => e.code === "UNAUTHENTICATED"); assert.equal(platform.securityBoundary().productionReady, false);
+});
+
+test("production sessions are hashed at rest, expire, rotate, and revoke", () => {
+  let clock = Date.parse("2026-08-04T00:00:00.000Z");
+  const file = join(mkdtempSync(join(tmpdir(), "openreel-session-")), "platform.json");
+  const platform = createPlatform({ file, now: () => new Date(clock).toISOString(), sessionTtlMs: 1000 });
+  platform.register({ email: "session@example.test", password: "session-pass-123" });
+  const first = platform.login({ email: "session@example.test", password: "session-pass-123" });
+  const persisted = JSON.parse(readFileSync(file, "utf8"));
+  assert.equal(JSON.stringify(persisted).includes(first.token), false);
+  assert.equal(platform.authenticate(first.token).email, "session@example.test");
+  const rotated = platform.rotateSession(first.token);
+  assert.throws(() => platform.authenticate(first.token), e => e.code === "UNAUTHENTICATED");
+  platform.logout(rotated.token);
+  assert.throws(() => platform.authenticate(rotated.token), e => e.code === "UNAUTHENTICATED");
+  const expiring = platform.login({ email: "session@example.test", password: "session-pass-123" });
+  clock += 1001;
+  assert.throws(() => platform.authenticate(expiring.token), e => e.code === "UNAUTHENTICATED");
 });
 
 test("P1.4 automation preserves intent, exposes plan/status/failure/cost and replays idempotently", () => {

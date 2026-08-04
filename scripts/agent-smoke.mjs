@@ -4,13 +4,13 @@ import { createOpenReelServer } from "../server.mjs";
 const server = createOpenReelServer();
 await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
 const base = `http://127.0.0.1:${server.address().port}`;
-async function json(path, options = {}) { const response = await fetch(`${base}${path}`, { headers: { "content-type": "application/json", ...options.headers }, ...options }); const value = await response.json(); assert.equal(response.ok, true, `${response.status} ${JSON.stringify(value)}`); return value; }
+async function json(path, options = {}) { const response = await fetch(`${base}${path}`, { ...options, headers: { "content-type": "application/json", ...options.headers } }); const value = await response.json(); assert.equal(response.ok, true, `${response.status} ${JSON.stringify(value)}`); return value; }
 async function generate(sessionId, kind, referenceAssetIds = []) { const node = await json(`/api/v1/sessions/${sessionId}/nodes`, { method: "POST", body: JSON.stringify({ type: kind, title: `${kind} result` }) }); let job = await json(`/api/v1/sessions/${sessionId}/jobs`, { method: "POST", body: JSON.stringify({ nodeId: node.id, prompt: `deterministic ${kind}`, referenceAssetIds }) }); let cursor = 0; while (!new Set(["succeeded", "failed", "canceled"]).has(job.state)) { job = await json(`/api/v1/jobs/${job.id}/tick`, { method: "POST" }); const progress = await json(`/api/v1/jobs/${job.id}/progress?afterSeq=${cursor}`); assert.ok(progress.events.every(e => e.seq > cursor)); cursor = progress.nextSeq; } return { job, cursor }; }
 try {
   const project = await json("/api/v1/projects", { method: "POST", body: JSON.stringify({ name: "Agent creation-to-export" }) });
   const session = await json(`/api/v1/projects/${project.id}/sessions`, { method: "POST", body: JSON.stringify({ name: "Principal" }) });
   const story = await json(`/api/v1/projects/${project.id}/story`, { method: "PUT", body: JSON.stringify({ title: "Demo", synopsis: "Local workflow", scenes: [{ title: "Reveal", summary: "Product enters frame" }] }) });
-  const upload = await fetch(`${base}/api/v1/projects/${project.id}/sessions/${session.id}/assets/references`, { method: "POST", headers: { "content-type": "image/png", "x-filename": "look.png" }, body: Buffer.from("deterministic-reference") }); assert.equal(upload.status, 201); const reference = await upload.json();
+  const upload = await fetch(`${base}/api/v1/projects/${project.id}/sessions/${session.id}/assets/references`, { method: "POST", headers: { "content-type": "image/png", "x-filename": "look.png" }, body: Buffer.concat([Buffer.from("89504e470d0a1a0a", "hex"), Buffer.from("deterministic-reference")]) }); assert.equal(upload.status, 201); const reference = await upload.json();
   const storyboard = await json(`/api/v1/projects/${project.id}/storyboard`, { method: "PUT", body: JSON.stringify({ shots: [{ sceneId: story.scenes[0].id, prompt: "Hero reveal", duration: 4, referenceAssetIds: [reference.id] }] }) });
   const video = await generate(session.id, "video", [reference.id]);
   const audio = await generate(session.id, "audio");

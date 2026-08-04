@@ -1,0 +1,15 @@
+openreel.io, www.openreel.io {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+	@internal path /metrics /health/ready
+	respond @internal 404
+	reverse_proxy 127.0.0.1:4173 {
+		header_up Host {host}
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Request-ID {http.request.header.X-Request-ID}
+	}
+}
