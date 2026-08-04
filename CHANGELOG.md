@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.3.0 — 2026-08-04
+
+Manual API access approval and usage-control release.
+
+### Highlights
+
+- Add user-submitted API access applications with durable pending, approved, rejected, and stopped states.
+- Add a dedicated administrator page for reviewing applications, assigning hard limits and expiries, rejecting requests, and stopping access.
+- Issue one-time `or_live_...` platform keys only after approval; persist only hashes and safe prefixes.
+- Preserve token reservation and settlement accounting, and suspend all active keys when limits are exhausted or access is stopped.
+- Add schema v3-to-v4 migration, audit fields, protected administrator endpoints, and end-to-end negative tests.
+
+### Scope
+
+This release uses manual administrator approval while payment integration is unavailable. Provider credentials and real Volcengine inference remain separate follow-up work.
+
 ## v0.2.0 — 2026-08-04
 
 First public multi-user production baseline, deployed at [openreel.io](https://openreel.io).

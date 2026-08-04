@@ -161,6 +161,24 @@ test("production HTTP binds project identity to session cookie and enforces CSRF
   assert.equal(project.members[0].userId, loginBody.account.id);
 });
 
+test("API key applications require user submission and administrator approval or stop", async (t) => {
+  const adminKey = "administrator-secret-key-for-tests", server = createOpenReelServer(undefined, undefined, { production: true, secureCookies: false, adminToken: adminKey, rateLimit: { max: 1000 } });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`, email = "applicant@example.test", password = "applicant-pass-123";
+  await fetch(`${base}/api/v1/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, password }) });
+  const login = await fetch(`${base}/api/v1/auth/login`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, password }) }), loginBody = await login.json();
+  const cookieHeader = login.headers.getSetCookie().map(x => x.split(";", 1)[0]).join("; "), userHeaders = { "content-type": "application/json", cookie: cookieHeader, "x-csrf-token": loginBody.csrfToken };
+  const submitted = await fetch(`${base}/api/v1/key-applications`, { method: "POST", headers: userHeaders, body: JSON.stringify({ reason: "Render customer videos", requestedLimitMicros: 1200 }) }), application = await submitted.json();
+  assert.equal(submitted.status, 201); assert.equal(application.status, "pending");
+  const forbidden = await fetch(`${base}/api/v1/admin/key-applications`); assert.equal(forbidden.status, 403);
+  const listed = await fetch(`${base}/api/v1/admin/key-applications?status=pending`, { headers: { "x-openreel-admin-key": adminKey } }); assert.equal((await listed.json())[0].id, application.id);
+  const approved = await fetch(`${base}/api/v1/admin/key-applications/${application.id}/approve`, { method: "POST", headers: { "content-type": "application/json", "x-openreel-admin-key": adminKey }, body: JSON.stringify({ hardLimitMicros: 1200, periodEndsAt: "2099-01-01T00:00:00.000Z", reviewNote: "Approved" }) }); assert.equal(approved.status, 201);
+  const keyResponse = await fetch(`${base}/api/v1/api-keys`, { method: "POST", headers: userHeaders, body: JSON.stringify({ name: "primary" }) }), issued = await keyResponse.json(); assert.equal(keyResponse.status, 201); assert.match(issued.key, /^or_live_/);
+  const stopped = await fetch(`${base}/api/v1/admin/key-applications/${application.id}/stop`, { method: "POST", headers: { "content-type": "application/json", "x-openreel-admin-key": adminKey }, body: JSON.stringify({ reviewNote: "Operator stop" }) }); assert.equal(stopped.status, 201);
+  const keyStatus = await fetch(`${base}/api/v1/key/status`, { headers: { "x-openreel-api-key": issued.key } }); assert.equal(keyStatus.status, 401);
+  const adminPage = await fetch(`${base}/admin.html`); assert.equal(adminPage.status, 200); assert.match(await adminPage.text(), /API access administration/);
+});
+
 test("production protected-route matrix rejects anonymous, bad cookie, bad bearer, and spoofed identity", async (t) => {
   const server = createOpenReelServer(undefined, undefined, { production: true, rateLimit: { max: 1000 } });
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));

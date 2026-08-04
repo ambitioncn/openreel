@@ -35,6 +35,9 @@ The desktop UI retains canvas pan/zoom and node editing, adds project rename/arc
 
 ## API and evidence
 
+Paid platform API keys, token metering, reservations and hard spending limits are
+documented in [`docs/api-key-billing.md`](docs/api-key-billing.md).
+
 All integrations should use `/api/v1`; legacy unversioned lifecycle routes remain for the accepted UI baseline. See [Agent Skill](docs/agent-skill.md) for the complete route and replay contract, [acceptance evidence](docs/acceptance-evidence.json) for item-by-item total-contract proof, and the [LibTV parity matrix](docs/libtv-parity-matrix.md) for carefully bounded external evidence.
 
 Generation fixtures validate deterministic routing, lifecycle, byte persistence and interchange—not model quality. Generated node video bytes remain boundary fixtures, audio is a minimal WAV fixture, and images are deterministic SVGs. Final timeline export uses local ffmpeg 8.1 to create a playable deterministic preview composition; no production codec quality is claimed.

@@ -27,7 +27,7 @@
     <main id="workspace-shell" class="app-shell" hidden>
       <header class="topbar">
         <div><span class="mark">OR</span><strong>OpenReel</strong><span id="project-name" class="crumb">/ Loading…</span></div>
-        <div class="project-actions"><button id="rename-project">Rename</button><button id="archive-project">Archive</button><button id="logout" type="button">Sign out</button><div class="status"><span></span> Secure workspace</div></div>
+        <div class="project-actions"><button id="api-access" type="button">API access</button><button id="rename-project">Rename</button><button id="archive-project">Archive</button><button id="logout" type="button">Sign out</button><div class="status"><span></span> Secure workspace</div></div>
       </header>
       <aside class="toolbox" aria-label="Node toolbox">
         <p class="eyebrow">ADD NODE</p>
@@ -73,6 +73,23 @@
         </form>
       </aside>
     </main>
+    <dialog id="api-access-dialog" class="access-dialog">
+      <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
+      <h2>API access</h2>
+      <p>Submit an application. An administrator reviews the requested usage limit before API keys can be created.</p>
+      <form id="key-application-form" class="auth-form">
+        <label>Why do you need access?<textarea id="key-application-reason" maxlength="1000" required></textarea></label>
+        <label>Requested usage limit (microcredits)<input id="key-application-limit" type="number" min="1" step="1" value="1000000" required /></label>
+        <button type="submit">Submit application</button>
+      </form>
+      <p id="key-application-state" role="status">Loading applications…</p>
+      <ol id="key-application-list"></ol>
+      <section id="key-issue-panel" hidden>
+        <button id="create-api-key" type="button">Create API key</button>
+        <p id="issued-key" role="status">The full key is shown once after creation.</p>
+        <ol id="api-key-list"></ol>
+      </section>
+    </dialog>
     <script type="module" src="src/app.js"></script>
   </body>
 </html>

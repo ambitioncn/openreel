@@ -47,5 +47,6 @@ export function validateProductionConfig(env = process.env) {
   const paths = required.map(name => resolve(env[name]));
   if (new Set(paths).size !== paths.length) throw new Error("database, asset, and platform paths must be distinct");
   if (!env.OPENREEL_SESSION_SECRET || env.OPENREEL_SESSION_SECRET.length < 32 || /^(change|replace|example|test)/i.test(env.OPENREEL_SESSION_SECRET)) throw new Error("OPENREEL_SESSION_SECRET must be a non-placeholder value of at least 32 characters");
+  if (!env.OPENREEL_ADMIN_KEY || env.OPENREEL_ADMIN_KEY.length < 32 || /^(change|replace|example|test)/i.test(env.OPENREEL_ADMIN_KEY)) throw new Error("OPENREEL_ADMIN_KEY must be a non-placeholder value of at least 32 characters");
   return { port, host, databaseFile: paths[0], assetRoot: paths[1], platformFile: paths[2] };
 }

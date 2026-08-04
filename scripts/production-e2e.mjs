@@ -10,7 +10,7 @@ import { createBackup, verifyBackup } from "./backup.mjs";
 const root = mkdtempSync(join(tmpdir(), "openreel-production-e2e-"));
 const paths = { database: join(root, "data/openreel.sqlite"), assets: join(root, "data/assets"), platform: join(root, "data/platform.json") };
 const port = String(20000 + Math.floor(Math.random() * 20000)), base = `http://127.0.0.1:${port}`;
-const env = { ...process.env, NODE_ENV: "production", HOST: "127.0.0.1", PORT: port, OPENREEL_DATABASE: paths.database, OPENREEL_ASSETS: paths.assets, OPENREEL_PLATFORM: paths.platform, OPENREEL_SESSION_SECRET: randomBytes(32).toString("hex") };
+const env = { ...process.env, NODE_ENV: "production", HOST: "127.0.0.1", PORT: port, OPENREEL_DATABASE: paths.database, OPENREEL_ASSETS: paths.assets, OPENREEL_PLATFORM: paths.platform, OPENREEL_SESSION_SECRET: randomBytes(32).toString("hex"), OPENREEL_ADMIN_KEY: randomBytes(32).toString("hex") };
 let child;
 async function start() {
   child = spawn(process.execPath, [new URL("../server.mjs", import.meta.url).pathname], { env, stdio: ["ignore", "ignore", "pipe"] });

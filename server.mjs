@@ -23,7 +23,7 @@ function sniffMime(bytes) { if (bytes.length >= 8 && bytes.subarray(0, 8).equals
 function uploadFilename(value, extension) { if (typeof value !== "string" || !value.trim() || value.length > 128 || value.includes("/") || value.includes("\\") || value.includes("\0") || [".", ".."].includes(value.trim())) throw new DomainError("INVALID_FILENAME", "a safe filename is required"); const name = value.trim(); if (!new RegExp(`\\.${extension}$`, "i").test(name)) throw new DomainError("INVALID_FILENAME", `filename must end in .${extension}`); return name; }
 function createRateLimiter({ max = 60, windowMs = 60_000, now = Date.now, key = req => req.socket.remoteAddress || "unknown" } = {}) { const entries = new Map(); return req => { const id = key(req), time = Number(now()), old = entries.get(id); const entry = !old || time - old.startedAt >= windowMs ? { startedAt: time, count: 0 } : old; entry.count += 1; entries.set(id, entry); if (entry.count > max) throw new DomainError("RATE_LIMITED", "request rate limit exceeded", 429, { retryAfterSeconds: Math.max(1, Math.ceil((windowMs - (time - entry.startedAt)) / 1000)) }); }; }
 
-export function createOpenReelServer(store = createMemoryStore(), platform = createPlatform(), { production = false, secureCookies = production, jsonLimit = 1024 * 1024, rateLimit = {}, logger = () => {}, readiness = () => ({ database: "ok", assets: "ok" }), metrics = createMetrics() } = {}) {
+export function createOpenReelServer(store = createMemoryStore(), platform = createPlatform(), { production = false, secureCookies = production, jsonLimit = 1024 * 1024, rateLimit = {}, logger = () => {}, readiness = () => ({ database: "ok", assets: "ok" }), metrics = createMetrics(), adminToken = null } = {}) {
   const limit = createRateLimiter(rateLimit), log = (event, fields) => logger(event, redact(fields));
   return createServer(async (req, res) => {
     const requestId = correlationId(req.headers["x-request-id"]); res.setHeader("x-request-id", requestId); metrics.begin();
@@ -36,7 +36,9 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       if (req.method === "GET" && url.pathname === "/metrics") { let ready = true; try { readiness(); } catch { ready = false; } res.writeHead(200, { "content-type": "text/plain; version=0.0.4; charset=utf-8", "cache-control": "no-store" }); return res.end(metrics.render(ready)); }
       const versioned = parts[0] === "api" && parts[1] === "v1", api = versioned ? parts.slice(2) : parts.slice(1), input = async () => body(req, jsonLimit), jar = cookies(req);
       const token = req.headers.authorization?.replace(/^Bearer\s+/i, "") || jar.openreel_session;
-      const publicRoute = api[0] === "auth" && ["register", "login"].includes(api[1]);
+      const keyRoute = api[0] === "key" && api[1] === "status" && req.method === "GET";
+      const adminRoute = api[0] === "admin";
+      const publicRoute = (api[0] === "auth" && ["register", "login"].includes(api[1])) || keyRoute || adminRoute;
       if (production && url.pathname.startsWith("/api/")) limit(req);
       if (production && url.pathname.startsWith("/api/") && !publicRoute && req.method !== "OPTIONS") {
         if (jar.openreel_session && !["GET", "HEAD", "OPTIONS"].includes(req.method) && !safeEqual(req.headers["x-csrf-token"], jar.openreel_csrf)) throw new DomainError("CSRF_REJECTED", "valid CSRF token required", 403);
@@ -45,7 +47,8 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       const protectedApi = production && url.pathname.startsWith("/api/") && !publicRoute;
       const who = protectedApi ? platform.authenticate(token).id : "local-owner";
       let out;
-      if (req.method === "POST" && api[0] === "users" && api.length === 1) out = store.createUser(await input());
+      if (keyRoute) { const keySecret = req.headers["x-openreel-api-key"] || req.headers.authorization?.replace(/^Bearer\s+/i, ""); const auth = platform.authenticateApiKey(keySecret); out = { key: auth.apiKey, accountId: auth.account.id, plan: auth.subscription.plan, hardLimitMicros: auth.subscription.hardLimitMicros, spentMicros: auth.subscription.spentMicros, reservedMicros: auth.subscription.reservedMicros, remainingMicros: Math.max(0, auth.subscription.hardLimitMicros - auth.subscription.spentMicros - auth.subscription.reservedMicros), periodEndsAt: auth.subscription.periodEndsAt }; }
+      else if (req.method === "POST" && api[0] === "users" && api.length === 1) out = store.createUser(await input());
       else if (req.method === "GET" && api[0] === "models" && api.length === 1) out = store.listModels();
       else if (req.method === "POST" && api[0] === "auth" && api[1] === "register") { const account = platform.register(await input()); store.createUser({ id: account.id, name: account.email }); out = account; }
       else if (req.method === "POST" && api[0] === "auth" && api[1] === "login") { const session = platform.login(await input()), csrf = randomBytes(24).toString("base64url"); return json(res, 200, { account: platform.authenticate(session.token), csrfToken: csrf, expiresAt: session.expiresAt }, { "set-cookie": [sessionCookie("openreel_session", session.token, session, secureCookies), sessionCookie("openreel_csrf", csrf, session, secureCookies)] }); }
@@ -53,6 +56,20 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       else if (req.method === "POST" && api[0] === "auth" && api[1] === "rotate") { const session = platform.rotateSession(token), csrf = randomBytes(24).toString("base64url"); return json(res, 200, { account: platform.authenticate(session.token), csrfToken: csrf, expiresAt: session.expiresAt }, { "set-cookie": [sessionCookie("openreel_session", session.token, session, secureCookies), sessionCookie("openreel_csrf", csrf, session, secureCookies)] }); }
       else if (req.method === "GET" && api[0] === "auth" && api[1] === "csrf") { const account = platform.authenticate(token), csrf = randomBytes(24).toString("base64url"), createdAt = new Date().toISOString(), expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); return json(res, 200, { account, csrfToken: csrf }, { "set-cookie": sessionCookie("openreel_csrf", csrf, { createdAt, expiresAt }, secureCookies) }); }
       else if (req.method === "GET" && api[0] === "auth" && api[1] === "me") out = platform.authenticate(token);
+      else if (adminRoute) {
+        if (!adminToken || !safeEqual(req.headers["x-openreel-admin-key"], adminToken)) throw new DomainError("FORBIDDEN", "administrator authorization required", 403);
+        if (req.method === "GET" && api[1] === "key-applications" && api.length === 2) out = platform.listKeyApplications({ status: url.searchParams.get("status") || undefined });
+        else if (req.method === "POST" && api[1] === "key-applications" && api[3] === "approve") out = platform.approveKeyApplication(api[2], await input());
+        else if (req.method === "POST" && api[1] === "key-applications" && api[3] === "reject") out = platform.rejectKeyApplication(api[2], await input());
+        else if (req.method === "POST" && api[1] === "key-applications" && api[3] === "stop") out = platform.stopKeyAccess(api[2], await input());
+        else throw new DomainError("NOT_FOUND", "administrator route not found", 404);
+      }
+      else if (req.method === "POST" && api[0] === "key-applications" && api.length === 1) out = platform.submitKeyApplication(token, await input());
+      else if (req.method === "GET" && api[0] === "key-applications" && api.length === 1) out = platform.listOwnKeyApplications(token);
+      else if (req.method === "POST" && api[0] === "api-keys" && api.length === 1) out = platform.createApiKey(token, await input());
+      else if (req.method === "GET" && api[0] === "api-keys" && api.length === 1) out = platform.listApiKeys(token);
+      else if (req.method === "DELETE" && api[0] === "api-keys" && api.length === 2) out = platform.revokeApiKey(token, api[1]);
+      else if (req.method === "GET" && api[0] === "billing" && api[1] === "usage") out = platform.usageStatus(token);
       else if (req.method === "POST" && api[0] === "teams" && api.length === 1) out = platform.createTeam(token, await input());
       else if (req.method === "POST" && api[0] === "teams" && api[2] === "invites") out = platform.invite(token, api[1], await input());
       else if (req.method === "POST" && api[0] === "invites" && api[2] === "accept") out = platform.acceptInvite(token, api[1]);
@@ -106,7 +123,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const config = production ? validateProductionConfig() : { port: Number(process.env.PORT || 4173), host: "127.0.0.1", databaseFile: process.env.OPENREEL_DATABASE || join(root, ".data", "openreel.sqlite"), assetRoot: process.env.OPENREEL_ASSETS || join(root, ".data", "assets"), platformFile: process.env.OPENREEL_PLATFORM || join(root, ".data", "platform.json") };
   const backend = createSqliteBackend(config.databaseFile, { legacyJson: process.env.OPENREEL_LEGACY_JSON || null, assetRoot: config.assetRoot });
   const logger = createLogger();
-  const server = createOpenReelServer(createDatabaseStore(backend), createPlatform({ file: config.platformFile }), { production, secureCookies: production, readiness: backend.health, logger });
+  const server = createOpenReelServer(createDatabaseStore(backend), createPlatform({ file: config.platformFile }), { production, secureCookies: production, readiness: backend.health, logger, adminToken: process.env.OPENREEL_ADMIN_KEY || null });
   server.on("error", error => { logger("startup_error", { error: error.message }); process.exitCode = 1; });
   server.listen(config.port, config.host, () => logger("service_started", { host: config.host, port: config.port }));
 }

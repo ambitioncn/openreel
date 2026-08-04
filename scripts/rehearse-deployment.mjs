@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { spawn } from "node:child_process";
 
 const root = mkdtempSync(join(tmpdir(), "openreel-rehearsal-")), port = String(20000 + Math.floor(Math.random() * 20000));
-const env = { ...process.env, NODE_ENV: "production", HOST: "127.0.0.1", PORT: port, OPENREEL_DATABASE: join(root, "data/openreel.sqlite"), OPENREEL_ASSETS: join(root, "data/assets"), OPENREEL_PLATFORM: join(root, "data/platform.json"), OPENREEL_SESSION_SECRET: "x".repeat(40) };
+const env = { ...process.env, NODE_ENV: "production", HOST: "127.0.0.1", PORT: port, OPENREEL_DATABASE: join(root, "data/openreel.sqlite"), OPENREEL_ASSETS: join(root, "data/assets"), OPENREEL_PLATFORM: join(root, "data/platform.json"), OPENREEL_SESSION_SECRET: "x".repeat(40), OPENREEL_ADMIN_KEY: "a".repeat(40) };
 if (process.getuid?.() === 0) throw new Error("deployment rehearsal must run unprivileged");
 const child = spawn(process.execPath, [new URL("../server.mjs", import.meta.url).pathname], { env, stdio: ["ignore", "pipe", "pipe"] });
 let stderr = ""; child.stderr.on("data", chunk => { stderr += chunk; });

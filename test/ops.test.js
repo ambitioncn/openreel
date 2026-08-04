@@ -13,7 +13,7 @@ import { createOpenReelServer } from "../server.mjs";
 
 const exec = promisify(execFile);
 const fixture = Buffer.from("89504e470d0a1a0a00000000", "hex");
-const baseEnv = root => ({ NODE_ENV: "production", HOST: "127.0.0.1", PORT: "4173", OPENREEL_DATABASE: join(root, "openreel.sqlite"), OPENREEL_ASSETS: join(root, "assets"), OPENREEL_PLATFORM: join(root, "platform.json"), OPENREEL_SESSION_SECRET: "x".repeat(40) });
+const baseEnv = root => ({ NODE_ENV: "production", HOST: "127.0.0.1", PORT: "4173", OPENREEL_DATABASE: join(root, "openreel.sqlite"), OPENREEL_ASSETS: join(root, "assets"), OPENREEL_PLATFORM: join(root, "platform.json"), OPENREEL_SESSION_SECRET: "x".repeat(40), OPENREEL_ADMIN_KEY: "a".repeat(40) });
 
 test("OPS-1 production configuration fails fast on secrets, binding, ports, and paths", () => {
   const root = mkdtempSync(join(tmpdir(), "openreel-config-")), valid = baseEnv(root);

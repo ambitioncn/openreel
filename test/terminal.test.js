@@ -66,6 +66,43 @@ test("production sessions are hashed at rest, expire, rotate, and revoke", () =>
   assert.throws(() => platform.authenticate(expiring.token), e => e.code === "UNAUTHENTICATED");
 });
 
+test("paid API keys are one-time secrets, meter tokens, enforce reservations and suspend at the hard limit", () => {
+  const file = join(mkdtempSync(join(tmpdir(), "openreel-api-key-")), "platform.json");
+  let platform = createPlatform({ file }), token = account(platform, "paid@example.test"), accountId = platform.authenticate(token).id;
+  assert.throws(() => platform.createApiKey(token), e => e.code === "PAYMENT_REQUIRED");
+  const application = platform.submitKeyApplication(token, { reason: "Production rendering", requestedLimitMicros: 1000 });
+  assert.equal(application.accountId, accountId); assert.equal(application.status, "pending");
+  assert.throws(() => platform.submitKeyApplication(token, { reason: "Duplicate", requestedLimitMicros: 1000 }), e => e.code === "CONFLICT");
+  platform.approveKeyApplication(application.id, { plan: "manual", hardLimitMicros: 1000, periodEndsAt: "2099-01-01T00:00:00.000Z", reviewNote: "Approved" });
+  const issued = platform.createApiKey(token, { name: "production" });
+  assert.match(issued.key, /^or_live_/); assert.equal(platform.listApiKeys(token)[0].key, undefined);
+  assert.equal(JSON.stringify(JSON.parse(readFileSync(file, "utf8"))).includes(issued.key), false);
+  const first = platform.reserveUsage(issued.key, { model: "doubao-seed-1.8", maxCostMicros: 600, idempotencyKey: "request-1" });
+  assert.equal(platform.reserveUsage(issued.key, { model: "doubao-seed-1.8", maxCostMicros: 600, idempotencyKey: "request-1" }).id, first.id);
+  assert.throws(() => platform.reserveUsage(issued.key, { model: "seedance", maxCostMicros: 500, idempotencyKey: "too-large" }), e => e.code === "BUDGET_EXHAUSTED");
+  const usage = platform.settleUsage(issued.key, first.id, { inputTokens: 250000, outputTokens: 250000, inputMicrosPerMillion: 1000, outputMicrosPerMillion: 1400 });
+  assert.equal(usage.costMicros, 600);
+  const second = platform.reserveUsage(issued.key, { model: "seedream", maxCostMicros: 400, idempotencyKey: "request-2" });
+  platform.settleUsage(issued.key, second.id, { inputTokens: 400000, outputTokens: 0, inputMicrosPerMillion: 1000, outputMicrosPerMillion: 0 });
+  assert.equal(platform.listApiKeys(token)[0].status, "suspended");
+  assert.throws(() => platform.authenticateApiKey(issued.key), e => e.code === "INVALID_API_KEY");
+  platform = createPlatform({ file }); token = platform.login({ email: "paid@example.test", password: "local-pass-123" }).token;
+  assert.equal(platform.usageStatus(token).subscription.spentMicros, 1000);
+});
+
+test("administrators can reject applications and stop approved key access", () => {
+  const platform = createPlatform(), approvedToken = account(platform, "approved@example.test"), rejectedToken = account(platform, "rejected@example.test");
+  const rejected = platform.submitKeyApplication(rejectedToken, { reason: "Evaluation", requestedLimitMicros: 500 });
+  assert.equal(platform.rejectKeyApplication(rejected.id, { reviewNote: "More information required" }).status, "rejected");
+  assert.throws(() => platform.createApiKey(rejectedToken), e => e.code === "PAYMENT_REQUIRED");
+  const approved = platform.submitKeyApplication(approvedToken, { reason: "Video API", requestedLimitMicros: 800 });
+  platform.approveKeyApplication(approved.id, { hardLimitMicros: 800, periodEndsAt: "2099-01-01T00:00:00.000Z" });
+  const issued = platform.createApiKey(approvedToken);
+  const stopped = platform.stopKeyAccess(approved.id, { reviewNote: "Manual account stop" });
+  assert.equal(stopped.application.status, "stopped"); assert.equal(stopped.keys[0].status, "suspended");
+  assert.throws(() => platform.authenticateApiKey(issued.key), e => e.code === "INVALID_API_KEY");
+});
+
 test("P1.4 automation preserves intent, exposes plan/status/failure/cost and replays idempotently", () => {
   const platform = createPlatform(), token = account(platform), team = platform.createTeam(token, { name: "Automation" }), imported = platform.importWorkflow(token, team.id, workflow), plan = platform.planAutomation(token, team.id, { intent: "Keep the red hero consistent", workflowId: imported.id });
   const run = platform.runAutomation(token, team.id, plan, "run-1"), replay = platform.runAutomation(token, team.id, plan, "run-1"); assert.equal(run.id, replay.id); assert.equal(run.intent, plan.intent); assert.equal(run.status, "succeeded"); assert.equal(run.cost, 30);
