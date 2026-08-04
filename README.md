@@ -1,5 +1,7 @@
 # OpenReel
 
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+
 Project status: **v0.1.0 local product baseline complete**. The terminal contract and acceptance ledger are in `docs/project-completion-contract.md` and `docs/project-acceptance-ledger.json`.
 
 OpenReel is an independently implemented, local-first AI-native video workspace. The complete local baseline joins project management, canvas nodes, structured storyboards, deterministic multimodal generation, timeline decisions, permissions, persistence, and a versioned agent API in one creation-to-export workflow. It uses no paid model or credential and makes no production codec or security claim.
@@ -34,3 +36,7 @@ The desktop UI retains canvas pan/zoom and node editing, adds project rename/arc
 All integrations should use `/api/v1`; legacy unversioned lifecycle routes remain for the accepted UI baseline. See [Agent Skill](docs/agent-skill.md) for the complete route and replay contract, [acceptance evidence](docs/acceptance-evidence.json) for item-by-item total-contract proof, and the [LibTV parity matrix](docs/libtv-parity-matrix.md) for carefully bounded external evidence.
 
 Generation fixtures validate deterministic routing, lifecycle, byte persistence and interchange—not model quality. Generated node video bytes remain boundary fixtures, audio is a minimal WAV fixture, and images are deterministic SVGs. Final timeline export uses local ffmpeg 8.1 to create a playable deterministic preview composition; no production codec quality is claimed.
+
+## License
+
+OpenReel is licensed under the [GNU Affero General Public License v3.0](LICENSE). If you modify OpenReel and make it available to users over a network, you must offer those users access to the corresponding source code as required by the license.

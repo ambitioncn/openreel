@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.1 — 2026-08-04
+
+- License OpenReel under the GNU Affero General Public License v3.0 only.
+- Document the network-source obligation in the README and package metadata.
+
 ## v0.1.0 — 2026-08-04
 
 First public local-product baseline of OpenReel.
