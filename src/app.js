@@ -1,4 +1,5 @@
 import { NODE_TYPES } from "./model.js";
+import { TUTORIALS, tutorialById } from "./tutorials.js";
 
 const icons = { text: "T", image: "▧", video: "▶", audio: "♪", script: "≡" };
 let snapshot = { nodes: [], edges: [], groups: [] }, models = [], selected = [], selectedGraph = null, view = { x: 0, y: 0, scale: 1 }, projectId, sessionId, csrfToken = "", workspaceStarted = false;
@@ -37,6 +38,34 @@ $("#zoom-in").onclick = () => setScale(view.scale + .1); $("#zoom-out").onclick 
 $("#rename-project").onclick = async () => { const name = prompt("Project name", snapshot.project.name); if (name) { await api(`/api/v1/projects/${projectId}`, json("PATCH", { name, version: snapshot.project.version })); await refresh(); } };
 $("#archive-project").onclick = async () => { await api(`/api/v1/projects/${projectId}`, json("PATCH", { status: "archived", version: snapshot.project.version })); await refresh(); };
 $("#api-access").onclick = async () => { $("#api-access-dialog").showModal(); await refreshKeyApplications(); };
+$("#tutorials").onclick = () => { renderTutorialList(); $("#tutorial-dialog").showModal(); };
+function renderTutorialList() {
+  $("#tutorial-detail").hidden = true; $("#tutorial-list").hidden = false;
+  $("#tutorial-list").replaceChildren(...TUTORIALS.map(tutorial => {
+    const card = document.createElement("button"); card.type = "button"; card.className = "tutorial-card";
+    card.innerHTML = `<span>${escapeHtml(tutorial.category)} · ${escapeHtml(tutorial.level)}</span><strong>${escapeHtml(tutorial.title)}</strong><small>${escapeHtml(tutorial.duration)} · ${escapeHtml(tutorial.calls)}</small><p>${escapeHtml(tutorial.outcome)}</p>`;
+    card.onclick = () => renderTutorial(tutorial.id); return card;
+  }));
+}
+function renderTutorial(id) {
+  const tutorial = tutorialById(id), detail = $("#tutorial-detail"); $("#tutorial-list").hidden = true; detail.hidden = false;
+  detail.innerHTML = `<button class="tutorial-back" type="button">← 全部教程</button><p class="eyebrow">${escapeHtml(tutorial.category)} · ${escapeHtml(tutorial.level)}</p><h2>${escapeHtml(tutorial.title)}</h2><p class="tutorial-outcome">${escapeHtml(tutorial.outcome)}</p><div class="tutorial-meta"><span>${escapeHtml(tutorial.duration)}</span><span>${escapeHtml(tutorial.calls)}</span><span>${tutorial.nodes.length} 个节点</span></div><h3>操作步骤</h3><ol>${tutorial.steps.map(step => `<li>${escapeHtml(step)}</li>`).join("")}</ol><h3>验收清单</h3><ul>${tutorial.checks.map(check => `<li>${escapeHtml(check)}</li>`).join("")}</ul><p class="tutorial-safety">开始教程只会创建并连接节点，不会提交模型任务或产生费用。请在生成前检查模型、参数和管理员额度。</p><button class="tutorial-start" type="button">把教程蓝图放到当前画布</button>`;
+  detail.querySelector(".tutorial-back").onclick = renderTutorialList;
+  detail.querySelector(".tutorial-start").onclick = event => startTutorial(tutorial, event.currentTarget).catch(showError);
+}
+async function startTutorial(tutorial, trigger) {
+  trigger.disabled = true;
+  try {
+    const created = [];
+    for (const spec of tutorial.nodes) {
+      const node = await api(`/api/v1/sessions/${sessionId}/nodes`, json("POST", { type: spec.type, position: { x: spec.x, y: spec.y } }));
+      created.push(await api(`/api/v1/nodes/${node.id}`, json("PATCH", { title: spec.title, content: spec.content, version: node.version })));
+    }
+    for (let index = 1; index < created.length; index += 1) await api(`/api/v1/projects/${projectId}/edges`, json("POST", { fromNodeId: created[index - 1].id, toNodeId: created[index].id }));
+    await api(`/api/v1/projects/${projectId}/groups`, json("POST", { title: `Tutorial · ${tutorial.title}`, nodeIds: created.map(node => node.id) }));
+    await refresh(created[0].id); $("#tutorial-dialog").close(); $("#workflow-state").textContent = `Tutorial ready: ${tutorial.title}. Review each prompt before generating.`;
+  } finally { trigger.disabled = false; }
+}
 $("#key-application-form").addEventListener("submit", async event => { event.preventDefault(); const button = event.submitter; button.disabled = true; try { await api("/api/v1/key-applications", json("POST", { reason: $("#key-application-reason").value, requestedLimitMicros: Number($("#key-application-limit").value) })); event.target.reset(); await refreshKeyApplications(); } catch (error) { $("#key-application-state").textContent = `Error: ${error.message}`; } finally { button.disabled = false; } });
 $("#create-api-key").onclick = async () => { const issued = await api("/api/v1/api-keys", json("POST", { name: "primary" })); $("#issued-key").textContent = `Copy now — this key will not be shown again: ${issued.key}`; $("#ark-api-key").value = issued.key; await refreshKeyApplications(); };
 async function refreshKeyApplications() { const [applications, keys] = await Promise.all([api("/api/v1/key-applications"), api("/api/v1/api-keys")]); $("#key-application-state").textContent = applications.length ? "Your application history" : "No application submitted yet."; $("#key-application-list").replaceChildren(...[...applications].reverse().map(item => { const li = document.createElement("li"); li.textContent = `${item.status} · limit ${item.requestedLimitMicros} · ${item.reason}${item.reviewNote ? ` · ${item.reviewNote}` : ""}`; return li; })); const approved = applications.some(item => item.status === "approved"); $("#key-issue-panel").hidden = !approved; $("#api-key-list").replaceChildren(...keys.map(key => { const li = document.createElement("li"); li.textContent = `${key.name} · ${key.prefix}… · ${key.status}`; return li; })); }
