@@ -34,6 +34,11 @@ test("responsive workflow exposes empty, loading, error, and success states", as
   const [html, css, app] = await Promise.all([readFile(new URL("../index.html", import.meta.url), "utf8"), readFile(new URL("../src/styles.css", import.meta.url), "utf8"), readFile(new URL("../src/app.js", import.meta.url), "utf8")]);
   for (const hook of ["build-story", "export-edl", "workflow-state", "rename-project", "archive-project"]) assert.match(html, new RegExp(`id="${hook}"`));
   assert.match(css, /@media \(max-width: 760px\)/);
+  assert.match(css, /\.inspector \{[^}]*overflow-x: hidden/);
+  assert.match(css, /\.access-dialog \{[^}]*max-height:/);
+  assert.match(css, /\.admin-auth,\.application-action \{ grid-template-columns:/);
+  assert.match(css, /#node-form > section,#node-meta \{ grid-column:1\/-1 \}/);
+  assert.doesNotMatch(css, /\.project-actions button \{ display: none/);
   for (const state of ["Empty:", "Loading:", "Error:", "Success:"]) assert.match(`${html}\n${app}`, new RegExp(state));
 });
 
