@@ -178,7 +178,7 @@ test("API key applications require user submission and administrator approval or
   const stopped = await fetch(`${base}/api/v1/admin/key-applications/${application.id}/stop`, { method: "POST", headers: { "content-type": "application/json", "x-openreel-admin-key": adminKey }, body: JSON.stringify({ reviewNote: "Operator stop" }) }); assert.equal(stopped.status, 201);
   const keyStatus = await fetch(`${base}/api/v1/key/status`, { headers: { "x-openreel-api-key": issued.key } }); assert.equal(keyStatus.status, 401);
   const adminPage = await fetch(`${base}/admin.html`); assert.equal(adminPage.status, 200); assert.match(await adminPage.text(), /API access administration/);
-  for (const path of ["/admin", "/admin/"]) { const alias = await fetch(`${base}${path}`); assert.equal(alias.status, 200); assert.match(await alias.text(), /API access administration/); }
+  for (const path of ["/admin", "/admin/"]) { const alias = await fetch(`${base}${path}`); assert.equal(alias.status, 200); const html = await alias.text(); assert.match(html, /API access administration/); assert.match(html, /src="\/src\/admin\.js"/); assert.match(html, /href="\/src\/styles\.css"/); }
   for (const path of ["/favicon.ico", "/definitely-missing"]) { const missing = await fetch(`${base}${path}`); assert.equal(missing.status, 404); assert.equal((await missing.json()).error.code, "NOT_FOUND"); }
   const aliveAfterMissingStatic = await fetch(`${base}/health/live`); assert.equal(aliveAfterMissingStatic.status, 200);
 });
