@@ -182,10 +182,18 @@ test("HTTP inference route authenticates or_live keys and returns only sanitized
 
 test("canvas Ark route maps generic aspect and audio parameters to provider fields", async t => {
   const platform = createPlatform(), issued = issue(platform, "canvas-http@example.test"), ownerId = platform.authenticate(issued.token).id, store = createMemoryStore(); store.createUser({ id: ownerId, name: "Canvas" }); const project = store.createProject({ name: "Canvas" }, ownerId), session = store.createSession(project.id, { name: "Main" }, ownerId), node = store.createNode(session.id, { type: "video" }, ownerId); let providerInput;
-  const arkService = { submit: async (_key, request) => { providerInput = request.input; return { id: "ark-http", model: request.model, capability: request.capability, status: "running" }; }, models: () => [], poll: async () => {}, download: async () => {} };
+  const arkService = { submit: async (principal, request) => { assert.deepEqual(principal, { kind: "account", accountId: ownerId }); providerInput = request.input; return { id: "ark-http", model: request.model, capability: request.capability, status: "running" }; }, models: () => [], poll: async () => {}, download: async () => {} };
   const server = createOpenReelServer(store, platform, { production: true, arkService, rateLimit: { max: 100 } }); await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
-  const response = await fetch(`http://127.0.0.1:${server.address().port}/api/v1/sessions/${session.id}/ark-jobs`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${issued.token}`, "x-openreel-api-key": issued.key }, body: JSON.stringify({ nodeId: node.id, model: "seedance", capability: "video", prompt: "ocean", idempotencyKey: "canvas", parameters: { aspect: "16:9", audio: true, duration: 5 } }) });
+  const response = await fetch(`http://127.0.0.1:${server.address().port}/api/v1/sessions/${session.id}/ark-jobs`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${issued.token}` }, body: JSON.stringify({ nodeId: node.id, model: "seedance", capability: "video", prompt: "ocean", idempotencyKey: "canvas", parameters: { aspect: "16:9", audio: true, duration: 5 } }) });
   assert.equal(response.status, 201); assert.equal(providerInput.ratio, "16:9"); assert.equal(providerInput.generate_audio, true); assert.equal(providerInput.duration, 5);
+});
+
+test("signed-in account principals use approved allowance without creating a platform API key", async () => {
+  const platform = createPlatform(); platform.register({ email: "workspace@example.test", password: "password-123" }); const login = platform.login({ email: "workspace@example.test", password: "password-123" }), accountId = platform.authenticate(login.token).id;
+  const application = platform.submitKeyApplication(login.token, { reason: "Workspace generation", requestedLimitMicros: 100 }); platform.approveKeyApplication(application.id, { hardLimitMicros: 100, periodEndsAt: "2099-01-01T00:00:00.000Z" });
+  const service = createArkService({ config: config({ image: { capability: "image", providerModel: "ep", endpoint, maxCostMicros: 10, outputMicrosPerMillion: 1_000_000 } }), platform, transport: async () => ({ usage: { input_tokens: 0, output_tokens: 3 }, result: { ok: true } }), assetTransport: async () => ({}) });
+  const job = await service.submit({ kind: "account", accountId }, { model: "image", capability: "image", input: { prompt: "draw" }, idempotencyKey: "workspace" });
+  assert.equal(job.status, "succeeded"); const status = platform.usageStatus(login.token); assert.equal(status.keys.length, 0); assert.equal(status.subscription.spentMicros, 3); assert.equal(status.usage[0].apiKeyId, null); assert.equal(status.usage[0].accountId, accountId);
 });
 
 test("provider failures expose only a sanitized upstream HTTP status", async () => {

@@ -178,7 +178,11 @@ export function createArkService({ config, platform, transport, assetTransport, 
   const memoryStore = { get: jobId => jobs.has(jobId) ? { job: jobs.get(jobId), version: 1 } : null, getByIdempotency: (ownerHash, key) => { const jobId = idempotency.get(`${ownerHash}:${key}`); return jobId ? { job: jobs.get(jobId), version: 1 } : null; }, create: job => { const replay = memoryStore.getByIdempotency(job.ownerHash, job.idempotencyKey); if (replay) return replay; jobs.set(job.id, structuredClone(job)); idempotency.set(`${job.ownerHash}:${job.idempotencyKey}`, job.id); return { job: structuredClone(job), version: 1 }; }, update: job => { jobs.set(job.id, structuredClone(job)); return { job: structuredClone(job), version: 1 }; } };
   const storage = store || memoryStore;
   const locked = async (key, operation) => { while (locks.has(key)) await locks.get(key); let release; const pending = new Promise(resolve => { release = resolve; }); locks.set(key, pending); try { return await operation(); } finally { locks.delete(key); release(); } };
-  const owner = secret => createHash("sha256").update(secret).digest("hex");
+  const principal = credential => {
+    if (typeof credential === "string") { const auth = platform.authenticateApiKey(credential); return { ownerHash: createHash("sha256").update(credential).digest("hex"), reserve: request => platform.reserveUsage(credential, request), settle: (reservationId, result) => platform.settleUsage(credential, reservationId, result), accountId: auth.account.id }; }
+    if (credential?.kind === "account" && typeof credential.accountId === "string" && credential.accountId) return { ownerHash: createHash("sha256").update(`account:${credential.accountId}`).digest("hex"), reserve: request => platform.reserveUsageForAccount(credential.accountId, request), settle: (reservationId, result) => platform.settleUsageForAccount(credential.accountId, reservationId, result), accountId: credential.accountId };
+    throw new DomainError("INVALID_API_KEY", "a valid billing principal is required", 401);
+  };
   const modelFor = (name, capability) => { const model = config.models[name]; if (!model || model.capability !== capability) throw new DomainError("ARK_MODEL_UNAVAILABLE", "requested model/capability mapping is unavailable", 400); return model; };
   const call = async (model, operation, body, idempotencyKey) => {
     const request = providerRequest(model, operation, operation === "poll" ? null : body, operation === "poll" ? body.task_id : null);
@@ -186,55 +190,56 @@ export function createArkService({ config, platform, transport, assetTransport, 
     try { return providerResponse(model, operation, await transport({ ...request, apiKey: model.apiKey || config.apiKey, timeoutMs, idempotencyKey })); }
     catch (error) { throw sanitizeProviderError(error); }
   };
-  const settle = (secret, job, response, failed = false) => {
+  const settle = (billing, job, response, failed = false) => {
     const usage = failed ? { inputTokens: 0, outputTokens: 0 } : trustedUsage(response);
-    platform.settleUsage(secret, job.reservationId, { ...usage, inputMicrosPerMillion: job.rates.input, outputMicrosPerMillion: job.rates.output, pricingVersion: job.rates.version, failed });
+    billing.settle(job.reservationId, { ...usage, inputMicrosPerMillion: job.rates.input, outputMicrosPerMillion: job.rates.output, pricingVersion: job.rates.version, failed });
   };
-  const submit = async (secret, request = {}) => {
-    platform.authenticateApiKey(secret);
+  const submit = async (credential, request = {}) => {
+    const billing = principal(credential);
     if (!config.paidCallsEnabled) throw new DomainError("PAID_INFERENCE_GATED", "paid inference is disabled until an operator approves a budget", 403);
-    const idempotencyKey = requiredText(request.idempotencyKey, "idempotencyKey"), ownerHash = owner(secret), replayKey = `${ownerHash}:${idempotencyKey}`;
+    const idempotencyKey = requiredText(request.idempotencyKey, "idempotencyKey"), ownerHash = billing.ownerHash, replayKey = `${ownerHash}:${idempotencyKey}`;
     return locked(replayKey, async () => {
       let record = storage.getByIdempotency(ownerHash, idempotencyKey), job, model;
       if (record) { job = record.job; if (job.status !== "submitting") return publicJob(job); model = modelFor(job.model, job.capability); }
       else {
         const capability = requiredText(request.capability, "capability"); model = modelFor(requiredText(request.model, "model"), capability);
-        const reservation = platform.reserveUsage(secret, { model: model.name, maxCostMicros: model.maxCostMicros, pricingVersion: model.pricingVersion, currency: model.currency, unitScale: model.unitScale, idempotencyKey: `ark:${idempotencyKey}` });
+        const reservation = billing.reserve({ model: model.name, maxCostMicros: model.maxCostMicros, pricingVersion: model.pricingVersion, currency: model.currency, unitScale: model.unitScale, idempotencyKey: `ark:${idempotencyKey}` });
         record = storage.create({ id: id(), ownerHash, idempotencyKey, model: model.name, capability, providerInput: structuredClone(request.input ?? null), status: "submitting", providerTaskId: null, reservationId: reservation.id, rates: { input: model.inputMicrosPerMillion, output: model.outputMicrosPerMillion, version: model.pricingVersion }, settlement: null, result: null, error: null, createdAt: now(), updatedAt: now() });
         job = record.job; if (job.reservationId !== reservation.id) return publicJob(job);
       }
       try {
         const response = await call(model, "submit", job.providerInput, idempotencyKey);
         if (model.asynchronous) { job.providerTaskId = requiredText(response?.task_id, "Ark task_id"); job.status = "running"; }
-        else { job.settlement = { response, failed: false }; job.status = "settling"; record = storage.update(job, record.version); settle(secret, job, response); job.status = "succeeded"; job.result = response.result ?? null; job.settlement = null; }
+        else { job.settlement = { response, failed: false }; job.status = "settling"; record = storage.update(job, record.version); settle(billing, job, response); job.status = "succeeded"; job.result = response.result ?? null; job.settlement = null; }
       } catch (error) {
         job.status = "failed"; job.error = { code: error.code || "ARK_PROVIDER_ERROR", message: "Ark request failed" };
-        try { settle(secret, job, null, true); } catch { /* preserve the original sanitized failure */ }
+        try { settle(billing, job, null, true); } catch { /* preserve the original sanitized failure */ }
         job.updatedAt = now(); storage.update(job, record.version); throw error;
       }
       job.updatedAt = now(); storage.update(job, record.version); return publicJob(job);
     });
   };
-  const poll = async (secret, jobId) => {
+  const poll = async (credential, jobId) => {
+    const billing = principal(credential);
     return locked(`job:${jobId}`, async () => {
-    platform.authenticateApiKey(secret); let record = storage.get(jobId), job = record?.job;
-    if (!job || job.ownerHash !== owner(secret)) throw new DomainError("NOT_FOUND", "Ark job not found", 404);
+    let record = storage.get(jobId), job = record?.job;
+    if (!job || job.ownerHash !== billing.ownerHash) throw new DomainError("NOT_FOUND", "Ark job not found", 404);
     if (TERMINAL.has(job.status)) return publicJob(job);
-    if (job.status === "settling" && job.settlement) { settle(secret, job, job.settlement.response, job.settlement.failed); job.status = job.settlement.failed ? "failed" : "succeeded"; job.result = job.settlement.response?.result ?? null; job.settlement = null; job.updatedAt = now(); return publicJob(storage.update(job, record.version).job); }
+    if (job.status === "settling" && job.settlement) { settle(billing, job, job.settlement.response, job.settlement.failed); job.status = job.settlement.failed ? "failed" : "succeeded"; job.result = job.settlement.response?.result ?? null; job.settlement = null; job.updatedAt = now(); return publicJob(storage.update(job, record.version).job); }
     const model = config.models[job.model];
     if (!model.pollEndpoint) throw new DomainError("ARK_CONFIG_INVALID", "poll endpoint is not configured", 503);
     let response;
     try { response = await call(model, "poll", { task_id: job.providerTaskId }, job.id); }
     catch (error) { throw error; }
-    if (response.status === "succeeded") { job.settlement = { response, failed: false }; job.status = "settling"; record = storage.update(job, record.version); settle(secret, job, response); job.status = "succeeded"; job.result = response.result ?? null; job.settlement = null; }
-    else if (["failed", "canceled"].includes(response.status)) { job.settlement = { response: null, failed: true }; job.status = "settling"; record = storage.update(job, record.version); settle(secret, job, null, true); job.status = response.status; job.error = { code: "ARK_TASK_FAILED", message: "Ark task did not complete" }; job.settlement = null; }
+    if (response.status === "succeeded") { job.settlement = { response, failed: false }; job.status = "settling"; record = storage.update(job, record.version); settle(billing, job, response); job.status = "succeeded"; job.result = response.result ?? null; job.settlement = null; }
+    else if (["failed", "canceled"].includes(response.status)) { job.settlement = { response: null, failed: true }; job.status = "settling"; record = storage.update(job, record.version); settle(billing, job, null, true); job.status = response.status; job.error = { code: "ARK_TASK_FAILED", message: "Ark task did not complete" }; job.settlement = null; }
     else job.status = "running";
     job.updatedAt = now(); return publicJob(storage.update(job, record.version).job);
     });
   };
-  const download = async (secret, jobId) => {
-    platform.authenticateApiKey(secret); const job = storage.get(jobId)?.job;
-    if (!job || job.ownerHash !== owner(secret) || job.status !== "succeeded") throw new DomainError("NOT_FOUND", "Ark result asset not found", 404);
+  const download = async (credential, jobId) => {
+    const billing = principal(credential), job = storage.get(jobId)?.job;
+    if (!job || job.ownerHash !== billing.ownerHash || job.status !== "succeeded") throw new DomainError("NOT_FOUND", "Ark result asset not found", 404);
     const model = config.models[job.model], url = safeUrl(job.result?.url, allowedHosts, "result URL");
     let response; try { response = await assetTransport({ url: url.href, apiKey: model.apiKey || config.apiKey, timeoutMs: 30_000, maxBytes: maxAssetBytes }); } catch (error) { throw sanitizeProviderError(error); }
     const mimeType = String(response?.mimeType || "").split(";", 1)[0].toLowerCase(), bytes = Buffer.from(response?.bytes || []);

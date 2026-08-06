@@ -65,7 +65,7 @@
             <p id="upload-state" role="status">No reference uploaded.</p>
             <label>Prompt<textarea id="generation-prompt" rows="3">A cinematic local simulation</textarea></label>
             <fieldset id="parameter-fields"><legend>Model parameters</legend><label>Model<select id="generation-model"></select></label><label>Mode<select id="generation-mode"></select></label><label>Aspect<select id="generation-aspect"></select></label><label>Resolution<select id="generation-resolution"></select></label><label>Duration<select id="generation-duration"></select></label><label><input id="generation-audio" type="checkbox" /> Audio</label><output id="reference-limit"></output></fieldset>
-            <label>Ark API key (kept only in this tab)<input id="ark-api-key" type="password" autocomplete="off" placeholder="or_live_…" /></label>
+            <p class="field-note">Ark generation uses your signed-in account's approved USD allowance. No platform key is required in the workspace.</p>
             <label class="failure-toggle"><input id="simulate-failure" type="checkbox" /> Simulate failure</label>
             <button id="generate" type="button">Generate locally</button>
             <p id="generation-state" role="status">Ready</p>
@@ -78,7 +78,7 @@
     <dialog id="api-access-dialog" class="access-dialog">
       <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
       <h2>API access</h2>
-      <p>Submit an application. An administrator reviews the requested usage limit before API keys can be created.</p>
+      <p>Submit an allowance application for workspace generation. After approval, create a platform key only for external API or CLI access.</p>
       <form id="key-application-form" class="auth-form">
         <label>Why do you need access?<textarea id="key-application-reason" maxlength="1000" required></textarea></label>
         <label>Requested usage limit (USD)<input id="key-application-limit" type="number" min="0.0001" step="0.0001" value="10.0000" required /></label>
@@ -87,7 +87,7 @@
       <p id="key-application-state" role="status">Loading applications…</p>
       <ol id="key-application-list"></ol>
       <section id="key-issue-panel" hidden>
-        <button id="create-api-key" type="button">Create API key</button>
+        <button id="create-api-key" type="button">Create external API key</button>
         <p id="issued-key" role="status">The full key is shown once after creation.</p>
         <ol id="api-key-list"></ol>
       </section>
