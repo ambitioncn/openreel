@@ -5,7 +5,10 @@ import { DatabaseSync } from "node:sqlite";
 import { DomainError, SCHEMA_VERSION } from "./core.js";
 
 const KINDS = Object.freeze(["projects", "sessions", "nodes", "edges", "groups", "jobs", "assets", "users"]);
-const MIGRATIONS = Object.freeze([{ version: 1, sql: readFileSync(new URL("../migrations/001-initial.sql", import.meta.url), "utf8") }]);
+const MIGRATIONS = Object.freeze([
+  { version: 1, sql: readFileSync(new URL("../migrations/001-initial.sql", import.meta.url), "utf8") },
+  { version: 2, sql: readFileSync(new URL("../migrations/002-ark-jobs.sql", import.meta.url), "utf8") }
+]);
 const digest = value => createHash("sha256").update(value).digest("hex");
 const blank = () => Object.fromEntries([...[ ["schemaVersion", SCHEMA_VERSION] ], ...KINDS.map(k => [k, []])]);
 
@@ -60,5 +63,11 @@ export function createSqliteBackend(databaseFile, { legacyJson = null, assetRoot
     accessSync(safeDirectory(assetRoot), constants.R_OK | constants.W_OK);
     return { database: "ok", assets: "ok" };
   };
-  return { read, commit, assets, importLegacy, health, close: () => database.close(), databaseFile };
+  const arkJobs = {
+    get(id) { const row = database.prepare("SELECT data,version FROM ark_jobs WHERE id=?").get(id); return row ? { job: JSON.parse(row.data), version: row.version } : null; },
+    getByIdempotency(ownerHash, idempotencyKey) { const row = database.prepare("SELECT data,version FROM ark_jobs WHERE owner_hash=? AND idempotency_key=?").get(ownerHash, idempotencyKey); return row ? { job: JSON.parse(row.data), version: row.version } : null; },
+    create(job) { try { database.prepare("INSERT INTO ark_jobs(id,owner_hash,idempotency_key,data) VALUES(?,?,?,?)").run(job.id, job.ownerHash, job.idempotencyKey, JSON.stringify(job)); return { job: structuredClone(job), version: 1 }; } catch (error) { if (error.code === "ERR_SQLITE_ERROR" && String(error.message).includes("UNIQUE constraint failed")) return this.getByIdempotency(job.ownerHash, job.idempotencyKey); throw error; } },
+    update(job, expectedVersion) { const result = database.prepare("UPDATE ark_jobs SET data=?,version=version+1 WHERE id=? AND version=?").run(JSON.stringify(job), job.id, expectedVersion); if (result.changes !== 1) throw new DomainError("CONCURRENT_UPDATE", "Ark job changed during transaction; retry operation", 409); return { job: structuredClone(job), version: expectedVersion + 1 }; }
+  };
+  return { read, commit, assets, arkJobs, importLegacy, health, close: () => database.close(), databaseFile };
 }

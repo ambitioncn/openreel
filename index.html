@@ -64,6 +64,7 @@
             <p id="upload-state" role="status">No reference uploaded.</p>
             <label>Prompt<textarea id="generation-prompt" rows="3">A cinematic local simulation</textarea></label>
             <fieldset id="parameter-fields"><legend>Model parameters</legend><label>Model<select id="generation-model"></select></label><label>Mode<select id="generation-mode"></select></label><label>Aspect<select id="generation-aspect"></select></label><label>Resolution<select id="generation-resolution"></select></label><label>Duration<select id="generation-duration"></select></label><label><input id="generation-audio" type="checkbox" /> Audio</label><output id="reference-limit"></output></fieldset>
+            <label>Ark API key (kept only in this tab)<input id="ark-api-key" type="password" autocomplete="off" placeholder="or_live_…" /></label>
             <label class="failure-toggle"><input id="simulate-failure" type="checkbox" /> Simulate failure</label>
             <button id="generate" type="button">Generate locally</button>
             <p id="generation-state" role="status">Ready</p>

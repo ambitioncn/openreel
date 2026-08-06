@@ -27,7 +27,7 @@ The server persists metadata to `.data/openreel.sqlite` and asset bytes to `.dat
 1. Create, list, open, rename, or archive a project and create a session.
 2. Author an ordered structured story and scenes, then shots with prompt, duration, references, and generated asset links.
 3. Upload image, video, or audio references. Search/filter the isolated project asset index.
-4. Route image, video, or audio work through the capability-based registry. The deterministic local providers require no credentials and expose structured unsupported-capability/provider-failure errors.
+4. Route image, video, or audio work through the capability-based registry. The deterministic local providers require no credentials and expose structured unsupported-capability/provider-failure errors. An optional, disabled-by-default server-side Ark boundary supports explicitly configured text, vision, image, video, and available audio endpoints with trusted usage settlement.
 5. Put generated assets into ordered video/audio tracks with trim and start ranges.
 6. Retrieve the `openreel-edl/v1` edit manifest or render and download a deterministic local H.264 MP4 preview with AAC audio when an audio track is present.
 

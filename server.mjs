@@ -8,6 +8,7 @@ import { createSqliteBackend } from "./src/durable.js";
 import { createPlatform } from "./src/platform.js";
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import { correlationId, createLogger, createMetrics, redact, validateProductionConfig } from "./src/ops.js";
+import { arkMaxRetries, createArkService, createArkTransports, loadArkConfig } from "./src/ark.js";
 
 const root = fileURLToPath(new URL("./", import.meta.url));
 const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".md": "text/markdown" };
@@ -23,7 +24,7 @@ function sniffMime(bytes) { if (bytes.length >= 8 && bytes.subarray(0, 8).equals
 function uploadFilename(value, extension) { if (typeof value !== "string" || !value.trim() || value.length > 128 || value.includes("/") || value.includes("\\") || value.includes("\0") || [".", ".."].includes(value.trim())) throw new DomainError("INVALID_FILENAME", "a safe filename is required"); const name = value.trim(); if (!new RegExp(`\\.${extension}$`, "i").test(name)) throw new DomainError("INVALID_FILENAME", `filename must end in .${extension}`); return name; }
 function createRateLimiter({ max = 60, windowMs = 60_000, now = Date.now, key = req => req.socket.remoteAddress || "unknown" } = {}) { const entries = new Map(); return req => { const id = key(req), time = Number(now()), old = entries.get(id); const entry = !old || time - old.startedAt >= windowMs ? { startedAt: time, count: 0 } : old; entry.count += 1; entries.set(id, entry); if (entry.count > max) throw new DomainError("RATE_LIMITED", "request rate limit exceeded", 429, { retryAfterSeconds: Math.max(1, Math.ceil((windowMs - (time - entry.startedAt)) / 1000)) }); }; }
 
-export function createOpenReelServer(store = createMemoryStore(), platform = createPlatform(), { production = false, secureCookies = production, jsonLimit = 1024 * 1024, rateLimit = {}, logger = () => {}, readiness = () => ({ database: "ok", assets: "ok" }), metrics = createMetrics(), adminToken = null } = {}) {
+export function createOpenReelServer(store = createMemoryStore(), platform = createPlatform(), { production = false, secureCookies = production, jsonLimit = 1024 * 1024, rateLimit = {}, logger = () => {}, readiness = () => ({ database: "ok", assets: "ok" }), metrics = createMetrics(), adminToken = null, arkService = null } = {}) {
   const limit = createRateLimiter(rateLimit), log = (event, fields) => logger(event, redact(fields));
   return createServer(async (req, res) => {
     const requestId = correlationId(req.headers["x-request-id"]); res.setHeader("x-request-id", requestId); metrics.begin();
@@ -38,7 +39,8 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       const token = req.headers.authorization?.replace(/^Bearer\s+/i, "") || jar.openreel_session;
       const keyRoute = api[0] === "key" && api[1] === "status" && req.method === "GET";
       const adminRoute = api[0] === "admin";
-      const publicRoute = (api[0] === "auth" && ["register", "login"].includes(api[1])) || keyRoute || adminRoute;
+      const arkRoute = api[0] === "inference";
+      const publicRoute = (api[0] === "auth" && ["register", "login"].includes(api[1])) || keyRoute || adminRoute || arkRoute;
       if (production && url.pathname.startsWith("/api/")) limit(req);
       if (production && url.pathname.startsWith("/api/") && !publicRoute && req.method !== "OPTIONS") {
         if (jar.openreel_session && !["GET", "HEAD", "OPTIONS"].includes(req.method) && !safeEqual(req.headers["x-csrf-token"], jar.openreel_csrf)) throw new DomainError("CSRF_REJECTED", "valid CSRF token required", 403);
@@ -48,8 +50,17 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       const who = protectedApi ? platform.authenticate(token).id : "local-owner";
       let out;
       if (keyRoute) { const keySecret = req.headers["x-openreel-api-key"] || req.headers.authorization?.replace(/^Bearer\s+/i, ""); const auth = platform.authenticateApiKey(keySecret); out = { key: auth.apiKey, accountId: auth.account.id, plan: auth.subscription.plan, hardLimitMicros: auth.subscription.hardLimitMicros, spentMicros: auth.subscription.spentMicros, reservedMicros: auth.subscription.reservedMicros, remainingMicros: Math.max(0, auth.subscription.hardLimitMicros - auth.subscription.spentMicros - auth.subscription.reservedMicros), periodEndsAt: auth.subscription.periodEndsAt }; }
+      else if (arkRoute) {
+        if (!arkService) throw new DomainError("ARK_UNAVAILABLE", "Ark inference is not configured", 503);
+        const keySecret = req.headers["x-openreel-api-key"] || req.headers.authorization?.replace(/^Bearer\s+/i, "");
+        if (req.method === "GET" && api[1] === "models" && api.length === 2) out = arkService.models();
+        else if (req.method === "POST" && api[1] === "jobs" && api.length === 2) out = await arkService.submit(keySecret, await input());
+        else if (req.method === "GET" && api[1] === "jobs" && api.length === 3) out = await arkService.poll(keySecret, api[2]);
+        else if (req.method === "GET" && api[1] === "jobs" && api[3] === "asset") { const asset = await arkService.download(keySecret, api[2]); res.writeHead(200, { "content-type": asset.mimeType, "content-length": asset.bytes.length, "content-disposition": `attachment; filename="${api[2]}"`, "x-content-type-options": "nosniff" }); return res.end(asset.bytes); }
+        else throw new DomainError("NOT_FOUND", "Ark inference route not found", 404);
+      }
       else if (req.method === "POST" && api[0] === "users" && api.length === 1) out = store.createUser(await input());
-      else if (req.method === "GET" && api[0] === "models" && api.length === 1) out = store.listModels();
+      else if (req.method === "GET" && api[0] === "models" && api.length === 1) { out = store.listModels(); if (arkService) out.push(...arkService.models().filter(x => ["image", "video", "audio"].includes(x.capability)).map(x => ({ id: x.name, kind: x.capability, adapterId: "ark", schema: { modes: [], aspects: [], resolutions: [], durations: x.capability === "video" ? [5, 10] : [], audio: x.capability === "video", maxReferences: 0 } }))); }
       else if (req.method === "POST" && api[0] === "auth" && api[1] === "register") { const account = platform.register(await input()); store.createUser({ id: account.id, name: account.email }); out = account; }
       else if (req.method === "POST" && api[0] === "auth" && api[1] === "login") { const session = platform.login(await input()), csrf = randomBytes(24).toString("base64url"); return json(res, 200, { account: platform.authenticate(session.token), csrfToken: csrf, expiresAt: session.expiresAt }, { "set-cookie": [sessionCookie("openreel_session", session.token, session, secureCookies), sessionCookie("openreel_csrf", csrf, session, secureCookies)] }); }
       else if (req.method === "POST" && api[0] === "auth" && api[1] === "logout") { out = platform.logout(token); return json(res, 200, out, { "set-cookie": [cookie("openreel_session", "", { secure: secureCookies, maxAge: 0 }), cookie("openreel_csrf", "", { secure: secureCookies, maxAge: 0 })] }); }
@@ -75,7 +86,7 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       else if (req.method === "POST" && api[0] === "invites" && api[2] === "accept") out = platform.acceptInvite(token, api[1]);
       else if (req.method === "POST" && api[0] === "teams" && api[2] === "budget" && api[3] === "quote") out = platform.quote(token, api[1], await input());
       else if (req.method === "POST" && api[0] === "teams" && api[2] === "budget" && api[3] === "reserve") out = platform.reserve(token, api[1], await input());
-      else if (req.method === "POST" && api[0] === "teams" && api[2] === "budget" && api[3] === "settle") { const value = await input(); out = platform.settle(token, api[1], value.reservationId, value); }
+      else if (req.method === "POST" && api[0] === "teams" && api[2] === "budget" && api[3] === "settle") throw new DomainError("FORBIDDEN", "client-directed settlement is disabled", 403);
       else if (req.method === "GET" && api[0] === "teams" && api[2] === "budget") out = platform.budgetStatus(token, api[1]);
       else if (req.method === "POST" && api[0] === "teams" && api[2] === "workflows" && api[3] === "import") out = platform.importWorkflow(token, api[1], await input());
       else if (req.method === "POST" && api[0] === "teams" && api[2] === "automations" && api[3] === "plan") out = platform.planAutomation(token, api[1], await input());
@@ -103,6 +114,8 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       else if (req.method === "POST" && api[0] === "sessions" && api[2] === "nodes") out = store.createNode(api[1], await input(), who);
       else if (req.method === "PATCH" && api[0] === "nodes" && api.length === 2) out = store.updateNode(api[1], await input(), who);
       else if (req.method === "POST" && api[0] === "sessions" && api[2] === "jobs") out = store.createJob(api[1], await input(), who);
+      else if (req.method === "POST" && api[0] === "sessions" && api[2] === "ark-jobs") { if (!arkService) throw new DomainError("ARK_UNAVAILABLE", "Ark inference is not configured", 503); const value = await input(), parameters = value.parameters || {}, providerInput = { prompt: value.prompt, ...parameters, ...(parameters.aspect ? { ratio: parameters.aspect } : {}), ...(parameters.audio !== undefined ? { generate_audio: parameters.audio } : {}) }, arkJob = await arkService.submit(req.headers["x-openreel-api-key"], { model: value.model, capability: value.capability, input: providerInput, idempotencyKey: value.idempotencyKey }); out = store.createArkCanvasJob(api[1], value, arkJob, who); }
+      else if (req.method === "POST" && api[0] === "jobs" && api[2] === "ark-poll") { if (!arkService) throw new DomainError("ARK_UNAVAILABLE", "Ark inference is not configured", 503); const local = store.arkCanvasJob(api[1], who), arkJob = await arkService.poll(req.headers["x-openreel-api-key"], local.arkJobId), output = arkJob.status === "succeeded" ? await arkService.download(req.headers["x-openreel-api-key"], arkJob.id) : null; out = store.reconcileArkCanvasJob(local.id, arkJob, output, who); }
       else if (req.method === "POST" && api[0] === "jobs" && api[2] === "tick") out = store.tickJob(api[1], who);
       else if (req.method === "POST" && api[0] === "jobs" && api[2] === "cancel") out = store.transitionJob(api[1], "canceled", {}, who);
       else if (req.method === "GET" && api[0] === "jobs" && api[2] === "progress") out = store.progress(api[1], url.searchParams.get("afterSeq") ?? 0, who);
@@ -123,7 +136,9 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const config = production ? validateProductionConfig() : { port: Number(process.env.PORT || 4173), host: "127.0.0.1", databaseFile: process.env.OPENREEL_DATABASE || join(root, ".data", "openreel.sqlite"), assetRoot: process.env.OPENREEL_ASSETS || join(root, ".data", "assets"), platformFile: process.env.OPENREEL_PLATFORM || join(root, ".data", "platform.json") };
   const backend = createSqliteBackend(config.databaseFile, { legacyJson: process.env.OPENREEL_LEGACY_JSON || null, assetRoot: config.assetRoot });
   const logger = createLogger();
-  const server = createOpenReelServer(createDatabaseStore(backend), createPlatform({ file: config.platformFile }), { production, secureCookies: production, readiness: backend.health, logger, adminToken: process.env.OPENREEL_ADMIN_KEY || null });
+  const platform = createPlatform({ file: config.platformFile }), arkConfig = loadArkConfig(), transports = createArkTransports({ retries: arkMaxRetries() });
+  const arkService = createArkService({ config: arkConfig, platform, transport: transports.request, assetTransport: transports.asset, store: backend.arkJobs });
+  const server = createOpenReelServer(createDatabaseStore(backend), platform, { production, secureCookies: production, readiness: backend.health, logger, adminToken: process.env.OPENREEL_ADMIN_KEY || null, arkService });
   server.on("error", error => { logger("startup_error", { error: error.message }); process.exitCode = 1; });
   server.listen(config.port, config.host, () => logger("service_started", { host: config.host, port: config.port }));
 }

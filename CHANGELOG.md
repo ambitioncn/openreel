@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.4.0 — 2026-08-06
+
+Production Ark inference and canvas workflow release.
+
+### Highlights
+
+- Add server-side Volcengine Ark adapters for seven configured text, vision, image, video, and multimodal embedding models, with credentials isolated from clients.
+- Connect approved `or_live_...` platform keys to quota reservation, immutable 1.5x pricing snapshots, trusted settlement, and per-user/per-model usage ledgers.
+- Persist recoverable synchronous and asynchronous Ark jobs in SQLite with idempotency, crash recovery, bounded retries, sanitized provider errors, and tenant isolation.
+- Bridge Ark canvas jobs into validated OpenReel assets and automatically append generated video results to the timeline for authenticated preview and export.
+- Add migration `002`, production configuration examples, bounded paid smoke tooling, a real-new-user production E2E, and a rollback runbook.
+- Harden provider downloads against SSRF and DNS rebinding, enforce MIME and byte limits, and keep paid inference fail-closed until explicitly enabled.
+
+### Acceptance
+
+- Pass 79 automated tests, secret scanning, deployment rehearsal, and the production new-user/Admin approval/Key Server/canvas/asset/timeline/preview/export workflow.
+- Retain manual administrator entitlement and API-key issuance; automated payment collection and customer self-service top-ups remain out of scope.
+
 ## v0.3.0 — 2026-08-04
 
 Manual API access approval and usage-control release.
