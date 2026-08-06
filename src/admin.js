@@ -21,7 +21,7 @@ async function load() {
 function card(application) {
   const article = document.createElement("article"); article.className = "application-card";
   const heading = document.createElement("h2"); heading.textContent = application.email;
-  const details = document.createElement("p"); details.textContent = `${application.status} · requested ${application.requestedLimitMicros} microcredits · ${application.reason}`;
+  const details = document.createElement("p"); details.textContent = `${application.status} · requested ${money(application.requestedLimitUnits ?? application.requestedLimitMicros, application.currency, application.unitScale)} · ${application.reason}`;
   article.append(heading, details);
   if (application.status === "pending") article.append(actionForm(application, "approve"), actionForm(application, "reject"));
   if (application.status === "approved") article.append(actionForm(application, "stop"));
@@ -32,13 +32,14 @@ function card(application) {
 function actionForm(application, action) {
   const form = document.createElement("form"); form.className = "application-action";
   const note = input("Review note", "text", action === "approve" ? "Approved for controlled use" : "Reason required"); form.append(note.label);
-  let limit, expiry;
-  if (action === "approve") { limit = input("Hard limit (microcredits)", "number", application.requestedLimitMicros); expiry = input("Access expires", "date", futureDate(30)); form.append(limit.label, expiry.label); }
+  let limit, expiry; const currency = application.currency || "CNY", unitScale = application.unitScale || 1_000_000;
+  if (action === "approve") { limit = input(`Hard limit (${currency})`, "number", ((application.requestedLimitUnits ?? application.requestedLimitMicros) / unitScale).toFixed(4)); limit.input.min = "0.0001"; limit.input.step = "0.0001"; expiry = input("Access expires", "date", futureDate(30)); form.append(limit.label, expiry.label); }
   const button = document.createElement("button"); button.type = "submit"; button.textContent = action[0].toUpperCase() + action.slice(1); if (action !== "approve") button.className = "danger"; form.append(button);
-  form.onsubmit = async event => { event.preventDefault(); button.disabled = true; try { const payload = { reviewNote: note.input.value }; if (action === "approve") Object.assign(payload, { plan: "manual", hardLimitMicros: Number(limit.input.value), periodEndsAt: new Date(`${expiry.input.value}T23:59:59.999Z`).toISOString() }); await request(`/api/v1/admin/key-applications/${application.id}/${action}`, { method: "POST", body: JSON.stringify(payload) }); await load(); } catch (error) { $("#admin-state").textContent = `Error: ${error.message}`; } finally { button.disabled = false; } };
+  form.onsubmit = async event => { event.preventDefault(); button.disabled = true; try { const payload = { reviewNote: note.input.value }; if (action === "approve") Object.assign(payload, { plan: "manual", hardLimitUnits: Math.round(Number(limit.input.value) * unitScale), currency, unitScale, periodEndsAt: new Date(`${expiry.input.value}T23:59:59.999Z`).toISOString() }); await request(`/api/v1/admin/key-applications/${application.id}/${action}`, { method: "POST", body: JSON.stringify(payload) }); await load(); } catch (error) { $("#admin-state").textContent = `Error: ${error.message}`; } finally { button.disabled = false; } };
   return form;
 }
 
 function input(labelText, type, value) { const label = document.createElement("label"), input = document.createElement("input"); label.textContent = labelText; input.type = type; input.value = value; input.required = true; if (type === "number") input.min = "1"; label.append(input); return { label, input }; }
 function futureDate(days) { const date = new Date(Date.now() + days * 86400000); return date.toISOString().slice(0, 10); }
+function money(units, currency = "CNY", scale = 1_000_000) { return new Intl.NumberFormat("en-US", { style: "currency", currency, minimumFractionDigits: 4, maximumFractionDigits: 4 }).format(Number(units || 0) / scale); }
 async function request(path, options = {}, includeCsrf = true) { const response = await fetch(path, { ...options, headers: { "content-type": "application/json", ...(includeCsrf && csrfToken ? { "x-csrf-token": csrfToken } : {}) } }), value = await response.json(); if (!response.ok) throw new Error(value.error?.message || "Request failed"); return value; }

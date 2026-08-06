@@ -59,7 +59,7 @@ function modelMap(value, allowedHosts, env) {
     const maxCostMicros = Number(item.maxCostMicros), inputMicrosPerMillion = Number(item.inputMicrosPerMillion || 0), outputMicrosPerMillion = Number(item.outputMicrosPerMillion || 0);
     for (const [field, number] of Object.entries({ maxCostMicros, inputMicrosPerMillion, outputMicrosPerMillion })) if (!Number.isSafeInteger(number) || number < 0) throw new DomainError("ARK_CONFIG_INVALID", `model ${name} ${field} must be a non-negative safe integer`, 503);
     const apiKey = item.apiKeyEnv ? requiredText(env[item.apiKeyEnv], item.apiKeyEnv) : null;
-    return [name, Object.freeze({ name, capability: item.capability, providerModel: requiredText(item.providerModel, `model ${name} providerModel`), endpoint: endpoint.href, pollEndpoint: item.pollEndpoint ? safeUrl(item.pollEndpoint, allowedHosts, "pollEndpoint").href : null, apiKey, protocol: item.protocol || "generic", maxCostMicros, inputMicrosPerMillion, outputMicrosPerMillion, pricingVersion: item.pricingVersion ? requiredText(item.pricingVersion, `model ${name} pricingVersion`) : null, asynchronous: Boolean(item.asynchronous), resultMimeTypes: Array.isArray(item.resultMimeTypes) ? item.resultMimeTypes.map(String) : [] })];
+    return [name, Object.freeze({ name, capability: item.capability, providerModel: requiredText(item.providerModel, `model ${name} providerModel`), endpoint: endpoint.href, pollEndpoint: item.pollEndpoint ? safeUrl(item.pollEndpoint, allowedHosts, "pollEndpoint").href : null, apiKey, protocol: item.protocol || "generic", maxCostMicros, inputMicrosPerMillion, outputMicrosPerMillion, currency: item.currency || "USD", unitScale: Number(item.unitScale || 10_000), pricingVersion: item.pricingVersion ? requiredText(item.pricingVersion, `model ${name} pricingVersion`) : null, asynchronous: Boolean(item.asynchronous), resultMimeTypes: Array.isArray(item.resultMimeTypes) ? item.resultMimeTypes.map(String) : [] })];
   }));
 }
 
@@ -78,7 +78,7 @@ export function loadArkConfig(env = process.env) {
     if (env.OPENREEL_VOLCENGINE_API_KEY?.trim() && env[modelEnv]?.trim()) {
       const price = volcenginePrice(name);
       if (!price) throw new DomainError("ARK_PRICE_UNKNOWN", `model ${name} has no approved price`, 503);
-      presets[name] = { capability, providerModel: env[modelEnv].trim(), endpoint: `${volcengineBase}/${path}`, ...(asynchronous ? { pollEndpoint: `${volcengineBase}/${path}` } : {}), apiKeyEnv: "OPENREEL_VOLCENGINE_API_KEY", protocol, asynchronous, ...price, pricingVersion: VOLCENGINE_PRICING.version, resultMimeTypes };
+      presets[name] = { capability, providerModel: env[modelEnv].trim(), endpoint: `${volcengineBase}/${path}`, ...(asynchronous ? { pollEndpoint: `${volcengineBase}/${path}` } : {}), apiKeyEnv: "OPENREEL_VOLCENGINE_API_KEY", protocol, asynchronous, ...price, currency: VOLCENGINE_PRICING.currency, unitScale: VOLCENGINE_PRICING.unitScale, pricingVersion: VOLCENGINE_PRICING.version, resultMimeTypes };
     }
   }
   const enabled = env.ARK_ENABLED === "true" || Object.keys(presets).length > 0;
@@ -199,7 +199,7 @@ export function createArkService({ config, platform, transport, assetTransport, 
       if (record) { job = record.job; if (job.status !== "submitting") return publicJob(job); model = modelFor(job.model, job.capability); }
       else {
         const capability = requiredText(request.capability, "capability"); model = modelFor(requiredText(request.model, "model"), capability);
-        const reservation = platform.reserveUsage(secret, { model: model.name, maxCostMicros: model.maxCostMicros, pricingVersion: model.pricingVersion, idempotencyKey: `ark:${idempotencyKey}` });
+        const reservation = platform.reserveUsage(secret, { model: model.name, maxCostMicros: model.maxCostMicros, pricingVersion: model.pricingVersion, currency: model.currency, unitScale: model.unitScale, idempotencyKey: `ark:${idempotencyKey}` });
         record = storage.create({ id: id(), ownerHash, idempotencyKey, model: model.name, capability, providerInput: structuredClone(request.input ?? null), status: "submitting", providerTaskId: null, reservationId: reservation.id, rates: { input: model.inputMicrosPerMillion, output: model.outputMicrosPerMillion, version: model.pricingVersion }, settlement: null, result: null, error: null, createdAt: now(), updatedAt: now() });
         job = record.job; if (job.reservationId !== reservation.id) return publicJob(job);
       }

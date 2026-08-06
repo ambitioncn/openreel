@@ -21,7 +21,7 @@ The local implementation is not production acceptance. The following actions req
 
 1. Register a previously unused browser user and verify login/session rotation.
 2. Submit API access; verify generation remains unavailable before Admin approval.
-3. Admin approves the exact microcredit ceiling; user issues a one-time API key and enters it into the canvas tab.
+3. Admin approves the exact USD ceiling to four decimal places; user issues a one-time API key and enters it into the canvas tab.
 4. Create a video node, select the approved Ark model, and submit one generation with a unique idempotency key.
 5. Refresh during polling and confirm the durable Ark task and canvas Job recover without a second reservation/provider submission.
 6. Confirm the settled ledger entry contains the correct user/key, model, pricing version, trusted usage, and cost within the reservation.

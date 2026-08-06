@@ -42,12 +42,13 @@ or terminal task failure. These routes never accept client-supplied usage or pri
 
 The built-in Volcengine presets use the official Ark model price page
 <https://www.volcengine.com/docs/82379/1544106?lang=zh>, verified 2026-08-06,
-and pricing version `volcengine-2026-08-01-markup-1.5`. Costs are converted to
-integer CNY micro-units and multiplied by 1.5. Seed 2.1 Pro sells at CNY 9/45
-per million input/output tokens and Turbo at CNY 4.5/22.5. Seedream 5 Lite/Pro
-sell at CNY 0.33/0.45 per image. Seedance 2 Fast/standard use CNY 55.5/69 per
-million output tokens, and Embedding Vision uses CNY 2.7 per million input
-tokens. For request-dependent provider tiers, the highest official cost is used
+and pricing version `volcengine-2026-08-06-usd-7.20-markup-1.5`. Official CNY
+costs are multiplied by 1.5 and converted at the fixed versioned rate
+`1 USD = CNY 7.20`. New balances and ledger entries use integer USD units where
+`10,000 units = USD 1.0000`; user interfaces always show USD with four decimal
+places. Historical CNY micro-unit entries remain labeled `CNY / 1,000,000` and
+are never silently reinterpreted or mixed with USD reservations. For
+request-dependent provider tiers, the highest official cost is used
 until the provider returns a trustworthy per-tier usage breakdown.
 
 Paid mode fails closed during startup if a configured model has no positive price

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Switch new paid inference applications, reservations, and usage ledgers to USD at a fixed versioned rate of `1 USD = CNY 7.20`, displayed to four decimal places.
+- Preserve historical CNY micro-unit records with explicit currency/scale metadata and prevent cross-currency settlement.
+
 ## v0.4.0 — 2026-08-06
 
 Production Ark inference and canvas workflow release.

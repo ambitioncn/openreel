@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createPersistentStore } from "../src/core.js";
@@ -101,6 +101,15 @@ test("administrators can reject applications and stop approved key access", () =
   const stopped = platform.stopKeyAccess(approved.id, { reviewNote: "Manual account stop" });
   assert.equal(stopped.application.status, "stopped"); assert.equal(stopped.keys[0].status, "suspended");
   assert.throws(() => platform.authenticateApiKey(issued.key), e => e.code === "INVALID_API_KEY");
+});
+
+test("schema 4 CNY history stays labeled and cannot be mixed with new USD pricing", () => {
+  const file = join(mkdtempSync(join(tmpdir(), "openreel-currency-")), "platform.json"), accountId = "legacy-account", subscriptionId = "legacy-subscription";
+  writeFileSync(file, JSON.stringify({ schemaVersion: 4, accounts: [{ id: accountId, email: "legacy@example.test", passwordHash: "x", salt: "x", createdAt: "2026-01-01T00:00:00.000Z" }], sessions: [], teams: [], invites: [], wallets: [], ledger: [], workflows: [], automations: [], objects: [], subscriptions: [{ id: subscriptionId, accountId, plan: "legacy", status: "active", hardLimitMicros: 1_000_000, spentMicros: 0, reservedMicros: 0, periodStartedAt: "2026-01-01T00:00:00.000Z", periodEndsAt: "2099-01-01T00:00:00.000Z" }], keyApplications: [], apiKeys: [], usageReservations: [], usageLedger: [] }));
+  const platform = createPlatform({ file }), migrated = platform.grantSubscription(accountId, { hardLimitUnits: 10_000, currency: "USD", unitScale: 10_000, periodEndsAt: "2099-01-01T00:00:00.000Z" });
+  assert.equal(migrated.currency, "USD"); assert.equal(migrated.unitScale, 10_000); assert.equal(migrated.hardLimitMicros, 10_000);
+  const state = JSON.parse(readFileSync(file, "utf8")), legacy = state.subscriptions.find(item => item.id === subscriptionId);
+  assert.equal(legacy.currency, "CNY"); assert.equal(legacy.unitScale, 1_000_000); assert.equal(legacy.status, "stopped"); assert.equal(state.schemaVersion, 5);
 });
 
 test("P1.4 automation preserves intent, exposes plan/status/failure/cost and replays idempotently", () => {

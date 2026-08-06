@@ -26,7 +26,7 @@ test("Ark configuration is explicit, provider-neutral, and never exposes credent
   assert.throws(() => config({ seed: { capability: "text", providerModel: "account-endpoint-id", endpoint: "http://127.0.0.1/run", maxCostMicros: 1 } }), e => e.code === "ARK_URL_REJECTED");
   const ark = config({ planner: { capability: "text", providerModel: "configured-endpoint-id", endpoint, maxCostMicros: 10 } });
   const service = createArkService({ config: ark, platform: createPlatform(), transport: async () => ({}), assetTransport: async () => ({}) });
-  assert.deepEqual(service.models(), [{ name: "planner", capability: "text", maxCostMicros: 10, inputMicrosPerMillion: 0, outputMicrosPerMillion: 1, pricingVersion: null, asynchronous: false, resultMimeTypes: [] }]);
+  assert.deepEqual(service.models(), [{ name: "planner", capability: "text", maxCostMicros: 10, inputMicrosPerMillion: 0, outputMicrosPerMillion: 1, currency: "USD", unitScale: 10_000, pricingVersion: null, asynchronous: false, resultMimeTypes: [] }]);
   assert.equal(JSON.stringify(service.models()).includes("server-only-secret"), false);
   assert.equal(JSON.stringify(service.models()).includes("configured-endpoint-id"), false);
 });
@@ -115,17 +115,20 @@ test("production presets map all seven configured models and keep paid calls gat
 });
 
 test("production prices are official costs times 1.5 and paid mode fails closed on zero or unknown prices", () => {
-  assert.equal(VOLCENGINE_PRICING.version, "volcengine-2026-08-01-markup-1.5");
+  assert.equal(VOLCENGINE_PRICING.version, "volcengine-2026-08-06-usd-7.20-markup-1.5");
+  assert.equal(VOLCENGINE_PRICING.currency, "USD");
+  assert.equal(VOLCENGINE_PRICING.unitScale, 10_000);
+  assert.equal(VOLCENGINE_PRICING.cnyPerUsd, 7.20);
   assert.deepEqual([
     VOLCENGINE_PRICING.models["seed-2.1-pro"].inputMicrosPerMillion,
     VOLCENGINE_PRICING.models["seed-2.1-pro"].outputMicrosPerMillion,
     VOLCENGINE_PRICING.models["seed-2.1-turbo"].inputMicrosPerMillion,
     VOLCENGINE_PRICING.models["seed-2.1-turbo"].outputMicrosPerMillion
-  ], [9_000_000, 45_000_000, 4_500_000, 22_500_000]);
-  assert.equal(VOLCENGINE_PRICING.models["seedream-5-lite"].outputMicrosPerMillion, 330_000_000_000);
-  assert.equal(VOLCENGINE_PRICING.models["seedream-5-pro"].outputMicrosPerMillion, 450_000_000_000);
-  assert.equal(VOLCENGINE_PRICING.models["embedding-vision"].inputMicrosPerMillion, 2_700_000);
-  assert.equal(VOLCENGINE_PRICING.models["seedance-2-fast"].maxCostMicros, 5_000_000);
+  ], [12_500, 62_500, 6_250, 31_250]);
+  assert.equal(VOLCENGINE_PRICING.models["seedream-5-lite"].outputMicrosPerMillion, 459_000_000);
+  assert.equal(VOLCENGINE_PRICING.models["seedream-5-pro"].outputMicrosPerMillion, 625_000_000);
+  assert.equal(VOLCENGINE_PRICING.models["embedding-vision"].inputMicrosPerMillion, 3_750);
+  assert.equal(VOLCENGINE_PRICING.models["seedance-2-fast"].maxCostMicros, 6_945);
   assert.throws(() => loadArkConfig({ ARK_ENABLED: "true", OPENREEL_PAID_INFERENCE_ENABLED: "true", ARK_API_KEY: "fixture", ARK_ALLOWED_HOSTS: "ark.example.test", ARK_MODELS_JSON: JSON.stringify({ unknown: { capability: "text", providerModel: "unknown", endpoint, maxCostMicros: 1 } }) }), error => error.code === "ARK_PRICE_UNKNOWN");
 });
 
