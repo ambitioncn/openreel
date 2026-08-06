@@ -1,8 +1,14 @@
 const $ = selector => document.querySelector(selector);
-let adminKey = "";
+let csrfToken = "";
 
-$("#load-applications").onclick = async () => { adminKey = $("#admin-key").value; await load(); };
-$("#application-filter").onchange = () => adminKey && load();
+$("#admin-login").onclick = async () => { try { const value = await request("/api/v1/admin/login", { method: "POST", body: JSON.stringify({ password: $("#admin-password").value }) }, false); csrfToken = value.csrfToken; $("#admin-password").value = ""; setSignedIn(true); await load(); } catch (error) { $("#admin-state").textContent = `Error: ${error.message}`; } };
+$("#admin-logout").onclick = async () => { try { await request("/api/v1/admin/logout", { method: "POST" }); } finally { csrfToken = ""; setSignedIn(false); $("#application-list").replaceChildren(); } };
+$("#application-filter").onchange = () => load();
+$("#admin-password").onkeydown = event => { if (event.key === "Enter") $("#admin-login").click(); };
+checkSession();
+
+async function checkSession() { try { await request("/api/v1/admin/session"); setSignedIn(true); await load(); } catch { setSignedIn(false); } }
+function setSignedIn(value) { $("#admin-login").hidden = value; $("#admin-logout").hidden = !value; $("#admin-password").closest("label").hidden = value; $("#admin-state").textContent = value ? "Administrator session active." : "Sign in with the administrator password."; }
 
 async function load() {
   try {
@@ -35,4 +41,4 @@ function actionForm(application, action) {
 
 function input(labelText, type, value) { const label = document.createElement("label"), input = document.createElement("input"); label.textContent = labelText; input.type = type; input.value = value; input.required = true; if (type === "number") input.min = "1"; label.append(input); return { label, input }; }
 function futureDate(days) { const date = new Date(Date.now() + days * 86400000); return date.toISOString().slice(0, 10); }
-async function request(path, options = {}) { const response = await fetch(path, { ...options, headers: { "content-type": "application/json", "x-openreel-admin-key": adminKey } }), value = await response.json(); if (!response.ok) throw new Error(value.error?.message || "Request failed"); return value; }
+async function request(path, options = {}, includeCsrf = true) { const response = await fetch(path, { ...options, headers: { "content-type": "application/json", ...(includeCsrf && csrfToken ? { "x-csrf-token": csrfToken } : {}) } }), value = await response.json(); if (!response.ok) throw new Error(value.error?.message || "Request failed"); return value; }

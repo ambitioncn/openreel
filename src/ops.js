@@ -48,5 +48,6 @@ export function validateProductionConfig(env = process.env) {
   if (new Set(paths).size !== paths.length) throw new Error("database, asset, and platform paths must be distinct");
   if (!env.OPENREEL_SESSION_SECRET || env.OPENREEL_SESSION_SECRET.length < 32 || /^(change|replace|example|test)/i.test(env.OPENREEL_SESSION_SECRET)) throw new Error("OPENREEL_SESSION_SECRET must be a non-placeholder value of at least 32 characters");
   if (!env.OPENREEL_ADMIN_KEY || env.OPENREEL_ADMIN_KEY.length < 32 || /^(change|replace|example|test)/i.test(env.OPENREEL_ADMIN_KEY)) throw new Error("OPENREEL_ADMIN_KEY must be a non-placeholder value of at least 32 characters");
+  if (env.OPENREEL_ADMIN_PASSWORD_HASH && !/^scrypt\$[A-Za-z0-9_-]+\$[A-Za-z0-9_-]+$/.test(env.OPENREEL_ADMIN_PASSWORD_HASH)) throw new Error("OPENREEL_ADMIN_PASSWORD_HASH must be a valid scrypt password hash");
   return { port, host, databaseFile: paths[0], assetRoot: paths[1], platformFile: paths[2] };
 }

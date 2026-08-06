@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { ASSET_POLICY, createDatabaseStore, createMemoryStore, createPersistentStore, DomainError } from "./src/core.js";
 import { createSqliteBackend } from "./src/durable.js";
 import { createPlatform } from "./src/platform.js";
-import { randomBytes, timingSafeEqual } from "node:crypto";
+import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { correlationId, createLogger, createMetrics, redact, validateProductionConfig } from "./src/ops.js";
 import { arkMaxRetries, createArkService, createArkTransports, loadArkConfig } from "./src/ark.js";
 
@@ -20,12 +20,17 @@ function cookies(req) { return Object.fromEntries(String(req.headers.cookie || "
 function cookie(name, value, { secure = true, maxAge = null, expires = null } = {}) { return `${name}=${encodeURIComponent(value)}; Path=/; HttpOnly; SameSite=Lax${secure ? "; Secure" : ""}${maxAge === null ? "" : `; Max-Age=${maxAge}`}${expires ? `; Expires=${new Date(expires).toUTCString()}` : ""}`; }
 function sessionCookie(name, value, session, secure) { const maxAge = Math.max(0, Math.floor((Date.parse(session.expiresAt) - Date.parse(session.createdAt)) / 1000)); return cookie(name, value, { secure, maxAge, expires: session.expiresAt }); }
 function safeEqual(a, b) { const x = Buffer.from(String(a || "")), y = Buffer.from(String(b || "")); return x.length === y.length && timingSafeEqual(x, y); }
+function verifyAdminPassword(password, encoded) {
+  const [scheme, salt, digest] = String(encoded || "").split("$");
+  if (scheme !== "scrypt" || !salt || !digest || typeof password !== "string" || password.length > 1024) return false;
+  try { return safeEqual(scryptSync(password, Buffer.from(salt, "base64url"), 64), Buffer.from(digest, "base64url")); } catch { return false; }
+}
 function sniffMime(bytes) { if (bytes.length >= 8 && bytes.subarray(0, 8).equals(Buffer.from("89504e470d0a1a0a", "hex"))) return "image/png"; if (bytes.length >= 3 && bytes.subarray(0, 3).equals(Buffer.from("ffd8ff", "hex"))) return "image/jpeg"; if (bytes.length >= 12 && bytes.subarray(0, 4).toString() === "RIFF" && bytes.subarray(8, 12).toString() === "WEBP") return "image/webp"; if (bytes.length >= 12 && bytes.subarray(4, 8).toString() === "ftyp") return "video/mp4"; if (bytes.length >= 4 && bytes.subarray(0, 4).equals(Buffer.from("1a45dfa3", "hex"))) return "video/webm"; if (bytes.length >= 3 && (bytes.subarray(0, 3).toString() === "ID3" || (bytes[0] === 0xff && (bytes[1] & 0xe0) === 0xe0))) return "audio/mpeg"; if (bytes.length >= 12 && bytes.subarray(0, 4).toString() === "RIFF" && bytes.subarray(8, 12).toString() === "WAVE") return "audio/wav"; return null; }
 function uploadFilename(value, extension) { if (typeof value !== "string" || !value.trim() || value.length > 128 || value.includes("/") || value.includes("\\") || value.includes("\0") || [".", ".."].includes(value.trim())) throw new DomainError("INVALID_FILENAME", "a safe filename is required"); const name = value.trim(); if (!new RegExp(`\\.${extension}$`, "i").test(name)) throw new DomainError("INVALID_FILENAME", `filename must end in .${extension}`); return name; }
 function createRateLimiter({ max = 60, windowMs = 60_000, now = Date.now, key = req => req.socket.remoteAddress || "unknown" } = {}) { const entries = new Map(); return req => { const id = key(req), time = Number(now()), old = entries.get(id); const entry = !old || time - old.startedAt >= windowMs ? { startedAt: time, count: 0 } : old; entry.count += 1; entries.set(id, entry); if (entry.count > max) throw new DomainError("RATE_LIMITED", "request rate limit exceeded", 429, { retryAfterSeconds: Math.max(1, Math.ceil((windowMs - (time - entry.startedAt)) / 1000)) }); }; }
 
-export function createOpenReelServer(store = createMemoryStore(), platform = createPlatform(), { production = false, secureCookies = production, jsonLimit = 1024 * 1024, rateLimit = {}, logger = () => {}, readiness = () => ({ database: "ok", assets: "ok" }), metrics = createMetrics(), adminToken = null, arkService = null } = {}) {
-  const limit = createRateLimiter(rateLimit), log = (event, fields) => logger(event, redact(fields));
+export function createOpenReelServer(store = createMemoryStore(), platform = createPlatform(), { production = false, secureCookies = production, jsonLimit = 1024 * 1024, rateLimit = {}, logger = () => {}, readiness = () => ({ database: "ok", assets: "ok" }), metrics = createMetrics(), adminToken = null, adminPasswordHash = null, arkService = null } = {}) {
+  const limit = createRateLimiter(rateLimit), log = (event, fields) => logger(event, redact(fields)), adminSessions = new Map();
   return createServer(async (req, res) => {
     const requestId = correlationId(req.headers["x-request-id"]); res.setHeader("x-request-id", requestId); metrics.begin();
     res.once("finish", () => { metrics.end(res.statusCode); log("http_request", { requestId, method: req.method, path: new URL(req.url, "http://localhost").pathname, status: res.statusCode, authorization: req.headers.authorization, cookie: req.headers.cookie }); });
@@ -68,8 +73,20 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       else if (req.method === "GET" && api[0] === "auth" && api[1] === "csrf") { const account = platform.authenticate(token), csrf = randomBytes(24).toString("base64url"), createdAt = new Date().toISOString(), expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); return json(res, 200, { account, csrfToken: csrf }, { "set-cookie": sessionCookie("openreel_csrf", csrf, { createdAt, expiresAt }, secureCookies) }); }
       else if (req.method === "GET" && api[0] === "auth" && api[1] === "me") out = platform.authenticate(token);
       else if (adminRoute) {
-        if (!adminToken || !safeEqual(req.headers["x-openreel-admin-key"], adminToken)) throw new DomainError("FORBIDDEN", "administrator authorization required", 403);
-        if (req.method === "GET" && api[1] === "key-applications" && api.length === 2) out = platform.listKeyApplications({ status: url.searchParams.get("status") || undefined });
+        if (req.method === "POST" && api[1] === "login" && api.length === 2) {
+          const value = await input();
+          if (!verifyAdminPassword(value.password, adminPasswordHash)) { log("admin_login_failed", { requestId }); throw new DomainError("INVALID_CREDENTIALS", "invalid administrator credentials", 401); }
+          const sessionToken = randomBytes(32).toString("base64url"), csrf = randomBytes(24).toString("base64url"), now = Date.now(), expiresAt = new Date(now + 8 * 60 * 60 * 1000).toISOString();
+          adminSessions.set(sessionToken, { expiresAt: Date.parse(expiresAt) });
+          log("admin_login_succeeded", { requestId });
+          return json(res, 200, { expiresAt, csrfToken: csrf }, { "set-cookie": [cookie("openreel_admin_session", sessionToken, { secure: secureCookies, maxAge: 8 * 60 * 60, expires: expiresAt }), cookie("openreel_admin_csrf", csrf, { secure: secureCookies, maxAge: 8 * 60 * 60, expires: expiresAt })] });
+        }
+        const adminSession = jar.openreel_admin_session && adminSessions.get(jar.openreel_admin_session), sessionAuthorized = adminSession && adminSession.expiresAt > Date.now(), keyAuthorized = adminToken && safeEqual(req.headers["x-openreel-admin-key"], adminToken);
+        if (!sessionAuthorized && !keyAuthorized) throw new DomainError("FORBIDDEN", "administrator authorization required", 403);
+        if (sessionAuthorized && !["GET", "HEAD", "OPTIONS"].includes(req.method) && !safeEqual(req.headers["x-csrf-token"], jar.openreel_admin_csrf)) throw new DomainError("CSRF_REJECTED", "valid administrator CSRF token required", 403);
+        if (req.method === "POST" && api[1] === "logout" && api.length === 2) { adminSessions.delete(jar.openreel_admin_session); return json(res, 200, { loggedOut: true }, { "set-cookie": [cookie("openreel_admin_session", "", { secure: secureCookies, maxAge: 0 }), cookie("openreel_admin_csrf", "", { secure: secureCookies, maxAge: 0 })] }); }
+        if (req.method === "GET" && api[1] === "session" && api.length === 2) out = { authenticated: true, expiresAt: adminSession ? new Date(adminSession.expiresAt).toISOString() : null };
+        else if (req.method === "GET" && api[1] === "key-applications" && api.length === 2) out = platform.listKeyApplications({ status: url.searchParams.get("status") || undefined });
         else if (req.method === "POST" && api[1] === "key-applications" && api[3] === "approve") out = platform.approveKeyApplication(api[2], await input());
         else if (req.method === "POST" && api[1] === "key-applications" && api[3] === "reject") out = platform.rejectKeyApplication(api[2], await input());
         else if (req.method === "POST" && api[1] === "key-applications" && api[3] === "stop") out = platform.stopKeyAccess(api[2], await input());
@@ -138,7 +155,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const logger = createLogger();
   const platform = createPlatform({ file: config.platformFile }), arkConfig = loadArkConfig(), transports = createArkTransports({ retries: arkMaxRetries() });
   const arkService = createArkService({ config: arkConfig, platform, transport: transports.request, assetTransport: transports.asset, store: backend.arkJobs });
-  const server = createOpenReelServer(createDatabaseStore(backend), platform, { production, secureCookies: production, readiness: backend.health, logger, adminToken: process.env.OPENREEL_ADMIN_KEY || null, arkService });
+  const server = createOpenReelServer(createDatabaseStore(backend), platform, { production, secureCookies: production, readiness: backend.health, logger, adminToken: process.env.OPENREEL_ADMIN_KEY || null, adminPasswordHash: process.env.OPENREEL_ADMIN_PASSWORD_HASH || null, arkService });
   server.on("error", error => { logger("startup_error", { error: error.message }); process.exitCode = 1; });
   server.listen(config.port, config.host, () => logger("service_started", { host: config.host, port: config.port }));
 }

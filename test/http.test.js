@@ -5,6 +5,7 @@ import { createPersistentStore } from "../src/core.js";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { randomBytes, scryptSync } from "node:crypto";
 
 async function request(base, path, options) {
   const response = await fetch(`${base}${path}`, options && { headers: { "content-type": "application/json" }, ...options });
@@ -180,6 +181,21 @@ test("API key applications require user submission and administrator approval or
   for (const path of ["/admin", "/admin/"]) { const alias = await fetch(`${base}${path}`); assert.equal(alias.status, 200); assert.match(await alias.text(), /API access administration/); }
   for (const path of ["/favicon.ico", "/definitely-missing"]) { const missing = await fetch(`${base}${path}`); assert.equal(missing.status, 404); assert.equal((await missing.json()).error.code, "NOT_FOUND"); }
   const aliveAfterMissingStatic = await fetch(`${base}/health/live`); assert.equal(aliveAfterMissingStatic.status, 200);
+});
+
+test("administrator password creates a CSRF-protected browser session while the operations key remains supported", async (t) => {
+  const credential = ["correct", "horse", "battery", "staple"].join(" "), salt = randomBytes(16), adminPasswordHash = `scrypt$${salt.toString("base64url")}$${scryptSync(credential, salt, 64).toString("base64url")}`;
+  const operationsCredential = ["administrator", "operations", "credential", "fixture"].join("-"), server = createOpenReelServer(undefined, undefined, { production: true, secureCookies: false, adminToken: operationsCredential, adminPasswordHash, rateLimit: { max: 1000 } });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const bad = await fetch(`${base}/api/v1/admin/login`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ password: "wrong" }) }); assert.equal(bad.status, 401);
+  const login = await fetch(`${base}/api/v1/admin/login`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ password: credential }) }), loginBody = await login.json(); assert.equal(login.status, 200);
+  const adminCookie = login.headers.getSetCookie().map(value => value.split(";", 1)[0]).join("; "); assert.doesNotMatch(adminCookie, new RegExp(credential));
+  const session = await fetch(`${base}/api/v1/admin/session`, { headers: { cookie: adminCookie } }); assert.equal(session.status, 200);
+  const missingCsrf = await fetch(`${base}/api/v1/admin/logout`, { method: "POST", headers: { cookie: adminCookie, "content-type": "application/json" }, body: "{}" }); assert.equal(missingCsrf.status, 403);
+  const logout = await fetch(`${base}/api/v1/admin/logout`, { method: "POST", headers: { cookie: adminCookie, "x-csrf-token": loginBody.csrfToken, "content-type": "application/json" }, body: "{}" }); assert.equal(logout.status, 200);
+  const expired = await fetch(`${base}/api/v1/admin/session`, { headers: { cookie: adminCookie } }); assert.equal(expired.status, 403);
+  const operationsKey = await fetch(`${base}/api/v1/admin/key-applications`, { headers: { "x-openreel-admin-key": operationsCredential } }); assert.equal(operationsKey.status, 200);
 });
 
 test("production protected-route matrix rejects anonymous, bad cookie, bad bearer, and spoofed identity", async (t) => {

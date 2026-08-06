@@ -5,11 +5,11 @@
     <main class="admin-shell">
       <header><div><span class="mark">OR</span><h1>API access administration</h1></div><a href="/">Workspace</a></header>
       <section class="admin-auth">
-        <label>Administrator key<input id="admin-key" type="password" autocomplete="off" /></label>
+        <label>Administrator password<input id="admin-password" type="password" autocomplete="current-password" /></label>
         <label>Status<select id="application-filter"><option value="">All</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="stopped">Stopped</option></select></label>
-        <button id="load-applications" type="button">Load applications</button>
+        <button id="admin-login" type="button">Sign in</button><button id="admin-logout" type="button" hidden>Sign out</button>
       </section>
-      <p id="admin-state" role="status">Enter the server administrator key. It stays in this browser tab only.</p>
+      <p id="admin-state" role="status">Sign in with the administrator password.</p>
       <section id="application-list" class="application-list"></section>
     </main>
     <script type="module" src="src/admin.js"></script>
