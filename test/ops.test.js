@@ -1,14 +1,16 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { createDatabaseStore } from "../src/core.js";
 import { createSqliteBackend } from "../src/durable.js";
 import { correlationId, createLogger, createMetrics, redact, validateProductionConfig } from "../src/ops.js";
 import { createBackup, verifyBackup } from "../scripts/backup.mjs";
+import { buildReleaseManifest, releaseArtifactPaths, verifyReleaseManifest } from "../scripts/qualify-release-artifacts.mjs";
 import { createOpenReelServer } from "../server.mjs";
 
 const exec = promisify(execFile);
@@ -48,6 +50,21 @@ test("OPS-2 deployment artifacts enforce loopback binding, proxy headers, and ha
   for (const expected of ["User=openreel", "NoNewPrivileges=true", "ProtectSystem=strict", "CapabilityBoundingSet=", "ReadWritePaths=/var/lib/openreel"]) assert.match(service, new RegExp(expected.replace(/[=.]/g, "\\$&")));
   assert.match(caddy, /reverse_proxy 127\.0\.0\.1:4173/); assert.match(caddy, /X-Forwarded-Proto/); assert.match(caddy, /X-Forwarded-For/); assert.match(caddy, /X-Request-ID/); assert.match(caddy, /respond @internal 404/);
   assert.match(backup, /Type=oneshot/); assert.match(backup, /ReadOnlyPaths=\/var\/lib\/openreel/); assert.match(timer, /OnCalendar=daily/); assert.match(timer, /Persistent=true/);
+});
+
+test("OPS-2 release artifact manifest detects drift before rollback activation", () => {
+  const root = mkdtempSync(join(tmpdir(), "openreel-release-manifest-"));
+  const manifest = buildReleaseManifest(fileURLToPath(new URL("..", import.meta.url)));
+  assert.deepEqual(manifest.artifacts.map(item => item.path), releaseArtifactPaths);
+  for (const artifact of manifest.artifacts) {
+    const source = new URL(`../${artifact.path}`, import.meta.url);
+    const target = join(root, artifact.path);
+    mkdirSync(join(target, ".."), { recursive: true });
+    cpSync(fileURLToPath(source), target, { recursive: false });
+  }
+  assert.deepEqual(verifyReleaseManifest(root, manifest), { status: "verified", artifacts: releaseArtifactPaths.length });
+  writeFileSync(join(root, releaseArtifactPaths[0]), "drift");
+  assert.throws(() => verifyReleaseManifest(root, manifest), /integrity failure/);
 });
 
 test("OPS-2 unprivileged rehearsal starts the real production service on loopback", { skip: process.getuid?.() === 0 }, async () => {

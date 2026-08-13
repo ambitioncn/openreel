@@ -21,6 +21,13 @@ Reservations and settlements require idempotency keys/IDs so retries do not char
 twice. Failed provider calls settle at zero cost. A settlement cannot exceed the
 reserved maximum.
 
+Local administrative refunds apply only to settled usage, require an idempotency
+key and audit reason, and cannot exceed the remaining settled amount. The billing
+status includes account-scoped refunds and a read-only reconciliation result that
+compares recorded subscription totals with reservation, settlement and refund
+records. Drift is reported but never repaired automatically. This is ledger logic,
+not a connected payment-provider refund.
+
 ## Server-side Ark inference
 
 `POST /api/v1/inference/jobs` accepts an `or_live_...` key in
@@ -85,7 +92,9 @@ attempt-and-delay budget. Only transient transport, 429, and 5xx failures retry.
 - `POST /api/v1/api-keys` — create a key (paid session required)
 - `GET /api/v1/api-keys` — list prefixes and status; secrets are never returned
 - `DELETE /api/v1/api-keys/:id` — revoke a key
-- `GET /api/v1/billing/usage` — subscription, spend, reservations and usage ledger
+- `GET /api/v1/billing/usage` — account-scoped subscription, keys, reservation states,
+  settled usage, refunds, reconciliation state, and an explicit
+  `paymentIntegration.connected=false` boundary
 - `GET /api/v1/key/status` — authenticate a platform key and return remaining limit
 - `POST /api/v1/key-applications` — submit one pending application per account
 - `GET /api/v1/key-applications` — view the signed-in user's application history

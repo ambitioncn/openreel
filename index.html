@@ -30,6 +30,10 @@
         <div><span class="mark">OR</span><strong>OpenReel</strong><span id="project-name" class="crumb">/ Loading…</span></div>
         <div class="project-actions"><button id="tutorials" type="button">Tutorials</button><button id="api-access" type="button">API access</button><button id="rename-project">Rename</button><button id="archive-project">Archive</button><button id="logout" type="button">Sign out</button><div class="status"><span></span> Secure workspace</div></div>
       </header>
+      <section id="collaboration-conflict" class="collaboration-conflict" role="alert" hidden>
+        <div><strong id="collaboration-conflict-title"></strong><p id="collaboration-conflict-message"></p></div>
+        <button id="reload-collaboration" type="button">Load latest version</button>
+      </section>
       <aside class="toolbox" aria-label="Node toolbox">
         <p class="eyebrow">ADD NODE</p>
         <div id="node-tools"></div>
@@ -46,9 +50,24 @@
         <p class="eyebrow">INSPECTOR</p>
         <section class="workflow" aria-label="Creation workflow">
           <button id="build-story" type="button">1 · Create story + shot</button>
-          <button id="export-edl" type="button">2 · Export timeline manifest</button>
+          <button id="start-storyboard-batch" type="button">2 · Start storyboard batch</button>
+          <section id="storyboard-batch" class="storyboard-batch" hidden>
+            <p id="storyboard-batch-state" role="status"></p>
+            <ol id="storyboard-batch-jobs"></ol>
+            <div><button id="advance-storyboard-batch" type="button">Advance</button><button id="cancel-storyboard-batch" type="button">Cancel</button><button id="retry-storyboard-batch" type="button">Retry failed shot</button></div>
+          </section>
+          <button id="export-edl" type="button">3 · Export timeline manifest</button>
+          <fieldset id="render-export-fields">
+            <legend>Local preview export</legend>
+            <label>Format<select id="render-format"><option value="mp4">MP4</option></select></label>
+            <label>Quality<select id="render-quality"><option value="preview-360p">Preview 360p</option></select></label>
+            <label><input id="render-reviewed" type="checkbox" /> I reviewed the timeline</label>
+            <small>Local limit: 100 clips, 600 seconds. Preview quality only.</small>
+          </fieldset>
+          <button id="render-export" type="button">4 · Render local MP4 preview</button>
           <p id="workflow-state" role="status">Empty: create a story, generate media, then export.</p>
           <a id="export-download" hidden download="openreel-edl.json">Download EDL</a>
+          <a id="render-download" hidden download>Download MP4 preview</a>
         </section>
         <div id="inspector-empty">Select a node to edit its details.</div>
         <form id="graph-form" hidden>
@@ -64,7 +83,8 @@
             <label>Multimodal reference<input id="reference-upload" type="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,audio/mpeg,audio/wav" /></label>
             <p id="upload-state" role="status">No reference uploaded.</p>
             <label>Prompt<textarea id="generation-prompt" rows="3">A cinematic local simulation</textarea></label>
-            <fieldset id="parameter-fields"><legend>Model parameters</legend><label>Model<select id="generation-model"></select></label><label>Mode<select id="generation-mode"></select></label><label>Aspect<select id="generation-aspect"></select></label><label>Resolution<select id="generation-resolution"></select></label><label>Duration<select id="generation-duration"></select></label><label><input id="generation-audio" type="checkbox" /> Audio</label><output id="reference-limit"></output></fieldset>
+            <fieldset id="parameter-fields"><legend>Model parameters</legend><label>Model<select id="generation-model"></select></label><label>Mode<select id="generation-mode"></select></label><label>Aspect<select id="generation-aspect"></select></label><label>Resolution<select id="generation-resolution"></select></label><label>Duration<select id="generation-duration"></select></label><label><input id="generation-audio" type="checkbox" /> Audio</label><div id="generation-controls" class="generation-controls" hidden></div><output id="reference-limit"></output></fieldset>
+            <fieldset id="audio-spec-fields" hidden><legend>Reviewed audio settings</legend><label>Intent<select id="audio-intent"><option value="voice">Voice</option><option value="music">Music</option><option value="sfx">SFX</option></select></label><label>Voice<input id="audio-voice" maxlength="64" /></label><label>Speed<input id="audio-speed" type="number" min="0.5" max="2" step="0.1" value="1" /></label><label>Pitch<input id="audio-pitch" type="number" min="-12" max="12" step="1" value="0" /></label><label>Volume<input id="audio-volume" type="number" min="0" max="2" step="0.1" value="1" /></label><label>Sample rate<select id="audio-sample-rate"><option>24000</option><option>16000</option><option>44100</option><option>48000</option></select></label><label>Format<select id="audio-format"><option>wav</option><option>mp3</option></select></label><label><input id="audio-reviewed" type="checkbox" /> I reviewed these settings</label></fieldset>
             <p class="field-note">Ark generation uses your signed-in account's approved USD allowance. No platform key is required in the workspace.</p>
             <label class="failure-toggle"><input id="simulate-failure" type="checkbox" /> Simulate failure</label>
             <button id="generate" type="button">Generate locally</button>

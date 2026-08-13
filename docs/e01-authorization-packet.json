@@ -1,0 +1,49 @@
+{
+  "schema": "openreel-e01-authorization/v1",
+  "status": "prepared_not_authorized",
+  "authorized": false,
+  "scope": "staging_only_no_public_traffic",
+  "pricing": {
+    "version": "volcengine-2026-08-06-usd-7.20-markup-1.5",
+    "currency": "USD",
+    "unitScale": 10000,
+    "maximumReservedUnits": 30558,
+    "maximumReservedDisplay": "USD 3.0558"
+  },
+  "calls": [
+    {"caseId":"vision-image-1","modality":"vision","model":"embedding-vision","count":1,"maximumReservedUnitsPerCall":2778,"evidence":"bounded image input, terminal response shape, trusted usage"},
+    {"caseId":"vision-video-1","modality":"vision","model":"embedding-vision","count":1,"maximumReservedUnitsPerCall":2778,"evidence":"bounded video input, terminal response shape, trusted usage"},
+    {"caseId":"image-continuity-1","modality":"image","model":"seedream-5-lite","count":4,"maximumReservedUnitsPerCall":2778,"evidence":"four ordered storyboard outputs, provenance, billed usage, retained visual-scoring inputs"},
+    {"caseId":"video-sequence-1","modality":"video","model":"seedance-2-fast","count":2,"maximumReservedUnitsPerCall":6945,"evidence":"two bounded short clips, terminal asset metadata, provenance, billed usage"}
+  ],
+  "requiredHumanInputs": {
+    "stagingBaseUrl": null,
+    "credentialSourceReference": null,
+    "providerEndpointIds": {"embedding-vision":null,"seedream-5-lite":null,"seedance-2-fast":null},
+    "approvedBy": null,
+    "approvedAt": null,
+    "approvalStatement": null
+  },
+  "notCovered": [
+    "audio: no reviewed real provider endpoint and immutable price are configured",
+    "production deployment, public traffic, subscription, publication, credential creation or change",
+    "automatic retries or calls beyond the eight listed cases"
+  ],
+  "stopConditions": [
+    "any required human input is null or ambiguous",
+    "configured catalog fingerprint or pricing version differs from the reviewed packet",
+    "a model, endpoint host, MIME type, redirect, DNS result or credential source is outside the approved allowlist",
+    "any submission would exceed its per-call reservation or the USD 3.0558 aggregate ceiling",
+    "any provider failure, timeout, capability mismatch, untrusted usage report or ledger reconciliation mismatch",
+    "tenant isolation, CSRF, readiness, backup, rollback-preflight, dependency scan or secret scan is not passing",
+    "the operator requests stop"
+  ],
+  "executionDefaults": {
+    "automaticRetry": false,
+    "uniqueIdempotencyKeyPerCase": true,
+    "providerDeadlineSeconds": 30,
+    "retainCredentialsOrOutputUrlsInLogs": false,
+    "deployOrSwitchTraffic": false,
+    "cleanupRequiresSeparateApprovalIfCredentialOrProcessMutationIsNeeded": true
+  }
+}

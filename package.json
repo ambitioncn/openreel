@@ -21,6 +21,8 @@
     "smoke:import": "node scripts/terminal-smoke.mjs import",
     "scan:dependencies": "npm audit --omit=dev --audit-level=high",
     "scan:secrets": "node scripts/scan-secrets.mjs",
+    "qualify:reliability": "node scripts/qualify-reliability.mjs",
+    "qualify:release-artifacts": "node scripts/qualify-release-artifacts.mjs",
     "rehearse:deployment": "node scripts/rehearse-deployment.mjs",
     "smoke:production-e2e": "node scripts/production-e2e.mjs",
     "smoke:live": "node scripts/live-smoke.mjs",

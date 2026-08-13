@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "contractVersion": "2.0",
-  "updatedAt": "2026-08-04",
-  "status": "implemented_and_verified",
+  "contractVersion": "3.0",
+  "updatedAt": "2026-08-13",
+  "status": "ongoing",
   "items": [
     {"id":"P0.1","dependsOn":[],"status":"accepted","evidence":["src/core.js schema v3 graph persistence and graph edit APIs","src/app.js persisted nodes/directed edges/groups/history UI","test/graph-adapter.test.js graph edit/restart/cycle/stale/invalid-position negatives","npm test: 27/27"],"acceptance":["durable typed nodes/edges/groups","per-node run/progress/results/versioned history","graph negative and restart tests"],"unmet":[]},
     {"id":"P0.2","dependsOn":["P0.1"],"status":"accepted","evidence":["src/adapters.js registry/local/optional gates/result validation","src/core.js createJob registry execution","test/graph-adapter.test.js local execution/credential/cost/invalid-result gates","npm test: 27/27"],"acceptance":["adapter interface and registry","credential-free executable adapter","credential/cost gate negatives"],"unmet":[]},
@@ -17,6 +17,9 @@
     {"id":"P2.2","dependsOn":["P0.1"],"status":"accepted","evidence":["src/platform.js salted scrypt password authentication and opaque sessions","team tenant/invite/membership/roles/conflict enforcement","server.mjs local auth/team APIs","test/terminal.test.js and npm run smoke:auth authorization negatives","docs/security-posture.md explicit non-production boundary"],"acceptance":["local auth/team/invite architecture","authorization negatives","production boundary"],"unmet":[]},
     {"id":"P2.3","dependsOn":["P2.2"],"status":"accepted","evidence":["src/platform.js LocalObjectAdapter/LocalDatabaseAdapter tenant-scoped interfaces","workflow and ledger cross-tenant authorization","test/terminal.test.js and npm run smoke:tenant isolation negatives","docs/security-posture.md threat model, backup/migration guidance and production blockers"],"acceptance":["storage/database/multitenancy interfaces","tenant isolation/security posture"],"unmet":[]}
   ],
-  "unmet": [],
-  "blockers": []
+  "unmet": ["M-01","C-01","A-01","T-01","CO-01","B-01","S-01","E-01","E-02"],
+  "blockers": [
+    {"id":"E-01","reason":"Staging deployment, credentials and paid real-provider calls require explicit human approval."},
+    {"id":"E-02","reason":"Production deployment and process-control actions require explicit human approval."}
+  ]
 }

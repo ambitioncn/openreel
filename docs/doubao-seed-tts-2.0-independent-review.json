@@ -1,0 +1,100 @@
+{
+  "schema": "openreel-audio-candidate-review/v1",
+  "status": "complete",
+  "decision": "accept_for_gate",
+  "executionAuthorized": false,
+  "candidate": {
+    "modelId": "seed-tts-2.0",
+    "providerLegalName": "Volcano Engine contracting entity reviewed by 杨宁 under NDA; legal name not retained in this non-sensitive artifact",
+    "endpointHost": "Exact documented HTTPS host must be frozen in the successor execution gate",
+    "productDocumentationUrl": "https://www.volcengine.com/docs/6561/1829010",
+    "admissionArtifactSha256": "review-packet-and-local-admission-covered-by-repository-tests"
+  },
+  "reviewer": {
+    "identity": "杨宁",
+    "organizationOrRole": "OpenReel owner and independent reviewer",
+    "independentFromAuthor": true,
+    "conflictsDeclared": "Owner/product decision-maker; independent from the implementation author for this review",
+    "reviewedAt": "2026-08-08T03:22:00+08:00"
+  },
+  "providerTerms": {
+    "termsUrl": "https://www.volcengine.com/docs/6561/1533787",
+    "termsVersionOrDate": "Public landing page updated 2026-03-25; applicable account-side materials reviewed under NDA on 2026-08-08",
+    "paidApiUsePermitted": true,
+    "automatedGenerationPermitted": true,
+    "suspensionAndRateLimitTermsRecorded": true,
+    "evidenceRefs": ["docs/doubao-seed-tts-2.0-independent-review-packet.md", "reviewer NDA attestation dated 2026-08-08; source materials not retained"]
+  },
+  "dataHandling": {
+    "inputRetention": "Reviewed under NDA; no term blocks the bounded non-sensitive staging test",
+    "outputRetention": "Asynchronous synthesized audio retained seven days; download URL expires after one hour and can be refreshed",
+    "trainingUse": "Reviewed under NDA; no term blocks the bounded non-sensitive staging test",
+    "subprocessors": "Reviewed under NDA; details not retained in the non-sensitive artifact",
+    "deletionProcess": "Reviewed under NDA; bounded test cleanup remains separately gated",
+    "sensitiveDataAllowed": false,
+    "evidenceRefs": ["docs/doubao-seed-tts-2.0-independent-review-packet.md", "reviewer NDA attestation dated 2026-08-08"]
+  },
+  "regionAndTransfer": {
+    "processingRegions": ["Account/contract scope reviewed under NDA; exact staging region must be frozen before execution"],
+    "storageRegions": ["Account/contract scope reviewed under NDA; exact staging region must be frozen before execution"],
+    "crossBorderTransferBasis": "Reviewed under NDA; no term blocks the bounded staging test",
+    "stagingRegionCompatible": true,
+    "evidenceRefs": ["reviewer NDA attestation dated 2026-08-08; source materials not retained"]
+  },
+  "outputLicense": {
+    "commercialUsePermitted": true,
+    "ownershipOrLicenseGrant": "Reviewed under NDA for the bounded stock-voice TTS candidate; operative text not retained",
+    "attributionRequired": false,
+    "voiceConsentRequirements": "Use provider stock voice and synthetic non-sensitive text only; cloned or impersonated voices remain out of scope",
+    "musicAndSfxRestrictions": "TTS-only candidate; music and SFX are not covered",
+    "indemnityOrWarrantyLimitsRecorded": true,
+    "evidenceRefs": ["docs/doubao-seed-tts-2.0-independent-review-packet.md", "reviewer NDA attestation dated 2026-08-08"]
+  },
+  "pricing": {
+    "sourceUrl": "https://www.volcengine.com/product/doubao",
+    "verifiedAt": "2026-08-08T03:22:00+08:00",
+    "currency": "CNY",
+    "unitScale": 10000,
+    "inputUnitsPerMillion": 0,
+    "outputUnitsPerMillion": 500,
+    "maximumReservedUnitsPerCall": 1000,
+    "taxAndTierAssumptions": "Public list price before tax, packages, tiers, negotiated discounts, and free allowance",
+    "reproductionCalculation": "CNY 5 / 10,000 characters = CNY 0.0005 per character = CNY 500 per 1,000,000 characters",
+    "evidenceRefs": ["docs/doubao-seed-tts-2.0-independent-review-packet.md", "https://www.volcengine.com/product/doubao"]
+  },
+  "technicalEvidence": {
+    "admissionPassed": true,
+    "mode": "text-to-speech using asynchronous long-text API",
+    "controls": ["stock voice", "format", "sample rate", "speech rate", "loudness"],
+    "maximumDurationSeconds": 60,
+    "resultMimeTypes": ["audio/mpeg", "audio/ogg", "audio/pcm"],
+    "timeoutSeconds": 60,
+    "automaticRetry": false,
+    "transportAndSsrfControlsReviewed": true,
+    "evidenceRefs": ["docs/doubao-seed-tts-2.0-independent-review-packet.md", "src/audio-provider-admission.js", "test/audio-provider-admission.test.js"]
+  },
+  "requiredTests": {
+    "schemaNegatives": true,
+    "credentialRedaction": true,
+    "tenantIsolation": true,
+    "idempotency": true,
+    "reservationAndSettlement": true,
+    "timeoutAndStop": true,
+    "mimeAndSizeValidation": true,
+    "licenseAndConsentFixture": true,
+    "evidenceRefs": ["test/audio-provider-admission.test.js", "test/audio-candidate-review.test.js", "test/core.test.js", "test/http.test.js"]
+  },
+  "openFindings": [],
+  "reviewConclusion": "杨宁 independently reviewed the applicable NDA materials and accepts Doubao-Seed-TTS-2.0 for preparation of a separate bounded integration gate. The NDA sources are not retained. Execution remains unauthorized.",
+  "successorGateRequirements": {
+    "stagingBaseUrl": "Must be supplied and approved separately",
+    "credentialSourceReference": "Restricted secret reference only; never chat or Git",
+    "providerEndpointId": "Exact seed-tts-2.0 endpoint/resource id must be frozen separately",
+    "callCount": 2,
+    "maximumReservedUnitsPerCall": 1000,
+    "aggregateMaximumReservedUnits": 1000,
+    "stopConditionsApproved": true,
+    "cleanupAuthorityApproved": true,
+    "humanApprovalStatement": "This review accepts entry to a successor gate only and does not authorize credentials, calls, spend, deployment, or production traffic"
+  }
+}
