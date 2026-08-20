@@ -10,11 +10,16 @@
 .tutorial-detail { max-width:720px; margin:0 auto }
 .tutorial-detail h3 { margin-top:26px }
 .tutorial-detail li { margin-bottom:9px; color:#c7c9d1; font-size:13px; line-height:1.55 }
+.tutorial-steps label { display:grid; grid-template-columns:auto 1fr; align-items:start; gap:9px; margin:0; cursor:pointer }
+.tutorial-steps input { width:auto; margin-top:4px }
+.tutorial-progress { color:#ff916f; font-size:12px }
 .tutorial-meta { display:flex; flex-wrap:wrap; gap:8px }
 .tutorial-meta span { padding:6px 9px; border-radius:99px; background:#292b34; color:#bfc2cc; font-size:11px }
 .tutorial-back { border:0; padding:0; background:transparent; color:#ff916f; cursor:pointer }
 .tutorial-start { width:100%; margin-top:18px; border:0; border-radius:9px; padding:12px; background:#ff6a3d; color:white; cursor:pointer }
 .tutorial-start:disabled { opacity:.55 }
 .tutorial-safety { padding:12px; border-left:3px solid #e5af53; background:#26231b; color:#c9bd9d; font-size:12px; line-height:1.5 }
+.tutorial-shortcut { display:grid; gap:10px; margin:20px 0; padding:16px; border:1px solid #343741; border-radius:12px; background:#1b1c22 }
+.tutorial-shortcut label { display:grid; gap:6px; color:#c7c9d1; font-size:12px }
 @media (max-width:760px) { .tutorial-dialog { padding:20px }.tutorial-list { grid-template-columns:1fr } }
 @media (max-width:480px) { .tutorial-dialog { width:calc(100% - 16px); max-height:calc(100dvh - 16px); padding:16px }.tutorial-card { min-height:0; padding:16px }.tutorial-detail ol,.tutorial-detail ul { padding-left:20px } }

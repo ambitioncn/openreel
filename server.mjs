@@ -5,10 +5,15 @@ import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ASSET_POLICY, createDatabaseStore, createMemoryStore, createPersistentStore, DomainError } from "./src/core.js";
 import { createSqliteBackend } from "./src/durable.js";
-import { createPlatform } from "./src/platform.js";
+import { createPlatform, validateWorkflow } from "./src/platform.js";
 import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { correlationId, createLogger, createMetrics, redact, validateProductionConfig } from "./src/ops.js";
 import { arkMaxRetries, createArkService, createArkTransports, loadArkConfig } from "./src/ark.js";
+import { createModelCatalog, validateProviderMappings } from "./src/model-catalog.js";
+import { compareCapabilityBaseline, referenceCapabilityCatalog } from "./src/capability-baseline.js";
+import { prepareWorkflowShortcutApplication, workflowShortcutCatalog } from "./src/workflow-shortcuts.js";
+import { tutorialById, tutorialProgress, tutorialWorkflow } from "./src/tutorials.js";
+import { createQwenTtsClient, loadQwenTtsConfig } from "./src/qwen-tts.js";
 
 const root = fileURLToPath(new URL("./", import.meta.url));
 const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".md": "text/markdown" };
@@ -29,8 +34,10 @@ function sniffMime(bytes) { if (bytes.length >= 8 && bytes.subarray(0, 8).equals
 function uploadFilename(value, extension) { if (typeof value !== "string" || !value.trim() || value.length > 128 || value.includes("/") || value.includes("\\") || value.includes("\0") || [".", ".."].includes(value.trim())) throw new DomainError("INVALID_FILENAME", "a safe filename is required"); const name = value.trim(); if (!new RegExp(`\\.${extension}$`, "i").test(name)) throw new DomainError("INVALID_FILENAME", `filename must end in .${extension}`); return name; }
 function createRateLimiter({ max = 60, windowMs = 60_000, now = Date.now, key = req => req.socket.remoteAddress || "unknown" } = {}) { const entries = new Map(); return req => { const id = key(req), time = Number(now()), old = entries.get(id); const entry = !old || time - old.startedAt >= windowMs ? { startedAt: time, count: 0 } : old; entry.count += 1; entries.set(id, entry); if (entry.count > max) throw new DomainError("RATE_LIMITED", "request rate limit exceeded", 429, { retryAfterSeconds: Math.max(1, Math.ceil((windowMs - (time - entry.startedAt)) / 1000)) }); }; }
 
-export function createOpenReelServer(store = createMemoryStore(), platform = createPlatform(), { production = false, secureCookies = production, jsonLimit = 1024 * 1024, rateLimit = {}, logger = () => {}, readiness = () => ({ database: "ok", assets: "ok" }), metrics = createMetrics(), adminToken = null, adminPasswordHash = null, arkService = null } = {}) {
+export function createOpenReelServer(store = createMemoryStore(), platform = createPlatform(), { production = false, secureCookies = production, jsonLimit = 1024 * 1024, rateLimit = {}, logger = () => {}, readiness = () => ({ database: "ok", assets: "ok" }), metrics = createMetrics(), adminToken = null, adminPasswordHash = null, arkService = null, qwenTtsService = null, authorizeQwenTts = () => false } = {}) {
   const limit = createRateLimiter(rateLimit), log = (event, fields) => logger(event, redact(fields)), adminSessions = new Map();
+  const canvasModels = () => { const models = store.listModels(); if (arkService) models.push(...arkService.models().filter(x => ["image", "video", "audio"].includes(x.capability)).map(x => ({ id: x.name, kind: x.capability, adapterId: "ark", schema: { modes: [], aspects: [], resolutions: [], durations: x.capability === "video" ? [5, 10] : [], audio: x.capability === "video", maxReferences: 0 } }))); if (qwenTtsService) models.push({ id: "qwen-tts-tailnet", kind: "audio", adapterId: "qwen-tts", schema: { modes: ["text-to-audio"], aspects: [], resolutions: [], durations: [1, 2, 3, 4, 5, 10], controls: ["voice", "audio-format"], maxReferences: 0, execution: "server-authorized-only" } }); return models; };
+  const catalogModels = () => canvasModels().map(({ id, kind, adapterId, schema }) => ({ id, kind, adapterId, schema }));
   return createServer(async (req, res) => {
     const requestId = correlationId(req.headers["x-request-id"]); res.setHeader("x-request-id", requestId); metrics.begin();
     res.once("finish", () => { metrics.end(res.statusCode); log("http_request", { requestId, method: req.method, path: new URL(req.url, "http://localhost").pathname, status: res.statusCode, authorization: req.headers.authorization, cookie: req.headers.cookie }); });
@@ -65,7 +72,33 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
         else throw new DomainError("NOT_FOUND", "Ark inference route not found", 404);
       }
       else if (req.method === "POST" && api[0] === "users" && api.length === 1) out = store.createUser(await input());
-      else if (req.method === "GET" && api[0] === "models" && api.length === 1) { out = store.listModels(); if (arkService) out.push(...arkService.models().filter(x => ["image", "video", "audio"].includes(x.capability)).map(x => ({ id: x.name, kind: x.capability, adapterId: "ark", schema: { modes: [], aspects: [], resolutions: [], durations: x.capability === "video" ? [5, 10] : [], audio: x.capability === "video", maxReferences: 0 } }))); }
+      else if (req.method === "GET" && api[0] === "models" && api.length === 1) out = canvasModels();
+      else if (req.method === "GET" && api[0] === "model-catalog" && api.length === 1) out = createModelCatalog(catalogModels());
+      else if (req.method === "GET" && api[0] === "model-catalog" && api[1] === "coverage" && api.length === 2) out = compareCapabilityBaseline(createModelCatalog(catalogModels()));
+      else if (req.method === "GET" && api[0] === "model-catalog" && api[1] === "reference" && api.length === 2) out = referenceCapabilityCatalog();
+      else if (req.method === "GET" && api[0] === "model-catalog" && api[1] === "mapping-validation" && api.length === 2) out = validateProviderMappings(createModelCatalog(catalogModels()));
+      else if (req.method === "GET" && api[0] === "workflow-shortcuts" && api.length === 1) out = workflowShortcutCatalog();
+      else if (req.method === "GET" && api[0] === "tutorials" && api[2] === "workflow" && api.length === 3) {
+        let workflow;
+        try { workflow = tutorialWorkflow(api[1]); validateWorkflow(workflow); } catch { throw new DomainError("NOT_FOUND", "valid tutorial workflow not found", 404); }
+        out = workflow;
+      }
+      else if (api[0] === "projects" && api[2] === "tutorials" && api[4] === "progress" && api.length === 5) {
+        const tutorial = tutorialById(api[3]);
+        if (!tutorial) throw new DomainError("NOT_FOUND", "tutorial not found", 404);
+        if (req.method === "GET") out = store.getTutorialProgress(api[1], tutorial.id, tutorial.version, who) || tutorialProgress(tutorial.id);
+        else if (req.method === "PUT") { let progress; try { progress = tutorialProgress(tutorial.id, (await input()).completedSteps); } catch { throw new DomainError("INVALID_INPUT", "completedSteps contains an invalid tutorial step"); } out = store.setTutorialProgress(api[1], progress, who); }
+        else throw new DomainError("NOT_FOUND", "tutorial progress route not found", 404);
+      }
+      else if (req.method === "POST" && api[0] === "projects" && api[2] === "sessions" && api[4] === "workflow-shortcuts" && api[6] === "apply" && api.length === 7) {
+        const prepared = prepareWorkflowShortcutApplication(api[5], await input());
+        const provenance = JSON.parse(prepared.content);
+        for (const assetId of provenance.referenceAssetIds) {
+          const asset = store.assetManifest(api[1], api[3], assetId, who);
+          if (asset.kind !== "image" || asset.role !== "reference") throw new DomainError("INVALID_INPUT", "workflow shortcut references must be uploaded images");
+        }
+        out = store.createNode(api[3], prepared, who);
+      }
       else if (req.method === "POST" && api[0] === "auth" && api[1] === "register") { const account = platform.register(await input()); store.createUser({ id: account.id, name: account.email }); out = account; }
       else if (req.method === "POST" && api[0] === "auth" && api[1] === "login") { const session = platform.login(await input()), csrf = randomBytes(24).toString("base64url"); return json(res, 200, { account: platform.authenticate(session.token), csrfToken: csrf, expiresAt: session.expiresAt }, { "set-cookie": [sessionCookie("openreel_session", session.token, session, secureCookies), sessionCookie("openreel_csrf", csrf, session, secureCookies)] }); }
       else if (req.method === "POST" && api[0] === "auth" && api[1] === "logout") { out = platform.logout(token); return json(res, 200, out, { "set-cookie": [cookie("openreel_session", "", { secure: secureCookies, maxAge: 0 }), cookie("openreel_csrf", "", { secure: secureCookies, maxAge: 0 })] }); }
@@ -100,7 +133,14 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       else if (req.method === "GET" && api[0] === "billing" && api[1] === "usage") out = platform.usageStatus(token);
       else if (req.method === "POST" && api[0] === "teams" && api.length === 1) out = platform.createTeam(token, await input());
       else if (req.method === "POST" && api[0] === "teams" && api[2] === "invites") out = platform.invite(token, api[1], await input());
+      else if (req.method === "DELETE" && api[0] === "teams" && api[2] === "invites" && api.length === 4) out = platform.revokeInvite(token, api[1], api[3]);
       else if (req.method === "POST" && api[0] === "invites" && api[2] === "accept") out = platform.acceptInvite(token, api[1]);
+      else if (req.method === "PATCH" && api[0] === "teams" && api[2] === "members" && api.length === 4) out = platform.updateMember(token, api[1], api[3], await input());
+      else if (req.method === "DELETE" && api[0] === "teams" && api[2] === "members" && api.length === 4) out = platform.removeMember(token, api[1], api[3]);
+      else if (req.method === "PUT" && api[0] === "teams" && api[2] === "presence" && api.length === 3) out = platform.updatePresence(token, api[1], await input());
+      else if (req.method === "GET" && api[0] === "teams" && api[2] === "presence" && api.length === 3) out = platform.listPresence(token, api[1], url.searchParams.get("documentId"));
+      else if (req.method === "GET" && api[0] === "teams" && api[2] === "documents" && api.length === 4) out = platform.collaborativeDocument(token, api[1], api[3]);
+      else if (req.method === "PUT" && api[0] === "teams" && api[2] === "documents" && api.length === 4) out = platform.updateCollaborativeDocument(token, api[1], api[3], await input());
       else if (req.method === "POST" && api[0] === "teams" && api[2] === "budget" && api[3] === "quote") out = platform.quote(token, api[1], await input());
       else if (req.method === "POST" && api[0] === "teams" && api[2] === "budget" && api[3] === "reserve") out = platform.reserve(token, api[1], await input());
       else if (req.method === "POST" && api[0] === "teams" && api[2] === "budget" && api[3] === "settle") throw new DomainError("FORBIDDEN", "client-directed settlement is disabled", 403);
@@ -122,19 +162,32 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       else if (req.method === "GET" && api[0] === "projects" && api[2] === "assets" && api.length === 3) out = store.listAssets(api[1], Object.fromEntries(url.searchParams), who);
       else if (req.method === "GET" && api[0] === "projects" && api[2] === "history") out = store.listHistory(api[1], Object.fromEntries(url.searchParams), who);
       else if (req.method === "POST" && api[0] === "projects" && api[2] === "assets" && api[4] === "copy") { const value = await input(); out = store.copyAsset(api[1], api[3], value.targetProjectId, who); }
+      else if (api[0] === "projects" && api[2] === "continuity" && api.length === 3) {
+        if (req.method === "GET") out = store.listContinuityEntities(api[1], who);
+        else if (req.method === "POST") out = store.createContinuityEntity(api[1], await input(), who);
+        else throw new DomainError("NOT_FOUND", "continuity route not found", 404);
+      }
+      else if (req.method === "PATCH" && api[0] === "projects" && api[2] === "continuity" && api.length === 4) out = store.updateContinuityEntity(api[1], api[3], await input(), who);
       else if (req.method === "PUT" && api[0] === "projects" && api[2] === "story") out = store.upsertStory(api[1], await input(), who);
       else if (req.method === "PUT" && api[0] === "projects" && api[2] === "storyboard") out = store.upsertStoryboard(api[1], await input(), who);
+      else if (req.method === "GET" && api[0] === "projects" && api[2] === "storyboard-batches" && api.length === 3) out = store.listStoryboardBatches(api[1], who);
+      else if (req.method === "POST" && api[0] === "projects" && api[2] === "storyboard-batches" && api.length === 3) out = store.createStoryboardBatch(api[1], await input(), who);
+      else if (req.method === "GET" && api[0] === "projects" && api[2] === "storyboard-batches" && api.length === 4) out = store.storyboardBatch(api[1], api[3], who);
+      else if (req.method === "POST" && api[0] === "projects" && api[2] === "storyboard-batches" && api[4] === "tick") out = store.tickStoryboardBatch(api[1], api[3], who);
       else if (req.method === "PUT" && api[0] === "projects" && api[2] === "timeline") out = store.upsertTimeline(api[1], await input(), who);
       else if (req.method === "GET" && api[0] === "projects" && api[2] === "exports" && api[3] === "manifest") out = store.exportManifest(api[1], who);
-      else if (req.method === "POST" && api[0] === "projects" && api[2] === "exports" && api[3] === "render") out = store.renderProject(api[1], who);
+      else if (req.method === "POST" && api[0] === "projects" && api[2] === "exports" && api[3] === "render") out = store.renderProject(api[1], await input(), who);
       else if (req.method === "POST" && api[0] === "sessions" && api[2] === "close") out = store.closeSession(api[1], await input(), who);
       else if (req.method === "POST" && api[0] === "sessions" && api[2] === "nodes") out = store.createNode(api[1], await input(), who);
       else if (req.method === "PATCH" && api[0] === "nodes" && api.length === 2) out = store.updateNode(api[1], await input(), who);
       else if (req.method === "POST" && api[0] === "sessions" && api[2] === "jobs") out = store.createJob(api[1], await input(), who);
+      else if (req.method === "POST" && api[0] === "sessions" && api[2] === "qwen-tts-jobs") out = store.createQwenTtsCanvasJob(api[1], await input(), who);
+      else if (req.method === "POST" && api[0] === "jobs" && api[2] === "qwen-tts-run") { if (!qwenTtsService) throw new DomainError("QWEN_TTS_UNAVAILABLE", "Qwen TTS is not configured", 503); const job = store.qwenTtsCanvasJob(api[1], who); if (await authorizeQwenTts({ job, actorId: who, request: req }) !== true) throw new DomainError("QWEN_TTS_CALL_GATED", "a precise real-generation authorization is required", 403); const output = await qwenTtsService.synthesize({ input: job.prompt, response_format: "wav", ...(job.parameters.language && { language: job.parameters.language }), ...(job.parameters.audioSpec.voice && { voice: job.parameters.audioSpec.voice }), ...(job.parameters.instruct && { instruct: job.parameters.instruct }) }, { authorized: true }); out = store.reconcileQwenTtsCanvasJob(job.id, output, who); }
       else if (req.method === "POST" && api[0] === "sessions" && api[2] === "ark-jobs") { if (!arkService) throw new DomainError("ARK_UNAVAILABLE", "Ark inference is not configured", 503); const value = await input(), parameters = value.parameters || {}, providerInput = { prompt: value.prompt, ...parameters, ...(parameters.aspect ? { ratio: parameters.aspect } : {}), ...(parameters.audio !== undefined ? { generate_audio: parameters.audio } : {}) }, arkJob = await arkService.submit({ kind: "account", accountId: who }, { model: value.model, capability: value.capability, input: providerInput, idempotencyKey: value.idempotencyKey }); out = store.createArkCanvasJob(api[1], value, arkJob, who); }
       else if (req.method === "POST" && api[0] === "jobs" && api[2] === "ark-poll") { if (!arkService) throw new DomainError("ARK_UNAVAILABLE", "Ark inference is not configured", 503); const billing = { kind: "account", accountId: who }, local = store.arkCanvasJob(api[1], who), arkJob = await arkService.poll(billing, local.arkJobId), output = arkJob.status === "succeeded" ? await arkService.download(billing, arkJob.id) : null; out = store.reconcileArkCanvasJob(local.id, arkJob, output, who); }
       else if (req.method === "POST" && api[0] === "jobs" && api[2] === "tick") out = store.tickJob(api[1], who);
       else if (req.method === "POST" && api[0] === "jobs" && api[2] === "cancel") out = store.transitionJob(api[1], "canceled", {}, who);
+      else if (req.method === "POST" && api[0] === "jobs" && api[2] === "retry") out = store.retryJob(api[1], await input(), who);
       else if (req.method === "GET" && api[0] === "jobs" && api[2] === "progress") out = store.progress(api[1], url.searchParams.get("afterSeq") ?? 0, who);
       else if (versioned && req.method === "POST" && api[0] === "projects" && api[2] === "sessions" && api[4] === "assets" && api[5] === "references") { const mime = req.headers["content-type"]?.split(";", 1)[0], policy = ASSET_POLICY[mime]; if (!policy) throw new DomainError("UNSUPPORTED_MEDIA_TYPE", "unsupported reference media type", 415, { allowed: Object.keys(ASSET_POLICY) }); const bytes = await binaryBody(req, policy.maxBytes); if (!bytes.length) throw new DomainError("EMPTY_ASSET", "asset bytes are required"); if (sniffMime(bytes) !== mime) throw new DomainError("MEDIA_SIGNATURE_MISMATCH", "media signature does not match content-type", 415); out = store.uploadReference(api[1], api[3], { mimeType: mime, filename: uploadFilename(req.headers["x-filename"], policy.extension), bytes }, who); }
       else if (versioned && req.method === "GET" && api[0] === "projects" && api[2] === "assets" && api[4] === "manifest") out = store.assetManifest(api[1], api[3], undefined, who);
@@ -155,7 +208,8 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const logger = createLogger();
   const platform = createPlatform({ file: config.platformFile }), arkConfig = loadArkConfig(), transports = createArkTransports({ retries: arkMaxRetries() });
   const arkService = createArkService({ config: arkConfig, platform, transport: transports.request, assetTransport: transports.asset, store: backend.arkJobs });
-  const server = createOpenReelServer(createDatabaseStore(backend), platform, { production, secureCookies: production, readiness: backend.health, logger, adminToken: process.env.OPENREEL_ADMIN_KEY || null, adminPasswordHash: process.env.OPENREEL_ADMIN_PASSWORD_HASH || null, arkService });
+  const qwenTtsService = createQwenTtsClient({ config: loadQwenTtsConfig() });
+  const server = createOpenReelServer(createDatabaseStore(backend), platform, { production, secureCookies: production, readiness: backend.health, logger, adminToken: process.env.OPENREEL_ADMIN_KEY || null, adminPasswordHash: process.env.OPENREEL_ADMIN_PASSWORD_HASH || null, arkService, qwenTtsService });
   server.on("error", error => { logger("startup_error", { error: error.message }); process.exitCode = 1; });
   server.listen(config.port, config.host, () => logger("service_started", { host: config.host, port: config.port }));
 }

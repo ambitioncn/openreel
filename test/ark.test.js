@@ -67,6 +67,16 @@ test("asynchronous polling, tenant isolation, asset allowlist, MIME and byte lim
   assert.equal((await service.download(owner.key, job.id)).bytes.toString(), "video");
 });
 
+test("asynchronous poll failure releases the reservation without charging", async () => {
+  const platform = createPlatform(), owner = issue(platform, "poll-failure@example.test");
+  const service = createArkService({ config: config({ video: { capability: "video", providerModel: "ep-video", endpoint, pollEndpoint: "https://ark.example.test/v1/poll", asynchronous: true, maxCostMicros: 100, outputMicrosPerMillion: 1_000_000 } }), platform, transport: async request => { if (request.body?.task_id) throw Object.assign(new Error("unavailable"), { status: 503 }); return { task_id: "provider-task" }; }, assetTransport: async () => ({}) });
+  const job = await service.submit(owner.key, { model: "video", capability: "video", input: {}, idempotencyKey: "poll-failure" });
+  assert.equal(platform.usageStatus(owner.token).subscription.reservedMicros, 100);
+  await assert.rejects(service.poll(owner.key, job.id), error => error.code === "ARK_PROVIDER_ERROR");
+  const usage = platform.usageStatus(owner.token); assert.equal(usage.subscription.reservedMicros, 0); assert.equal(usage.subscription.spentMicros, 0); assert.equal(usage.usage[0].status, "failed");
+  assert.equal((await service.poll(owner.key, job.id)).status, "failed");
+});
+
 test("configured mappings cover text, vision, image, video, and available audio without guessed defaults", () => {
   const models = Object.fromEntries(["text", "vision", "image", "video", "audio"].map(capability => [capability, { capability, providerModel: `configured-${capability}`, endpoint, maxCostMicros: 1 }]));
   assert.deepEqual(Object.values(config(models).models).map(x => x.capability), ["text", "vision", "image", "video", "audio"]);
@@ -93,6 +103,19 @@ test("Volcengine content generation uses a per-model key and normalizes async ta
   assert.equal(calls[1].method, "GET"); assert.match(calls[1].url, /tasks\/task-1$/); assert.equal(JSON.stringify(service.models()).includes("seedance-only-secret"), false);
 });
 
+test("Volcengine content generation preserves an explicit bounded first-frame content item", async () => {
+  const platform = createPlatform(), issued = issue(platform, "first-frame@example.test"), calls = [];
+  const ark = loadArkConfig({
+    ARK_ENABLED: "true", OPENREEL_PAID_INFERENCE_ENABLED: "true", ARK_ALLOWED_HOSTS: "ark.example.test,assets.example.test",
+    SEEDANCE_KEY: "fixture-key", ARK_MODELS_JSON: JSON.stringify({ seedance: { capability: "video", providerModel: "doubao-seedance-2-0-fast-260128", endpoint: "https://ark.example.test/api/plan/v3/contents/generations/tasks", pollEndpoint: "https://ark.example.test/api/plan/v3/contents/generations/tasks", apiKeyEnv: "SEEDANCE_KEY", protocol: "volcengine-content-generation", asynchronous: true, maxCostMicros: 100, outputMicrosPerMillion: 1, resultMimeTypes: ["video/mp4"] } })
+  });
+  const service = createArkService({ config: ark, platform, transport: async request => { calls.push(request); return { id: "task-frame" }; }, assetTransport: async () => ({}) });
+  const content = [{ type: "text", text: "continue the scene" }, { type: "image_url", image_url: { url: "data:image/jpeg;base64,YWJj" }, role: "first_frame" }];
+  await service.submit(issued.key, { model: "seedance", capability: "video", input: { prompt: "continue the scene", content, duration: 5, ratio: "16:9", generate_audio: false }, idempotencyKey: "first-frame" });
+  assert.deepEqual(calls[0].body.content, content);
+  assert.equal(calls[0].body.duration, 5); assert.equal(calls[0].body.ratio, "16:9"); assert.equal(calls[0].body.generate_audio, false);
+});
+
 test("Volcengine presets fall back to the shared provider key", () => {
   const ark = loadArkConfig({
     OPENREEL_VOLCENGINE_API_KEY: "shared-key-fixture",
@@ -101,6 +124,58 @@ test("Volcengine presets fall back to the shared provider key", () => {
   });
   assert.equal(ark.enabled, true);
   assert.equal(ark.models["seedance-2-fast"].apiKey, "shared-key-fixture");
+});
+
+test("Standard Volcengine mappings remain selected unless direct routing is explicit", () => {
+  const loaded = loadArkConfig({
+    OPENREEL_VOLCENGINE_API_KEY: "endpoint-key",
+    OPENREEL_VOLCENGINE_DIRECT_API_KEY: "direct-key",
+    OPENREEL_VOLCENGINE_SEEDREAM5_LITE_MODEL: "ep-lite",
+    OPENREEL_VOLCENGINE_SEEDREAM5_LITE_DIRECT_MODEL: "doubao-seedream-5-0-260128"
+  });
+  assert.equal(loaded.models["seedream-5-lite"].providerModel, "ep-lite");
+  assert.equal(loaded.models["seedream-5-lite"].apiKey, "endpoint-key");
+  assert.equal(JSON.stringify(loaded.models).includes("direct-key"), false);
+});
+
+test("Direct Volcengine mappings require an explicit route preference", () => {
+  const loaded = loadArkConfig({
+    OPENREEL_VOLCENGINE_ROUTE_PREFERENCE: "direct",
+    OPENREEL_VOLCENGINE_API_KEY: "endpoint-key",
+    OPENREEL_VOLCENGINE_DIRECT_API_KEY: "direct-key",
+    OPENREEL_VOLCENGINE_SEEDREAM5_LITE_MODEL: "ep-lite",
+    OPENREEL_VOLCENGINE_SEEDREAM5_LITE_DIRECT_MODEL: "doubao-seedream-5-0-260128"
+  });
+  assert.equal(loaded.models["seedream-5-lite"].providerModel, "doubao-seedream-5-0-260128");
+  assert.equal(loaded.models["seedream-5-lite"].apiKey, "direct-key");
+  assert.equal(loaded.models["seedream-5-lite"].endpoint, "https://ark.cn-beijing.volces.com/api/plan/v3/images/generations");
+  assert.equal(JSON.stringify(loaded.models).includes("endpoint-key"), false);
+});
+
+test("Standard and direct Volcengine routes keep distinct base URL contracts", () => {
+  const standard = loadArkConfig({
+    OPENREEL_VOLCENGINE_API_KEY: "endpoint-key",
+    OPENREEL_VOLCENGINE_SEEDANCE2_FAST_MODEL: "ep-fast"
+  });
+  assert.equal(standard.models["seedance-2-fast"].endpoint, "https://ark.cn-beijing.volces.com/api/v3/contents/generations/tasks");
+  const direct = loadArkConfig({
+    OPENREEL_VOLCENGINE_ROUTE_PREFERENCE: "direct",
+    OPENREEL_VOLCENGINE_DIRECT_API_KEY: "direct-key",
+    OPENREEL_VOLCENGINE_SEEDANCE2_FAST_DIRECT_MODEL: "doubao-seedance-2-0-fast-260128"
+  });
+  assert.equal(direct.models["seedance-2-fast"].endpoint, "https://ark.cn-beijing.volces.com/api/plan/v3/contents/generations/tasks");
+  assert.equal(direct.models["seedance-2-fast"].pollEndpoint, "https://ark.cn-beijing.volces.com/api/plan/v3/contents/generations/tasks");
+  const overridden = loadArkConfig({
+    OPENREEL_VOLCENGINE_ROUTE_PREFERENCE: "direct",
+    OPENREEL_VOLCENGINE_DIRECT_BASE_URL: "https://ark.example.test/custom/plan/v3",
+    OPENREEL_VOLCENGINE_DIRECT_API_KEY: "direct-key",
+    OPENREEL_VOLCENGINE_SEEDANCE2_FAST_DIRECT_MODEL: "direct-fast"
+  });
+  assert.equal(overridden.models["seedance-2-fast"].endpoint, "https://ark.example.test/custom/plan/v3/contents/generations/tasks");
+});
+
+test("Volcengine route preference fails closed on unknown values", () => {
+  assert.throws(() => loadArkConfig({ OPENREEL_VOLCENGINE_ROUTE_PREFERENCE: "fallback", OPENREEL_VOLCENGINE_API_KEY: "endpoint-key", OPENREEL_VOLCENGINE_SEEDREAM5_LITE_MODEL: "ep-lite" }), error => error.code === "ARK_CONFIG_INVALID");
 });
 
 test("production presets map all seven configured models and keep paid calls gated by default", async () => {
@@ -156,9 +231,20 @@ test("Volcengine text, image, and multimodal embedding protocols normalize trust
   }, assetTransport: async () => ({ mimeType: "image/png", bytes: Buffer.from("png") }) });
   assert.deepEqual((await service.submit(issued.key, { model: "text", capability: "text", input: { prompt: "write" }, idempotencyKey: "text" })).result, { content: "plan" });
   assert.equal((await service.submit(issued.key, { model: "image", capability: "image", input: { prompt: "draw" }, idempotencyKey: "image" })).result.url, "https://assets.example.test/image.png");
-  assert.deepEqual((await service.submit(issued.key, { model: "vision", capability: "vision", input: { input: [{ type: "image_url", image_url: "https://assets.example.test/image.png" }] }, idempotencyKey: "vision" })).result.data[0].embedding, [0.1, 0.2]);
+  assert.deepEqual((await service.submit(issued.key, { model: "vision", capability: "vision", input: { input: [{ type: "image_url", image_url: { url: "https://assets.example.test/image.png" } }] }, idempotencyKey: "vision" })).result.data[0].embedding, [0.1, 0.2]);
+  assert.deepEqual(calls.at(-1).body, { model: "vision-id", encoding_format: "float", input: [{ type: "image_url", image_url: { url: "https://assets.example.test/image.png" } }] });
+  await assert.rejects(service.submit(issued.key, { model: "vision", capability: "vision", input: { input: [{ type: "image_url", image_url: "https://assets.example.test/image.png" }] }, idempotencyKey: "vision-invalid" }), error => error.code === "ARK_INPUT_INVALID");
   assert.deepEqual(calls.map(x => x.body.model), ["text-id", "image-id", "vision-id"]);
   assert.deepEqual(calls.map(x => x.timeoutMs), [30_000, 120_000, 30_000]);
+});
+
+test("Seedream 5 rejects out-of-contract custom dimensions before provider contact", async () => {
+  const platform = createPlatform(), issued = issue(platform, "seedream-size@example.test", 100); let calls = 0;
+  const service = createArkService({ config: config({ "seedream-5-lite": { capability: "image", providerModel: "image-id", endpoint: "https://ark.example.test/images/generations", protocol: "volcengine-image-generation", maxCostMicros: 10, outputMicrosPerMillion: 10_000_000 } }), platform, transport: async () => { calls++; return { data: { url: "https://assets.example.test/image.png" } }; }, assetTransport: async () => ({ mimeType: "image/png", bytes: Buffer.from("png") }) });
+  await assert.rejects(service.submit(issued.key, { model: "seedream-5-lite", capability: "image", input: { prompt: "draw", size: "1920x1080" }, idempotencyKey: "too-small" }), error => error.code === "ARK_INPUT_INVALID");
+  assert.equal(calls, 0); assert.equal(platform.usageStatus(issued.token).subscription.reservedMicros, 0);
+  assert.equal((await service.submit(issued.key, { model: "seedream-5-lite", capability: "image", input: { prompt: "draw", size: "2560x1440" }, idempotencyKey: "minimum" })).status, "succeeded");
+  assert.equal(calls, 1);
 });
 
 test("trusted settlement at the hard limit automatically suspends the calling key", async () => {
@@ -204,6 +290,42 @@ test("provider failures expose only a sanitized upstream HTTP status", async () 
   });
 });
 
+test("provider validation failures retain only bounded safe diagnostics", async () => {
+  const transport = createArkTransports({ retries: 0, resolver: async () => [{ address: "93.184.216.34", family: 4 }], fetchImpl: async () => ({ ok: false, status: 400, headers: { get: () => null }, json: async () => ({ error: { code: "InvalidParameter", param: "size", message: "The size must be 2K, 3K, or a supported widthxheight value." }, private: "do-not-copy" }) }) });
+  const platform = createPlatform(), issued = issue(platform, "provider-400@example.test");
+  const service = createArkService({ config: config({ image: { capability: "image", providerModel: "ep", endpoint, maxCostMicros: 5 } }), platform, transport: transport.request, assetTransport: async () => ({}) });
+  await assert.rejects(service.submit(issued.key, { model: "image", capability: "image", input: {}, idempotencyKey: "400-detail" }), error => {
+    assert.equal(error.details.providerCode, "InvalidParameter"); assert.equal(error.details.providerParam, "size"); assert.match(error.details.providerMessage, /supported widthxheight/); assert.equal(JSON.stringify(error).includes("do-not-copy"), false); return true;
+  });
+});
+
+test("provider diagnostics drop messages that may contain credentials or URLs", async () => {
+  const transport = createArkTransports({ retries: 0, resolver: async () => [{ address: "93.184.216.34", family: 4 }], fetchImpl: async () => ({ ok: false, status: 400, headers: { get: () => null }, json: async () => ({ error: { code: "InvalidParameter", param: "image", message: "Authorization Bearer private-token failed for https://private.example" } }) }) });
+  const platform = createPlatform(), issued = issue(platform, "provider-redaction@example.test");
+  const service = createArkService({ config: config({ image: { capability: "image", providerModel: "ep", endpoint, maxCostMicros: 5 } }), platform, transport: transport.request, assetTransport: async () => ({}) });
+  await assert.rejects(service.submit(issued.key, { model: "image", capability: "image", input: {}, idempotencyKey: "400-redact" }), error => {
+    assert.equal(error.details.providerCode, "InvalidParameter"); assert.equal(error.details.providerParam, "image"); assert.equal(error.details.providerMessage, undefined); assert.equal(JSON.stringify(error).includes("private-token"), false); return true;
+  });
+});
+
+test("provider 503 preserves only retryability and a one-way request-id fingerprint", async () => {
+  const transport = createArkTransports({ retries: 0, resolver: async () => [{ address: "93.184.216.34", family: 4 }], fetchImpl: async () => ({ ok: false, status: 503, headers: { get: name => name === "x-request-id" ? "provider-private-request-id" : null } }) });
+  const platform = createPlatform(), issued = issue(platform, "provider-503@example.test");
+  const service = createArkService({ config: config({ image: { capability: "image", providerModel: "ep", endpoint, maxCostMicros: 5 } }), platform, transport: transport.request, assetTransport: async () => ({}) });
+  await assert.rejects(service.submit(issued.key, { model: "image", capability: "image", input: {}, idempotencyKey: "503" }), error => {
+    assert.equal(error.code, "ARK_PROVIDER_ERROR"); assert.equal(error.details.upstreamStatus, 503); assert.equal(error.details.retryable, true); assert.match(error.details.providerRequestIdHash, /^[a-f0-9]{16}$/); assert.equal(JSON.stringify(error).includes("provider-private-request-id"), false); return true;
+  });
+});
+
+test("provider authentication failures retain a safe distinct error code", async () => {
+  const transport = createArkTransports({ retries: 0, resolver: async () => [{ address: "93.184.216.34", family: 4 }], fetchImpl: async () => ({ ok: false, status: 401, headers: { get: () => null }, json: async () => ({ error: { code: "AuthenticationError" } }) }) });
+  const platform = createPlatform(), issued = issue(platform, "provider-auth@example.test");
+  const service = createArkService({ config: config({ image: { capability: "image", providerModel: "ep", endpoint, maxCostMicros: 5 } }), platform, transport: transport.request, assetTransport: async () => ({}) });
+  await assert.rejects(service.submit(issued.key, { model: "image", capability: "image", input: {}, idempotencyKey: "401" }), error => {
+    assert.equal(error.code, "ARK_PROVIDER_AUTH"); assert.equal(error.details.upstreamStatus, 401); assert.equal(error.details.retryable, undefined); return true;
+  });
+});
+
 test("Ark canvas jobs persist validated output as a tenant asset and append video to the timeline", () => {
   const store = createMemoryStore(); store.createUser({ id: "owner", name: "Owner" }); store.createUser({ id: "other", name: "Other" });
   const project = store.createProject({ name: "Ark canvas" }, "owner"), session = store.createSession(project.id, { name: "Main" }, "owner"), node = store.createNode(session.id, { type: "video" }, "owner");
@@ -246,6 +368,16 @@ test("a crash in the durable settling phase is recovered exactly once", async ()
   const service = createArkService({ config: config({ planner: { capability: "text", providerModel: "ep", endpoint, maxCostMicros: 10, outputMicrosPerMillion: 1_000_000 } }), platform, store: backend.arkJobs, transport: async () => { throw new Error("must not call provider"); }, assetTransport: async () => ({}) });
   const [a, b] = await Promise.all([service.poll(owner.key, "crashed-job"), service.poll(owner.key, "crashed-job")]);
   assert.equal(a.status, "succeeded"); assert.equal(b.status, "succeeded"); assert.deepEqual(a.result, { recovered: true }); assert.equal(platform.usageStatus(owner.token).usage.length, 1); backend.close();
+});
+
+test("a crash in durable failed settlement releases the reservation exactly once", async () => {
+  const root = mkdtempSync(join(tmpdir(), "openreel-ark-failed-settling-")), platformFile = join(root, "platform.json"), databaseFile = join(root, "db.sqlite"); let platform = createPlatform({ file: platformFile }), owner = issue(platform, "failed-settling@example.test"), backend = createSqliteBackend(databaseFile, { assetRoot: join(root, "assets") });
+  const reservation = platform.reserveUsage(owner.key, { model: "video", maxCostMicros: 100, pricingVersion: "test-v1", idempotencyKey: "ark:failed-settling" }), ownerHash = createHash("sha256").update(owner.key).digest("hex");
+  backend.arkJobs.create({ id: "failed-settling-job", ownerHash, idempotencyKey: "failed-settling", model: "video", capability: "video", status: "settling", providerTaskId: "provider-task", reservationId: reservation.id, rates: { input: 0, output: 1_000_000, version: "test-v1" }, settlement: { failed: true, response: null }, result: null, error: null, createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" });
+  backend.close(); platform = createPlatform({ file: platformFile }); backend = createSqliteBackend(databaseFile, { assetRoot: join(root, "assets") });
+  const service = createArkService({ config: config({ video: { capability: "video", providerModel: "ep-video", endpoint, pollEndpoint: "https://ark.example.test/poll", asynchronous: true, maxCostMicros: 100, outputMicrosPerMillion: 1_000_000, pricingVersion: "test-v1" } }), platform, store: backend.arkJobs, transport: async () => { throw new Error("must not call provider"); }, assetTransport: async () => ({}) });
+  const [a, b] = await Promise.all([service.poll(owner.key, "failed-settling-job"), service.poll(owner.key, "failed-settling-job")]);
+  const usage = platform.usageStatus(owner.token); assert.equal(a.status, "failed"); assert.equal(b.status, "failed"); assert.equal(usage.subscription.reservedMicros, 0); assert.equal(usage.subscription.spentMicros, 0); assert.equal(usage.usage.length, 1); assert.equal(usage.usage[0].status, "failed"); backend.close();
 });
 
 test("transport rejects private and rebound DNS and bounds Retry-After by total timeout", async () => {

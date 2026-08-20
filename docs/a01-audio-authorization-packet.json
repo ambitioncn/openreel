@@ -1,0 +1,76 @@
+{
+  "schema": "openreel-a01-audio-authorization/v1",
+  "status": "prepared_awaiting_exact_human_inputs",
+  "authorized": false,
+  "executionAuthorized": false,
+  "scope": "private_staging_only_no_public_or_production_traffic",
+  "candidate": {
+    "model": "seed-tts-2.0",
+    "reviewArtifact": "docs/doubao-seed-tts-2.0-independent-review.json",
+    "reviewDecision": "accept_for_gate",
+    "providerEndpointHost": null,
+    "providerEndpointResourceId": null
+  },
+  "pricing": {
+    "sourceUrl": "https://www.volcengine.com/product/doubao",
+    "verifiedAt": "2026-08-08T03:22:00+08:00",
+    "currency": "CNY",
+    "charactersPerPriceUnit": 10000,
+    "pricePerUnit": 5,
+    "maximumInputCharactersPerCall": 500,
+    "aggregateMaximumInputCharacters": 1000,
+    "aggregateMaximumSpend": 0.5,
+    "assumptions": "Public list price before tax, packages, tiers, negotiated discounts, and free allowance; stop if the live price differs."
+  },
+  "calls": [
+    {
+      "caseId": "tts-voice-baseline-zh-1",
+      "count": 1,
+      "maximumInputCharacters": 500,
+      "purpose": "Generate a bounded Mandarin voice fixture and retain terminal metadata, MIME type, duration, usage, provenance and redacted failure evidence."
+    },
+    {
+      "caseId": "tts-timeline-sync-zh-1",
+      "count": 1,
+      "maximumInputCharacters": 500,
+      "purpose": "Generate a second bounded voice fixture for private-staging timeline alignment, AAC export and graphical-browser download E2E."
+    }
+  ],
+  "requiredHumanInputs": {
+    "privateStagingBaseUrl": null,
+    "restrictedCredentialSourceReference": null,
+    "providerEndpointHost": null,
+    "providerEndpointResourceId": null,
+    "approvedBy": null,
+    "approvedAt": null,
+    "approvalStatement": null,
+    "approveStopConditions": false,
+    "approveCleanupAuthority": false
+  },
+  "approvalStatementTemplate": "I approve only the two private-staging seed-tts-2.0 calls in this packet, capped at 500 input characters each, 1000 aggregate input characters, and CNY 0.50 aggregate spend, using the exact staging, credential reference, endpoint host and resource id supplied above. I approve the listed stop conditions and cleanup boundary. This does not authorize production traffic, public release, subscription, credential creation/change, retries, or additional calls.",
+  "stopConditions": [
+    "any required human input is null, false, stale or ambiguous",
+    "the independent review no longer validates as accept_for_gate with executionAuthorized=false",
+    "the live provider host, resource id, model, terms, region, output license or price differs from the approved packet",
+    "a redirect, DNS result, MIME type, credential source or staging target is outside the approved allowlist",
+    "either call would exceed 500 input characters, aggregate input would exceed 1000 characters, or aggregate spend would exceed CNY 0.50",
+    "any provider failure, timeout, capability mismatch, untrusted usage report, ledger mismatch, secret-scan failure, tenant-isolation failure or browser-E2E preflight failure",
+    "the operator requests stop"
+  ],
+  "executionDefaults": {
+    "automaticRetry": false,
+    "uniqueIdempotencyKeyPerCall": true,
+    "providerDeadlineSeconds": 30,
+    "retainCredentialsOrExpiringOutputUrlsInLogs": false,
+    "deployOrSwitchTraffic": false,
+    "productionTraffic": false,
+    "cleanupAuthority": "Delete only newly created private-staging fixtures and ephemeral local evidence; any credential, provider-resource, deployment, process or production mutation requires a separate approval."
+  },
+  "notCovered": [
+    "provider calls or staging access before every required human input is resolved and explicitly approved",
+    "automatic retries or calls beyond the two listed cases",
+    "credential creation, import, disclosure, rotation or change",
+    "subscription, production deployment or traffic, public publishing, external messaging, signing or process control",
+    "project completion or closure of A-01 before retained real-media browser E2E evidence passes acceptance"
+  ]
+}

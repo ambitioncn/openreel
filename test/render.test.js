@@ -1,9 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createMemoryStore, DomainError } from "../src/core.js";
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { createMemoryStore, createPersistentStore, DomainError } from "../src/core.js";
 import { renderTimelineVideo } from "../src/render.js";
 
-function generated(store, session, kind) { const node = store.createNode(session.id, { type: kind }), job = store.createJob(session.id, { nodeId: node.id, prompt: kind }); store.tickJob(job.id); return store.tickJob(job.id).assetId; }
+function generated(store, session, kind) { const node = store.createNode(session.id, { type: kind }), job = store.createJob(session.id, { nodeId: node.id, prompt: kind, ...(kind === "audio" && { reviewed: true, audioSpec: { intent: "music", sampleRate: 24000, format: "wav" } }) }); store.tickJob(job.id); return store.tickJob(job.id).assetId; }
 
 test("render composes deterministic playable MP4 with audio", () => {
   let next = 0; const store = createMemoryStore({ id: () => `id-${++next}`, now: () => "2026-08-04T00:00:00.000Z" });
@@ -11,7 +14,15 @@ test("render composes deterministic playable MP4 with audio", () => {
   const video = generated(store, session, "video"), audio = generated(store, session, "audio");
   store.upsertTimeline(project.id, { version: 1, tracks: [{ kind: "video", clips: [{ assetId: video, inPoint: 0, outPoint: .5, start: 0 }] }, { kind: "audio", clips: [{ assetId: audio, inPoint: 0, outPoint: .5, start: 0 }] }] });
   const first = store.renderProject(project.id), second = store.renderProject(project.id);
-  assert.equal(first.asset.mimeType, "video/mp4"); assert.equal(first.hasAudio, true); assert.equal(first.sha256, second.sha256); assert.equal(first.asset.metadata.sourceTimelineVersion, 2);
+  assert.equal(first.asset.mimeType, "video/mp4"); assert.equal(first.hasAudio, true); assert.equal(first.asset.id, second.asset.id); assert.equal(second.replayed, true); assert.equal(first.sha256, second.sha256); assert.equal(first.asset.metadata.sourceTimelineVersion, 2);
+});
+
+test("multi-shot export metadata and replay survive restart", () => {
+  const file = join(mkdtempSync(join(tmpdir(), "openreel-export-replay-")), "state.json"), store = createPersistentStore(file), project = store.createProject({ name: "Replay" }), session = store.createSession(project.id, { name: "Main" });
+  const first = generated(store, session, "video"), second = generated(store, session, "video"), audio = generated(store, session, "audio");
+  store.upsertTimeline(project.id, { version: 1, tracks: [{ kind: "video", clips: [{ assetId: first, inPoint: 0, outPoint: .4, start: 0 }, { assetId: second, inPoint: 0, outPoint: .4, start: .4 }] }, { kind: "audio", clips: [{ assetId: audio, inPoint: 0, outPoint: .8, start: 0 }] }] });
+  const rendered = store.renderProject(project.id, { format: "mp4", quality: "preview-360p" }), replay = createPersistentStore(file).renderProject(project.id, { format: "mp4", quality: "preview-360p" });
+  assert.equal(replay.asset.id, rendered.asset.id); assert.equal(replay.inputDigest, rendered.inputDigest); assert.equal(replay.replayed, true); assert.deepEqual(replay.limits, { maxClips: 100, maxDuration: 600 }); assert.equal(replay.duration, .8);
 });
 
 test("render rejects empty, audio-only, and unavailable-renderer paths", () => {
@@ -20,4 +31,5 @@ test("render rejects empty, audio-only, and unavailable-renderer paths", () => {
   const audio = generated(store, session, "audio"); store.upsertTimeline(project.id, { version: 1, tracks: [{ kind: "audio", clips: [{ assetId: audio, inPoint: 0, outPoint: 1, start: 0 }] }] });
   assert.throws(() => store.renderProject(project.id), error => error.code === "VIDEO_TRACK_REQUIRED" && error.status === 409);
   assert.throws(() => renderTimelineVideo({ tracks: [{ kind: "video", clips: [{ assetId: "a", inPoint: 0, outPoint: 1, start: 0 }] }] }, 1, { ffmpeg: "openreel-missing-ffmpeg" }), error => error.code === "RENDERER_UNAVAILABLE" && error.status === 503);
+  assert.throws(() => store.renderProject(project.id, { format: "webm" }), error => error.code === "UNSUPPORTED_EXPORT" && error.details.formats[0] === "mp4");
 });

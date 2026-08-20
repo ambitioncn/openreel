@@ -32,7 +32,7 @@ export const localAdapter = Object.freeze({
   capabilities: {
     image: { modes: ["text-to-image"], aspects: ["16:9", "1:1"], resolutions: ["640x360", "512x512"], maxReferences: 4 },
     video: { modes: ["text-to-video"], aspects: ["16:9"], resolutions: ["160x90"], durations: [0.5], audio: true, maxReferences: 2 },
-    audio: { modes: ["text-to-audio"], durations: [1, 2, 4], maxReferences: 1 }
+    audio: { modes: ["text-to-audio"], durations: [1, 2, 4], controls: ["voice", "speed", "pitch", "volume", "sample-rate", "audio-format"], maxReferences: 1 }
   },
   execute(request = {}) { if (!this.capabilities[request.kind] || !request.prompt?.trim()) throw new AdapterGateError("INVALID_ADAPTER_REQUEST", "supported kind and prompt are required"); return { adapterId: "local-deterministic", kind: request.kind, deterministic: true, prompt: request.prompt.trim() }; }
 });

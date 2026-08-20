@@ -1,0 +1,100 @@
+{
+  "schema": "openreel-audio-candidate-review/v1",
+  "status": "not_reviewed",
+  "decision": null,
+  "executionAuthorized": false,
+  "candidate": {
+    "modelId": null,
+    "providerLegalName": null,
+    "endpointHost": null,
+    "productDocumentationUrl": null,
+    "admissionArtifactSha256": null
+  },
+  "reviewer": {
+    "identity": null,
+    "organizationOrRole": null,
+    "independentFromAuthor": null,
+    "conflictsDeclared": null,
+    "reviewedAt": null
+  },
+  "providerTerms": {
+    "termsUrl": null,
+    "termsVersionOrDate": null,
+    "paidApiUsePermitted": null,
+    "automatedGenerationPermitted": null,
+    "suspensionAndRateLimitTermsRecorded": null,
+    "evidenceRefs": []
+  },
+  "dataHandling": {
+    "inputRetention": null,
+    "outputRetention": null,
+    "trainingUse": null,
+    "subprocessors": null,
+    "deletionProcess": null,
+    "sensitiveDataAllowed": false,
+    "evidenceRefs": []
+  },
+  "regionAndTransfer": {
+    "processingRegions": [],
+    "storageRegions": [],
+    "crossBorderTransferBasis": null,
+    "stagingRegionCompatible": null,
+    "evidenceRefs": []
+  },
+  "outputLicense": {
+    "commercialUsePermitted": null,
+    "ownershipOrLicenseGrant": null,
+    "attributionRequired": null,
+    "voiceConsentRequirements": null,
+    "musicAndSfxRestrictions": null,
+    "indemnityOrWarrantyLimitsRecorded": null,
+    "evidenceRefs": []
+  },
+  "pricing": {
+    "sourceUrl": null,
+    "verifiedAt": null,
+    "currency": null,
+    "unitScale": null,
+    "inputUnitsPerMillion": null,
+    "outputUnitsPerMillion": null,
+    "maximumReservedUnitsPerCall": null,
+    "taxAndTierAssumptions": null,
+    "reproductionCalculation": null,
+    "evidenceRefs": []
+  },
+  "technicalEvidence": {
+    "admissionPassed": false,
+    "mode": null,
+    "controls": [],
+    "maximumDurationSeconds": null,
+    "resultMimeTypes": [],
+    "timeoutSeconds": null,
+    "automaticRetry": false,
+    "transportAndSsrfControlsReviewed": false,
+    "evidenceRefs": []
+  },
+  "requiredTests": {
+    "schemaNegatives": null,
+    "credentialRedaction": null,
+    "tenantIsolation": null,
+    "idempotency": null,
+    "reservationAndSettlement": null,
+    "timeoutAndStop": null,
+    "mimeAndSizeValidation": null,
+    "licenseAndConsentFixture": null,
+    "evidenceRefs": []
+  },
+  "openFindings": [],
+  "reviewConclusion": null,
+  "successorGateRequirements": {
+    "stagingBaseUrl": null,
+    "credentialSourceReference": null,
+    "providerEndpointId": null,
+    "callCount": null,
+    "maximumReservedUnitsPerCall": null,
+    "aggregateMaximumReservedUnits": null,
+    "stopConditionsApproved": null,
+    "cleanupAuthorityApproved": null,
+    "humanApprovalStatement": null
+  }
+}

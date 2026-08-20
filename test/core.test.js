@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createMemoryStore, DomainError, JOB_STATES } from "../src/core.js";
+import { createMemoryStore, createPersistentStore, DomainError, JOB_STATES } from "../src/core.js";
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 function fixture() {
   let count = 0;
@@ -60,6 +63,66 @@ test("failed simulation records a structured error and creates no asset", () => 
   const failed = store.tickJob(job.id);
   assert.deepEqual(failed.error, { code: "GENERATION_FAILED", message: "Local simulation failed" });
   assert.equal(store.snapshot(project.id).assets.length, 0);
+});
+
+test("failed and canceled jobs retry once per idempotency key with traceable parameters", () => {
+  const { store, session, node } = fixture();
+  const failed = store.createJob(session.id, { nodeId: node.id, prompt: "frame", mode: "text-to-image", outcome: "failed" });
+  store.tickJob(failed.id); store.tickJob(failed.id);
+  const first = store.retryJob(failed.id, { idempotencyKey: "retry-1" }), duplicate = store.retryJob(failed.id, { idempotencyKey: "retry-1" });
+  assert.equal(first.id, duplicate.id);
+  assert.equal(first.retryOf, failed.id);
+  assert.equal(first.retryAttempt, 1);
+  assert.deepEqual(first.parameters, { mode: "text-to-image" });
+  assert.equal(store.tickJob(first.id).state, "running");
+  assert.equal(store.tickJob(first.id).state, "succeeded");
+  assert.throws(() => store.retryJob(first.id, { idempotencyKey: "bad" }), (error) => error.code === "JOB_NOT_RETRYABLE" && error.status === 409);
+  assert.throws(() => store.retryJob(failed.id), (error) => error.code === "INVALID_INPUT");
+  const canceled = store.createJob(session.id, { nodeId: node.id, prompt: "canceled" });
+  store.transitionJob(canceled.id, "canceled");
+  assert.equal(store.retryJob(canceled.id, { idempotencyKey: "retry-canceled" }).retryOf, canceled.id);
+});
+
+test("retry idempotency and provenance survive restart", () => {
+  const file = join(mkdtempSync(join(tmpdir(), "openreel-retry-")), "state.json"), store = createPersistentStore(file);
+  const project = store.createProject({ name: "Retry restart" }), session = store.createSession(project.id, { name: "Main" }), node = store.createNode(session.id, { type: "image" });
+  const source = store.createJob(session.id, { nodeId: node.id, prompt: "retry after restart", outcome: "failed" });
+  store.tickJob(source.id); store.tickJob(source.id);
+  const retry = store.retryJob(source.id, { idempotencyKey: "stable-retry" });
+  const recovered = createPersistentStore(file).retryJob(source.id, { idempotencyKey: "stable-retry" });
+  assert.equal(recovered.id, retry.id);
+  assert.equal(recovered.retryOf, source.id);
+});
+
+test("audio jobs require reviewed typed settings and preserve them through retry and restart", () => {
+  const file = join(mkdtempSync(join(tmpdir(), "openreel-audio-job-")), "state.json"), store = createPersistentStore(file);
+  const project = store.createProject({ name: "Audio" }), session = store.createSession(project.id, { name: "Review" }), node = store.createNode(session.id, { type: "audio" });
+  assert.throws(() => store.createJob(session.id, { nodeId: node.id, prompt: "line", audioSpec: { intent: "voice" } }), error => error.code === "REVIEW_REQUIRED");
+  assert.throws(() => store.createJob(session.id, { nodeId: node.id, prompt: "line", reviewed: true, audioSpec: { intent: "voice", speed: 9 } }), error => error.code === "INVALID_AUDIO_SPEC");
+  const source = store.createJob(session.id, { nodeId: node.id, prompt: "line", reviewed: true, audioSpec: { intent: "voice", voice: "Narrator", speed: 1, pitch: 0, volume: 1, sampleRate: 24000, format: "wav" }, outcome: "failed" });
+  assert.deepEqual(source.parameters.audioSpec, { intent: "voice", voice: "Narrator", speed: 1, pitch: 0, volume: 1, sampleRate: 24000, format: "wav" });
+  store.tickJob(source.id); store.tickJob(source.id);
+  const retried = store.retryJob(source.id, { idempotencyKey: "audio-retry" });
+  const recovered = createPersistentStore(file).retryJob(source.id, { idempotencyKey: "audio-retry" });
+  assert.equal(recovered.id, retried.id);
+  assert.deepEqual(recovered.parameters.audioSpec, source.parameters.audioSpec);
+  assert.equal(recovered.parameters.reviewed, true);
+});
+
+test("audio-to-video and timeline synchronization inputs fail closed", () => {
+  const adapter = { id: "audio-video-test", provider: "test", capabilities: { video: { modes: ["audio-to-video"], maxReferences: 3 } }, execute: request => ({ adapterId: "audio-video-test", kind: request.kind }) };
+  const store = createMemoryStore({ adapters: [adapter] }), project = store.createProject({ name: "Audio sync" }), session = store.createSession(project.id, { name: "Sync" });
+  const videoNode = store.createNode(session.id, { type: "video" }), audioNode = store.createNode(session.id, { type: "audio" });
+  const audio = store.uploadReference(project.id, session.id, { mimeType: "audio/mpeg", bytes: Buffer.from("audio") });
+  const image = store.uploadReference(project.id, session.id, { mimeType: "image/png", bytes: Buffer.from("image") });
+  assert.throws(() => store.createJob(session.id, { nodeId: videoNode.id, prompt: "sync", mode: "audio-to-video" }), error => error.code === "INVALID_AUDIO_TO_VIDEO_INPUT");
+  assert.throws(() => store.createJob(session.id, { nodeId: videoNode.id, prompt: "sync", mode: "audio-to-video", referenceAssetIds: [image.id] }), error => error.code === "INVALID_AUDIO_TO_VIDEO_INPUT");
+  assert.throws(() => store.createJob(session.id, { nodeId: audioNode.id, prompt: "sync", mode: "audio-to-video", referenceAssetIds: [audio.id], reviewed: true, audioSpec: { intent: "voice" } }), error => error.code === "INVALID_AUDIO_TO_VIDEO_INPUT");
+  assert.throws(() => store.createJob(session.id, { nodeId: videoNode.id, prompt: "sync", mode: "audio-to-video", referenceAssetIds: [audio.id, audio.id, audio.id, audio.id] }), error => error.code === "INVALID_AUDIO_TO_VIDEO_INPUT");
+  const job = store.createJob(session.id, { nodeId: videoNode.id, prompt: "sync", mode: "audio-to-video", referenceAssetIds: [audio.id], adapterId: adapter.id });
+  store.tickJob(job.id); const done = store.tickJob(job.id);
+  assert.deepEqual(store.snapshot(project.id).jobs.find(item => item.id === job.id).referenceAssetIds, [audio.id]);
+  assert.throws(() => store.upsertTimeline(project.id, { version: 1, tracks: [{ kind: "audio", clips: [{ assetId: done.assetId, outPoint: 1 }] }] }), error => error.code === "TIMELINE_MEDIA_MISMATCH");
 });
 
 test("reference assets enforce type, size, and session scope", () => {

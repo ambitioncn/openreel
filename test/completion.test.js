@@ -16,7 +16,7 @@ test("durable store recovers projects, jobs, bytes, and migrates schema v1", () 
   let store = createPersistentStore(file);
   const { project, session } = base(store);
   const node = store.createNode(session.id, { type: "audio" });
-  const job = store.createJob(session.id, { nodeId: node.id, prompt: "tone" });
+  const job = store.createJob(session.id, { nodeId: node.id, prompt: "tone", reviewed: true, audioSpec: { intent: "music", sampleRate: 24000, format: "wav" } });
   store.tickJob(job.id); const done = store.tickJob(job.id);
   store = createPersistentStore(file);
   const recovered = store.snapshot(project.id);
@@ -58,7 +58,7 @@ test("story, storyboard, multimodal routing, timeline, and export form one workf
   const board = store.upsertStoryboard(project.id, { shots: [{ sceneId: story.scenes[0].id, prompt: "Wide reveal", duration: 4, referenceAssetIds: refs.map(x => x.id) }] });
   assert.equal(board.shots[0].referenceAssetIds.length, 3);
   const results = [];
-  for (const kind of ["image", "video", "audio"]) { const node = store.createNode(session.id, { type: kind }); const job = store.createJob(session.id, { nodeId: node.id, prompt: `${kind} result` }); store.tickJob(job.id); results.push(store.tickJob(job.id).assetId); }
+  for (const kind of ["image", "video", "audio"]) { const node = store.createNode(session.id, { type: kind }); const job = store.createJob(session.id, { nodeId: node.id, prompt: `${kind} result`, ...(kind === "audio" && { reviewed: true, audioSpec: { intent: "music", sampleRate: 24000, format: "wav" } }) }); store.tickJob(job.id); results.push(store.tickJob(job.id).assetId); }
   assert.deepEqual(store.listModels().map(x => x.kind), ["image", "video", "audio"]);
   assert.throws(() => store.routeModel("audio", "text-to-video"), (e) => e.code === "UNSUPPORTED_CAPABILITY");
   const timeline = store.upsertTimeline(project.id, { version: 1, tracks: [{ kind: "video", clips: [{ assetId: results[1], inPoint: 0, outPoint: 4, start: 0 }] }, { kind: "audio", clips: [{ assetId: results[2], inPoint: 0, outPoint: 4, start: 0 }] }] });
@@ -87,4 +87,69 @@ test("script-storyboard-image-video chain preserves reference continuity and pro
   for (const kind of ["image", "video"]) { const node = store.createNode(session.id, { type: kind }); store.createEdge(project.id, { fromNodeId: script.id, toNodeId: node.id }); const job = store.createJob(session.id, { nodeId: node.id, prompt: script.content, referenceAssetIds: [reference.id] }); store.tickJob(job.id); results.push(store.tickJob(job.id).assetId); }
   assert.deepEqual(results.map(assetId => store.assetManifest(project.id, assetId).metadata.referenceAssetIds), [[reference.id], [reference.id]]);
   assert.deepEqual(store.snapshot(project.id).edges.map(edge => edge.fromNodeId), [script.id, script.id]);
+});
+
+test("continuity entities lock identity attributes and retain copied reference provenance after restart", () => {
+  const file = join(mkdtempSync(join(tmpdir(), "openreel-continuity-")), "state.json"); let store = createPersistentStore(file);
+  const source = store.createProject({ name: "Source" }), sourceSession = store.createSession(source.id, { name: "Source" });
+  const target = store.createProject({ name: "Target" });
+  const uploaded = store.uploadReference(source.id, sourceSession.id, { mimeType: "image/png", filename: "hero.png", bytes: Buffer.from("hero") });
+  const copied = store.copyAsset(source.id, uploaded.id, target.id);
+  const entity = store.createContinuityEntity(target.id, { kind: "character", name: "Hero", attributes: { face: "oval", jacket: "red" }, lockedAttributes: ["face"], referenceAssetIds: [copied.id] });
+  assert.throws(() => store.updateContinuityEntity(target.id, entity.id, { version: entity.version, attributes: { face: "round", jacket: "red" } }), error => error.code === "CONTINUITY_LOCKED");
+  const updated = store.updateContinuityEntity(target.id, entity.id, { version: entity.version, attributes: { face: "oval", jacket: "blue" } });
+  store = createPersistentStore(file);
+  const recovered = store.listContinuityEntities(target.id)[0];
+  assert.equal(recovered.attributes.jacket, "blue"); assert.deepEqual(recovered.lockedAttributes, ["face"]);
+  assert.equal(recovered.referenceProvenance[0].source.operation, "copy"); assert.equal(recovered.referenceProvenance[0].source.sourceAssetId, uploaded.id);
+  assert.equal(store.snapshot(target.id).continuityEntities[0].version, updated.version);
+});
+
+test("storyboard shots apply ordered continuity entity references and preserve reviewed snapshots", () => {
+  const file = join(mkdtempSync(join(tmpdir(), "openreel-continuity-board-")), "state.json"); let store = createPersistentStore(file);
+  const project = store.createProject({ name: "Continuity board" }), session = store.createSession(project.id, { name: "Main" });
+  const refs = ["hero-a", "hero-b", "scene", "manual"].map(name => store.uploadReference(project.id, session.id, { mimeType: "image/png", filename: `${name}.png`, bytes: Buffer.from(name) }));
+  const hero = store.createContinuityEntity(project.id, { kind: "character", name: "Hero", attributes: { face: "oval" }, lockedAttributes: ["face"], referenceAssetIds: [refs[0].id, refs[1].id] });
+  const scene = store.createContinuityEntity(project.id, { kind: "scene", name: "Stage", attributes: { lighting: "blue" }, lockedAttributes: ["lighting"], referenceAssetIds: [refs[2].id, refs[0].id] });
+  const story = store.upsertStory(project.id, { scenes: [{ title: "Opening" }] });
+  const board = store.upsertStoryboard(project.id, { shots: [{ sceneId: story.scenes[0].id, prompt: "Hero enters", duration: 2, continuityEntityIds: [scene.id, hero.id, scene.id], referenceAssetIds: [refs[3].id, refs[1].id] }] });
+  assert.deepEqual(board.shots[0].continuityEntityIds, [scene.id, hero.id]);
+  assert.deepEqual(board.shots[0].referenceAssetIds, [refs[2].id, refs[0].id, refs[1].id, refs[3].id]);
+  assert.deepEqual(board.shots[0].continuityEntityUsages.map(usage => [usage.name, usage.version]), [["Stage", 1], ["Hero", 1]]);
+  const batch = store.createStoryboardBatch(project.id, { sessionId: session.id, idempotencyKey: "continuity-board" });
+  store.updateContinuityEntity(project.id, hero.id, { version: hero.version, attributes: { face: "oval", jacket: "red" } });
+  store = createPersistentStore(file);
+  const recovered = store.storyboardBatch(project.id, batch.id).jobs[0];
+  assert.deepEqual(recovered.referenceAssetIds, [refs[2].id, refs[0].id, refs[1].id, refs[3].id]);
+  assert.equal(recovered.continuityEntityUsages[1].version, 1);
+  assert.deepEqual(recovered.continuityEntityUsages[1].attributes, { face: "oval" });
+  const other = store.createProject({ name: "Other" }), otherEntity = store.createContinuityEntity(other.id, { kind: "product", name: "Bottle", attributes: { color: "green" } });
+  assert.throws(() => store.upsertStoryboard(project.id, { shots: [{ sceneId: story.scenes[0].id, prompt: "Invalid", duration: 1, continuityEntityIds: [otherEntity.id] }] }), error => error.code === "SCOPE_MISMATCH");
+});
+
+test("ordered storyboard batch is idempotent, stops on failure, and resumes through retry", () => {
+  const store = createMemoryStore(), project = store.createProject({ name: "Batch" }), session = store.createSession(project.id, { name: "Main" });
+  const story = store.upsertStory(project.id, { scenes: [{ title: "Sequence" }] });
+  store.upsertStoryboard(project.id, { shots: [{ sceneId: story.scenes[0].id, prompt: "first", duration: 1 }, { sceneId: story.scenes[0].id, prompt: "second", duration: 1 }] });
+  const first = store.createStoryboardBatch(project.id, { sessionId: session.id, idempotencyKey: "board-1" }), duplicate = store.createStoryboardBatch(project.id, { sessionId: session.id, idempotencyKey: "board-1" });
+  assert.equal(first.id, duplicate.id); assert.equal(first.jobs.length, 2); assert.deepEqual(first.jobs.map(job => job.storyboardOrder), [0, 1]);
+  let batch = store.tickStoryboardBatch(project.id, first.id); assert.equal(batch.jobs[0].state, "running"); assert.equal(batch.jobs[1].state, "queued");
+  batch = store.tickStoryboardBatch(project.id, first.id); assert.equal(batch.jobs[0].state, "succeeded"); assert.equal(batch.jobs[1].state, "queued");
+  store.transitionJob(batch.jobs[1].id, "canceled"); batch = store.tickStoryboardBatch(project.id, first.id); assert.equal(batch.state, "failed");
+  const retry = store.retryJob(batch.jobs[1].id, { idempotencyKey: "board-1-shot-2" }); assert.equal(retry.storyboardOrder, 1);
+  store.tickStoryboardBatch(project.id, first.id); batch = store.tickStoryboardBatch(project.id, first.id); assert.equal(batch.state, "succeeded"); assert.deepEqual(batch.jobs.map(job => job.prompt), ["first", "second"]);
+});
+
+test("storyboard batch creation is atomic and survives restart", () => {
+  const file = join(mkdtempSync(join(tmpdir(), "openreel-batch-")), "state.json"); let store = createPersistentStore(file);
+  const project = store.createProject({ name: "Atomic batch" }), session = store.createSession(project.id, { name: "Main" }), story = store.upsertStory(project.id, { scenes: [{ title: "Scene" }] });
+  const refs = Array.from({ length: 5 }, (_, index) => store.uploadReference(project.id, session.id, { mimeType: "image/png", filename: `${index}.png`, bytes: Buffer.from(`ref-${index}`) }));
+  store.upsertStoryboard(project.id, { shots: [{ sceneId: story.scenes[0].id, prompt: "valid first", duration: 1 }, { sceneId: story.scenes[0].id, prompt: "invalid second", duration: 1, referenceAssetIds: refs.map(ref => ref.id) }] });
+  const before = store.snapshot(project.id);
+  assert.throws(() => store.createStoryboardBatch(project.id, { sessionId: session.id, idempotencyKey: "atomic-fail" }), (error) => error.code === "INCOMPATIBLE_PARAMETERS");
+  const rolledBack = store.snapshot(project.id); assert.equal(rolledBack.nodes.length, before.nodes.length); assert.equal(rolledBack.jobs.length, before.jobs.length);
+  store.upsertStoryboard(project.id, { shots: [{ sceneId: story.scenes[0].id, prompt: "first", duration: 1 }, { sceneId: story.scenes[0].id, prompt: "second", duration: 1 }] });
+  const created = store.createStoryboardBatch(project.id, { sessionId: session.id, idempotencyKey: "atomic-pass" }); store = createPersistentStore(file);
+  const recovered = store.storyboardBatch(project.id, created.id); assert.equal(recovered.jobs.length, 2); assert.deepEqual(recovered.jobs.map(job => job.prompt), ["first", "second"]);
+  assert.equal(store.listStoryboardBatches(project.id)[0].id, created.id); assert.deepEqual(recovered.cost, { amount: 0, currency: "CNY", unitScale: 1_000_000, basis: "local deterministic adapter; no paid provider call" });
 });

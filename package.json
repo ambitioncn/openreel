@@ -5,6 +5,7 @@
   "private": true,
   "type": "module",
   "bin": { "openreel": "bin/openreel.mjs" },
+  "devDependencies": { "playwright": "1.58.2" },
   "scripts": {
     "dev": "node server.mjs",
     "test": "node --test",
@@ -21,9 +22,15 @@
     "smoke:import": "node scripts/terminal-smoke.mjs import",
     "scan:dependencies": "npm audit --omit=dev --audit-level=high",
     "scan:secrets": "node scripts/scan-secrets.mjs",
+    "qualify:reliability": "node scripts/qualify-reliability.mjs",
+    "qualify:release-artifacts": "node scripts/qualify-release-artifacts.mjs",
     "rehearse:deployment": "node scripts/rehearse-deployment.mjs",
     "smoke:production-e2e": "node scripts/production-e2e.mjs",
+    "smoke:staging-tenant-isolation": "node scripts/staging-tenant-isolation-e2e.mjs",
     "smoke:live": "node scripts/live-smoke.mjs",
+    "smoke:qwen-browser-negative": "node scripts/qwen-tts-browser-negative-e2e.mjs",
+    "smoke:t01-real-video-browser-download": "node scripts/t01-real-video-browser-download-e2e.mjs",
+    "e01:phase-one": "node scripts/e01-phase-one-runner.mjs",
     "check": "npm test"
   }
 }
