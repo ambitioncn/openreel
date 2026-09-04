@@ -65,7 +65,28 @@ function modelMap(value, allowedHosts, env) {
 
 export function loadArkConfig(env = process.env) {
   const volcengineBase = String(env.OPENREEL_VOLCENGINE_BASE_URL || "https://ark.cn-beijing.volces.com/api/v3").replace(/\/$/, "");
+  const volcengineDirectBase = String(env.OPENREEL_VOLCENGINE_DIRECT_BASE_URL || "https://ark.cn-beijing.volces.com/api/plan/v3").replace(/\/$/, "");
   const presets = {};
+  const directPresets = {};
+  for (const [name, modelEnv, capability, path, protocol, asynchronous, resultMimeTypes] of [
+    ["seedance-2-fast", "OPENREEL_VOLCENGINE_SEEDANCE2_FAST_DIRECT_MODEL", "video", "contents/generations/tasks", "volcengine-content-generation", true, ["video/mp4"]],
+    ["seedance-2", "OPENREEL_VOLCENGINE_SEEDANCE2_DIRECT_MODEL", "video", "contents/generations/tasks", "volcengine-content-generation", true, ["video/mp4"]],
+    ["seedream-5-lite", "OPENREEL_VOLCENGINE_SEEDREAM5_LITE_DIRECT_MODEL", "image", "images/generations", "volcengine-image-generation", false, ["image/png", "image/jpeg", "image/webp"]],
+    ["seedream-5-pro", "OPENREEL_VOLCENGINE_SEEDREAM5_PRO_DIRECT_MODEL", "image", "images/generations", "volcengine-image-generation", false, ["image/png", "image/jpeg", "image/webp"]],
+    ["seed-2.1-turbo", "OPENREEL_VOLCENGINE_SEED21_TURBO_DIRECT_MODEL", "text", "chat/completions", "volcengine-chat-completions", false, []],
+    ["seed-2.1-pro", "OPENREEL_VOLCENGINE_SEED21_PRO_DIRECT_MODEL", "text", "chat/completions", "volcengine-chat-completions", false, []],
+    ["embedding-vision", "OPENREEL_VOLCENGINE_EMBEDDING_VISION_DIRECT_MODEL", "vision", "embeddings/multimodal", "volcengine-multimodal-embedding", false, []]
+  ]) {
+    if (env.OPENREEL_VOLCENGINE_DIRECT_API_KEY?.trim() && env[modelEnv]?.trim()) {
+      const price = volcenginePrice(name);
+      if (!price) throw new DomainError("ARK_PRICE_UNKNOWN", `model ${name} has no approved price`, 503);
+      // Ark's content-generation task API (Seedance) lives under /api/plan/v3,
+      // while image, chat, and embedding APIs keep their /api/v3 endpoints even
+      // when the direct credential/model mapping is selected.
+      const directEndpointBase = protocol === "volcengine-content-generation" ? volcengineDirectBase : volcengineBase;
+      directPresets[name] = { capability, providerModel: env[modelEnv].trim(), endpoint: `${directEndpointBase}/${path}`, ...(asynchronous ? { pollEndpoint: `${directEndpointBase}/${path}` } : {}), apiKeyEnv: "OPENREEL_VOLCENGINE_DIRECT_API_KEY", protocol, asynchronous, ...price, currency: VOLCENGINE_PRICING.currency, unitScale: VOLCENGINE_PRICING.unitScale, pricingVersion: VOLCENGINE_PRICING.version, resultMimeTypes };
+    }
+  }
   for (const [name, modelEnv, capability, path, protocol, asynchronous, resultMimeTypes] of [
     ["seedance-2-fast", "OPENREEL_VOLCENGINE_SEEDANCE2_FAST_MODEL", "video", "contents/generations/tasks", "volcengine-content-generation", true, ["video/mp4"]],
     ["seedance-2", "OPENREEL_VOLCENGINE_SEEDANCE2_MODEL", "video", "contents/generations/tasks", "volcengine-content-generation", true, ["video/mp4"]],
@@ -81,25 +102,76 @@ export function loadArkConfig(env = process.env) {
       presets[name] = { capability, providerModel: env[modelEnv].trim(), endpoint: `${volcengineBase}/${path}`, ...(asynchronous ? { pollEndpoint: `${volcengineBase}/${path}` } : {}), apiKeyEnv: "OPENREEL_VOLCENGINE_API_KEY", protocol, asynchronous, ...price, currency: VOLCENGINE_PRICING.currency, unitScale: VOLCENGINE_PRICING.unitScale, pricingVersion: VOLCENGINE_PRICING.version, resultMimeTypes };
     }
   }
-  const enabled = env.ARK_ENABLED === "true" || Object.keys(presets).length > 0;
+  const enabled = env.ARK_ENABLED === "true" || Object.keys(presets).length > 0 || Object.keys(directPresets).length > 0;
   if (!enabled) return Object.freeze({ enabled: false, models: {}, allowedHosts: [] });
+  const textSubmitTimeoutMs = Number(env.OPENREEL_ARK_TEXT_SUBMIT_TIMEOUT_MS ?? 30_000);
+  if (!Number.isSafeInteger(textSubmitTimeoutMs) || textSubmitTimeoutMs < 30_000 || textSubmitTimeoutMs > 120_000) throw new DomainError("ARK_CONFIG_INVALID", "OPENREEL_ARK_TEXT_SUBMIT_TIMEOUT_MS must be an integer between 30000 and 120000", 503);
   const apiKey = env.ARK_API_KEY?.trim() || null;
-  const allowedHosts = new Set([new URL(volcengineBase).hostname, ...String(env.ARK_ALLOWED_HOSTS || "").split(",").map(x => x.trim().toLowerCase()).filter(Boolean)]);
+  const allowedHosts = new Set([new URL(volcengineBase).hostname, new URL(volcengineDirectBase).hostname, ...String(env.ARK_ALLOWED_HOSTS || "").split(",").map(x => x.trim().toLowerCase()).filter(Boolean)]);
   if (!allowedHosts.size) throw new DomainError("ARK_CONFIG_INVALID", "ARK_ALLOWED_HOSTS is required", 503);
   let explicit = {};
   try { explicit = JSON.parse(env.ARK_MODELS_JSON || "{}"); } catch { throw new DomainError("ARK_CONFIG_INVALID", "ARK_MODELS_JSON must be valid JSON", 503); }
-  const models = modelMap(JSON.stringify({ ...presets, ...explicit }), allowedHosts, env);
+  const routePreference = String(env.OPENREEL_VOLCENGINE_ROUTE_PREFERENCE || "standard").trim().toLowerCase();
+  if (!["standard", "direct", "hybrid"].includes(routePreference)) throw new DomainError("ARK_CONFIG_INVALID", "OPENREEL_VOLCENGINE_ROUTE_PREFERENCE must be standard, direct, or hybrid", 503);
+  const hybridPresets = { ...directPresets, ...presets };
+  for (const [name, model] of Object.entries(directPresets)) if (model.capability === "video") hybridPresets[name] = model;
+  const providerPresets = routePreference === "direct" ? { ...presets, ...directPresets } : routePreference === "hybrid" ? hybridPresets : { ...directPresets, ...presets };
+  const models = modelMap(JSON.stringify({ ...providerPresets, ...explicit }), allowedHosts, env);
   if (env.OPENREEL_PAID_INFERENCE_ENABLED === "true") {
     for (const model of Object.values(models)) if (model.maxCostMicros <= 0 || model.inputMicrosPerMillion + model.outputMicrosPerMillion <= 0) throw new DomainError("ARK_PRICE_UNKNOWN", `model ${model.name} has no approved positive price`, 503);
   }
   if (!apiKey && Object.values(models).some(model => !model.apiKey)) throw new DomainError("ARK_CONFIG_INVALID", "ARK_API_KEY or a per-model apiKeyEnv is required", 503);
-  return Object.freeze({ enabled, paidCallsEnabled: env.OPENREEL_PAID_INFERENCE_ENABLED === "true", apiKey, allowedHosts: [...allowedHosts], models });
+  return Object.freeze({ enabled, paidCallsEnabled: env.OPENREEL_PAID_INFERENCE_ENABLED === "true", apiKey, allowedHosts: [...allowedHosts], models, textSubmitTimeoutMs });
 }
 
 export function arkMaxRetries(env = process.env) {
   const value = env.OPENREEL_ARK_MAX_RETRIES ?? "2";
   if (!/^\d+$/.test(String(value)) || !Number.isSafeInteger(Number(value))) throw new DomainError("ARK_CONFIG_INVALID", "OPENREEL_ARK_MAX_RETRIES must be a non-negative safe integer", 503);
   return Number(value);
+}
+
+function safeProviderDiagnostic(value, maxLength, pattern) {
+  if (typeof value !== "string") return null;
+  const normalized = value.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim();
+  if (!normalized || normalized.length > maxLength || !pattern.test(normalized)) return null;
+  return normalized;
+}
+
+function providerErrorDiagnostic(value) {
+  const source = value?.error && typeof value.error === "object" ? value.error : value;
+  if (!source || typeof source !== "object" || Array.isArray(source)) return {};
+  const providerCode = safeProviderDiagnostic(source.providerCode ?? source.code, 80, /^[A-Za-z0-9_.:-]+$/);
+  const providerParam = safeProviderDiagnostic(source.providerParam ?? source.param, 120, /^[A-Za-z0-9_.[\]-]+$/);
+  const rawMessage = safeProviderDiagnostic(source.providerMessage ?? source.message, 240, /^[^\r\n]+$/);
+  const providerMessage = rawMessage && !/(?:bearer\s+|api[_ -]?key|secret|token|authorization|ark-[A-Za-z0-9_-]{8,}|https?:\/\/)/i.test(rawMessage) ? rawMessage : null;
+  return { ...(providerCode ? { providerCode } : {}), ...(providerParam ? { providerParam } : {}), ...(providerMessage ? { providerMessage } : {}) };
+}
+
+const SENSITIVE_DIAGNOSTIC_KEY = /(?:authorization|api[_-]?key|secret|token|credential|password|cookie|url)/i;
+const SENSITIVE_DIAGNOSTIC_VALUE = /(?:bearer\s+|api[_ -]?key|secret|token|authorization|ark-[A-Za-z0-9_-]{8,}|https?:\/\/)/i;
+
+function boundedDiagnosticValue(value, depth = 0) {
+  if (depth > 2 || value === null || value === undefined) return null;
+  if (typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value))) return value;
+  if (typeof value === "string") {
+    const normalized = value.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim();
+    if (!normalized || SENSITIVE_DIAGNOSTIC_VALUE.test(normalized)) return null;
+    return normalized.length > 240 ? `${normalized.slice(0, 239)}…` : normalized;
+  }
+  if (Array.isArray(value)) return value.slice(0, 8).map(item => boundedDiagnosticValue(item, depth + 1)).filter(item => item !== null);
+  if (typeof value !== "object") return null;
+  const entries = Object.entries(value).filter(([key]) => !SENSITIVE_DIAGNOSTIC_KEY.test(key)).slice(0, 12);
+  return Object.fromEntries(entries.map(([key, item]) => [key, boundedDiagnosticValue(item, depth + 1)]).filter(([, item]) => item !== null));
+}
+
+function terminalProviderDiagnostic(value) {
+  const source = value?.error && typeof value.error === "object" ? value.error : value?.diagnostic;
+  if (!source || typeof source !== "object" || Array.isArray(source)) return null;
+  const code = safeProviderDiagnostic(source.code, 80, /^[A-Za-z0-9_.:-]+$/);
+  const message = boundedDiagnosticValue(source.message);
+  const details = boundedDiagnosticValue(source.details);
+  const diagnostic = { ...(code ? { code } : {}), ...(message ? { message } : {}), ...(details && (typeof details !== "object" || Object.keys(details).length) ? { details } : {}) };
+  return Object.keys(diagnostic).length ? diagnostic : null;
 }
 
 export function createArkTransports({ fetchImpl = globalThis.fetch, retries = 2, resolver = lookup, sleep = ms => new Promise(resolve => setTimeout(resolve, ms)), baseDelayMs = 100, maxDelayMs = 2_000, maxRetryAfterMs = 5_000, totalTimeoutMs = 120_000, nowMs = Date.now } = {}) {
@@ -113,7 +185,7 @@ export function createArkTransports({ fetchImpl = globalThis.fetch, retries = 2,
       let response;
       try { response = await fetchResolved(url, { method, headers: { authorization: `Bearer ${apiKey}`, "content-type": "application/json", "x-idempotency-key": idempotencyKey }, ...(method === "GET" ? {} : { body: JSON.stringify(body) }), signal: AbortSignal.timeout(remaining), redirect: "error" }, addresses); }
       catch (cause) { if (attempt >= retries) throw Object.assign(new Error("provider unavailable", { cause }), { status: 502 }); response = null; }
-      if (response && (!RETRYABLE.has(response.status) || attempt >= retries)) { if (!response.ok) throw Object.assign(new Error("provider rejected request"), { status: response.status }); try { return await response.json(); } catch { throw Object.assign(new Error("invalid provider response"), { status: 502 }); } }
+      if (response && (!RETRYABLE.has(response.status) || attempt >= retries)) { if (!response.ok) { const requestId = ["x-request-id", "request-id", "x-tt-logid"].map(name => response.headers?.get?.(name)).find(Boolean); let diagnostic = {}; try { diagnostic = providerErrorDiagnostic(await response.json()); } catch { /* malformed provider errors remain status-only */ } throw Object.assign(new Error("provider rejected request"), { status: response.status, ...diagnostic, ...(requestId ? { providerRequestIdHash: createHash("sha256").update(String(requestId)).digest("hex").slice(0, 16) } : {}) }); } try { return await response.json(); } catch { throw Object.assign(new Error("invalid provider response"), { status: 502 }); } }
       const retryAfter = Number(response?.headers?.get?.("retry-after"));
       const delay = Math.min(Number.isFinite(retryAfter) && retryAfter >= 0 ? retryAfter * 1000 : baseDelayMs * (2 ** attempt), maxDelayMs, maxRetryAfterMs, budget - (nowMs() - started));
       if (delay <= 0) throw Object.assign(new Error("provider timeout"), { status: 504 });
@@ -137,7 +209,10 @@ export function createArkTransports({ fetchImpl = globalThis.fetch, retries = 2,
 function sanitizeProviderError(error) {
   const status = Number(error?.status);
   const upstreamStatus = Number.isSafeInteger(status) && status >= 400 && status <= 599 ? status : null;
-  return new DomainError("ARK_PROVIDER_ERROR", "Ark provider request failed", status === 429 ? 429 : 502, { ...(status === 429 ? { retryable: true } : {}), upstreamStatus });
+  const providerRequestIdHash = typeof error?.providerRequestIdHash === "string" && /^[a-f0-9]{16}$/.test(error.providerRequestIdHash) ? error.providerRequestIdHash : null;
+  const diagnostic = providerErrorDiagnostic({ providerCode: error?.providerCode, providerParam: error?.providerParam, providerMessage: error?.providerMessage });
+  const code = status === 401 || status === 403 ? "ARK_PROVIDER_AUTH" : "ARK_PROVIDER_ERROR";
+  return new DomainError(code, "Ark provider request failed", status === 429 ? 429 : 502, { ...(RETRYABLE.has(status) ? { retryable: true } : {}), upstreamStatus, ...diagnostic, ...(providerRequestIdHash ? { providerRequestIdHash } : {}) });
 }
 
 function trustedUsage(value) {
@@ -147,16 +222,45 @@ function trustedUsage(value) {
 }
 
 function publicJob(job) {
-  return structuredClone({ id: job.id, model: job.model, capability: job.capability, status: job.status, providerTaskId: job.providerTaskId, result: job.result, error: job.error, createdAt: job.createdAt, updatedAt: job.updatedAt });
+  return structuredClone({ id: job.id, idempotencyKey: job.idempotencyKey, model: job.model, capability: job.capability, status: job.status, providerTaskId: job.providerTaskId, result: job.result, error: job.error, usage: job.usage || null, createdAt: job.createdAt, updatedAt: job.updatedAt });
+}
+
+function validateSeedreamSize(model, size) {
+  if (!model.name.startsWith("seedream-5-") || size === undefined) return;
+  if (size === "2K" || size === "3K" || (model.name === "seedream-5-pro" && size === "4K")) return;
+  const match = /^(\d+)x(\d+)$/.exec(String(size));
+  if (!match) throw new DomainError("ARK_INPUT_INVALID", "Seedream size must be a supported preset or WIDTHxHEIGHT", 400);
+  const width = Number(match[1]), height = Number(match[2]), pixels = width * height, ratio = width / height;
+  const maximum = model.name === "seedream-5-lite" ? Math.floor(3072 * 3072 * 1.1025) : 4096 * 4096;
+  if (!Number.isSafeInteger(pixels) || pixels < 2560 * 1440 || pixels > maximum || ratio < 1 / 16 || ratio > 16) {
+    throw new DomainError("ARK_INPUT_INVALID", "Seedream size is outside the documented pixel or aspect-ratio bounds", 400);
+  }
+}
+
+function multimodalEmbeddingInput(value) {
+  const parts = value?.input;
+  if (!Array.isArray(parts) || !parts.length) throw new DomainError("ARK_INPUT_INVALID", "multimodal embedding input must be a non-empty array", 400);
+  return parts.map((part, index) => {
+    if (!part || typeof part !== "object" || Array.isArray(part)) throw new DomainError("ARK_INPUT_INVALID", `multimodal embedding input[${index}] is invalid`, 400);
+    if (part.type === "text" && typeof part.text === "string" && part.text.trim()) return { type: "text", text: part.text };
+    if (part.type === "image_url" || part.type === "video_url") {
+      const media = part[part.type];
+      if (!media || typeof media !== "object" || Array.isArray(media) || typeof media.url !== "string" || !media.url.trim()) {
+        throw new DomainError("ARK_INPUT_INVALID", `${part.type} must be an object containing url`, 400);
+      }
+      return { type: part.type, [part.type]: { url: media.url } };
+    }
+    throw new DomainError("ARK_INPUT_INVALID", `multimodal embedding input[${index}] has an unsupported type`, 400);
+  });
 }
 
 function providerRequest(model, operation, input, taskId) {
   if (model.protocol === "generic") return { url: operation === "poll" ? model.pollEndpoint : model.endpoint, method: "POST", body: operation === "poll" ? { task_id: taskId } : { model: model.providerModel, capability: model.capability, input } };
   if (operation === "poll") return { url: `${model.pollEndpoint.replace(/\/$/, "")}/${encodeURIComponent(taskId)}`, method: "GET", body: null };
   const value = input && typeof input === "object" ? input : {};
-  if (model.protocol === "volcengine-chat-completions") return { url: model.endpoint, method: "POST", body: { model: model.providerModel, messages: Array.isArray(value.messages) ? value.messages : [{ role: "user", content: requiredText(value.prompt, "input.prompt") }], ...(value.temperature === undefined ? {} : { temperature: value.temperature }), ...(value.max_completion_tokens === undefined ? {} : { max_completion_tokens: value.max_completion_tokens }) } };
-  if (model.protocol === "volcengine-multimodal-embedding") return { url: model.endpoint, method: "POST", body: { model: model.providerModel, input: value.input ?? input } };
-  if (model.protocol === "volcengine-image-generation") return { url: model.endpoint, method: "POST", body: { model: model.providerModel, prompt: requiredText(value.prompt, "input.prompt"), ...(value.size ? { size: value.size } : {}), ...(value.seed === undefined ? {} : { seed: value.seed }), ...(value.watermark === undefined ? {} : { watermark: Boolean(value.watermark) }), response_format: value.response_format || "url" } };
+  if (model.protocol === "volcengine-chat-completions") return { url: model.endpoint, method: "POST", body: { model: model.providerModel, messages: Array.isArray(value.messages) ? value.messages : [{ role: "user", content: requiredText(value.prompt, "input.prompt") }], ...(value.temperature === undefined ? {} : { temperature: value.temperature }), ...(value.max_completion_tokens === undefined ? {} : { max_completion_tokens: value.max_completion_tokens }), ...(value.disableThinking === true ? { thinking: { type: "disabled" } } : {}), ...(value.jsonOutput === true ? { response_format: { type: "json_object" } } : {}) } };
+  if (model.protocol === "volcengine-multimodal-embedding") return { url: model.endpoint, method: "POST", body: { model: model.providerModel, encoding_format: "float", input: multimodalEmbeddingInput(value) } };
+  if (model.protocol === "volcengine-image-generation") { validateSeedreamSize(model, value.size); return { url: model.endpoint, method: "POST", body: { model: model.providerModel, prompt: requiredText(value.prompt, "input.prompt"), ...(typeof value.image === "string" && value.image ? { image: value.image } : {}), ...(value.size ? { size: value.size } : {}), ...(value.seed === undefined ? {} : { seed: value.seed }), ...(value.watermark === undefined ? {} : { watermark: Boolean(value.watermark) }), response_format: value.response_format || "url" } }; }
   const content = Array.isArray(value.content) ? value.content : [{ type: "text", text: requiredText(value.prompt, "input.prompt") }];
   return { url: model.endpoint, method: "POST", body: { model: model.providerModel, content, ...(value.generate_audio === undefined ? {} : { generate_audio: Boolean(value.generate_audio) }), ...(value.resolution ? { resolution: value.resolution } : {}), ...(value.ratio ? { ratio: value.ratio } : {}), ...(value.duration ? { duration: value.duration } : {}), ...(value.watermark === undefined ? {} : { watermark: Boolean(value.watermark) }) } };
 }
@@ -165,10 +269,22 @@ function providerResponse(model, operation, response) {
   if (model.protocol === "generic") return response;
   if (model.protocol === "volcengine-content-generation" && operation === "submit") return { task_id: response?.id };
   const usage = response?.usage || {};
-  if (model.protocol === "volcengine-chat-completions") return { usage: { input_tokens: usage.prompt_tokens, output_tokens: usage.completion_tokens }, result: { content: response?.choices?.[0]?.message?.content ?? null } };
+  if (model.protocol === "volcengine-chat-completions") { const finishReason = response?.choices?.[0]?.finish_reason; return { usage: { input_tokens: usage.prompt_tokens, output_tokens: usage.completion_tokens }, result: { content: response?.choices?.[0]?.message?.content ?? null, ...(typeof finishReason === "string" ? { finishReason } : {}) } }; }
   if (model.protocol === "volcengine-multimodal-embedding") return { usage: { input_tokens: usage.prompt_tokens ?? usage.total_tokens, output_tokens: 0 }, result: { data: Array.isArray(response?.data) ? response.data : (response?.data ? [response.data] : []) } };
   if (model.protocol === "volcengine-image-generation") { const data = Array.isArray(response?.data) ? response.data[0] : response?.data; return { usage: { input_tokens: 0, output_tokens: data ? 1 : 0 }, result: data ?? null }; }
-  return { status: response?.status, usage: { input_tokens: Number.isSafeInteger(usage.input_tokens) ? usage.input_tokens : 0, output_tokens: Number.isSafeInteger(usage.output_tokens) ? usage.output_tokens : (Number.isSafeInteger(usage.completion_tokens) ? usage.completion_tokens : 0) }, result: response?.content?.video_url ? { url: response.content.video_url } : null };
+  return { status: response?.status, usage: { input_tokens: Number.isSafeInteger(usage.input_tokens) ? usage.input_tokens : 0, output_tokens: Number.isSafeInteger(usage.output_tokens) ? usage.output_tokens : (Number.isSafeInteger(usage.completion_tokens) ? usage.completion_tokens : 0) }, result: response?.content?.video_url ? { url: response.content.video_url } : null, diagnostic: terminalProviderDiagnostic(response) };
+}
+
+function reservationCost(model, input, maximumCostMicros) {
+  if (maximumCostMicros !== undefined) {
+    if (!Number.isSafeInteger(maximumCostMicros) || maximumCostMicros <= 0 || maximumCostMicros > model.maxCostMicros) throw new DomainError("ARK_INPUT_INVALID", "maximumCostMicros must be within the model cost ceiling", 400);
+    return maximumCostMicros;
+  }
+  if (model.capability !== "text" || !Number.isSafeInteger(input?.max_completion_tokens) || input.max_completion_tokens <= 0) return model.maxCostMicros;
+  const inputBytes = Buffer.byteLength(JSON.stringify(input.messages || input.prompt || ""), "utf8");
+  const inputTokenCeiling = inputBytes + 16_384;
+  const bounded = Math.ceil((inputTokenCeiling * model.inputMicrosPerMillion + input.max_completion_tokens * model.outputMicrosPerMillion) / 1_000_000);
+  return Math.min(model.maxCostMicros, Math.max(1, bounded));
 }
 
 export function createArkService({ config, platform, transport, assetTransport, store = null, now = () => new Date().toISOString(), id = () => crypto.randomUUID(), maxAssetBytes = 100 * 1024 * 1024 } = {}) {
@@ -186,13 +302,14 @@ export function createArkService({ config, platform, transport, assetTransport, 
   const modelFor = (name, capability) => { const model = config.models[name]; if (!model || model.capability !== capability) throw new DomainError("ARK_MODEL_UNAVAILABLE", "requested model/capability mapping is unavailable", 400); return model; };
   const call = async (model, operation, body, idempotencyKey) => {
     const request = providerRequest(model, operation, operation === "poll" ? null : body, operation === "poll" ? body.task_id : null);
-    const timeoutMs = operation === "submit" && model.capability === "image" ? 120_000 : 30_000;
+    const timeoutMs = operation === "submit" && model.capability === "image" ? 120_000 : operation === "submit" && model.capability === "text" ? config.textSubmitTimeoutMs : 30_000;
     try { return providerResponse(model, operation, await transport({ ...request, apiKey: model.apiKey || config.apiKey, timeoutMs, idempotencyKey })); }
     catch (error) { throw sanitizeProviderError(error); }
   };
   const settle = (billing, job, response, failed = false) => {
     const usage = failed ? { inputTokens: 0, outputTokens: 0 } : trustedUsage(response);
-    billing.settle(job.reservationId, { ...usage, inputMicrosPerMillion: job.rates.input, outputMicrosPerMillion: job.rates.output, pricingVersion: job.rates.version, failed });
+    const entry = billing.settle(job.reservationId, { ...usage, inputMicrosPerMillion: job.rates.input, outputMicrosPerMillion: job.rates.output, pricingVersion: job.rates.version, failed });
+    job.usage = { inputTokens: entry.inputTokens, outputTokens: entry.outputTokens, costMicros: entry.costMicros, currency: entry.currency, unitScale: entry.unitScale, pricingVersion: entry.pricingVersion };
   };
   const submit = async (credential, request = {}) => {
     const billing = principal(credential);
@@ -203,8 +320,8 @@ export function createArkService({ config, platform, transport, assetTransport, 
       if (record) { job = record.job; if (job.status !== "submitting") return publicJob(job); model = modelFor(job.model, job.capability); }
       else {
         const capability = requiredText(request.capability, "capability"); model = modelFor(requiredText(request.model, "model"), capability);
-        const reservation = billing.reserve({ model: model.name, maxCostMicros: model.maxCostMicros, pricingVersion: model.pricingVersion, currency: model.currency, unitScale: model.unitScale, idempotencyKey: `ark:${idempotencyKey}` });
-        record = storage.create({ id: id(), ownerHash, idempotencyKey, model: model.name, capability, providerInput: structuredClone(request.input ?? null), status: "submitting", providerTaskId: null, reservationId: reservation.id, rates: { input: model.inputMicrosPerMillion, output: model.outputMicrosPerMillion, version: model.pricingVersion }, settlement: null, result: null, error: null, createdAt: now(), updatedAt: now() });
+        const reservation = billing.reserve({ model: model.name, maxCostMicros: reservationCost(model, request.input, request.maximumCostMicros), pricingVersion: model.pricingVersion, currency: model.currency, unitScale: model.unitScale, idempotencyKey: `ark:${idempotencyKey}` });
+        record = storage.create({ id: id(), ownerHash, idempotencyKey, model: model.name, capability, providerInput: structuredClone(request.input ?? null), status: "submitting", providerTaskId: null, reservationId: reservation.id, rates: { input: model.inputMicrosPerMillion, output: model.outputMicrosPerMillion, version: model.pricingVersion }, settlement: null, result: null, error: null, usage: null, createdAt: now(), updatedAt: now() });
         job = record.job; if (job.reservationId !== reservation.id) return publicJob(job);
       }
       try {
@@ -212,7 +329,7 @@ export function createArkService({ config, platform, transport, assetTransport, 
         if (model.asynchronous) { job.providerTaskId = requiredText(response?.task_id, "Ark task_id"); job.status = "running"; }
         else { job.settlement = { response, failed: false }; job.status = "settling"; record = storage.update(job, record.version); settle(billing, job, response); job.status = "succeeded"; job.result = response.result ?? null; job.settlement = null; }
       } catch (error) {
-        job.status = "failed"; job.error = { code: error.code || "ARK_PROVIDER_ERROR", message: "Ark request failed" };
+        job.status = "failed"; job.error = { code: error.code || "ARK_PROVIDER_ERROR", message: "Ark request failed", ...(error?.details && typeof error.details === "object" && !Array.isArray(error.details) ? { details: structuredClone(error.details) } : {}) };
         try { settle(billing, job, null, true); } catch { /* preserve the original sanitized failure */ }
         job.updatedAt = now(); storage.update(job, record.version); throw error;
       }
@@ -230,9 +347,13 @@ export function createArkService({ config, platform, transport, assetTransport, 
     if (!model.pollEndpoint) throw new DomainError("ARK_CONFIG_INVALID", "poll endpoint is not configured", 503);
     let response;
     try { response = await call(model, "poll", { task_id: job.providerTaskId }, job.id); }
-    catch (error) { throw error; }
+    catch (error) {
+      job.settlement = { response: null, failed: true }; job.status = "settling"; record = storage.update(job, record.version);
+      settle(billing, job, null, true); job.status = "failed"; job.error = { code: error.code || "ARK_PROVIDER_ERROR", message: "Ark request failed", ...(error?.details && typeof error.details === "object" && !Array.isArray(error.details) ? { details: structuredClone(error.details) } : {}) }; job.settlement = null; job.updatedAt = now(); storage.update(job, record.version);
+      throw error;
+    }
     if (response.status === "succeeded") { job.settlement = { response, failed: false }; job.status = "settling"; record = storage.update(job, record.version); settle(billing, job, response); job.status = "succeeded"; job.result = response.result ?? null; job.settlement = null; }
-    else if (["failed", "canceled"].includes(response.status)) { job.settlement = { response: null, failed: true }; job.status = "settling"; record = storage.update(job, record.version); settle(billing, job, null, true); job.status = response.status; job.error = { code: "ARK_TASK_FAILED", message: "Ark task did not complete" }; job.settlement = null; }
+    else if (["failed", "canceled"].includes(response.status)) { job.settlement = { response: null, failed: true }; job.status = "settling"; job.error = { code: "ARK_TASK_FAILED", message: "Ark task did not complete", ...(response.diagnostic ? { details: { providerDiagnostic: response.diagnostic } } : {}) }; record = storage.update(job, record.version); settle(billing, job, null, true); job.status = response.status; job.settlement = null; }
     else job.status = "running";
     job.updatedAt = now(); return publicJob(storage.update(job, record.version).job);
     });

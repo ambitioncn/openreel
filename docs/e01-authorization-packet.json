@@ -1,7 +1,14 @@
 {
   "schema": "openreel-e01-authorization/v1",
-  "status": "prepared_not_authorized",
-  "authorized": false,
+  "status": "phase_one_stopped_fail_closed_provider_error",
+  "authorized": true,
+  "executionOutcome": {
+    "evidence": "e01-phase-one-execution-evidence.json",
+    "providerSubmissions": 1,
+    "unexecutedSubmissions": 7,
+    "spentUnits": 0,
+    "nextProviderSubmissionAuthorized": false
+  },
   "scope": "staging_only_no_public_traffic",
   "pricing": {
     "version": "volcengine-2026-08-06-usd-7.20-markup-1.5",
@@ -17,12 +24,12 @@
     {"caseId":"video-sequence-1","modality":"video","model":"seedance-2-fast","count":2,"maximumReservedUnitsPerCall":6945,"evidence":"two bounded short clips, terminal asset metadata, provenance, billed usage"}
   ],
   "requiredHumanInputs": {
-    "stagingBaseUrl": null,
-    "credentialSourceReference": null,
-    "providerEndpointIds": {"embedding-vision":null,"seedream-5-lite":null,"seedance-2-fast":null},
-    "approvedBy": null,
-    "approvedAt": null,
-    "approvalStatement": null
+    "stagingBaseUrl": "http://127.0.0.1:4273",
+    "credentialSourceReference": "/etc/openreel/openreel.env (existing restricted reference; values must not be copied or logged)",
+    "providerEndpointIds": {"embedding-vision":"OPENREEL_VOLCENGINE_EMBEDDING_VISION_MODEL","seedream-5-lite":"OPENREEL_VOLCENGINE_SEEDREAM5_LITE_MODEL","seedance-2-fast":"OPENREEL_VOLCENGINE_SEEDANCE2_FAST_MODEL"},
+    "approvedBy": "task owner via cp54 human gate",
+    "approvedAt": "2026-08-13T09:17:10.123Z",
+    "approvalStatement": "E-01 phase one only: isolated private staging, exactly eight provider submissions, USD 3.0558 aggregate ceiling, zero automatic retries, and fail-closed stop conditions; excludes audio and E-02."
   },
   "notCovered": [
     "audio: no reviewed real provider endpoint and immutable price are configured",

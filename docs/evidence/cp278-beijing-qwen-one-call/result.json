@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "authorization": "CP278-BEIJING-STAGING-QWEN-ONE-CALL",
+  "status": "succeeded",
+  "providerCalls": 1,
+  "retries": 0,
+  "environment": {
+    "host": "beijing-staging",
+    "loopbackOnly": true,
+    "productionServiceChanged": false
+  },
+  "request": {
+    "endpoint": "http://100.124.97.3:8004/v1/audio/speech",
+    "inputCharacters": 33,
+    "language": "chinese",
+    "responseFormat": "wav"
+  },
+  "result": {
+    "byteLength": 253484,
+    "sha256": "6ef317e14a67293502a4fe199972a243e30e2247fa2a2fd4092e628fdb0d6ffa",
+    "mimeType": "audio/wav",
+    "durationSeconds": 5.28,
+    "sampleRate": 24000,
+    "channels": 1,
+    "audioFormat": "pcm",
+    "bitsPerSample": 16
+  },
+  "durable": {
+    "jobState": "succeeded",
+    "assetCount": 1,
+    "timelineAudioClipCount": 1,
+    "downloadStatus": 200
+  },
+  "cost": {
+    "ceilingCny": 30,
+    "estimatedCny": 0,
+    "basis": "owner-operated Tailnet model; no paid-provider or billing endpoint used"
+  },
+  "externalActions": {
+    "qwenSynthesisRequests": 1,
+    "retries": 0,
+    "deployments": 0,
+    "productionServiceChanges": 0,
+    "credentialChanges": 0,
+    "publicWrites": 0
+  }
+}

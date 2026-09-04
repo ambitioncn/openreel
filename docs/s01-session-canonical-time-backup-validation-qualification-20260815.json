@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "S-01",
+  "capturedAt": "2026-08-15T18:26:19.000Z",
+  "scope": "credential-free local backup and isolated-restore validation",
+  "claim": "Platform snapshots fail closed before atomic promotion unless every persisted session lifecycle timestamp uses the exact UTC ISO-8601 millisecond format emitted by OpenReel; parseable offset and low-precision date representations are rejected.",
+  "evidence": [
+    "scripts/backup.mjs",
+    "test/ops.test.js"
+  ],
+  "verification": {
+    "focused": "node --test test/ops.test.js: 21 passed, 0 failed",
+    "fullSuite": "npm test: 189 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "npm run scan:secrets: passed across 175 files"
+  },
+  "externalActions": [],
+  "limitations": [
+    "No live session token or credential was read, generated or changed.",
+    "No external backup, off-host retention, staging mutation, restore activation or production rollback occurred."
+  ]
+}

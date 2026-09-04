@@ -1,0 +1,47 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp73-fresh-candidate-rejection/v1",
+  "capturedAt": "2026-08-27T05:35:00Z",
+  "authorization": "cp70 + standing_authorization_openreel_2026-08-19",
+  "necessity": "T11 required one newly reviewed complete fresh candidate after the deployed cp72 lineage contract; one single-shot candidate minimized cross-shot drift while still exercising generation, composition, byte-backed quality and settlement.",
+  "production": {
+    "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+    "jobId": "c738be08-b8b3-4d5c-afec-91c0788e0fa6",
+    "candidate": { "mode": "fresh", "sourceJobId": null, "inheritedShotIds": [], "inheritedAssetIds": [] },
+    "directorReady": true,
+    "attempts": 1,
+    "terminal": { "status": "failed", "stage": "quality", "code": "COMMERCIAL_QUALITY_REJECTED", "releaseEligible": false }
+  },
+  "quality": {
+    "decisionPolicy": "all required checks must pass; no averaging",
+    "shot": {
+      "assetId": "b681fcb1-24f4-4359-ac8a-e5b2ebd25b3b",
+      "sha256": "6a0cda3c143e05ce34a760d899ebe096230fa50bdfc4be26fdb5aa8dc329a0ca",
+      "byteLength": 1547775,
+      "technicalAndSafetyPassed": true,
+      "scores": { "intent": 0.85, "beat": 0.7, "composition": 0.9, "visual_identity_consistency": 0.95, "performance_naturalness": 0.85 },
+      "failedDimensions": ["beat"]
+    },
+    "final": {
+      "assetId": "954646f4-2a2d-4f49-a22b-17e61cdcbf08",
+      "sha256": "b25f9c95e37ecde3cf1043b563502ab951b883078d04c9089f55175fe3f77781",
+      "byteLength": 147846,
+      "technicalPassed": true,
+      "scores": { "story": 0.3, "pacing": 0.8, "continuity": 0.9 },
+      "failedDimensions": ["story"]
+    }
+  },
+  "billing": {
+    "quoteCny": 16.2,
+    "settledCny": 6.42384,
+    "generationSettledCny": 6.37488,
+    "evaluationSettledCny": 0.04896,
+    "subscriptionSpentUnits": 8922,
+    "subscriptionReservedUnits": 0,
+    "perActionLimitCny": 100
+  },
+  "safety": { "commercialJobs": 1, "executeCalls": 1, "retries": 0, "fallbacks": 0, "publications": 0, "externalSends": 0 },
+  "evidenceRecovery": "The browser runner reached the terminal job then received a non-2xx authenticated asset download. No retry was made. Terminal, billing, manifests and storage bytes were recovered read-only from production durable state; both video hashes and lengths match the quality evidence.",
+  "productionHealth": { "live": "ok", "ready": { "database": "ok", "assets": "ok" }, "service": "active/running", "restarts": 0 },
+  "status": "rejected_fail_closed",
+  "projectCompletion": "in_progress"
+}

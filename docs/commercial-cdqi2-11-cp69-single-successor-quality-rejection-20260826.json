@@ -1,0 +1,34 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp69-single-successor-quality-rejection/v1",
+  "capturedAt": "2026-08-26T06:34:00Z",
+  "authorization": "consumed_cp68_single_provider_successor_attestation",
+  "sourceJobId": "3a0c05de-0225-4446-9ea5-45d6f773baa4",
+  "successorJobId": "93ae2bad-e9b7-4f04-b0ff-da10578382e5",
+  "terminal": {
+    "status": "failed",
+    "stage": "quality",
+    "attempts": 1,
+    "retryable": false,
+    "code": "COMMERCIAL_QUALITY_REJECTED",
+    "generationStatus": "succeeded",
+    "qualificationStatus": "rejected",
+    "releaseEligible": false
+  },
+  "byteEvidence": {
+    "shots": [
+      {"shotId":"c918c4a5-4408-44f8-91d0-d922f847bbe4","sha256":"f657def723b65301ee1ed1dfb21e76abf70d523d03cfc5d102d33dd508bdd601","byteLength":2955194,"qualificationStatus":"rejected","failures":["intent","beat","composition"],"scores":{"intent":0.55,"beat":0.6,"composition":0.7,"visual_identity_consistency":0.95,"performance_naturalness":0.85}},
+      {"shotId":"9780fbb5-bbf6-4d01-b0e2-23567b15890f","sha256":"aeaea21ef9d75035d4a8917f984311f99d389bfa00787724919ecb4027d3233b","byteLength":3060404,"qualificationStatus":"hard_failed","failures":["safety"],"scores":{"intent":0.85,"beat":0.8,"composition":0.9,"visual_identity_consistency":0.95,"performance_naturalness":0.9}},
+      {"shotId":"1ac218db-e947-465a-b1ba-62a14dfbc4df","sha256":"f36a903faab9417960eae01582eee8773b82bfcf5bd01b2323cf0a58692a941e","byteLength":2097402,"qualificationStatus":"rejected","failures":["composition"],"scores":{"intent":0.85,"beat":0.8,"composition":0.75,"visual_identity_consistency":0.95,"performance_naturalness":0.9}}
+    ],
+    "finalRender": {"sha256":"70316f414b4cefe26d06ecc19d5ee3dcbdea0ea9918ce9df14cf68824861aa2a","byteLength":297377,"qualificationStatus":"hard_failed","failures":["story","pacing","continuity"],"scores":{"story":0.2,"pacing":0.3,"continuity":0.1}}
+  },
+  "billing": {
+    "quoteCny": 31.3,
+    "jobCost": {"status":"settled","settledCny":12.8736,"generationSettledCny":12.74976,"evaluationSettledCny":0.12384},
+    "subscriptionDelta": {"units":17708,"currency":"USD","unitScale":10000,"cnyPerUsd":7.2,"settledCny":12.74976,"reservedUnits":0,"reconciliationConsistent":true},
+    "reconciliationGap": "The job projects evaluation settlement of CNY 0.12384, but the inspected account subscription usage ledger contains only the generation delta. Full job-to-account settlement parity is not established."
+  },
+  "safety": {"subscriptionsActivated":1,"redoJobs":1,"executeCalls":1,"retries":0,"publications":0,"activeScopedSessionsAfter":0,"passwordChanges":0},
+  "production": {"release":"/opt/openreel/releases/20260826T052000Z-cdqi2-cp68-compose-cost","ready":true,"service":"active/running","nRestarts":0},
+  "status": "quality_rejected_fail_closed_project_in_progress"
+}

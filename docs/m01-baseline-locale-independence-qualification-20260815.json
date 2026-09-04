@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "M-01",
+  "scope": "credential-free authenticated capability-baseline locale-independence qualification",
+  "controls": [
+    "sort count keys with an explicit Unicode code-unit comparator instead of locale-sensitive collation",
+    "sort set-like mode and control values with the same locale-independent comparator",
+    "prove baseline identity remains stable when host localeCompare is unavailable or behaves differently"
+  ],
+  "verification": {
+    "focused": "node --test test/capability-baseline.test.js: 8 passed, 0 failed",
+    "fullSuite": "npm test: 213 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 221 files"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "configured-provider support",
+    "real multimodal output",
+    "refreshed authenticated LibTV evidence",
+    "deployment or production readiness"
+  ]
+}

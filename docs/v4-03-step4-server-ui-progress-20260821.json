@@ -1,0 +1,26 @@
+{
+  "schema": "openreel-v4-03-progress/v1",
+  "backlogItem": "V4-03",
+  "status": "in_progress",
+  "scope": "local server and browser quote-confirm-lifecycle wiring; zero provider calls and no production change",
+  "implemented": [
+    "owner-scoped quote, confirm, get, execute, retry and cancel server routes",
+    "quote binds exact project, story and storyboard versions and fails before provider contact on drift",
+    "explicit confirmation is required before durable job creation",
+    "browser step 4 exposes quote, confirmation, durable status recovery, retry and cancel controls"
+  ],
+  "verification": [
+    "node --check server.mjs and node --check src/app.js passed",
+    "17/17 focused workbench, lifecycle, orchestrator, planning and project-boundary tests passed",
+    "npm test passed 442/442"
+  ],
+  "providerCalls": 0,
+  "productionChanges": 0,
+  "remaining": [
+    "construct the commercial lifecycle in the production bootstrap with a revision-bound project asset sink",
+    "add captions, music, composition and settled-cost lifecycle stages",
+    "implement paid per-shot redo that preserves successful revision-bound assets",
+    "retain Beijing ordinary-account production browser evidence"
+  ],
+  "projectCompletion": "in_progress"
+}

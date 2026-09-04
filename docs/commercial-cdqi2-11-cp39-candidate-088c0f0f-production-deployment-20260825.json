@@ -1,0 +1,54 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-candidate-deployment/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "deployed_acceptance_pending",
+  "authorization": "consumed_cp38_exact_candidate_deployment_attestation",
+  "candidate": {
+    "manifestFingerprint": "088c0f0fd06b6d24ef896271955f8e80013519ab8d6430417d8e652f779e4c96",
+    "artifactCount": 107,
+    "archiveSha256": "bca40956ca633ab418593d3e106b9534597284f7977e6be1af758d4fe6f80af1",
+    "release": "/opt/openreel/releases/20260825T114806Z-cdqi2-088c0f0f",
+    "preActivationRemoteManifestVerification": "passed",
+    "postActivationRemoteManifestVerification": "passed",
+    "dependencySource": "The healthy rollback anchor has the identical package-lock SHA-256 f65fc5a288d7a9c76df83d165db08d09f01f2c427d7896acfa0d563d7addfdc0. Its installed node_modules was copied without network access; all 107 immutable manifest artifacts were then reverified."
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-25T114806Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T114806Z-cp39-isolated-restore",
+    "database": "ok",
+    "assets": 144,
+    "publishing": "ok"
+  },
+  "activation": {
+    "activeRelease": "/opt/openreel/releases/20260825T114806Z-cdqi2-088c0f0f",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T111452Z-cdqi2-10c3e11e",
+    "automaticRollback": "armed for every activation verification failure; not triggered",
+    "service": "active",
+    "subState": "running",
+    "nRestarts": 0,
+    "processCwdMatchesRelease": true,
+    "readiness": {
+      "status": "ready",
+      "database": "ok",
+      "assets": "ok"
+    },
+    "liveness": "ok"
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "newCommercialJobs": 0,
+    "videoGenerations": 0,
+    "blindProviderRetries": 0,
+    "publicationCalls": 0,
+    "externalMessages": 0,
+    "credentialChanges": 0,
+    "scopeExpansion": false
+  },
+  "remaining": [
+    "Run one separately authorized paid Beijing production ordinary-account quality pass against this exact candidate, with no replay or blind retry.",
+    "Close the outstanding commercial projected-cost settlement defect and complete the T12 terminal evidence-ledger audit only after T11 is accepted."
+  ],
+  "projectCompletion": "in_progress"
+}

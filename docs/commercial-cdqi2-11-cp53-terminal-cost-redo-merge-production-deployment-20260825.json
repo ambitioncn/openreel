@@ -1,0 +1,46 @@
+{
+  "schema": "openreel-commercial-cdqi2-cp53-production-deployment/v1",
+  "capturedAt": "2026-08-25T15:22:00Z",
+  "authorization": "consumed_cp52_beijing_production_deployment_attestation",
+  "candidate": {
+    "release": "/opt/openreel/releases/20260825T153500Z-cdqi2-cp53-terminal-cost-redo-merge",
+    "previousRelease": "/opt/openreel/releases/20260825T142500Z-cdqi2-cp50-director-quote-gate",
+    "realDirectory": true,
+    "sourceHashes": {
+      "src/commercial-provider-orchestrator.js": "2813f1cb0f13767f0f808ac62bca30141b9b2a1686415d4b05cb013fe71bf69a",
+      "server.mjs": "8c96556b37f411b9131bd0b3ee4aa0f85c47f1fdb9cdc6c73f6f799fe260560a",
+      "test/commercial-provider-orchestrator.test.js": "f08e006a3ebf0e155bea94254af8d68491235496bbfc847857de284fb5575f51"
+    },
+    "localAndProductionHashesMatch": true
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-25T152029Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T152029Z-isolated-restore",
+    "database": "ok",
+    "assets": 164,
+    "publishing": "absent"
+  },
+  "verification": {
+    "remoteFocusedBeforeActivation": "44/44 passed",
+    "remoteFocusedAfterActivation": "44/44 passed",
+    "live": { "status": "ok" },
+    "ready": { "status": "ready", "database": "ok", "assets": "ok" },
+    "service": { "activeState": "active", "subState": "running", "nRestarts": 0 },
+    "processCwd": "/opt/openreel/releases/20260825T153500Z-cdqi2-cp53-terminal-cost-redo-merge",
+    "providerMarkersDuringDeploymentWindow": 0
+  },
+  "behavior": {
+    "terminalCostProjection": "reviewed production Tailnet audio route declares settled cost zero; unknown generic audio usage remains fail-closed",
+    "finiteRedoMerge": "retained successful-shot artifacts participate in full-cut inspection and remain immutable; missing, stale, unrelated or cross-revision retained assets reject before composition",
+    "historicalCp51Mutation": false
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "commercialJobs": 0,
+    "publicationCalls": 0,
+    "credentialChanges": 0
+  },
+  "status": "deployed_ready_for_acceptance",
+  "projectCompletion": "in_progress"
+}

@@ -4,7 +4,7 @@ Status: design only. No key exists, no manifest has been signed, and no artifact
 
 ## Signed manifest contract
 
-The existing `scripts/qualify-release-artifacts.mjs` output remains the canonical payload. A future authorized signing ceremony must serialize that version-1 manifest as UTF-8 canonical JSON, sign those exact bytes with an offline asymmetric key, and retain these four separate files:
+The existing `scripts/qualify-release-artifacts.mjs` manifest remains the canonical payload. `canonicalReleaseManifestBytes()` validates its exact version-1 schema, rejects extra or malformed fields, sorts object keys recursively, preserves the reviewed artifact-array order, and emits whitespace-free UTF-8 bytes. A future authorized signing ceremony must sign those exact bytes with an offline asymmetric key and retain these four separate files:
 
 1. `release-manifest.json` — the canonical payload containing the fixed ordered artifact list, byte counts, and SHA-256 digests.
 2. `release-manifest.sig` — a detached signature over the exact payload bytes.
@@ -31,3 +31,4 @@ The reviewer must be someone other than the change author and must record pass, 
 
 Review fails if any required item lacks replayable evidence, a high-severity finding is unexplained, key custody is ambiguous, a gate is missing, or rollback cannot be stopped safely. A failed review produces a revision request; it never authorizes activation.
 
+`src/release-review.js` makes the nine-item review packet machine-checkable. It requires a reviewer distinct from the author, the fixed ordered checklist, pass status and at least one evidence reference for every item, and an explicit `externalActionsExecuted=false` local boundary. Passing this validator proves only that a complete local review packet is internally consistent; it does not perform or replace the independent review, select a signing algorithm, create or use a key, authorize retention, or activate a release.

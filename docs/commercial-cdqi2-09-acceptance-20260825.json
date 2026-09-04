@@ -1,0 +1,28 @@
+{
+  "schema": "openreel-commercial-terminal-item-acceptance/v1",
+  "projectId": "openreel-commercial-director-quality-integration",
+  "item": "CDQI2-09",
+  "terminalCriterion": "T09",
+  "status": "accepted",
+  "evidence": {
+    "pass": "commercial-cdqi2-09-person-pass-evidence-20260825.json",
+    "reject": "commercial-cdqi2-09-no-person-reject-evidence-20260825.json",
+    "actualVideoByteDigests": [
+      "fecc2756a093a103eb49e316f54a4826edd61688504e3b60248188a94e8b84d4",
+      "8cfd36a52965e4ad6a2fc1af58c0946be046ca5f2fb0765e9ada12f6555c7a6a"
+    ],
+    "acceptedNewDimensionPassScores": {"visual_identity_consistency":0.95,"performance_naturalness":0.9},
+    "acceptedNewDimensionRejectScores": {"visual_identity_consistency":0,"performance_naturalness":0},
+    "acceptedCallsCostCny": 0.017649,
+    "acceptedCalls": 2,
+    "automaticRetries": 0,
+    "fallbacks": 0,
+    "publicationCalls": 0
+  },
+  "excludedDiagnostics": [
+    "commercial-cdqi2-09-real-evaluation-attempt-20260825.json: observation field violated the strict contract",
+    "commercial-cdqi2-09-person-evaluation-attempt-20260825.json: raw usage was not retained and no score/cost claim is accepted"
+  ],
+  "projectCompletion": "in_progress",
+  "remaining": ["CDQI2-10","CDQI2-11","CDQI2-12"]
+}

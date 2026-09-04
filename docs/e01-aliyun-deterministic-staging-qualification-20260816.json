@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "backlogItems": ["T-01", "S-01", "E-01"],
+  "authorizationGate": "cp170",
+  "target": "root@123.57.67.213:/opt/openreel/current",
+  "release": "/opt/openreel/releases/20260816T020000Z-cp170",
+  "backup": {
+    "path": "/opt/openreel/backups/20260816T020000Z-cp170",
+    "applicationReleaseCopied": true,
+    "stateManifestFiles": 21,
+    "isolatedRestore": { "database": "ok", "assets": 19 },
+    "ownerOnlyPermissions": true
+  },
+  "preActivation": {
+    "tests": { "passed": 226, "failed": 0, "skipped": 0, "runAs": "openreel" },
+    "deploymentRehearsal": "passed",
+    "productionE2E": {
+      "status": "passed",
+      "providerCalls": 0,
+      "registrationLoginIdentity": true,
+      "secureCookieCsrf": true,
+      "idorAttemptsRejected": 3,
+      "concurrentConflictStatus": 409,
+      "playableMp4Bytes": 2407,
+      "durableRestart": true,
+      "isolatedBackupRestore": "ok",
+      "rateLimitStatus": 429,
+      "healthReadinessMetrics": true
+    },
+    "secretScan": "the locally scanned release file set passed across 234 files and rsync checksum dry-run found no deployed-content drift; the release-local scanner was inapplicable because immutable releases intentionally omit .git"
+  },
+  "activation": {
+    "newReleaseReady": true,
+    "rollbackToPreviousReleaseReady": true,
+    "reactivationOfNewReleaseReady": true,
+    "finalService": "active",
+    "finalReadiness": "ready",
+    "publicRootStatus": 200,
+    "providerCalls": 0,
+    "providerCostUsd": 0
+  },
+  "findings": [
+    {
+      "severity": "medium",
+      "id": "public-operational-endpoints",
+      "observation": "the public staging listener currently returns HTTP 200 for /health/ready and /metrics instead of the operations-contract external 404",
+      "resolutionGate": "an exact staging reverse-proxy configuration authorization is required; no Nginx change was made"
+    },
+    {
+      "severity": "acceptance-gap",
+      "id": "graphical-browser-unavailable",
+      "observation": "no Chromium, Chrome or equivalent graphical browser is installed on the target, so the completed HTTP production E2E is not claimed as graphical-browser E2E",
+      "resolutionGate": "approve a bounded browser runner or provide an external graphical-browser execution environment"
+    }
+  ],
+  "claimsExcluded": [
+    "real-media provider output",
+    "graphical-browser E2E",
+    "authenticated LibTV format or quality comparison",
+    "production launch acceptance",
+    "public operational endpoint hardening"
+  ],
+  "projectCompletion": "in_progress"
+}

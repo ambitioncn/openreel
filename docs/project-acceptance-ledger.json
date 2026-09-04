@@ -1,25 +1,415 @@
 {
   "schemaVersion": 1,
-  "contractVersion": "3.0",
-  "updatedAt": "2026-08-13",
-  "status": "ongoing",
+  "contractVersion": "4.0",
+  "updatedAt": "2026-08-31",
+  "status": "accepted",
   "items": [
-    {"id":"P0.1","dependsOn":[],"status":"accepted","evidence":["src/core.js schema v3 graph persistence and graph edit APIs","src/app.js persisted nodes/directed edges/groups/history UI","test/graph-adapter.test.js graph edit/restart/cycle/stale/invalid-position negatives","npm test: 27/27"],"acceptance":["durable typed nodes/edges/groups","per-node run/progress/results/versioned history","graph negative and restart tests"],"unmet":[]},
-    {"id":"P0.2","dependsOn":["P0.1"],"status":"accepted","evidence":["src/adapters.js registry/local/optional gates/result validation","src/core.js createJob registry execution","test/graph-adapter.test.js local execution/credential/cost/invalid-result gates","npm test: 27/27"],"acceptance":["adapter interface and registry","credential-free executable adapter","credential/cost gate negatives"],"unmet":[]},
-    {"id":"P0.3","dependsOn":["P0.2"],"status":"accepted","evidence":["src/render.js deterministic ffmpeg 8.1 timeline composition","openreel-render/v1 MP4 manifest/download with SHA-256","npm run smoke:render: H.264 + AAC ffprobe, deterministic replay","npm run smoke:http: video/mp4 HTTP download","npm run smoke:render-negative and npm run smoke:http-negative"],"acceptance":["playable final media","render manifest/download","render smoke"],"unmet":[]},
-    {"id":"P0.4","dependsOn":["P0.1","P0.2","P0.3"],"status":"accepted","evidence":["bin/openreel.mjs and src/cli.js first-class command help/JSON errors","npm run smoke:cli: 20 positive commands including video render/download and 3 negative commands","npm run smoke:cli-negative"],"acceptance":["workspace/project/canvas/node/edge/run/model-schema/upload/download CLI","stable JSON errors","CLI smoke"],"unmet":[]},
-    {"id":"P1.1","dependsOn":["P0.1","P0.2"],"status":"accepted","evidence":["test/completion.test.js script-storyboard-image-video executable chain","shared reference continuity and immutable result provenance metadata","npm test"],"acceptance":["script-storyboard-image-video executable chain","provenance and continuity tests"],"unmet":[]},
-    {"id":"P1.2","dependsOn":["P0.2"],"status":"accepted","evidence":["src/adapters.js validateCapability domain enforcement","server.mjs generation API delegates structured INCOMPATIBLE_PARAMETERS errors","index.html/src/app.js model schema-driven controls","test/terminal.test.js mode/aspect/resolution/duration/audio/reference-count negatives","npm test: 38/38"],"acceptance":["schema-driven parameter UI","capability constraint negatives"],"unmet":[]},
-    {"id":"P1.3","dependsOn":["P0.1","P0.2"],"status":"accepted","evidence":["src/core.js listHistory/listAssets/copyAsset with immutable results and copy provenance","server.mjs history/library/copy APIs","index.html/src/app.js searchable/filterable asset and generation library UI","test/terminal.test.js immutable versions/cross-project reuse/restart","npm test: 38/38"],"acceptance":["history/library/result versions/reuse","restart tests"],"unmet":[]},
-    {"id":"P1.4","dependsOn":["P1.1","P2.1"],"status":"accepted","evidence":["src/platform.js planAutomation/runAutomation intent/plan/node/status/failure/cost model","budget-backed execution and idempotency key replay","test/terminal.test.js success/failure/cost/replay smoke beyond CRUD","npm run smoke:workflow: passed and persisted"],"acceptance":["intent-preserving plan/run/status/failure/cost","idempotent automation smoke"],"unmet":[]},
-    {"id":"P1.5","dependsOn":["P1.1"],"status":"accepted","evidence":["docs/workflow-templates.md versioned example","src/platform.js schema validation and SHA-256 deduplicated local import","test/terminal.test.js invalid/reproducible import","npm run smoke:import: passed and persisted","no publish route or external action"],"acceptance":["examples/templates","versioned validated workflow import"],"unmet":[]},
-    {"id":"P2.1","dependsOn":["P0.2"],"status":"accepted","evidence":["src/platform.js durable local plan/wallet/pricing/reservation/settlement ledger","hard balance/ceiling checks, idempotent reserve/settle and transparent status/failure/cost","test/terminal.test.js concurrency/restart/insufficient-budget negatives","npm run smoke:budget: passed and persisted","no billing provider"],"acceptance":["quote/reserve/settle ledger","hard budget ceiling and negative tests"],"unmet":[]},
-    {"id":"P2.2","dependsOn":["P0.1"],"status":"accepted","evidence":["src/platform.js salted scrypt password authentication and opaque sessions","team tenant/invite/membership/roles/conflict enforcement","server.mjs local auth/team APIs","test/terminal.test.js and npm run smoke:auth authorization negatives","docs/security-posture.md explicit non-production boundary"],"acceptance":["local auth/team/invite architecture","authorization negatives","production boundary"],"unmet":[]},
-    {"id":"P2.3","dependsOn":["P2.2"],"status":"accepted","evidence":["src/platform.js LocalObjectAdapter/LocalDatabaseAdapter tenant-scoped interfaces","workflow and ledger cross-tenant authorization","test/terminal.test.js and npm run smoke:tenant isolation negatives","docs/security-posture.md threat model, backup/migration guidance and production blockers"],"acceptance":["storage/database/multitenancy interfaces","tenant isolation/security posture"],"unmet":[]}
+    {
+      "id": "P0.1",
+      "dependsOn": [],
+      "status": "accepted",
+      "evidence": [
+        "src/core.js schema v3 graph persistence and graph edit APIs",
+        "src/app.js persisted nodes/directed edges/groups/history UI",
+        "test/graph-adapter.test.js graph edit/restart/cycle/stale/invalid-position negatives",
+        "npm test: 27/27"
+      ],
+      "acceptance": [
+        "durable typed nodes/edges/groups",
+        "per-node run/progress/results/versioned history",
+        "graph negative and restart tests"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P0.2",
+      "dependsOn": [
+        "P0.1"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "src/adapters.js registry/local/optional gates/result validation",
+        "src/core.js createJob registry execution",
+        "test/graph-adapter.test.js local execution/credential/cost/invalid-result gates",
+        "npm test: 27/27"
+      ],
+      "acceptance": [
+        "adapter interface and registry",
+        "credential-free executable adapter",
+        "credential/cost gate negatives"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P0.3",
+      "dependsOn": [
+        "P0.2"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "src/render.js deterministic ffmpeg 8.1 timeline composition",
+        "openreel-render/v1 MP4 manifest/download with SHA-256",
+        "npm run smoke:render: H.264 + AAC ffprobe, deterministic replay",
+        "npm run smoke:http: video/mp4 HTTP download",
+        "npm run smoke:render-negative and npm run smoke:http-negative"
+      ],
+      "acceptance": [
+        "playable final media",
+        "render manifest/download",
+        "render smoke"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P0.4",
+      "dependsOn": [
+        "P0.1",
+        "P0.2",
+        "P0.3"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "bin/openreel.mjs and src/cli.js first-class command help/JSON errors",
+        "npm run smoke:cli: 20 positive commands including video render/download and 3 negative commands",
+        "npm run smoke:cli-negative"
+      ],
+      "acceptance": [
+        "workspace/project/canvas/node/edge/run/model-schema/upload/download CLI",
+        "stable JSON errors",
+        "CLI smoke"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P1.1",
+      "dependsOn": [
+        "P0.1",
+        "P0.2"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "test/completion.test.js script-storyboard-image-video executable chain",
+        "shared reference continuity and immutable result provenance metadata",
+        "npm test"
+      ],
+      "acceptance": [
+        "script-storyboard-image-video executable chain",
+        "provenance and continuity tests"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P1.2",
+      "dependsOn": [
+        "P0.2"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "src/adapters.js validateCapability domain enforcement",
+        "server.mjs generation API delegates structured INCOMPATIBLE_PARAMETERS errors",
+        "index.html/src/app.js model schema-driven controls",
+        "test/terminal.test.js mode/aspect/resolution/duration/audio/reference-count negatives",
+        "npm test: 38/38"
+      ],
+      "acceptance": [
+        "schema-driven parameter UI",
+        "capability constraint negatives"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P1.3",
+      "dependsOn": [
+        "P0.1",
+        "P0.2"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "src/core.js listHistory/listAssets/copyAsset with immutable results and copy provenance",
+        "server.mjs history/library/copy APIs",
+        "index.html/src/app.js searchable/filterable asset and generation library UI",
+        "test/terminal.test.js immutable versions/cross-project reuse/restart",
+        "npm test: 38/38"
+      ],
+      "acceptance": [
+        "history/library/result versions/reuse",
+        "restart tests"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P1.4",
+      "dependsOn": [
+        "P1.1",
+        "P2.1"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "src/platform.js planAutomation/runAutomation intent/plan/node/status/failure/cost model",
+        "budget-backed execution and idempotency key replay",
+        "test/terminal.test.js success/failure/cost/replay smoke beyond CRUD",
+        "npm run smoke:workflow: passed and persisted"
+      ],
+      "acceptance": [
+        "intent-preserving plan/run/status/failure/cost",
+        "idempotent automation smoke"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P1.5",
+      "dependsOn": [
+        "P1.1"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "docs/workflow-templates.md versioned example",
+        "src/platform.js schema validation and SHA-256 deduplicated local import",
+        "test/terminal.test.js invalid/reproducible import",
+        "npm run smoke:import: passed and persisted",
+        "no publish route or external action"
+      ],
+      "acceptance": [
+        "examples/templates",
+        "versioned validated workflow import"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P2.1",
+      "dependsOn": [
+        "P0.2"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "src/platform.js durable local plan/wallet/pricing/reservation/settlement ledger",
+        "hard balance/ceiling checks, idempotent reserve/settle and transparent status/failure/cost",
+        "test/terminal.test.js concurrency/restart/insufficient-budget negatives",
+        "npm run smoke:budget: passed and persisted",
+        "no billing provider"
+      ],
+      "acceptance": [
+        "quote/reserve/settle ledger",
+        "hard budget ceiling and negative tests"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P2.2",
+      "dependsOn": [
+        "P0.1"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "src/platform.js salted scrypt password authentication and opaque sessions",
+        "team tenant/invite/membership/roles/conflict enforcement",
+        "server.mjs local auth/team APIs",
+        "test/terminal.test.js and npm run smoke:auth authorization negatives",
+        "docs/security-posture.md explicit non-production boundary"
+      ],
+      "acceptance": [
+        "local auth/team/invite architecture",
+        "authorization negatives",
+        "production boundary"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "P2.3",
+      "dependsOn": [
+        "P2.2"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "src/platform.js LocalObjectAdapter/LocalDatabaseAdapter tenant-scoped interfaces",
+        "workflow and ledger cross-tenant authorization",
+        "test/terminal.test.js and npm run smoke:tenant isolation negatives",
+        "docs/security-posture.md threat model, backup/migration guidance and production blockers"
+      ],
+      "acceptance": [
+        "storage/database/multitenancy interfaces",
+        "tenant isolation/security posture"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "V4-01",
+      "dependsOn": [
+        "P2.2"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "docs/v4-reopen-audit-20260821.json",
+        "docs/v4-01-distinct-work-boundary-qualification-20260821.json",
+        "docs/evidence/v4-07-production-ordinary-account-cp26.json"
+      ],
+      "acceptance": [
+        "new creative creates a distinct project or requires explicit project selection",
+        "ordinary-account browser regression proves no accidental overwrite"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "V4-02",
+      "dependsOn": [
+        "V4-01",
+        "M-01"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "docs/v4-reopen-audit-20260821.json",
+        "docs/evidence/v4-07-production-ordinary-account-cp26.json"
+      ],
+      "acceptance": [
+        "creative-to-script and script-to-storyboard use a real configured text model",
+        "model/job/cost/prompt provenance retained; no hard-coded template fallback may claim success"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "V4-03",
+      "dependsOn": [
+        "V4-02",
+        "P2.1"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "src/commercial-provider-orchestrator.js",
+        "src/commercial-job-lifecycle.js",
+        "src/workbench-commercial.js",
+        "test/workbench-commercial.test.js",
+        "docs/v4-03-durable-stage-cost-progress-20260822.json",
+        "docs/v4-03-shot-redo-preserved-merge-cp31-20260822.json",
+        "docs/evidence/v4-07-production-ordinary-account-cp54.json",
+        "docs/openreel-h3-commercial-main-qualification-20260831.json"
+      ],
+      "acceptance": [
+        "real step 4 quote and explicit confirmation",
+        "Seedream first frame and Seedance video per shot",
+        "TTS, captions, music and composition",
+        "durable progress, failure recovery and per-shot redo",
+        "production Server API and browser UI integration"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "V4-04",
+      "dependsOn": [
+        "V4-03"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "server.mjs authenticated Agent film prepare/execute/status/progress routes",
+        "src/agent-film-store.js durable preparation and execution linkage",
+        "test/workbench-commercial.test.js Agent orchestration, progress, mismatch and restart boundaries",
+        "docs/v4-04-agent-entry-progress-20260822.json",
+        "docs/v4-04-v4-06-local-completion-cp55-20260823.json",
+        "docs/v4-04-v4-06-cp59-production-evidence-20260823.json"
+      ],
+      "acceptance": [
+        "one authenticated Agent entry point orchestrates prompt through final render",
+        "same lifecycle, budget and revision gates as browser path",
+        "idempotent recovery and observable stage progress"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "V4-05",
+      "dependsOn": [
+        "V4-01"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "docs/v4-05-revision-identity-progress-20260822.json",
+        "docs/evidence/v4-07-production-ordinary-account-cp54.json",
+        "docs/openreel-h3-commercial-main-qualification-20260831.json"
+      ],
+      "acceptance": [
+        "every generated asset binds project/story/storyboard version and shot where applicable",
+        "timeline/render/publish preflight reject stale or foreign assets",
+        "explicit provenance-bearing reuse cannot masquerade as fresh generation"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "V4-06",
+      "dependsOn": [
+        "V4-02"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "src/product-url.js",
+        "src/product-understanding.js",
+        "src/app.js authenticated product URL intake",
+        "test/product-url.test.js",
+        "test/product-understanding.test.js",
+        "docs/v4-06-real-product-understanding-progress-20260822.json",
+        "docs/v4-04-v4-06-local-completion-cp55-20260823.json",
+        "docs/evidence/v4-06-production-ordinary-account-cp60.json"
+      ],
+      "acceptance": [
+        "server safely fetches allowed public product URLs with redirect and DNS revalidation",
+        "bounded verified content feeds a real understanding model",
+        "source, fetch and model provenance retained"
+      ],
+      "unmet": []
+    },
+    {
+      "id": "V4-07",
+      "dependsOn": [
+        "V4-02",
+        "V4-03",
+        "V4-04",
+        "V4-05",
+        "V4-06"
+      ],
+      "status": "accepted",
+      "evidence": [
+        "docs/evidence/v4-07-production-ordinary-account-cp54.json",
+        "docs/v4-04-v4-06-cp59-production-evidence-20260823.json",
+        "docs/evidence/v4-06-production-ordinary-account-cp60.json"
+      ],
+      "acceptance": [
+        "fresh ordinary account on Beijing production",
+        "exact initial prompt 美女在海滩跳舞",
+        "new playable MP4",
+        "retained model, cost, task, per-shot assets, storyboard version, timeline and render binding evidence",
+        "clean regression, backup and rollback evidence"
+      ],
+      "unmet": []
+    }
   ],
-  "unmet": ["M-01","C-01","A-01","T-01","CO-01","B-01","S-01","E-01","E-02"],
-  "blockers": [
-    {"id":"E-01","reason":"Staging deployment, credentials and paid real-provider calls require explicit human approval."},
-    {"id":"E-02","reason":"Production deployment and process-control actions require explicit human approval."}
-  ]
+  "unmet": [],
+  "outOfScope": [
+    {
+      "id": "CO-01",
+      "status": "out_of_scope",
+      "disposition": "canceled_by_owner",
+      "canceledAt": "2026-08-19",
+      "reason": "The owner canceled team functionality and any creation of or integration with a LibTV team space. Historical local and authenticated read-only evidence is retained but is not an acceptance pass."
+    },
+    {
+      "id": "B-01",
+      "status": "out_of_scope",
+      "disposition": "canceled_by_owner",
+      "canceledAt": "2026-08-19",
+      "reason": "The owner removed billing, credits, usage and payment-system alignment from the project plan and terminal acceptance scope. Historical local and authenticated read-only evidence is retained but is not an acceptance pass."
+    }
+  ],
+  "blockers": [],
+  "humanAcceptance": {
+    "status": "accepted",
+    "acceptedAt": "2026-08-31T17:35:27Z",
+    "acceptedBy": "owner",
+    "scope": "OpenReel v4 current evidence bundle and project terminal acceptance",
+    "sourceTaskId": "2026-08-31T17-34-19-129Z_routed-task-loop-openreel-v4",
+    "decision": "The owner reviewed and explicitly accepted the current OpenReel v4 evidence bundle.",
+    "idempotencyRule": "This acceptance is final for the evidenced v4 revision and must not be requested again."
+  },
+  "terminalEvidence": [
+    "docs/s01-storageclaw-synthetic-snapshot-qualification-20260820.json: dedicated least-privilege ZFS namespace, recursive Sanoid 24-hour/30-day/8-week/12-month retention, synthetic client-side encrypted write/readback/integrity, writer snapshot create/destroy denial, live tamper/delete survival and isolated snapshot restore all passed; no production data uploaded",
+    "docs/s01-e02-production-resilience-drill-20260819.json: production deployment, application-aware backup/restore, monitored recovery and actual rollback/reactivation evidence remains accepted",
+    "docs/openreel-h3-commercial-main-qualification-20260831.json: H3 first-frame continuity wiring, 599/599 regression, Beijing release identity, active service and process model configuration verified with zero generation calls"
+  ],
+  "terminalDecision": "V4-01 through V4-07 remain accepted. The 2026-08-31 H3 commercial-main continuity and Beijing deployment evidence is synchronized. The owner reviewed and explicitly accepted the current v4 evidence bundle on 2026-08-31; all terminal criteria are satisfied and the OpenReel v4 project is complete. Do not request this same acceptance decision again."
 }

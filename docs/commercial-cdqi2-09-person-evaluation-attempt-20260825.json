@@ -1,0 +1,23 @@
+{
+  "schema": "openreel-commercial-real-evaluation-attempt/v1",
+  "taskId": "2026-08-25T02-55-58-120Z_routed-task-loop-engineering-loop-openreel-comme",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "necessity": "CDQI2-09 still lacked actual-person pass evidence after the prior no-person rejection diagnostic; an existing retained person-performance MP4 was selected without generating or buying new media.",
+  "route": {"environment":"Beijing Aliyun private production provider route","provider":"volcengine-ark","model":"seed-2.1-turbo"},
+  "limits": {"maximumSubmissions":1,"providerSubmissions":1,"automaticRetries":0,"fallbacks":0,"maximumCostCny":0.1,"ownerPerActionLimitCny":100},
+  "asset": {"source":"runtime/v4-07-production-ordinary-account-cp26.mp4","mimeType":"video/mp4","byteLength":257435,"sha256":"fecc2756a093a103eb49e316f54a4826edd61688504e3b60248188a94e8b84d4"},
+  "response": {
+    "httpStatus": 200,
+    "scoreEnvelopeParsedBeforeUsageCheck": true,
+    "retainedScores": null,
+    "retainedObservation": null,
+    "usage": null,
+    "calculatedCostCny": null
+  },
+  "contractResult": "not_qualified",
+  "contractFailure": "The one-shot harness expected normalized input_tokens/output_tokens while the raw Volcengine chat response uses prompt_tokens/completion_tokens. It failed closed as untrusted usage before emitting any response evidence, so neither scores nor cost may be reconstructed or claimed.",
+  "correctiveAction": "The retained harness now accepts only the two explicitly supported trusted token-name pairs. This correction was syntax-checked but was not executed against the provider in this tick.",
+  "publicationCalls": 0,
+  "status": "diagnostic_evidence_retained_cdqi2_09_incomplete",
+  "nextAction": "In a later loop tick, perform a fresh read-only preflight and at most one separately justified call with the corrected harness; do not reuse this idempotency intent or blindly retry this action."
+}

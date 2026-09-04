@@ -1,0 +1,24 @@
+{
+  "schema": "openreel-v4-terminal-gap-audit/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp27",
+  "status": "in_progress",
+  "verifiedFacts": [
+    "The active ffmpeg 8.1 build exposes overlay but no drawtext, subtitles or ass filter, so caption text cannot be truthfully claimed as burned into pixels by the current renderer.",
+    "The current commercial composition plan contains caption timing and music gain targets, but renderCommercialMedia accepts only video sources and one voice source.",
+    "The current commercial orchestrator generates Seedream images, Seedance videos and Qwen voice; it does not request, retain or mix a music asset.",
+    "The existing local failed-shot redo planner starts no paid action, while the durable commercial lifecycle exposes only whole-job retry and the production HTTP surface has no per-shot quote, confirmation or execute route.",
+    "The most recent MiniMax music evidence records a consumed authorization and no returned music bytes; it cannot be reused as current successful music evidence."
+  ],
+  "failClosedDecision": "Do not label planned captions as burned-in captions, do not synthesize placeholder tones as reviewed music, and do not label whole-job retry or storyboard clearing as paid per-shot redo.",
+  "implementationBoundary": {
+    "caption": "Provide a reviewed production text-rendering dependency or implement a separately qualified renderer, then verify visible pixels and safe-zone placement.",
+    "music": "Obtain generated or reviewed licensed byte-backed music with provenance, retain it under the current revision identity, and mix it with speech ducking.",
+    "perShotRedo": "Persist per-shot terminal results, quote only selected failed shots, require explicit confirmation, derive new provider idempotency keys for the selected shot attempt, preserve successful assets, and recompose only after revision checks."
+  },
+  "safeNextWork": [
+    "Collect V4-04 Agent-entry production evidence through the already deployed authenticated route without a production restart.",
+    "Collect V4-06 product-URL production fetch and real-understanding evidence through the already deployed authenticated route without a production restart."
+  ],
+  "projectCompletion": "in_progress"
+}

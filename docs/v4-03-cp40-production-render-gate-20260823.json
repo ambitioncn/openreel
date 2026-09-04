@@ -1,0 +1,54 @@
+{
+  "schema": "openreel-v4-progress-evidence/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp40",
+  "status": "caption_contract_deployed_production_compose_failed",
+  "deployment": {
+    "release": "/opt/openreel/releases/20260823T023500Z-cp40-caption-length",
+    "previousRelease": "/opt/openreel/releases/20260823T020500Z-cp38-duration",
+    "manifestArtifactsVerified": 85,
+    "archiveSha256": "beecfe79eee318c1de03a6e310d79a9586410fb797a774d86e60a6a19a74d6b4",
+    "service": "active",
+    "restartCount": 0,
+    "loopbackReady": 200,
+    "public4173Root": 200,
+    "rollbackUsed": false
+  },
+  "productionAcceptance": {
+    "freshOrdinaryAccount": true,
+    "initialPrompt": "美女在海滩跳舞",
+    "requestedDurationSeconds": 5,
+    "attempts": 1,
+    "commercialJobId": "9a5c3845-7514-4093-a1d1-f182e595658a",
+    "quoteCny": 16,
+    "result": "failed_at_compose",
+    "errorCode": "RENDER_FAILED",
+    "retryable": false,
+    "mp4Produced": false
+  },
+  "retainedProductionAssets": {
+    "binding": {
+      "projectId": "7fe3fdd5-157a-40d3-b5e3-144eabccb32e",
+      "projectVersion": 6,
+      "storyVersion": 2,
+      "storyboardVersion": 2
+    },
+    "image": { "model": "seedream-5-lite", "providerJobId": "d0208c0c-723f-4e19-8d96-96b49033e18a", "bytes": 295721, "status": "succeeded" },
+    "video": { "model": "seedance-2-fast", "providerJobId": "25a90171-cdfd-4901-8008-beffd898d772", "bytes": 3043058, "status": "succeeded" },
+    "voice": { "model": "qwen-tts-tailnet", "bytes": 165164, "status": "succeeded" },
+    "caption": { "exactStoryboardPrompt": true, "reviewed": true, "bytes": 70 },
+    "music": { "sourceDeclared": true, "responsibilityConfirmed": true, "bytes": 16044 },
+    "render": null
+  },
+  "diagnosis": "The deployed 2000-character caption planner accepted the exact reviewed prompt and all three provider stages succeeded. The byte-backed ffmpeg compose then failed with RENDER_FAILED. The durable lifecycle intentionally exposes only the generic render error, so the exact ffmpeg cause remains unproven; no paid retry was made.",
+  "cost": { "currency": "CNY", "estimated": 16, "status": "reserved", "settled": null },
+  "safety": {
+    "acceptanceRetries": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "portsChanged": false,
+    "derperTouched": false
+  },
+  "projectCompletion": "in_progress"
+}

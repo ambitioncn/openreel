@@ -1,0 +1,51 @@
+{
+  "schema": "openreel-a01-seed-tts-read-only-diagnosis/v1",
+  "recordedAt": "2026-08-16T03:37:00Z",
+  "sourceExecution": "docs/a01-seed-tts-cp178-execution-evidence.json",
+  "observedTerminalCode": 45000010,
+  "officialEvidence": {
+    "v3ApiUrl": "https://www.volcengine.com/docs/6561/1598757",
+    "voiceListUrl": "https://www.volcengine.com/docs/6561/1257544",
+    "resourceId": "seed-tts-2.0",
+    "speaker": "zh_female_vv_uranus_bigtts",
+    "speakerIsDocumentedForV3SeedTts2": true,
+    "resourceAndSpeakerFamilyCompatible": true,
+    "publishedErrorFamily": 45000000,
+    "publishedErrorMeaning": "speaker permission denied; speaker is unauthorized or incorrect",
+    "exactSubcodePublished": false
+  },
+  "beijingReadOnlyConfiguration": {
+    "directCredentialReferencePresent": true,
+    "dedicatedSeedAudioCredentialReferencePresent": true,
+    "sharedCredentialReferencePresent": true,
+    "directEqualsDedicatedSeedAudio": false,
+    "directEqualsShared": false,
+    "dedicatedSeedAudioEqualsShared": false,
+    "credentialValuesOrDigestsRetained": false
+  },
+  "diagnosis": {
+    "classification": "likely_credential_or_entitlement_mismatch",
+    "confidence": "high_but_not_terminal",
+    "reasoning": [
+      "The selected speaker is listed by the provider as a TTS 2.0 voice and the selected resource id is the documented TTS 2.0 resource, reducing the likelihood of a static speaker/resource family mismatch.",
+      "The provider publishes the 45000000 family as speaker permission denial, while the exact 45000010 subcode is not publicly enumerated.",
+      "The credential explicitly authorized for cp178 is distinct from a dedicated SeedAudio credential reference already present on the Beijing host; cp178 did not authorize switching credentials."
+    ],
+    "notProven": [
+      "Whether the dedicated SeedAudio credential is entitled to seed-tts-2.0 or this exact speaker.",
+      "Whether the direct credential lacks the product grant, speaker grant, or another account-side entitlement.",
+      "Whether a corrected request would succeed."
+    ]
+  },
+  "safety": {
+    "providerCalls": 0,
+    "credentialReads": 0,
+    "credentialChanges": 0,
+    "configurationChanges": 0,
+    "serviceChanges": 0
+  },
+  "nextGatePrerequisites": [
+    "Obtain account-visible read-only evidence binding one named non-secret credential reference to seed-tts-2.0 and the selected speaker.",
+    "Prepare a new exact call-count and CNY budget gate naming that credential reference; do not reuse cp178 authority."
+  ]
+}

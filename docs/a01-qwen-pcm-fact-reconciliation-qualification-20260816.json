@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "backlogItems": ["A-01", "S-01"],
+  "date": "2026-08-16",
+  "scope": "credential-free optional PCM fact provenance reconciliation",
+  "implementation": "src/wav.js permits PCM without fact metadata but, when a canonical fact chunk is supplied, requires its sample-frame count to match dataBytes / blockAlign",
+  "positiveEvidence": "a canonical one-frame PCM WAV with an optional fact frame count of one remained accepted",
+  "negativeEvidence": "the same PCM bytes with an asserted fact frame count of two were rejected as QWEN_TTS_RESULT_INVALID",
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js",
+    "targetedResult": "17/17 passed",
+    "externalCalls": 0,
+    "retainedExternalMedia": 0
+  },
+  "boundary": "No OTP replay, Tailnet request, real synthesis, Provider call, deployment, service change, credential change or publication occurred."
+}

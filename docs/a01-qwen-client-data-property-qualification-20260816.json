@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "backlog_id": "A-01",
+  "scope": "local Qwen TTS provider-client request property semantics",
+  "result": "pass",
+  "claims": [
+    "The provider client accepts only allowlisted string-named own fields.",
+    "Every accepted request field must be an enumerable data property before any request value is read.",
+    "Symbol, hidden and accessor fields fail before fetch, and rejected accessors are never executed."
+  ],
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js: 30/30 passed",
+    "npm test: 257/257 passed",
+    "npm run scan:secrets: 294 files passed",
+    "git diff --check: passed"
+  ],
+  "external_actions": [],
+  "limitations": [
+    "No Tailnet or Provider request was made.",
+    "Real synthesis and retained-media graphical-browser evidence remain gated."
+  ]
+}

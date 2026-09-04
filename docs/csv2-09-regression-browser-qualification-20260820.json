@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "project": "openreel-short-video-commercial-v2",
+  "backlog_item": "CSV2-09",
+  "status": "accepted",
+  "scope": "Regression, security, desktop/mobile graphical-browser E2E and zero-provider qualification",
+  "verification": [
+    {"command":"npm test","result":"passed","tests":369,"failed":0,"log":".artifacts/csv2-09/npm-test.log"},
+    {"command":"npm run scan:secrets","result":"passed","files":493,"log":".artifacts/csv2-09/scan-secrets.log"},
+    {"command":"npm run scan:dependencies","result":"passed","high_or_greater_vulnerabilities":0,"log":".artifacts/csv2-09/scan-dependencies.log"},
+    {"command":"npm run smoke:production-e2e","result":"passed","mode":"production","playable_mp4_bytes":2418,"durable_restart":true,"restore_quick_check":"ok","live_activation":false,"log":".artifacts/csv2-09/production-e2e.log"},
+    {"command":"npm run smoke:workbench-browser","result":"passed","browser":"chromium","provider_calls":0,"desktop_viewport":"1440x900","mobile_viewport":"390x844","advanced_canvas_reachable":true,"log":".artifacts/csv2-09/workbench-browser.log"},
+    {"command":"npm run rehearse:deployment","result":"passed","binding":"isolated_loopback","log":".artifacts/csv2-09/rehearse-deployment.log"}
+  ],
+  "security_boundaries": [
+    "The qualification used isolated loopback processes and temporary state.",
+    "No provider request, paid action, external send, production mutation, credential change or publish occurred.",
+    "Identity, CSRF, tenant isolation, IDOR rejection, rate limiting, backup and restore paths were exercised by the production-mode E2E."
+  ],
+  "remaining": ["CSV2-10"],
+  "project_completion": "in_progress"
+}

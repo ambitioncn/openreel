@@ -1,0 +1,46 @@
+{
+  "schema": "openreel-commercial-director-quality-terminal-acceptance/v1",
+  "projectId": "openreel-commercial-director-quality-integration",
+  "candidate": {
+    "manifestSha256": "5c50563431b1f5f24bffd1f45460e9f7e29a208e1bfdc02204f4650461a944e9",
+    "artifactCount": 105,
+    "release": "/opt/openreel/releases/20260824T165100Z-cdqi-5c505634"
+  },
+  "acceptance": {
+    "C01": "accepted",
+    "C02": "accepted",
+    "C03": "accepted",
+    "C04": "accepted",
+    "C05": "accepted",
+    "C06": "accepted",
+    "C07": "accepted",
+    "C08": "accepted"
+  },
+  "verification": {
+    "targeted": "47/47 and successor 38/38 passed",
+    "fullRegression": "548/548 passed",
+    "releaseManifest": "105/105 files verified; tamper rejected",
+    "dependencyAudit": "0 vulnerabilities",
+    "deploymentRehearsal": "passed",
+    "beijingReadiness": {"status":"ready","database":"ok","assets":"ok","service":"active","subState":"running","nRestarts":0},
+    "ordinaryAccountFixtures": {"creativePass":true,"creativeReject":true,"providerCalls":0,"paidCalls":0},
+    "rollback": "previous release reactivated successfully, then candidate reactivated successfully",
+    "evaluationCeiling": {"currency":"CNY","maximumPerCall":0.1,"quoteAndExecutionEnforced":true}
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-24T164809Z-cdqi-predeploy",
+    "publishingArchive": "/var/backups/openreel/2026-08-24T164809Z-cdqi-predeploy-publishing-full.tgz"
+  },
+  "deploymentNotes": [
+    "The host had no installed openreel-backup.service, so the reviewed backup script and a separate complete publishing-state archive were used.",
+    "The first activation exposed inherited candidate-directory permissions and an incorrect readiness port in the operator command. The previous release was restored, permissions were corrected, and the candidate then passed rollback and final activation checks.",
+    "No external publication, external message, generation provider call, or paid evaluation call was made during terminal acceptance."
+  ],
+  "residualRiskClosure": {
+    "status": "accepted",
+    "evidence": "docs/cdqi-residual-risk-closure-20260825.json",
+    "remainingBlockingRisks": [],
+    "remainingNonBlockingRisks": []
+  },
+  "projectCompletion": {"status":"accepted","acceptedAt":"2026-08-24T16:51:00Z"}
+}

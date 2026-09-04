@@ -1,0 +1,73 @@
+{
+  "schema": "openreel-e01-single-video-authorization/v1",
+  "status": "prepared_awaiting_exact_human_approval",
+  "authorized": false,
+  "executionAuthorized": false,
+  "scope": "isolated_private_staging_only_no_public_or_production_traffic",
+  "predecessorEvidence": "docs/e01-historical-config-diagnostic-evidence.json",
+  "call": {
+    "caseId": "video-sequence-diagnostic-1",
+    "modality": "video",
+    "model": "seedance-2-fast",
+    "count": 1,
+    "input": {
+      "kind": "text_to_video",
+      "durationSeconds": 5,
+      "resolution": "480p",
+      "ratio": "16:9",
+      "generateAudio": false,
+      "watermark": false
+    },
+    "maximumReservedUnits": 6945,
+    "maximumReservedDisplay": "USD 0.6945",
+    "automaticRetries": 0
+  },
+  "fixedExecutionContext": {
+    "target": "existing isolated botland-vps staging instance",
+    "stagingBaseUrl": "http://127.0.0.1:4273",
+    "credentialSourceReference": "/etc/openreel/openreel.env (existing restricted reference; value must not be read, copied or logged)",
+    "providerModelReference": "OPENREEL_VOLCENGINE_SEEDANCE2_FAST_MODEL",
+    "pricingVersion": "volcengine-2026-08-06-usd-7.20-markup-1.5",
+    "currency": "USD",
+    "unitScale": 10000
+  },
+  "requiredHumanApproval": {
+    "approvedBy": null,
+    "approvedAt": null,
+    "approvalStatement": null,
+    "approveTemporaryStagingProcessControl": false,
+    "approveCleanupBoundary": false
+  },
+  "approvalStatementTemplate": "I approve only one isolated private-staging seedance-2-fast text-to-video submission: 5 seconds, 480p, 16:9, audio disabled, USD 0.6945 maximum, zero retries. I approve temporary staging paid-inference enablement and service restart only as needed for this call, followed by mandatory cleanup. This does not authorize production traffic, credential access or change, additional calls, audio, publication, subscription, or deployment outside the existing isolated staging instance.",
+  "stopConditions": [
+    "any required approval field is null, false, stale or ambiguous",
+    "the existing restricted credential reference or Seedance model reference is absent or structurally invalid",
+    "the target, provider host, model, pricing version, currency, input shape or cost ceiling differs from this packet",
+    "staging or production readiness, tenant isolation, billing reconciliation, dependency audit or secret scan fails preflight",
+    "the call fails, times out, exceeds the ceiling, returns an unapproved MIME type, or reports untrusted usage",
+    "cleanup cannot revoke the temporary OpenReel key, stop its application/subscription, settle reservations, disable paid inference and restore staging readiness",
+    "the operator requests stop"
+  ],
+  "evidenceBoundary": {
+    "retain": [
+      "sanitized terminal status and timing",
+      "result MIME type, dimensions and duration when available",
+      "settled usage, spend and reconciliation",
+      "one-way hashes for retained private artifacts when available",
+      "staging and production readiness plus cleanup outcome"
+    ],
+    "neverRetain": [
+      "credential values",
+      "provider task or account identifiers",
+      "expiring provider output URLs",
+      "unredacted tenant or billing data"
+    ]
+  },
+  "notCovered": [
+    "automatic retry or any second provider submission",
+    "image-to-video, audio-to-video, additional video, vision, image or audio calls",
+    "credential creation, disclosure, import, rotation, change or deletion",
+    "production deployment, production traffic, public publishing, external messaging or payment/subscription changes",
+    "project completion or closure of E-01, C-01, A-01 or T-01"
+  ]
+}

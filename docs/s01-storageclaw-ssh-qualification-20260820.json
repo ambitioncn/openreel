@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "capturedAt": "2026-08-20T02:18:00Z",
+  "scope": "SSH-based read-only qualification of the owner-selected storageclaw target; no production data or credentials accessed",
+  "sshIdentity": {
+    "target": "openreel@100.124.133.8",
+    "host": "storageclaw",
+    "uid": 1001,
+    "gid": 1002,
+    "supplementaryGroups": [],
+    "publicKeyBatchLogin": true,
+    "passwordlessSudo": false
+  },
+  "capacityAndHealth": {
+    "pool": "tank",
+    "poolHealth": "ONLINE",
+    "poolSize": "38.2T",
+    "poolFree": "38.2T",
+    "datasetAvailable": "25.3T",
+    "observedDatasets": [
+      "tank",
+      "tank/backups",
+      "tank/media",
+      "tank/models",
+      "tank/openclaw",
+      "tank/share"
+    ]
+  },
+  "namespaceAndPermissions": {
+    "dedicatedOpenReelDataset": null,
+    "expectedPath": "/tank/openreel",
+    "expectedPathExists": false,
+    "existingDatasetAccess": "openreel has no read, write, or traverse access to /tank/backups, /tank/openclaw, or the other group-owned datasets",
+    "zfsDelegatedPermissions": [],
+    "homeFilesystem": "ext4",
+    "homeCapacity": "457G total, 402G available",
+    "conclusion": "The account is least-privilege but no approved writable OpenReel-only ZFS namespace is currently provisioned. HOME is not an acceptable substitute for the target qualification."
+  },
+  "snapshotsAndRetention": {
+    "engine": "Sanoid",
+    "timerEnabled": true,
+    "recursiveFrom": "tank",
+    "policy": {
+      "hourly": 24,
+      "daily": 30,
+      "weekly": 8,
+      "monthly": 12,
+      "yearly": 0,
+      "autosnap": true,
+      "autoprune": true
+    },
+    "snapshotVisibilityToWriter": true,
+    "snapshotHoldsObserved": false,
+    "retentionAdminSeparation": "The openreel account has neither sudo nor ZFS delegated permissions, so it cannot administer snapshots or shorten retention. Root remains the retention administrator.",
+    "immutabilityQualification": "not yet proven for OpenReel because no dedicated dataset or synthetic generation exists; Sanoid snapshots are mutable by root and have no observed holds"
+  },
+  "syntheticDrill": {
+    "authorized": true,
+    "executed": false,
+    "reason": "No approved OpenReel-only ZFS namespace is present or writable. Writing to existing shared datasets would exceed the authorized isolation boundary, while testing in HOME/ext4 would not validate the candidate target.",
+    "pendingChecks": [
+      "client-side encrypted synthetic write",
+      "readback, decryption, length and SHA-256 verification",
+      "writer tamper and deletion behavior",
+      "snapshot-backed isolated restore",
+      "proof that the writer cannot delete the retained snapshot or shorten retention"
+    ]
+  },
+  "safety": {
+    "externalWritesExecuted": false,
+    "productionDataAccessed": false,
+    "secretsReadOrRetained": false,
+    "credentialsLogged": false,
+    "productionConfigurationChanged": false
+  },
+  "classification": {
+    "offsiteCopyCandidate": true,
+    "offsiteCopyVerified": false,
+    "immutableOrEquivalentCopyVerified": false,
+    "s01Passed": false
+  },
+  "blockingCondition": "Provision and identify an approved OpenReel-only child dataset (for example tank/backups/openreel or tank/openreel) writable by uid/gid openreel, covered by the observed Sanoid policy, while keeping snapshot/destroy/retention administration unavailable to openreel.",
+  "safeResume": "After read-only verification that the dedicated path exists and is writable only by openreel, run the already-authorized uniquely named synthetic encrypted drill and wait for a snapshot before tamper/delete and isolated restore checks.",
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "M-01",
+  "scope": "credential-free authenticated capability-baseline canonicalization and immutability qualification",
+  "controls": [
+    "reject unknown baseline fields and non-canonical mode or control strings",
+    "fingerprint the validated canonical baseline rather than caller-owned input",
+    "deep-freeze comparison and reference outputs including nested counts, gaps and lists"
+  ],
+  "verification": {
+    "focused": "node --test test/capability-baseline.test.js: 7 passed, 0 failed",
+    "fullSuite": "npm test: 212 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 218 files"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "configured-provider support",
+    "real multimodal output",
+    "refreshed authenticated LibTV evidence",
+    "deployment or production readiness"
+  ]
+}

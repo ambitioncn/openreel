@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "cp286",
+  "capturedAt": "2026-08-17T07:56:38.332Z",
+  "scope": "zero-cost route-contract correction",
+  "externalModelCalls": 0,
+  "credentialsRecorded": false,
+  "facts": {
+    "beijingDnsAndTls": "owner-attested repaired and reachable",
+    "standardRoute": {
+      "baseUrl": "https://ark.cn-beijing.volces.com/api/v3",
+      "readonlyResult": "expected 404 ResourceNotFound",
+      "interpretation": "credential authenticated and Ark reachable"
+    },
+    "directRoute": {
+      "baseUrl": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "readonlyResult": "expected 404 ResourceNotFound",
+      "interpretation": "credential authenticated and Ark reachable"
+    },
+    "invalidPriorEvidence": "A direct-key 401 obtained through /api/v3 used the wrong route and is excluded from diagnosis."
+  },
+  "changes": [
+    "Standard mappings retain OPENREEL_VOLCENGINE_BASE_URL with /api/v3 default.",
+    "Direct mappings now use OPENREEL_VOLCENGINE_DIRECT_BASE_URL with /api/plan/v3 default.",
+    "Regression tests pin both route contracts and direct-base override behavior.",
+    "The cp285 console-login prerequisite is withdrawn."
+  ],
+  "authorizationBoundary": "No new model generation, console login, OTP request, provider/account mutation, deployment, credential change or publication was authorized or performed."
+}

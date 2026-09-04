@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "milestone": "V4-03",
+  "status": "in_progress",
+  "scope": "local byte-backed commercial video and voice composition; zero provider calls and no deployment",
+  "summary": "The commercial composition sink now reads the exact revision-bound provider video and voice asset bytes, decodes them with ffmpeg, concatenates shots in storyboard order, mixes the retained voice track and persists a new playable MP4 render. The deterministic asset-id preview renderer remains available only for the separate generic preview path.",
+  "files": [
+    "src/render.js",
+    "src/core.js",
+    "test/workbench-commercial.test.js"
+  ],
+  "verification": [
+    "node --test test/workbench-commercial.test.js test/render.test.js test/commercial-provider-orchestrator.test.js: 14/14 passed",
+    "npm test: 447/447 passed",
+    "the commercial integration test uses valid MP4 and WAV bytes, asserts renderer=ffmpeg-source-media and retains stale-storyboard/unrelated-timeline rejection"
+  ],
+  "unmet": [
+    "caption burn-in",
+    "generated or reviewed licensed music mixing",
+    "paid version-safe per-shot redo",
+    "production deployment, provider usage settlement and ordinary-account browser evidence"
+  ],
+  "externalActions": []
+}

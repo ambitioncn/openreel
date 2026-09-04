@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "scope": "credential-free model catalog adapter drift observability",
+  "change": "Verified catalog comparisons expose sorted affected adapter identifiers and map each adapter to deterministic model identifiers for additions, removals and changed models before and after adapter migration.",
+  "semantics": {
+    "added": "current-catalog model identifiers introduced on the adapter",
+    "removed": "previous-catalog model identifiers removed from the adapter",
+    "changedBefore": "changed model identifiers classified by their previous adapter",
+    "changedAfter": "changed model identifiers classified by their current adapter",
+    "empty": "unchanged and source-revision-only reports expose empty affectedAdapterIds and driftModelIdsByAdapter values"
+  },
+  "safety": {
+    "executedProviderCalls": false,
+    "credentialsAccessedOrChanged": false,
+    "otpUsed": false,
+    "deploymentChanged": false,
+    "externalWrite": false
+  },
+  "verification": [
+    {
+      "command": "node --test test/model-catalog.test.js",
+      "result": "14/14 passed"
+    },
+    {
+      "command": "npm test",
+      "result": "301/301 passed"
+    }
+  ],
+  "status": "qualified_local_increment",
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "milestone": "A-01",
+  "subject": "Qwen TTS canonical request schema qualification",
+  "result": "pass",
+  "change": "Synthesis requests now require a plain record, response_format accepts only absence or exact wav, and optional text limits count normalized Unicode code points. Arrays, inherited records, empty/null/boxed formats and over-limit text fail before network access.",
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 26/26 pass",
+    "npm test: 255/255 pass",
+    "npm run scan:secrets: 286 files pass",
+    "git diff --check: pass"
+  ],
+  "external_actions": [],
+  "limitations": [
+    "No Tailnet Qwen request or real synthesis was made.",
+    "Real-media browser E2E and deployment remain separately gated."
+  ]
+}

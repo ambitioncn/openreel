@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "milestone": "M-01",
+  "qualifiedAt": "2026-08-17T12:22:12Z",
+  "scope": "credential-free model catalog drift aggregation",
+  "result": "passed",
+  "claims": [
+    "Catalog drift reports expose deterministic aggregate counts for revision, model, and field changes.",
+    "Affected model identifiers and changed field paths are deduplicated and code-unit sorted.",
+    "Aggregate evidence is deeply immutable and preserves fail-closed review behavior without provider execution."
+  ],
+  "verification": {
+    "targeted": "node --test test/model-catalog.test.js: 13/13 passed",
+    "full": "npm test: 300/300 passed"
+  },
+  "externalActions": {
+    "providerCalls": 0,
+    "credentialReads": 0,
+    "deployments": 0,
+    "writes": 0
+  }
+}

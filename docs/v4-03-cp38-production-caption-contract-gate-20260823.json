@@ -1,0 +1,71 @@
+{
+  "schema": "openreel-v4-progress-evidence/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp38",
+  "status": "production_media_generated_composition_failed_local_runner_repair_ready",
+  "deployment": {
+    "release": "/opt/openreel/releases/20260823T020500Z-cp38-duration",
+    "previousRelease": "/opt/openreel/releases/20260823T012000Z-cp36-refresh",
+    "manifestArtifactsVerified": 85,
+    "manifestSha256": "924e4808396154118550cec36d0c8f9965a70ad4aa45de63ffe8df1f2be39579",
+    "service": "active",
+    "restartCount": 0,
+    "loopbackReady": 200,
+    "public4173Root": 200,
+    "rollbackUsedDuringHealthCheckCorrection": true
+  },
+  "productionAcceptance": {
+    "freshOrdinaryAccount": true,
+    "initialPrompt": "美女在海滩跳舞",
+    "requestedDurationSeconds": 5,
+    "attempts": 1,
+    "commercialJobId": "36991a3a-d1e7-4a4e-919d-da82f177a7bb",
+    "quoteCny": 16,
+    "result": "failed_at_compose",
+    "errorCode": "COMMERCIAL_CAPTION_INVALID",
+    "retryable": false,
+    "mp4Produced": false
+  },
+  "retainedProductionAssets": {
+    "binding": {
+      "projectId": "68af4517-ece0-463c-ada9-5a3383281c08",
+      "projectVersion": 6,
+      "storyVersion": 2,
+      "storyboardVersion": 2
+    },
+    "image": {
+      "model": "seedream-5-lite",
+      "providerJobId": "5e2cd598-a9d8-45ac-b401-022c44fe9c24",
+      "bytes": 630985,
+      "status": "succeeded"
+    },
+    "video": {
+      "model": "seedance-2-fast",
+      "providerJobId": "4d144e79-117d-41fc-b5f0-6d32bc36577e",
+      "bytes": 5566852,
+      "status": "succeeded"
+    },
+    "voice": {
+      "model": "qwen-tts-tailnet",
+      "bytes": 153644,
+      "status": "succeeded"
+    },
+    "render": null
+  },
+  "diagnosis": "The production runner uploaded a synthetic caption label, while the composition contract requires the reviewed caption text to equal the current storyboard shot prompt exactly. Provider generation succeeded and composition failed closed before a render could be created.",
+  "localRepair": {
+    "file": "scripts/v4-production-ordinary-account-e2e.mjs",
+    "change": "Upload shot.prompt as the exact reviewed caption text.",
+    "providerCalls": 0,
+    "deployed": false
+  },
+  "safety": {
+    "acceptanceRetries": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "portsChanged": false,
+    "derperTouched": false
+  },
+  "projectCompletion": "in_progress"
+}

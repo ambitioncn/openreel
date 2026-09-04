@@ -1,0 +1,34 @@
+{
+  "schema": "openreel-v4-07-cp25-production-4173-revision/v1",
+  "capturedAt": "2026-08-22T13:24:00Z",
+  "route": "https://openreel.duobiai.cn:4173",
+  "forbiddenChanges": {
+    "derperTouched": false,
+    "tcp80Touched": false,
+    "tcp443Touched": false
+  },
+  "activeRelease": "/opt/openreel/releases/20260822T132249Z-v4-commercial-poll",
+  "service": {
+    "active": true,
+    "restartCount": 0,
+    "readiness": "database/assets ready"
+  },
+  "implemented": [
+    "120000 ms bounded text-submit timeout activated",
+    "strict planning calls disable model thinking so completion tokens produce JSON content",
+    "selectedHook accepts only an in-range model-selected hook",
+    "step 4 becomes visible only after story and storyboard save succeeds",
+    "production commercial lifecycle uses explicit image/video/audio models and bounded costs",
+    "commercial Ark calls carry the signed-in account principal envelope",
+    "Seedance durable polling waits two seconds between bounded polls"
+  ],
+  "productionEvidence": {
+    "realTextPlanningSucceeded": true,
+    "distinctProjectSucceeded": true,
+    "quoteAndConfirmationSucceeded": true,
+    "seedreamFirstFrameSucceeded": true,
+    "seedanceTaskSubmitted": true,
+    "newPlayableMp4Succeeded": false
+  },
+  "projectCompletion": "in_progress"
+}

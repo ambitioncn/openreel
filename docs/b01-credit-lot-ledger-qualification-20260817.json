@@ -1,0 +1,24 @@
+{
+  "schema": "openreel-local-qualification/v1",
+  "backlogItem": "B-01",
+  "date": "2026-08-17",
+  "scope": "payment-disconnected credit-lot normalization, expiry/model-scoped consumption planning and reconciliation",
+  "evidence": [
+    "src/credit-ledger.js",
+    "test/credit-ledger.test.js",
+    "docs/b01-credit-lot-ledger-contract.md"
+  ],
+  "verification": {
+    "targeted": "node --test test/credit-ledger.test.js: 4/4 passed",
+    "fullSuite": "npm test: 281/281 passed",
+    "secretScan": "npm run scan:secrets: 342 files passed"
+  },
+  "externalActions": [],
+  "boundaries": {
+    "paymentConnected": false,
+    "balancesMutated": false,
+    "ordersCreated": false,
+    "providerCalled": false,
+    "productionChanged": false
+  }
+}

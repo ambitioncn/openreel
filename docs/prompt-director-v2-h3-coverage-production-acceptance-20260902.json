@@ -1,0 +1,32 @@
+{
+  "schema": "openreel-prompt-director-v2-h3-production-acceptance/v1",
+  "capturedAt": "2026-09-02T15:57:28Z",
+  "authorization": "standing_authorization_openreel_2026-08-19 plus explicit 2026-09-02 continuation request",
+  "target": "root@123.57.67.213",
+  "previousRelease": "/opt/openreel/releases/20260901T1612Z-h3-primitives",
+  "candidateRelease": "/opt/openreel/releases/20260902T1605Z-pd2h3-qualified-canary",
+  "backup": {"path":"/var/backups/openreel/20260902T1605Z-pd2h3-qualified-canary-predeploy","size":"477M","files":561},
+  "qualifiedCanary": {
+    "policy": "Only pairs with accepted multi-seed evidence were selected; unsupported capabilities remain excluded.",
+    "selectedOutputs": [
+      {"pair":"service_app:pan_right","sha256":"31dad6d0065e83b2e44e7b3ddcdb1a6284b762bc91c9f790ad3f49dabf90d304"},
+      {"pair":"brand_payoff:crane_up","sha256":"8546b98844bb6381f819ffcdc7321f0bcb5e18a4aafa8db791b96c0d51b210cc"}
+    ],
+    "newProviderCalls": 0,
+    "paidCny": 0
+  },
+  "verification": {
+    "archiveSha256": "0d44a99f2ff03bcd8e7846e09d7d5112a9232893d9070df2b45b2388de2580a5",
+    "promptDirectorSha256LocalAndRemote": "3731aa01d718130c2ab9841c892ca5ba311bc25dfebff503f9d74100653fac74",
+    "remoteFullRegression": {"tests":626,"passed":625,"skipped":1,"failed":0},
+    "localFullRegression": {"tests":626,"passed":626,"skipped":0,"failed":0},
+    "service": "active",
+    "nRestarts": 0,
+    "loopbackLive": "ok",
+    "loopbackReady": {"status":"ready","database":"ok","assets":"ok"},
+    "publicTlsLive": "ok",
+    "publicTlsReady": "not_exposed_by_nginx_route; loopback readiness passed"
+  },
+  "rollback": {"actualPreviousReleaseActivation":"healthy","actualCandidateReactivation":"healthy","currentAndProcessCwdMatchCandidate":true},
+  "safety": {"publications":0,"externalSends":0,"credentialChanges":0,"providerRetries":0}
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "openreel-v4-02-local-qualification/v1",
+  "date": "2026-08-21",
+  "status": "phase_complete_project_in_progress",
+  "scope": "Local production-server and browser integration with a deterministic Ark service double; no provider call and no production change.",
+  "implemented": [
+    "Authenticated project planning API selects a configured Ark text model and bills the account principal",
+    "Browser success path contains no hard-coded planning template or fallback",
+    "Strict JSON, bounds and exact-duration validation fail closed",
+    "Durable provider prompt binds project, project version, story version and storyboard version",
+    "Durable Ark jobs retain trusted tokens, settled cost, currency, unit scale and pricing version",
+    "Response provenance binds provider job, model, prompt/output hashes and resulting versions"
+  ],
+  "verification": [
+    { "command": "node --test test/workbench-planning.test.js test/ark.test.js test/http.test.js test/model.test.js", "result": "targeted paths passed after updating one intentionally obsolete template-presence assertion" },
+    { "command": "npm test", "result": "440/440 passed" }
+  ],
+  "negativeCoverage": ["invalid model JSON", "duration mismatch", "stale project version", "mid-call project version drift", "missing model service", "non-terminal or empty output"],
+  "unmet": ["Beijing production ordinary-account browser replay", "Paid real-model response and ledger evidence"],
+  "projectCompletion": "in_progress"
+}

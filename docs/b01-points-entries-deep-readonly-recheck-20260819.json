@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "capturedAt": "2026-08-19",
+  "scope": "Owner-requested deeper read-only recheck of the two stable LibTV points entry controls in the existing authenticated personal session",
+  "authorizationBoundary": {
+    "existingSessionOnly": true,
+    "currentAccountOnly": true,
+    "retainRedactedStructuralFactsOnly": true,
+    "entryControlsOnly": true,
+    "forbidden": [
+      "purchase",
+      "recharge",
+      "subscription",
+      "payment",
+      "content_generation",
+      "account_switch",
+      "external_message",
+      "credential_change",
+      "undocumented_write_interface"
+    ]
+  },
+  "observations": {
+    "sessionAuthenticated": true,
+    "stableEntryCount": 2,
+    "entries": [
+      {
+        "category": "points_promo_banner",
+        "elementType": "button",
+        "routeBefore": "/",
+        "routeAfter": "/",
+        "routeChanged": false,
+        "resultSurface": "modal"
+      },
+      {
+        "category": "points_store_button",
+        "elementType": "button",
+        "routeBefore": "/",
+        "routeAfter": "/",
+        "routeChanged": false,
+        "resultSurface": "modal"
+      }
+    ],
+    "sameStructuralDestination": true,
+    "resultSurface": {
+      "visibleDialogCount": 1,
+      "visibleTabCount": 3,
+      "pointsRelatedControlsPresent": true,
+      "purchaseOrRechargeControlsPresent": true,
+      "validityRuleTextPresent": true,
+      "balanceControlPresent": false,
+      "quotaControlPresent": false,
+      "usageControlPresent": false,
+      "billingOrLedgerControlPresent": false,
+      "balanceTextPresent": false,
+      "quotaTextPresent": false,
+      "billingOrLedgerTextPresent": false
+    },
+    "readonlyBalanceQuotaUsageBillingOrLedgerSurfaceDiscovered": false,
+    "mutationActivated": false
+  },
+  "interpretation": {
+    "surfaceClass": "points-commerce catalog rather than personal balance or ledger",
+    "usageKeywordCaveat": "A generic usage-related word appears in body copy, but there is no usage control, route, dashboard, quota meter, billing table or ledger view.",
+    "routeFinding": "Both stable entry controls open the same in-page modal and do not navigate to a dedicated account, billing, usage or ledger route."
+  },
+  "privacy": {
+    "rawDomRetained": false,
+    "rawNetworkPayloadRetained": false,
+    "accountIdentifiersRetained": false,
+    "personalAmountsRetained": false,
+    "transactionIdentifiersRetained": false,
+    "credentialsReadOrRetained": false
+  },
+  "conclusion": "The deeper inspection resolves both stable points entries as aliases for one commerce-oriented modal. The visible authenticated surface offers points products and purchase/recharge controls, but no personal balance, quota, usage dashboard, bill, invoice, transaction history or ledger interface. No commerce control was activated, so this remains negative read-only evidence and does not accept B-01."
+}

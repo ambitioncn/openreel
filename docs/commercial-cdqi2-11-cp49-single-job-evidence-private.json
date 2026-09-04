@@ -1,0 +1,468 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp49-single-job/v1",
+  "capturedAt": "2026-08-25T13:49:54.544Z",
+  "necessity": "T11 requires one fresh ordinary-account production commercial result against the deployed policy-safe runtime.",
+  "projectId": "81faf2e9-3122-44fb-add6-fb4518184c1a",
+  "jobId": "3ab547a8-7205-4485-9291-3ff9329d34cc",
+  "quote": {
+    "currency": "CNY",
+    "estimatedCny": 46.4,
+    "generationEstimatedCny": 46,
+    "evaluationEstimatedCny": 0.4,
+    "evaluation": {
+      "schema": "openreel-commercial-perceptual-evaluation/v2",
+      "shotDimensions": [
+        "intent",
+        "beat",
+        "composition",
+        "visual_identity_consistency",
+        "performance_naturalness"
+      ],
+      "finalDimensions": [
+        "story",
+        "pacing",
+        "continuity"
+      ],
+      "calls": 4,
+      "maximumCostCnyPerCall": 0.1,
+      "necessity": "qualify actual generated shot bytes and the composed render before release eligibility"
+    },
+    "perActionLimitCny": 100
+  },
+  "policySafety": {
+    "schema": "openreel-commercial-storyboard-policy-safety-preflight/v1",
+    "accepted": true,
+    "shotCount": 3,
+    "referenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+    "paidProviderCalls": 0,
+    "providerPolicyGuaranteed": false
+  },
+  "terminal": {
+    "schema": "openreel-commercial-job/v1",
+    "id": "3ab547a8-7205-4485-9291-3ff9329d34cc",
+    "ownerId": "8d31a191-4f69-4c63-bdd7-b7687f6a4ea8",
+    "idempotencyKey": "cdqi2-cp49-20260825134942",
+    "status": "failed",
+    "stage": "prepare",
+    "stageDetail": null,
+    "director": {
+      "schema": "openreel-commercial-director-workflow/v1",
+      "currentStage": "formal_generation",
+      "status": "in_progress",
+      "stages": [
+        {
+          "id": "creative",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "3ab547a8-7205-4485-9291-3ff9329d34cc",
+            "stage": "creative",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": false,
+                "shots": [
+                  {
+                    "shotId": "86693e8e-5f8a-47ac-a4f9-31cc5c26cf9c",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  },
+                  {
+                    "shotId": "91c3954b-7b49-4713-9e40-21791c9cd334",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  },
+                  {
+                    "shotId": "f47b00c5-79c6-495e-a7c1-573ddb0e28ec",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-25T13:49:49.305Z"
+          }
+        },
+        {
+          "id": "script",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "3ab547a8-7205-4485-9291-3ff9329d34cc",
+            "stage": "script",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": false,
+                "shots": [
+                  {
+                    "shotId": "86693e8e-5f8a-47ac-a4f9-31cc5c26cf9c",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  },
+                  {
+                    "shotId": "91c3954b-7b49-4713-9e40-21791c9cd334",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  },
+                  {
+                    "shotId": "f47b00c5-79c6-495e-a7c1-573ddb0e28ec",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-25T13:49:49.305Z"
+          }
+        },
+        {
+          "id": "visual_bible",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "3ab547a8-7205-4485-9291-3ff9329d34cc",
+            "stage": "visual_bible",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": false,
+                "shots": [
+                  {
+                    "shotId": "86693e8e-5f8a-47ac-a4f9-31cc5c26cf9c",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  },
+                  {
+                    "shotId": "91c3954b-7b49-4713-9e40-21791c9cd334",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  },
+                  {
+                    "shotId": "f47b00c5-79c6-495e-a7c1-573ddb0e28ec",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-25T13:49:49.305Z"
+          }
+        },
+        {
+          "id": "dynamic_storyboard",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "3ab547a8-7205-4485-9291-3ff9329d34cc",
+            "stage": "dynamic_storyboard",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": false,
+                "shots": [
+                  {
+                    "shotId": "86693e8e-5f8a-47ac-a4f9-31cc5c26cf9c",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  },
+                  {
+                    "shotId": "91c3954b-7b49-4713-9e40-21791c9cd334",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  },
+                  {
+                    "shotId": "f47b00c5-79c6-495e-a7c1-573ddb0e28ec",
+                    "ready": false,
+                    "roleEntityIds": [],
+                    "sceneEntityIds": [],
+                    "style": "",
+                    "continuityEntityUsages": [],
+                    "referenceAssetIds": []
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-25T13:49:49.305Z"
+          }
+        },
+        {
+          "id": "formal_generation",
+          "status": "awaiting_execution",
+          "evidence": null
+        },
+        {
+          "id": "post_production",
+          "status": "pending",
+          "evidence": null
+        },
+        {
+          "id": "automatic_qc",
+          "status": "pending",
+          "evidence": null
+        }
+      ]
+    },
+    "attempts": 1,
+    "maxAttempts": 3,
+    "cancelRequested": false,
+    "retryable": false,
+    "cost": {
+      "currency": "CNY",
+      "status": "reserved",
+      "estimatedCny": 46.4,
+      "generationEstimatedCny": 46,
+      "evaluationEstimatedCny": 0.4,
+      "evaluation": {
+        "schema": "openreel-commercial-perceptual-evaluation/v2",
+        "shotDimensions": [
+          "intent",
+          "beat",
+          "composition",
+          "visual_identity_consistency",
+          "performance_naturalness"
+        ],
+        "finalDimensions": [
+          "story",
+          "pacing",
+          "continuity"
+        ],
+        "calls": 4,
+        "maximumCostCnyPerCall": 0.1,
+        "necessity": "qualify actual generated shot bytes and the composed render before release eligibility"
+      },
+      "settledCny": null
+    },
+    "input": {
+      "projectId": "81faf2e9-3122-44fb-add6-fb4518184c1a",
+      "projectVersion": 3,
+      "storyVersion": 1,
+      "storyboardVersion": 1,
+      "quoteId": "522481c3-4d4f-4b03-9854-82c8aeb3ebb7",
+      "quoteCost": {
+        "currency": "CNY",
+        "estimatedCny": 46.4,
+        "generationEstimatedCny": 46,
+        "evaluationEstimatedCny": 0.4,
+        "evaluation": {
+          "schema": "openreel-commercial-perceptual-evaluation/v2",
+          "shotDimensions": [
+            "intent",
+            "beat",
+            "composition",
+            "visual_identity_consistency",
+            "performance_naturalness"
+          ],
+          "finalDimensions": [
+            "story",
+            "pacing",
+            "continuity"
+          ],
+          "calls": 4,
+          "maximumCostCnyPerCall": 0.1,
+          "necessity": "qualify actual generated shot bytes and the composed render before release eligibility"
+        },
+        "perActionLimitCny": 100
+      },
+      "estimatedCostCny": 46.4,
+      "script": "注意蓝布\n折叠蓝布\n放下蓝布",
+      "storyboard": {
+        "version": 1,
+        "shots": [
+          {
+            "id": "86693e8e-5f8a-47ac-a4f9-31cc5c26cf9c",
+            "sceneId": "428112f7-3b39-44f1-96dd-325d935ceab4",
+            "order": 0,
+            "prompt": "fictional adult performer notices an unbranded blue cloth in a controlled studio",
+            "styleContinuity": "",
+            "broll": "",
+            "duration": 5,
+            "continuityEntityIds": [],
+            "continuityEntityUsages": [],
+            "referenceAssetIds": [],
+            "generatedAssetId": null,
+            "caption": "注意蓝布"
+          },
+          {
+            "id": "91c3954b-7b49-4713-9e40-21791c9cd334",
+            "sceneId": "908c221a-c92c-454d-a1cf-34a1ad0322dc",
+            "order": 1,
+            "prompt": "fictional adult performer folds the unbranded blue cloth in a controlled studio",
+            "styleContinuity": "",
+            "broll": "",
+            "duration": 5,
+            "continuityEntityIds": [],
+            "continuityEntityUsages": [],
+            "referenceAssetIds": [],
+            "generatedAssetId": null,
+            "caption": "折叠蓝布"
+          },
+          {
+            "id": "f47b00c5-79c6-495e-a7c1-573ddb0e28ec",
+            "sceneId": "d216ef81-4f2f-4802-a11c-eacad9689177",
+            "order": 2,
+            "prompt": "fictional adult performer places the unbranded blue cloth down in a controlled studio",
+            "styleContinuity": "",
+            "broll": "",
+            "duration": 5,
+            "continuityEntityIds": [],
+            "continuityEntityUsages": [],
+            "referenceAssetIds": [],
+            "generatedAssetId": null,
+            "caption": "放下蓝布"
+          }
+        ]
+      },
+      "director": {
+        "schema": "openreel-commercial-director-context/v1",
+        "ready": false,
+        "shots": [
+          {
+            "shotId": "86693e8e-5f8a-47ac-a4f9-31cc5c26cf9c",
+            "ready": false,
+            "roleEntityIds": [],
+            "sceneEntityIds": [],
+            "style": "",
+            "continuityEntityUsages": [],
+            "referenceAssetIds": []
+          },
+          {
+            "shotId": "91c3954b-7b49-4713-9e40-21791c9cd334",
+            "ready": false,
+            "roleEntityIds": [],
+            "sceneEntityIds": [],
+            "style": "",
+            "continuityEntityUsages": [],
+            "referenceAssetIds": []
+          },
+          {
+            "shotId": "f47b00c5-79c6-495e-a7c1-573ddb0e28ec",
+            "ready": false,
+            "roleEntityIds": [],
+            "sceneEntityIds": [],
+            "style": "",
+            "continuityEntityUsages": [],
+            "referenceAssetIds": []
+          }
+        ]
+      },
+      "policySafety": {
+        "schema": "openreel-commercial-storyboard-policy-safety-preflight/v1",
+        "accepted": true,
+        "shotCount": 3,
+        "referenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+        "paidProviderCalls": 0,
+        "providerPolicyGuaranteed": false
+      },
+      "production": {
+        "voice": "natural",
+        "captions": true,
+        "music": "light",
+        "safeZone": "tiktok",
+        "captionAssetIds": [],
+        "musicAssetId": null,
+        "musicRightsConfirmation": null
+      },
+      "models": {
+        "image": "seedream-5-lite",
+        "video": "seedance-2-fast"
+      },
+      "quality": "quality",
+      "idempotencyKey": "cdqi2-cp49-20260825134942"
+    },
+    "result": null,
+    "error": {
+      "code": "COMMERCIAL_DIRECTOR_BINDING_REQUIRED",
+      "message": "commercial generation failed"
+    },
+    "createdAt": "2026-08-25T13:49:49.305Z",
+    "updatedAt": "2026-08-25T13:49:49.400Z",
+    "startedAt": "2026-08-25T13:49:49.380Z",
+    "finishedAt": "2026-08-25T13:49:49.400Z"
+  },
+  "identityReference": {
+    "width": 1024,
+    "height": 1024,
+    "sha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+    "file": "/home/nickn/.openclaw/workspace/openreel/artifacts/cdqi2-11-cp49-media/identity-reference.png"
+  },
+  "retainedMedia": [],
+  "billing": {
+    "subscription": {
+      "id": "64f5add1-3d35-4a1b-b963-a86c2d28deca",
+      "accountId": "8d31a191-4f69-4c63-bdd7-b7687f6a4ea8",
+      "plan": "cdqi2-t11-cp49",
+      "status": "active",
+      "hardLimitMicros": 64445,
+      "currency": "USD",
+      "unitScale": 10000,
+      "spentMicros": 0,
+      "reservedMicros": 0,
+      "periodStartedAt": "2026-08-25T13:49:49.154Z",
+      "periodEndsAt": "2026-08-25T14:19:49.031Z",
+      "createdAt": "2026-08-25T13:49:49.154Z",
+      "updatedAt": "2026-08-25T13:49:49.154Z"
+    },
+    "reconciliation": {
+      "accountId": "8d31a191-4f69-4c63-bdd7-b7687f6a4ea8",
+      "consistent": true,
+      "mismatches": []
+    }
+  },
+  "safety": {
+    "newCommercialJobs": 1,
+    "executeCalls": 1,
+    "automaticRetries": 0,
+    "historicalReplays": 0,
+    "publications": 0,
+    "credentialChanges": 0
+  }
+}

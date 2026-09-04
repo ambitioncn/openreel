@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "milestone": "M-01",
+  "decidedAt": "2026-08-18",
+  "decision": "capability_control_parity_with_curated_executable_catalog",
+  "terminalInterpretation": {
+    "required": [
+      "Cover the evidenced multimodal modes and control experience with a smaller, curated catalog of genuinely executable model families",
+      "Keep catalog integrity, drift, routing and control coverage observable and fail closed",
+      "Disclose the catalog-size variance against the authenticated LibTV baseline"
+    ],
+    "notRequired": [
+      "Add duplicate or weakly differentiated Provider models solely to match LibTV's observed numerical catalog size",
+      "Treat standard and direct route references as separate effective model families"
+    ]
+  },
+  "countDisclosure": {
+    "libtvObservedCatalogEntries": 58,
+    "libtvObservedCounts": {
+      "text": 4,
+      "image": 16,
+      "video": 32,
+      "audio": 6
+    },
+    "openreelConfiguredNamedModelFamilies": 7,
+    "openreelEnvironmentRouteReferences": 14,
+    "openreelRouteReferenceBreakdown": {
+      "standard": 7,
+      "direct": 7
+    },
+    "minimumDisclosedEntryVariance": 51,
+    "comparisonCaveat": "LibTV evidence counts observed catalog entries while the sanitized OpenReel production inventory counts named model families after collapsing standard/direct route variants. The 51-entry variance is therefore a transparent lower-bound catalog-size disclosure, not a claim that both products use identical family taxonomy."
+  },
+  "acceptanceEffect": "M-01 no longer requires exact numerical catalog parity. Existing accepted mode, control, drift, routing and bounded real-provider evidence satisfies the selected product scope; future catalog additions must be justified by capability value and remain separately gated when they require Provider, credential, paid, production or deployment actions.",
+  "authorityBoundaries": {
+    "providerCallsAuthorized": 0,
+    "consumedProviderAuthorizationsReusable": false,
+    "productionChangesAuthorized": false,
+    "deploymentsAuthorized": false,
+    "publicationsAuthorized": false
+  }
+}

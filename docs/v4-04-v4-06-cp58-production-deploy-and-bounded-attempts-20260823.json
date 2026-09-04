@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "checkpoint": "cp58",
+  "createdAt": "2026-08-23T19:02:47Z",
+  "scope": "Deploy the reviewed cp56/cp57 Agent principal and product-model normalization repairs, then perform the authorized bounded V4-04 and V4-06 production attempts",
+  "production": {
+    "host": "root@123.57.67.213",
+    "previousRelease": "/opt/openreel/releases/20260823T180300Z-cp56-agent-binding",
+    "activeRelease": "/opt/openreel/releases/20260824T030000Z-cp58-agent-product-repairs",
+    "backup": "/var/backups/openreel/2026-08-23T185845Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-23T185845Z-cp58-isolated-restore",
+    "backupVerification": {
+      "database": "ok",
+      "assets": 85,
+      "publishing": "absent"
+    },
+    "deployedFiles": [
+      {
+        "path": "server.mjs",
+        "sha256": "edc9a77d9c57256292b6ee0fd88cc814be42c323ff7b685f8cb631b3643487e6"
+      },
+      {
+        "path": "src/product-understanding.js",
+        "sha256": "d5299d7de94ea2aec16f2414af432bc253cef7f233c807d824fd8480263720a9"
+      }
+    ],
+    "service": {
+      "activeState": "active",
+      "subState": "running",
+      "restartCommands": 1,
+      "nRestarts": 0,
+      "tls4173Liveness": "ok",
+      "rollbackUsed": false,
+      "note": "The initial unauthenticated readiness path was incorrect and returned 404. The transaction restored the symlink while the healthy restarted process remained in the cp58 release; read-only process-cwd and hashes proved this, so the symlink was realigned to the running cp58 release without a second restart."
+    }
+  },
+  "agentAttempt": {
+    "result": "stopped_before_confirmation",
+    "brief": "美女在海滩跳舞",
+    "ordinaryAccount": true,
+    "planningModel": "seed-2.1-pro",
+    "planningAttempts": 1,
+    "binding": {
+      "projectVersion": 4,
+      "storyVersion": 1,
+      "storyboardVersion": 1
+    },
+    "quote": {
+      "currency": "CNY",
+      "estimatedCny": 16,
+      "perActionLimitCny": 100,
+      "confirmationRequired": true,
+      "paidActionStarted": false
+    },
+    "failure": "The acceptance runner incorrectly read quote.estimatedCny instead of quote.cost.estimatedCny and stopped before confirm/execute.",
+    "providerExecutionStarted": false,
+    "retryCount": 0
+  },
+  "productAttempt": {
+    "result": "fail_closed",
+    "ordinaryAccount": true,
+    "requests": 1,
+    "retryCount": 0,
+    "errorCode": "PRODUCT_MODEL_OUTPUT_INVALID",
+    "status": 502,
+    "meaning": "The real HTTPS fetch-to-text-model path was reached once, but the response was still outside the bounded complete-JSON-or-single-fence normalization contract. No grounded product understanding was accepted."
+  },
+  "billing": {
+    "combinedAuthorizedCeilingCny": 30,
+    "subscriptions": [
+      {
+        "hardLimitUnits": 40000,
+        "spentUnits": 15,
+        "currency": "USD",
+        "unitScale": 10000
+      },
+      {
+        "hardLimitUnits": 40000,
+        "spentUnits": 68,
+        "currency": "USD",
+        "unitScale": 10000
+      }
+    ]
+  },
+  "localVerification": {
+    "focusedTests": "22/22 passed",
+    "syntax": "passed",
+    "diffCheck": "passed",
+    "runnerRepair": "The acceptance runner now reads quote.cost.estimatedCny at both assertion and summary sites."
+  },
+  "externalActions": {
+    "backupCreated": true,
+    "deploymentPerformed": true,
+    "serviceRestartCommands": 1,
+    "agentPlanningRequests": 1,
+    "agentExecutionRequests": 0,
+    "productUnderstandingRequests": 1,
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "derperChanges": 0,
+    "tcp80Or443Changes": 0
+  },
+  "projectCompletion": "in_progress"
+}

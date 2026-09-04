@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "project": "openreel-libtv-parity",
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T20:44:00.000Z",
+  "scope": "local-only asset ownership relationship validation",
+  "change": {
+    "implementation": "scripts/backup.mjs indexes validated database entities and requires each asset projectId to resolve to a project; a present sessionId must resolve to a session whose projectId matches the asset",
+    "boundary": "backup creation and restore reject self-consistent asset paths with dangling or cross-project ownership before atomic promotion",
+    "negativeFixture": "a synthetic asset row and local file moved to the deterministic path of a nonexistent project"
+  },
+  "verification": {
+    "opsTest": {
+      "command": "node --test test/ops.test.js",
+      "passed": 25,
+      "failed": 0
+    },
+    "fullSuite": {
+      "command": "npm test",
+      "passed": 193,
+      "failed": 0
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "highSeverityFindings": 0
+    },
+    "secretScan": {
+      "command": "npm run scan:secrets",
+      "status": "passed",
+      "filesScanned": 195
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  },
+  "externalActions": [],
+  "limitations": [
+    "This increment validates asset ownership but does not yet validate every relationship among all database entity kinds.",
+    "Independent review, off-host retention, staging drills and production rollback remain separately gated."
+  ]
+}

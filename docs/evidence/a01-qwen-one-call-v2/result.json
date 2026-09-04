@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "authorization": "A-01-QWEN-CHINESE-ONE-CALL-V2",
+  "status": "terminal_failure_after_single_call",
+  "providerCalls": 1,
+  "retries": 0,
+  "error": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "{\"id\":\"4129c0c5-50fa-496f-afcb-68628eb297ec\",\"projectId\":\"55e8a1b6-aa7d-441d-9d4b-3c2a20dc75bd\",\"sessionId\":\"f335180b-31ab-4034-879c-5b44374c2af5\",\"nodeId\":\"946b0fd1-684c-4c81-8737-159b1073515a\",\"kind\":\"audio\",\"capability\":\"text-to-audio\",\"modelId\":\"qwen-tts-tailnet\",\"adapterId\":\"qwen-tts\",\"provider\":\"qwen-tts-tailnet\",\"parameters\":{\"audioSpec\":{\"intent\":\"voice\",\"sampleRate\":24000,\"format\":\"wav\"},\"reviewed\":true,\"language\":\"chinese\",\"instruct\":null,\"duration\":1},\"prompt\":\"你好，这是 OpenReel 语音链路测试。\",\"referenceAssetIds\":[],\"outcome\":\"remote\",\"state\":\"succeeded\",\"idempotencyKey\":\"fca35dfb-63d8-4c6c-aefd-1102925a4350\",\"requestFingerprint\":\"9d77fd8cfcab0e25b60b9605e8cabd4d7b5ae0fb3179a1cc7eab33836877abec\",\"assetId\":\"22c320a9-a44d-47ab-b850-31e0f32efa6d\",\"error\":null,\"createdAt\":\"2026-08-16T12:57:13.949Z\",\"updatedAt\":\"2026-08-16T12:57:13.949Z\",\"events\":[{\"seq\":1,\"state\":\"queued\",\"at\":\"2026-08-16T12:57:13.949Z\"},{\"seq\":2,\"state\":\"running\",\"at\":\"2026-08-16T12:57:16.635Z\"},{\"seq\":3,\"state\":\"succeeded\",\"at\":\"2026-08-16T12:57:16.635Z\",\"assetId\":\"22c320a9-a44d-47ab-b850-31e0f32efa6d\"}]}\n\n201 !== 200\n",
+    "details": null
+  },
+  "externalActions": {
+    "qwenSynthesisRequests": 1,
+    "deployments": 0,
+    "credentialChanges": 0,
+    "publicWrites": 0,
+    "libtvWrites": 0
+  }
+}

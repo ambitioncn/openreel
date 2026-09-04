@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "capturedAt": "2026-08-19T22:45:32Z",
+  "scope": "credential-free read-only discovery for the owner-selected storageclaw offsite backup target",
+  "ownerDecision": {
+    "cancelledRoute": "Alibaba Cloud OSS and Object Lock",
+    "cancelledActions": [
+      "create Alibaba Cloud OSS resources",
+      "use Alibaba Cloud OSS resources for OpenReel backup"
+    ],
+    "replacementCandidate": "storageclaw on the owner's Tailnet",
+    "perIndependentPaidActionCnyCeiling": 100
+  },
+  "identity": {
+    "tailnetDnsName": "storageclaw.tailbfeb65.ts.net.",
+    "tailscaleIpv4": "100.124.133.8",
+    "tailscaleIpv6": "fd7a:115c:a1e0::4732:850a",
+    "tailscaleNodeId": "n9XfWhpTNB11CNTRL",
+    "operatingSystem": "linux",
+    "online": true,
+    "keyExpiry": "2027-01-21T06:37:43Z"
+  },
+  "reachability": {
+    "tailscalePing": "3/3 replies, 13 ms via DERP bj-aliyun; no direct path established",
+    "openTcpPorts": [22, 111, 445, 2049],
+    "closedCommonStoragePorts": [80, 139, 443, 548, 873, 5000, 5001, 8000, 8080, 9000, 9443]
+  },
+  "storageProtocols": {
+    "nfs": {
+      "observed": true,
+      "ports": [111, 2049],
+      "exports": [
+        "/tank/openclaw",
+        "/tank/models",
+        "/tank/backups",
+        "/tank/media",
+        "/tank/share"
+      ],
+      "observedClientAcl": "192.168.50.0/24",
+      "tailnetClientAuthorizedByObservedAcl": false
+    },
+    "smb": {
+      "observed": true,
+      "port": 445,
+      "dialects": ["2.1", "3.0", "3.0.2", "3.1.1"],
+      "signing": "enabled but not required",
+      "anonymousShareOrCapacityEvidence": false
+    },
+    "ssh": {
+      "observed": true,
+      "port": 22,
+      "publicKeyAuthenticationForTestedLocalIdentity": false,
+      "tailscaleSshVerified": false
+    }
+  },
+  "unverified": [
+    "usable capacity and quota for an OpenReel-specific target",
+    "authorized account and least-privilege read/write boundary",
+    "whether /tank/backups or another dedicated dataset is the approved OpenReel namespace",
+    "snapshot schedule and retention",
+    "read-only snapshot exposure",
+    "WORM, immutable retention, legal hold, object lock, or an equivalent separately administered anti-delete control",
+    "whether a backup writer can be denied snapshot deletion and retention-policy administration"
+  ],
+  "classification": {
+    "offsiteCopyCandidate": true,
+    "offsiteCopyVerified": false,
+    "immutableCopyVerified": false,
+    "s01Passed": false,
+    "reason": "Network identity and NFS/SMB availability are verified, but no authorized namespace, capacity, snapshot policy, or enforceable anti-delete boundary is yet evidenced. ZFS-like /tank paths alone do not prove immutability."
+  },
+  "safeNextStep": {
+    "requiredNonSecretInput": "Identify an approved OpenReel-only share/dataset and a non-secret credential or access procedure with enough read-only administrative visibility to inspect capacity, ACLs, ZFS snapshot/retention properties and writer-versus-retention-admin separation.",
+    "subsequentMutationGate": "Before the first remote write, separately confirm the uniquely named synthetic-test namespace and authorize bounded upload/readback/tamper-delete-denial/isolated-restore actions. No unique or production copy may be deleted.",
+    "plannedSyntheticValidation": [
+      "create deterministic synthetic source bytes and record SHA-256 locally",
+      "encrypt client-side with an ephemeral test key that is never committed or logged",
+      "upload only into the approved isolated namespace",
+      "read back, decrypt, and verify byte length and SHA-256 in a fresh local path",
+      "attempt tamper and deletion only against the synthetic test object and require an enforced denial for an immutable claim",
+      "restore into an isolated directory and quarantine any failed generation without touching prior accepted copies"
+    ]
+  },
+  "externalWritesExecuted": false,
+  "paidActionsExecuted": false,
+  "productionDataAccessed": false,
+  "secretsReadOrRetained": false,
+  "projectCompletion": "in_progress"
+}

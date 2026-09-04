@@ -1,0 +1,32 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-quality-not-found-diagnosis/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "root_cause_fixed_locally",
+  "jobId": "a4324cf2-36de-476a-a5a0-b40da90578b4",
+  "diagnosis": {
+    "observedStage": "quality",
+    "observedErrorCode": "NOT_FOUND",
+    "productionManifestBinding": "metadata.shotId",
+    "inspectorBindingBeforeFix": "shotId",
+    "effect": "The retained production video was treated as missing and the evaluator attempted to read an undefined asset id before creating an evaluation job.",
+    "supportingEvidence": [
+      "The durable commercial job reached quality after generation and composition.",
+      "Production Ark storage contains successful image and video jobs for the attempt but no quality evaluation Ark job.",
+      "retainCommercialArtifact returns a manifest whose shot binding is metadata.shotId."
+    ]
+  },
+  "localFix": {
+    "file": "src/commercial-quality-inspector.js",
+    "behavior": "Resolve a retained video by either the legacy flat shotId fixture shape or the production metadata.shotId manifest shape.",
+    "regression": "quality inspector reads the shot binding from a retained production asset manifest"
+  },
+  "verification": {
+    "targetedTests": { "passed": 24, "failed": 0 },
+    "fullNpmTest": "passed",
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "productionMutations": 0
+  },
+  "decision": "Do not replay the failed paid attempt. Build and qualify a new immutable candidate containing the fix before any separately necessary production acceptance action."
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "M-01",
+  "scope": "credential-free model-catalog locale-independence qualification",
+  "controls": [
+    "sort model identifiers with an explicit Unicode code-unit comparator instead of locale-sensitive collation",
+    "preserve catalog fingerprint identity across input ordering changes without consulting host locale data",
+    "prove deterministic catalog creation when host localeCompare is unavailable or behaves differently"
+  ],
+  "verification": {
+    "focused": "node --test test/model-catalog.test.js: 9 passed, 0 failed",
+    "fullSuite": "npm test: 214 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 221 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "configured-provider support",
+    "real multimodal output",
+    "refreshed authenticated LibTV evidence",
+    "deployment or production readiness"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-planning-language-contract-fix/v1",
+  "capturedAt": "2026-08-25T11:40:00Z",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "locally_qualified_not_deployed",
+  "sourceFailure": {
+    "checkpoint": "cp37",
+    "projectId": "80c60915-d929-4dc8-8fdf-9da28dbd5778",
+    "briefLanguage": "zh-Hans",
+    "firstShotSummary": "Let the ocean breeze set the rhythm.",
+    "finding": "The planning prompt required shape, duration and non-empty strings but did not bind user-facing output language to the brief. The parser consequently accepted structurally valid English user-facing text for a Chinese brief."
+  },
+  "repair": {
+    "languageDetection": "A brief containing a Han-script character selects zh-Hans planning validation.",
+    "promptContract": "Chinese briefs require Chinese title, synopsis, hooks, shot titles and shot lines; visual prompts may remain in another language.",
+    "validationContract": "Any required user-facing field without a Han-script character fails MODEL_OUTPUT_INVALID.",
+    "boundedHandling": "The existing deterministic repair path receives the safe language-contract failure and remains capped at two total planning attempts.",
+    "entryPoints": [
+      "POST /api/v1/projects/:id/workbench-plan",
+      "POST /api/v1/projects/:id/agent-films action=prepare"
+    ]
+  },
+  "verification": {
+    "targeted": {
+      "command": "node --test test/workbench-planning.test.js test/workbench-commercial.test.js",
+      "tests": 23,
+      "passed": 23,
+      "failed": 0
+    },
+    "fullRegression": {
+      "command": "npm test",
+      "tests": 570,
+      "passed": 570,
+      "failed": 0,
+      "log": ".artifacts/cdqi2-cp38-npm-test.log"
+    },
+    "candidate": {
+      "manifestEvidence": "docs/evidence/cdqs-14-production-candidate.json",
+      "manifestFingerprint": "088c0f0fd06b6d24ef896271955f8e80013519ab8d6430417d8e652f779e4c96",
+      "artifactCount": 107,
+      "qualificationChecks": 6,
+      "frozen": true
+    }
+  },
+  "boundaries": {
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "commercialJobs": 0,
+    "videoGenerations": 0,
+    "productionMutations": 0,
+    "deployments": 0,
+    "publications": 0,
+    "credentialChanges": 0
+  },
+  "nextAction": "Review cp38. Deployment of candidate 088c0f0f and any new paid T11 acceptance require separate authorization."
+}

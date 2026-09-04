@@ -1,0 +1,55 @@
+{
+  "schema": "openreel-a01-seedaudio-pricing-review/v1",
+  "capturedAt": "2026-08-18T10:00:00Z",
+  "scope": "read-only price and billing review for one private SeedAudio 1.0 validation",
+  "authoritativeHumanInput": {
+    "gate": "cp340",
+    "providerCallAuthorized": false,
+    "pricingReviewOnly": true
+  },
+  "officialEvidence": [
+    {
+      "url": "https://ai.volcengine.com/model",
+      "finding": "The official model catalog lists SeedAudio1.0 / Doubao-音频生成-1.0 and QPS 5, but does not publish a unit price, billing unit, minimum billable duration or free entitlement for this model."
+    },
+    {
+      "url": "https://www.volcengine.com/product/ai-savingsplans",
+      "finding": "The official savings-plan page classifies Doubao-音频生成-1.0 as an A-category eligible model, which supports that it is a billable product but does not establish its base unit price or this account's coverage."
+    },
+    {
+      "url": "https://www.volcengine.com/product/doubao",
+      "finding": "The official product page describes pay-as-you-go and free-credit concepts generally, but its public pricing table does not provide a SeedAudio 1.0 price or account-specific entitlement."
+    }
+  ],
+  "nonAuthoritativeContext": {
+    "finding": "Volcengine developer-community articles mention a 30-minute experience quota for individual users and invitation-only enterprise API access. This is not an official pricing contract or account-visible entitlement and is not accepted as spend authorization evidence."
+  },
+  "pricingConclusion": {
+    "officialUnitPriceVerified": false,
+    "billingUnitVerified": false,
+    "minimumBillableDurationVerified": false,
+    "accountFreeEntitlementVerified": false,
+    "exactWorstCaseCostComputable": false,
+    "reason": "The required public or account-visible inputs are absent; inventing a per-second or per-request rate would be unsafe."
+  },
+  "recommendedNextAuthorization": {
+    "model": "seed-audio-1.0",
+    "request": "one private 5-second text-to-audio validation",
+    "maximumCalls": 1,
+    "automaticRetries": 0,
+    "recommendedMaximumSpendCny": 10,
+    "meaning": "A conservative owner policy ceiling, not an asserted provider quote or expected charge.",
+    "preSubmissionCondition": "Submit only after an official account-visible quote, price card or billing estimate establishes that the exact request cannot exceed CNY 10; otherwise stop without a Provider request.",
+    "deploymentAuthorized": false,
+    "publicationAuthorized": false,
+    "credentialChangeAuthorized": false
+  },
+  "executionObservations": {
+    "providerRequestsSubmitted": 0,
+    "retries": 0,
+    "spendCny": 0,
+    "credentialValuesReadOrOutput": 0,
+    "deploymentChanges": 0,
+    "publications": 0
+  }
+}

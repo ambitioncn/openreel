@@ -1,0 +1,71 @@
+{
+  "schema": "openreel-m01-vision-authorization/v1",
+  "status": "consumed_terminal_failure",
+  "authorized": false,
+  "milestone": "M-01",
+  "purpose": "Close the remaining real-provider vision mode gap with one bounded image input and one bounded video input.",
+  "authorizationPhrase": "授权 M-01 vision 两次私有验证：embedding-vision，image-to-text 1 次、video-to-text 1 次，零重试，总费用上限 4 元，不部署、不公开发布。",
+  "environment": "Beijing isolated private staging",
+  "provider": "Volcengine Ark",
+  "model": "embedding-vision",
+  "credentialReference": "existing restricted server-side OPENREEL_VOLCENGINE_API_KEY reference; value must not be copied or logged",
+  "pricing": {
+    "version": "volcengine-2026-08-06-usd-7.20-markup-1.5",
+    "currency": "USD",
+    "unitScale": 10000,
+    "maximumReservedUnitsPerCall": 2778,
+    "maximumReservedUnitsTotal": 5556,
+    "maximumReservedDisplay": "USD 0.5556",
+    "ownerCeilingCny": 4
+  },
+  "calls": [
+    {
+      "caseId": "m01-vision-image-1",
+      "mode": "image-to-text",
+      "count": 1,
+      "input": "one private bounded non-sensitive image fixture",
+      "expectedEvidence": "accepted input metadata, terminal sanitized response shape and trusted usage"
+    },
+    {
+      "caseId": "m01-vision-video-1",
+      "mode": "video-to-text",
+      "count": 1,
+      "input": "one private bounded non-sensitive short-video fixture",
+      "expectedEvidence": "accepted input metadata, terminal sanitized response shape and trusted usage"
+    }
+  ],
+  "executionLimits": {
+    "maximumProviderSubmissions": 2,
+    "automaticRetries": 0,
+    "uniqueIdempotencyKeyPerCall": true,
+    "stopAfterFirstFailure": true,
+    "retainCredentialsOrProviderUrls": false,
+    "deployOrSwitchTraffic": false,
+    "publish": false
+  },
+  "stopConditions": [
+    "the exact authorization phrase has not been received for this packet",
+    "the configured model, endpoint, credential reference, pricing version or route differs from this packet",
+    "either call would exceed its reservation or the aggregate CNY 4 owner ceiling",
+    "the private fixture is missing, sensitive, oversized or outside the reviewed request contract",
+    "any provider failure, timeout, capability mismatch, untrusted usage or ledger reconciliation mismatch",
+    "any retry, credential mutation, deployment, production change or publication would be required"
+  ],
+  "notAuthorized": [
+    "any Provider submission before the exact owner gate is consumed",
+    "more than two total submissions or any retry",
+    "any model other than embedding-vision",
+    "credential creation, replacement, disclosure or copying",
+    "production deployment, service/process change, public traffic or publication",
+    "payment, subscription or calls above the CNY 4 aggregate ceiling"
+  ],
+  "negativeEvidence": {
+    "providerCalls": 0,
+    "credentialReads": 0,
+    "credentialWrites": 0,
+    "spend": 0,
+    "deployments": 0,
+    "publications": 0
+  },
+  "projectCompletion": "in_progress"
+}

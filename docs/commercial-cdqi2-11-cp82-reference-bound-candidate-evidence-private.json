@@ -1,0 +1,1105 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp77-single-job/v1",
+  "capturedAt": "2026-08-27T06:53:19.588Z",
+  "necessity": "T11 requires one materially revised three-beat ordinary-account production commercial candidate against the deployed director-bound policy-safe runtime.",
+  "projectId": "86d4b0e4-0219-482e-96de-6d49913ee4ff",
+  "jobId": "bec968aa-09fe-4437-b139-812556817e54",
+  "quote": {
+    "currency": "CNY",
+    "estimatedCny": 46.4,
+    "generationEstimatedCny": 46,
+    "evaluationEstimatedCny": 0.4,
+    "evaluation": {
+      "schema": "openreel-commercial-perceptual-evaluation/v2",
+      "shotDimensions": [
+        "intent",
+        "beat",
+        "composition",
+        "visual_identity_consistency",
+        "performance_naturalness"
+      ],
+      "finalDimensions": [
+        "story",
+        "pacing",
+        "continuity"
+      ],
+      "calls": 4,
+      "maximumCostCnyPerCall": 0.1,
+      "necessity": "qualify actual generated shot bytes and the composed render before release eligibility"
+    },
+    "perActionLimitCny": 100
+  },
+  "policySafety": {
+    "schema": "openreel-commercial-storyboard-policy-safety-preflight/v1",
+    "accepted": true,
+    "shotCount": 3,
+    "referenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+    "paidProviderCalls": 0,
+    "providerPolicyGuaranteed": false
+  },
+  "director": {
+    "schema": "openreel-commercial-director-context/v1",
+    "ready": true,
+    "shots": [
+      {
+        "shotId": "9b9cbce4-7dde-4c9c-9c34-c0e48eb81524",
+        "ready": true,
+        "roleEntityIds": [
+          "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+        ],
+        "sceneEntityIds": [
+          "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+        ],
+        "style": "natural documentary commercial, soft neutral studio light",
+        "continuityEntityUsages": [
+          {
+            "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+            "kind": "character",
+            "version": 1,
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ]
+          },
+          {
+            "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+            "kind": "scene",
+            "version": 1,
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ]
+          }
+        ],
+        "referenceAssetIds": [
+          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+        ]
+      },
+      {
+        "shotId": "bdd881e1-512b-4ce1-9f7a-4c0656212a86",
+        "ready": true,
+        "roleEntityIds": [
+          "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+        ],
+        "sceneEntityIds": [
+          "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+        ],
+        "style": "natural documentary commercial, soft neutral studio light",
+        "continuityEntityUsages": [
+          {
+            "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+            "kind": "character",
+            "version": 1,
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ]
+          },
+          {
+            "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+            "kind": "scene",
+            "version": 1,
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ]
+          }
+        ],
+        "referenceAssetIds": [
+          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+        ]
+      },
+      {
+        "shotId": "a784681e-f1c8-405f-b501-7dc0f727bb8e",
+        "ready": true,
+        "roleEntityIds": [
+          "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+        ],
+        "sceneEntityIds": [
+          "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+        ],
+        "style": "natural documentary commercial, soft neutral studio light",
+        "continuityEntityUsages": [
+          {
+            "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+            "kind": "character",
+            "version": 1,
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ]
+          },
+          {
+            "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+            "kind": "scene",
+            "version": 1,
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ]
+          }
+        ],
+        "referenceAssetIds": [
+          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+        ]
+      }
+    ]
+  },
+  "terminal": {
+    "schema": "openreel-commercial-job/v1",
+    "id": "bec968aa-09fe-4437-b139-812556817e54",
+    "ownerId": "14c2a291-39de-49da-b325-f2ce03776b32",
+    "idempotencyKey": "cdqi2-cp77-20260827065226",
+    "status": "failed",
+    "stage": "videos",
+    "stageDetail": {
+      "shotId": "9b9cbce4-7dde-4c9c-9c34-c0e48eb81524",
+      "shotIndex": 0
+    },
+    "director": {
+      "schema": "openreel-commercial-director-workflow/v1",
+      "currentStage": "formal_generation",
+      "status": "in_progress",
+      "stages": [
+        {
+          "id": "creative",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "bec968aa-09fe-4437-b139-812556817e54",
+            "stage": "creative",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": true,
+                "shots": [
+                  {
+                    "shotId": "9b9cbce4-7dde-4c9c-9c34-c0e48eb81524",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  },
+                  {
+                    "shotId": "bdd881e1-512b-4ce1-9f7a-4c0656212a86",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  },
+                  {
+                    "shotId": "a784681e-f1c8-405f-b501-7dc0f727bb8e",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-27T06:52:29.108Z"
+          }
+        },
+        {
+          "id": "script",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "bec968aa-09fe-4437-b139-812556817e54",
+            "stage": "script",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": true,
+                "shots": [
+                  {
+                    "shotId": "9b9cbce4-7dde-4c9c-9c34-c0e48eb81524",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  },
+                  {
+                    "shotId": "bdd881e1-512b-4ce1-9f7a-4c0656212a86",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  },
+                  {
+                    "shotId": "a784681e-f1c8-405f-b501-7dc0f727bb8e",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-27T06:52:29.108Z"
+          }
+        },
+        {
+          "id": "visual_bible",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "bec968aa-09fe-4437-b139-812556817e54",
+            "stage": "visual_bible",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": true,
+                "shots": [
+                  {
+                    "shotId": "9b9cbce4-7dde-4c9c-9c34-c0e48eb81524",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  },
+                  {
+                    "shotId": "bdd881e1-512b-4ce1-9f7a-4c0656212a86",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  },
+                  {
+                    "shotId": "a784681e-f1c8-405f-b501-7dc0f727bb8e",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-27T06:52:29.108Z"
+          }
+        },
+        {
+          "id": "dynamic_storyboard",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "bec968aa-09fe-4437-b139-812556817e54",
+            "stage": "dynamic_storyboard",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": true,
+                "shots": [
+                  {
+                    "shotId": "9b9cbce4-7dde-4c9c-9c34-c0e48eb81524",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  },
+                  {
+                    "shotId": "bdd881e1-512b-4ce1-9f7a-4c0656212a86",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  },
+                  {
+                    "shotId": "a784681e-f1c8-405f-b501-7dc0f727bb8e",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+                    ],
+                    "sceneEntityIds": [
+                      "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      },
+                      {
+                        "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    ]
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-27T06:52:29.108Z"
+          }
+        },
+        {
+          "id": "formal_generation",
+          "status": "running",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "bec968aa-09fe-4437-b139-812556817e54",
+            "stage": "formal_generation",
+            "status": "running",
+            "detail": {
+              "providerStage": "videos",
+              "shotId": "9b9cbce4-7dde-4c9c-9c34-c0e48eb81524",
+              "shotIndex": 0
+            },
+            "recordedAt": "2026-08-27T06:53:06.951Z"
+          }
+        },
+        {
+          "id": "post_production",
+          "status": "pending",
+          "evidence": null
+        },
+        {
+          "id": "automatic_qc",
+          "status": "pending",
+          "evidence": null
+        }
+      ]
+    },
+    "attempts": 1,
+    "maxAttempts": 3,
+    "cancelRequested": false,
+    "retryable": true,
+    "cost": {
+      "currency": "CNY",
+      "status": "unsettled",
+      "estimatedCny": 46.4,
+      "generationEstimatedCny": 46,
+      "evaluationEstimatedCny": 0.4,
+      "evaluation": {
+        "schema": "openreel-commercial-perceptual-evaluation/v2",
+        "shotDimensions": [
+          "intent",
+          "beat",
+          "composition",
+          "visual_identity_consistency",
+          "performance_naturalness"
+        ],
+        "finalDimensions": [
+          "story",
+          "pacing",
+          "continuity"
+        ],
+        "calls": 4,
+        "maximumCostCnyPerCall": 0.1,
+        "necessity": "qualify actual generated shot bytes and the composed render before release eligibility"
+      },
+      "settledCny": null
+    },
+    "input": {
+      "projectId": "86d4b0e4-0219-482e-96de-6d49913ee4ff",
+      "projectVersion": 7,
+      "storyVersion": 1,
+      "storyboardVersion": 1,
+      "quoteId": "9b3ffb5b-a6b7-423b-9f46-e027ed15a43f",
+      "quoteCost": {
+        "currency": "CNY",
+        "estimatedCny": 46.4,
+        "generationEstimatedCny": 46,
+        "evaluationEstimatedCny": 0.4,
+        "evaluation": {
+          "schema": "openreel-commercial-perceptual-evaluation/v2",
+          "shotDimensions": [
+            "intent",
+            "beat",
+            "composition",
+            "visual_identity_consistency",
+            "performance_naturalness"
+          ],
+          "finalDimensions": [
+            "story",
+            "pacing",
+            "continuity"
+          ],
+          "calls": 4,
+          "maximumCostCnyPerCall": 0.1,
+          "necessity": "qualify actual generated shot bytes and the composed render before release eligibility"
+        },
+        "perActionLimitCny": 100
+      },
+      "estimatedCostCny": 46.4,
+      "candidate": {
+        "schema": "openreel-commercial-candidate-lineage/v1",
+        "mode": "fresh",
+        "sourceJobId": null,
+        "inheritedShotIds": [],
+        "inheritedAssetIds": []
+      },
+      "script": "演员发现桌上折叠的无品牌蓝布并建立展示目标\n同一演员自然举起并展开同一块蓝布\n同一演员向镜头完整展示蓝布并以自然反应收束",
+      "storyboard": {
+        "version": 1,
+        "shots": [
+          {
+            "id": "9b9cbce4-7dde-4c9c-9c34-c0e48eb81524",
+            "sceneId": "d72737ad-324e-4715-9f50-a7c7ee70582d",
+            "order": 0,
+            "prompt": "three-shot commercial beat 1 of 3, medium shot: the same fictional adult performer in plain blue wardrobe notices a neatly folded unbranded blue cloth on a table in the same neutral controlled studio, establishes performer cloth and goal, stable face and body, soft neutral light, no text, no logo",
+            "styleContinuity": "natural documentary commercial, soft neutral studio light",
+            "broll": "",
+            "duration": 5,
+            "continuityEntityIds": [
+              "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+              "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+            ],
+            "continuityEntityUsages": [
+              {
+                "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                "kind": "character",
+                "name": "Fictional adult performer",
+                "version": 1,
+                "attributes": {
+                  "appearance": "fictional adult in plain blue studio wardrobe"
+                },
+                "lockedAttributes": [
+                  "appearance"
+                ],
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ],
+                "referenceProvenance": [
+                  {
+                    "assetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74",
+                    "source": {
+                      "operation": "upload",
+                      "sourceAssetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    },
+                    "createdAt": "2026-08-27T06:52:27.900Z"
+                  }
+                ]
+              },
+              {
+                "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                "kind": "scene",
+                "name": "Controlled studio",
+                "version": 1,
+                "attributes": {
+                  "environment": "neutral controlled studio with soft light"
+                },
+                "lockedAttributes": [
+                  "environment"
+                ],
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ],
+                "referenceProvenance": [
+                  {
+                    "assetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74",
+                    "source": {
+                      "operation": "upload",
+                      "sourceAssetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    },
+                    "createdAt": "2026-08-27T06:52:27.900Z"
+                  }
+                ]
+              }
+            ],
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ],
+            "generatedAssetId": null,
+            "caption": "演员发现桌上折叠的无品牌蓝布并建立展示目标"
+          },
+          {
+            "id": "bdd881e1-512b-4ce1-9f7a-4c0656212a86",
+            "sceneId": "6eb01dc0-4da4-4bc5-b3ca-3d43776317f4",
+            "order": 1,
+            "prompt": "three-shot commercial beat 2 of 3, matching medium shot: the same fictional adult performer in identical plain blue wardrobe naturally lifts and unfolds the same unbranded blue cloth in the same neutral controlled studio, clear deliberate action and visible cloth transformation, stable face and body, soft neutral light, no text, no logo",
+            "styleContinuity": "natural documentary commercial, soft neutral studio light",
+            "broll": "",
+            "duration": 5,
+            "continuityEntityIds": [
+              "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+              "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+            ],
+            "continuityEntityUsages": [
+              {
+                "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                "kind": "character",
+                "name": "Fictional adult performer",
+                "version": 1,
+                "attributes": {
+                  "appearance": "fictional adult in plain blue studio wardrobe"
+                },
+                "lockedAttributes": [
+                  "appearance"
+                ],
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ],
+                "referenceProvenance": [
+                  {
+                    "assetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74",
+                    "source": {
+                      "operation": "upload",
+                      "sourceAssetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    },
+                    "createdAt": "2026-08-27T06:52:27.900Z"
+                  }
+                ]
+              },
+              {
+                "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                "kind": "scene",
+                "name": "Controlled studio",
+                "version": 1,
+                "attributes": {
+                  "environment": "neutral controlled studio with soft light"
+                },
+                "lockedAttributes": [
+                  "environment"
+                ],
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ],
+                "referenceProvenance": [
+                  {
+                    "assetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74",
+                    "source": {
+                      "operation": "upload",
+                      "sourceAssetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    },
+                    "createdAt": "2026-08-27T06:52:27.900Z"
+                  }
+                ]
+              }
+            ],
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ],
+            "generatedAssetId": null,
+            "caption": "同一演员自然举起并展开同一块蓝布"
+          },
+          {
+            "id": "a784681e-f1c8-405f-b501-7dc0f727bb8e",
+            "sceneId": "dab7c4da-4608-433f-a3e0-df5fd97ad843",
+            "order": 2,
+            "prompt": "three-shot commercial beat 3 of 3, matching medium shot: the same fictional adult performer in identical plain blue wardrobe naturally presents the fully opened same unbranded blue cloth toward camera in the same neutral controlled studio, clear completed payoff and brief satisfied reaction, stable face and body, soft neutral light, no text, no logo",
+            "styleContinuity": "natural documentary commercial, soft neutral studio light",
+            "broll": "",
+            "duration": 5,
+            "continuityEntityIds": [
+              "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+              "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+            ],
+            "continuityEntityUsages": [
+              {
+                "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                "kind": "character",
+                "name": "Fictional adult performer",
+                "version": 1,
+                "attributes": {
+                  "appearance": "fictional adult in plain blue studio wardrobe"
+                },
+                "lockedAttributes": [
+                  "appearance"
+                ],
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ],
+                "referenceProvenance": [
+                  {
+                    "assetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74",
+                    "source": {
+                      "operation": "upload",
+                      "sourceAssetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    },
+                    "createdAt": "2026-08-27T06:52:27.900Z"
+                  }
+                ]
+              },
+              {
+                "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                "kind": "scene",
+                "name": "Controlled studio",
+                "version": 1,
+                "attributes": {
+                  "environment": "neutral controlled studio with soft light"
+                },
+                "lockedAttributes": [
+                  "environment"
+                ],
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ],
+                "referenceProvenance": [
+                  {
+                    "assetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74",
+                    "source": {
+                      "operation": "upload",
+                      "sourceAssetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                    },
+                    "createdAt": "2026-08-27T06:52:27.900Z"
+                  }
+                ]
+              }
+            ],
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ],
+            "generatedAssetId": null,
+            "caption": "同一演员向镜头完整展示蓝布并以自然反应收束"
+          }
+        ]
+      },
+      "director": {
+        "schema": "openreel-commercial-director-context/v1",
+        "ready": true,
+        "shots": [
+          {
+            "shotId": "9b9cbce4-7dde-4c9c-9c34-c0e48eb81524",
+            "ready": true,
+            "roleEntityIds": [
+              "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+            ],
+            "sceneEntityIds": [
+              "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+            ],
+            "style": "natural documentary commercial, soft neutral studio light",
+            "continuityEntityUsages": [
+              {
+                "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                "kind": "character",
+                "version": 1,
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ]
+              },
+              {
+                "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                "kind": "scene",
+                "version": 1,
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ]
+              }
+            ],
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ]
+          },
+          {
+            "shotId": "bdd881e1-512b-4ce1-9f7a-4c0656212a86",
+            "ready": true,
+            "roleEntityIds": [
+              "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+            ],
+            "sceneEntityIds": [
+              "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+            ],
+            "style": "natural documentary commercial, soft neutral studio light",
+            "continuityEntityUsages": [
+              {
+                "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                "kind": "character",
+                "version": 1,
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ]
+              },
+              {
+                "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                "kind": "scene",
+                "version": 1,
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ]
+              }
+            ],
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ]
+          },
+          {
+            "shotId": "a784681e-f1c8-405f-b501-7dc0f727bb8e",
+            "ready": true,
+            "roleEntityIds": [
+              "f7ad889e-7506-48be-adf8-00fe171dd1c7"
+            ],
+            "sceneEntityIds": [
+              "63ca5687-bcbc-4617-8efd-2c7a50503eef"
+            ],
+            "style": "natural documentary commercial, soft neutral studio light",
+            "continuityEntityUsages": [
+              {
+                "entityId": "f7ad889e-7506-48be-adf8-00fe171dd1c7",
+                "kind": "character",
+                "version": 1,
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ]
+              },
+              {
+                "entityId": "63ca5687-bcbc-4617-8efd-2c7a50503eef",
+                "kind": "scene",
+                "version": 1,
+                "referenceAssetIds": [
+                  "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+                ]
+              }
+            ],
+            "referenceAssetIds": [
+              "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74"
+            ]
+          }
+        ]
+      },
+      "policySafety": {
+        "schema": "openreel-commercial-storyboard-policy-safety-preflight/v1",
+        "accepted": true,
+        "shotCount": 3,
+        "referenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+        "paidProviderCalls": 0,
+        "providerPolicyGuaranteed": false
+      },
+      "production": {
+        "voice": "natural",
+        "captions": true,
+        "music": "light",
+        "safeZone": "tiktok",
+        "captionAssetIds": [],
+        "musicAssetId": null,
+        "musicRightsConfirmation": null
+      },
+      "models": {
+        "image": "seedream-5-lite",
+        "video": "seedance-2-fast"
+      },
+      "quality": "quality",
+      "idempotencyKey": "cdqi2-cp77-20260827065226"
+    },
+    "result": null,
+    "error": {
+      "code": "ARK_PROVIDER_ERROR",
+      "message": "commercial generation failed"
+    },
+    "createdAt": "2026-08-27T06:52:29.108Z",
+    "updatedAt": "2026-08-27T06:53:18.256Z",
+    "startedAt": "2026-08-27T06:52:29.156Z",
+    "finishedAt": "2026-08-27T06:53:18.256Z"
+  },
+  "identityReference": {
+    "assetId": "a0ca4e20-07d3-46c6-a74e-9ae4d8619d74",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+    "file": "/home/nickn/.openclaw/workspace/openreel/artifacts/cdqi2-11-cp82-reference-bound-media/identity-reference.png"
+  },
+  "retainedMedia": [],
+  "billing": {
+    "subscription": {
+      "id": "7fdaf902-2f87-427a-a8b7-c54cb938d6d5",
+      "accountId": "14c2a291-39de-49da-b325-f2ce03776b32",
+      "plan": "cdqi2-t11-cp77",
+      "status": "active",
+      "hardLimitMicros": 64445,
+      "currency": "USD",
+      "unitScale": 10000,
+      "spentMicros": 459,
+      "reservedMicros": 0,
+      "periodStartedAt": "2026-08-27T06:52:28.964Z",
+      "periodEndsAt": "2026-08-27T07:22:28.869Z",
+      "createdAt": "2026-08-27T06:52:28.964Z",
+      "updatedAt": "2026-08-27T06:52:28.964Z"
+    },
+    "reconciliation": {
+      "accountId": "14c2a291-39de-49da-b325-f2ce03776b32",
+      "consistent": true,
+      "mismatches": []
+    }
+  },
+  "safety": {
+    "newCommercialJobs": 1,
+    "executeCalls": 1,
+    "automaticRetries": 0,
+    "historicalReplays": 0,
+    "publications": 0,
+    "credentialChanges": 0
+  }
+}

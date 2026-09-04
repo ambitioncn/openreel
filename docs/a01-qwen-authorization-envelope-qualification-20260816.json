@@ -1,0 +1,27 @@
+{
+  "schema": "openreel-local-qualification/v1",
+  "milestone": "A-01",
+  "qualification": "qwen-tts-authorization-envelope",
+  "date": "2026-08-16",
+  "scope": "credential-free local synthetic verification",
+  "result": "passed",
+  "claims": [
+    "The Qwen provider client accepts only a plain authorization record containing exactly one enumerable own data property named authorized.",
+    "Authorization accessors, inherited fields, hidden fields, symbols, extra scope fields and non-object envelopes fail with QWEN_TTS_CALL_GATED.",
+    "Rejected authorization accessors are not invoked and rejected envelopes cannot reach fetch."
+  ],
+  "external_actions": {
+    "tailnet_qwen_calls": 0,
+    "provider_calls": 0,
+    "deployments": 0,
+    "credential_changes": 0
+  },
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js: 31/31 passed",
+    "npm test",
+    "node --test test/project-governance.test.js",
+    "npm run scan:secrets",
+    "git diff --check"
+  ],
+  "boundary": "This qualification does not authorize or claim a real Qwen synthesis, retained media, deployment or production behavior."
+}

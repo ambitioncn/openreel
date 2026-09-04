@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "project": "openreel-libtv-parity",
+  "qualification": "required_backlog_gate_reconciliation",
+  "status": "passed",
+  "scope": "local_control_plane_only",
+  "reconciled_items": [
+    "M-01",
+    "C-01",
+    "A-01",
+    "T-01",
+    "CO-01",
+    "B-01",
+    "S-01"
+  ],
+  "result": {
+    "all_required_unmet_items_have_explicit_blockers": true,
+    "all_blockers_reference_required_human_gated_items": true,
+    "project_complete": false,
+    "local_milestone_complete": true
+  },
+  "verification": [
+    "jq empty docs/libtv-parity-backlog.json docs/project-acceptance-ledger.json: passed",
+    "node --test test/project-governance.test.js: 3/3 passed",
+    "npm test: 302/302 passed",
+    "npm run scan:secrets: 393 files passed",
+    "git diff --check: passed"
+  ],
+  "external_actions": [],
+  "notes": "Each reconciled item's recorded remaining work was inspected and is acceptance-advancing only through a human-authorized provider, authenticated external surface, staging/production operation, payment surface, independent ceremony, or future evidence refresh. This does not claim project completion and does not prohibit future local corrections discovered by review."
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "openreel-v4-07-production-distinct-project-version-diagnosis/v1",
+  "capturedAt": "2026-08-22T05:05:00Z",
+  "target": "https://openreel.duobiai.cn:4173",
+  "humanGateApplied": "cp20 ordinary-account creation and under-CNY-100 real-model acceptance approval",
+  "attempts": [
+    {
+      "account": "fresh ordinary account; credential not retained in evidence",
+      "result": "browser did not reach script editor within five minutes",
+      "laterStagesStarted": false,
+      "seedreamCalls": 0,
+      "seedanceCalls": 0,
+      "ttsCalls": 0
+    },
+    {
+      "account": "fresh ordinary account; credential not retained in evidence",
+      "result": "project changed before text planning",
+      "providerCallStarted": false,
+      "seedreamCalls": 0,
+      "seedanceCalls": 0,
+      "ttsCalls": 0
+    }
+  ],
+  "rootCause": "The browser read the newly created project at version 1, created its initial Main canvas session (which advanced the durable project to version 2), and then submitted the stale version 1 to the real planning endpoint.",
+  "fix": "After creating the initial canvas session, openProject now reloads the durable project snapshot before any planning request.",
+  "verification": {
+    "focused": "14/14 passed",
+    "full": "457/457 passed",
+    "diffCheck": "passed"
+  },
+  "productionState": "The fix is local and tested but is not active in Beijing production.",
+  "safety": {
+    "publication": 0,
+    "externalSend": 0,
+    "seedreamCalls": 0,
+    "seedanceCalls": 0,
+    "ttsCalls": 0,
+    "firstPlanningCallSettlement": "unknown because the browser timed out before retaining a result",
+    "secondPlanningCallStarted": false
+  }
+}

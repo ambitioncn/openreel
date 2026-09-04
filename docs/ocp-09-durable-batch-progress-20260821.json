@@ -1,0 +1,24 @@
+{
+  "schema": "openreel-qualification/v1",
+  "milestone": "OCP-09",
+  "status": "in_progress",
+  "scope": "durable one-click batch orchestration",
+  "implemented": [
+    "atomic file-backed publishing batch snapshots",
+    "restart-safe intent idempotency",
+    "restart hydration from durable per-platform lifecycle jobs",
+    "tenant isolation after reconstruction",
+    "continued confirmation and advancement after restart"
+  ],
+  "verification": [
+    { "command": "node --test test/publishing-orchestration.test.js test/publishing-lifecycle.test.js", "result": "14 passed, 0 failed" },
+    { "command": "npm test", "result": "415 passed, 0 failed" },
+    { "command": "npm run scan:secrets", "result": "527 files scanned, passed" }
+  ],
+  "external_actions": [],
+  "remaining": [
+    "authenticated HTTP publishing routes and account binding view",
+    "responsive browser progress/error controls and desktop/mobile E2E",
+    "OCP-10 history/audit, OCP-11 security regression, OCP-12 Beijing Aliyun qualification"
+  ]
+}

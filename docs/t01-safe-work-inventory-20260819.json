@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "milestone": "T-01",
+  "inventoriedAt": "2026-08-19T00:00:00.000Z",
+  "scope": "Read-only inventory and credential-free local requalification after the Ironman development-dispatch authentication repair.",
+  "strategyChange": "The failed source round did not reach development because its isolated OpenAI authentication was unavailable. This round used the repaired Ironman execution path, inspected the accepted M-01 handoff and authoritative backlog, and reran T-01 locally without replaying any Provider authorization.",
+  "localAcceptance": {
+    "representativeMultiShotPlayableOutput": {
+      "status": "qualified_locally",
+      "evidence": [
+        "src/render.js",
+        "test/render.test.js"
+      ]
+    },
+    "downloadMetadataReplayAndFailures": {
+      "status": "qualified_locally",
+      "evidence": [
+        "src/export-evidence.js",
+        "test/export-evidence.test.js",
+        "test/export-ui.test.js",
+        "test/http.test.js"
+      ]
+    },
+    "explicitFormatAndQualityLimits": {
+      "status": "qualified_locally",
+      "evidence": [
+        "MP4 preview-360p",
+        "100-clip maximum",
+        "600-second maximum",
+        "productionReady=false local-preview boundary"
+      ]
+    }
+  },
+  "verification": {
+    "focused": {
+      "command": "npm test -- --test-name-pattern='T-01|render composes|multi-shot export|render rejects|local export|HTTP render errors'",
+      "passed": 42,
+      "failed": 0
+    },
+    "fullSuite": {
+      "command": "npm test",
+      "passed": 324,
+      "failed": 0
+    }
+  },
+  "safeWorkConclusion": "No further credential-free local implementation gap remains for T-01. Its remaining acceptance evidence crosses an external authorization boundary.",
+  "remainingGate": {
+    "required": true,
+    "actions": [
+      "Representative real-video graphical-browser download E2E",
+      "Authenticated LibTV format and quality comparison"
+    ],
+    "authority": "A new exact authorization is required; consumed Provider authorizations cannot be replayed."
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "credentialsReadOrWritten": 0,
+    "deployments": 0,
+    "productionMutations": 0,
+    "publications": 0,
+    "externalMessages": 0
+  },
+  "projectCompletion": "in_progress"
+}

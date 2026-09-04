@@ -1,0 +1,63 @@
+{
+  "schema": "openreel-m01-real-provider-evidence-reconciliation/v1",
+  "milestone": "M-01",
+  "capturedAt": "2026-08-18T11:00:00Z",
+  "status": "verified_complete",
+  "scope": "Local reconciliation of already-consumed, previously accepted provider evidence; no new provider request or external write.",
+  "verifiedModalities": [
+    {
+      "modality": "image",
+      "mode": "text-to-image",
+      "model": "seedream-5-lite",
+      "evidence": "docs/e01-historical-config-diagnostic-evidence.json",
+      "result": "succeeded_cleanup_complete",
+      "boundary": "One historical real image output only; it does not prove catalog count parity or every image control."
+    },
+    {
+      "modality": "video",
+      "mode": "image-to-video",
+      "model": "seedance-2-fast",
+      "evidence": "docs/c01-e01-cp323-reference-conditioned-continuity-evidence-20260818.json",
+      "result": "two_succeeded_reference_conditioned_outputs",
+      "boundary": "Run-specific evidence-only retention exception was accepted; it does not prove every video mode or control."
+    },
+    {
+      "modality": "audio",
+      "mode": "text-to-audio",
+      "model": "seedaudio-1.0",
+      "evidence": [
+        "accepted Loop cp343 SeedAudio provider checkpoint",
+        "runtime/a01-cp343-private/integration-evidence.json"
+      ],
+      "result": "provider_output_and_local_product_integration_passed",
+      "boundary": "The single-call authorization is consumed; this does not authorize another call or prove all audio controls."
+    }
+  ],
+  "verifiedVisionModalities": [
+    {
+      "modality": "vision",
+      "modes": ["image-to-text", "video-to-text"],
+      "model": "embedding-vision",
+      "evidence": "docs/m01-vision-corrected-v2-execution-evidence.json",
+      "result": "both_modes_succeeded_cleanup_complete",
+      "boundary": "Two bounded private-input calls validate the reviewed input-understanding paths; the consumed authorization grants no replay and does not imply every future model or control."
+    }
+  ],
+  "unverifiedModalities": [],
+  "remainingGaps": [
+    "The authenticated target baseline captured 2026-08-07 must be refreshed if final review occurs after its 30-day window."
+  ],
+  "nextGate": {
+    "recommendedScope": "No additional Provider call is required for the terminal modality matrix; any future expansion remains separately bounded.",
+    "authorized": false
+  },
+  "negativeEvidence": {
+    "providerCalls": 0,
+    "credentialReads": 0,
+    "credentialWrites": 0,
+    "spend": 0,
+    "deployments": 0,
+    "publications": 0
+  },
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel",
+  "contractVersion": "4.0",
+  "auditedAt": "2026-08-21T20:45:00Z",
+  "status": "reopened_in_progress",
+  "supersedes": [
+    "docs/project-completion-contract.md v3.3 terminal acceptance",
+    "docs/project-acceptance-ledger.json accepted status dated 2026-08-20",
+    "docs/csv2-10-final-production-acceptance-20260820.json project_completion accepted claim"
+  ],
+  "findings": [
+    {"id":"F-01","severity":"critical","finding":"The beginner flow updates the current project directly; it does not establish a create-new-work or explicit-select-current-work boundary for a new creative prompt.","evidence":["src/app.js short-video creation handler uses the current projectId"]},
+    {"id":"F-02","severity":"critical","finding":"Creative-to-story and storyboard generation is browser-authored deterministic template content, not retained output from a real text model.","evidence":["src/app.js short-video creation handler constructs hooks, scenes and shot prompts client-side"]},
+    {"id":"F-03","severity":"critical","finding":"The beginner workbench final state explicitly says it will not start generation or paid calls; no real step-4 workflow is exposed.","evidence":["src/app.js renderFinalWorkbench sets a non-generation status","index.html beginner workbench flow"]},
+    {"id":"F-04","severity":"critical","finding":"Commercial provider orchestration and durable lifecycle exist as isolated modules/tests but are not wired into production server routes or the browser workbench.","evidence":["src/commercial-provider-orchestrator.js","src/commercial-job-lifecycle.js","server.mjs has no commercial job route","src/app.js has no commercial job API use"]},
+    {"id":"F-05","severity":"critical","finding":"Existing generated assets and final-preview selection do not collectively enforce one current project/story/storyboard-version identity through timeline, render and publish preflight.","evidence":["src/workbench-final.js","src/app.js finalPreview/export flow"]},
+    {"id":"F-06","severity":"high","finding":"Product URL safety and understanding modules have focused tests, but the requested ordinary-account production browser path with retained real-model fetch/understanding provenance is absent.","evidence":["src/product-url.js","src/product-understanding.js","docs/csv2-02-product-url-security-qualification-20260820.json","docs/csv2-03-product-understanding-qualification-20260820.json"]},
+    {"id":"F-07","severity":"critical","finding":"The retained CSV2 MP4 predates this request and does not prove a fresh ordinary-account run beginning with 美女在海滩跳舞 or the required end-to-end version bindings.","evidence":["docs/csv2-10-final-production-acceptance-20260820.json"]}
+  ],
+  "completionRule":"Only V4-01 through V4-07 accepted at one reviewed revision permits project completion. Until then all reports must say phase complete or project in progress.",
+  "blockers":[],
+  "deferredGates":[]
+}

@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T16:30:00.000Z",
+  "scope": "Credential-free local qualification of the independent release-review packet validator.",
+  "evidence": {
+    "implementation": "src/release-review.js",
+    "tests": "test/release-review.test.js",
+    "plan": "docs/release-signing-review-plan.md",
+    "focusedTests": { "passed": 3, "failed": 0 },
+    "fullSuite": { "passed": 169, "failed": 0 }
+  },
+  "negativeCoverage": [
+    "reviewer equals author",
+    "missing or reordered checklist item",
+    "unknown packet field",
+    "failed checklist item",
+    "missing evidence reference",
+    "external action claimed by local packet"
+  ],
+  "externalActions": false,
+  "credentialsRead": false,
+  "providerCalls": 0,
+  "signaturesCreated": 0,
+  "uploads": 0,
+  "deployments": 0,
+  "limitations": [
+    "This qualification does not constitute an independent review.",
+    "It does not select a signing algorithm, create or use keys, sign artifacts, authorize retention, or activate a release."
+  ]
+}

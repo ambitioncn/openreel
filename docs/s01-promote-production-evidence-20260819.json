@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "milestone": "S01-PROMOTE",
+  "capturedAt": "2026-08-19T14:52:00Z",
+  "status": "completed",
+  "projectCompletion": "in_progress",
+  "ownerDecision": {
+    "offlineSignatureRequired": false,
+    "decision": "S01-OFFLINE-SIGN waived for this release; direct promotion explicitly authorized"
+  },
+  "candidate": {
+    "fileCount": 139,
+    "manifestSha256": "457e793a7d73fc2dba2daad2f93850e0a670e6a1c2aa598e4626f0495fdc479d",
+    "gitTree": "d0cfe54ef2ee6c0e55a9257e59065438523933e2",
+    "parentlessCommit": "5aac1cf10fbb4c5c02b952b7e48321273613a55d",
+    "archiveSha256": "3b6297e286ee0bb8ce34b373f856f8479f7fb3d2d2afb00b3980a2367e0e47ae"
+  },
+  "target": {
+    "host": "123.57.67.213",
+    "release": "/opt/openreel/releases/20260819T145133Z-5aac1cf10fbb",
+    "current": "/opt/openreel/current",
+    "state": "/var/lib/openreel",
+    "service": "openreel.service",
+    "loopback": "127.0.0.1:4273",
+    "public": "http://123.57.67.213:4173"
+  },
+  "rollback": {
+    "previousRelease": "/opt/openreel/releases/20260816T020000Z-cp170",
+    "coldStateBackup": "/var/backups/openreel/pre-promote-cold-20260819T145058Z",
+    "backupFileCount": 36,
+    "backupManifestSha256": "3c8c5baa915ca11ea86ad93cb8b7a3a25c5ba079a00ad2679b190025d50aa03b",
+    "sqliteQuickCheck": "ok",
+    "isolatedRestoreByteVerification": "passed",
+    "actualRollbackExecuted": false
+  },
+  "verification": {
+    "localTests": "309 passed, 0 failed",
+    "secretScan": "passed (140 files)",
+    "deploymentRehearsal": "passed",
+    "service": "active with NRestarts=0",
+    "loopbackRoot": 200,
+    "loopbackLive": 200,
+    "loopbackReady": 200,
+    "publicRoot": 200,
+    "publicAdmin": 200,
+    "publicReady": 404,
+    "publicMetrics": 404,
+    "warningLogs": 0,
+    "derperPortsUnchanged": [80, 443],
+    "providerCalls": 0
+  },
+  "knownFinding": "The online semantic backup validator rejected a pre-existing storyboard relationship inconsistency before deployment. No switch had occurred. A stopped-service cold backup was then created, isolated-restored, byte-verified, and SQLite quick_check passed. The existing semantic inconsistency remains follow-up work and was not concealed as an accepted semantic backup.",
+  "scope": "This artifact accepts only the S01-PROMOTE milestone and the release-specific offline-signature waiver. It does not mark S-01, E-01, E-02, or the overall project complete."
+}

@@ -1,0 +1,52 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-fixed-candidate-deployment/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "deployed_acceptance_pending",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "candidate": {
+    "manifestFingerprint": "102ff46ffd751348fedebc910daa7ba5edf3a2b78d6e06bdb9624057765356f8",
+    "artifactCount": 106,
+    "archiveSha256": "2397aab311a3301fd40e4ec28f7058a54f0c7d900160c69e74a10d4b158e2d38",
+    "release": "/opt/openreel/releases/20260825T061000Z-cdqi2-102ff46f",
+    "remoteManifestVerification": "passed"
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-25T060107Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T060107Z-cdqi2-isolated-restore",
+    "database": "ok",
+    "assets": 111,
+    "publishing": "ok"
+  },
+  "activation": {
+    "activeRelease": "/opt/openreel/releases/20260825T061000Z-cdqi2-102ff46f",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T050500Z-cdqi2-4ce7e3b5",
+    "service": "active",
+    "subState": "running",
+    "nRestarts": 0,
+    "readiness": {
+      "status": "ready",
+      "database": "ok",
+      "assets": "ok"
+    },
+    "postActivationManifestVerification": "passed"
+  },
+  "operatorIncident": {
+    "summary": "The first activation used a stale port and an in-host public TLS probe; the probe failed, the rollback trap restored the prior release, and no provider action occurred.",
+    "correction": "A read-only journal check identified the configured application port as 4273. A separately bounded activation used the direct loopback readiness endpoint and passed.",
+    "finalStateVerified": true
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "blindProviderRetries": 0,
+    "publicationCalls": 0,
+    "externalMessages": 0,
+    "credentialChanges": 0
+  },
+  "remaining": [
+    "Retain a Beijing production ordinary-account qualified-pass result on this exact candidate, paired with the existing fail-closed rejection evidence.",
+    "Complete the T12 terminal evidence-ledger audit only after T11 is accepted."
+  ],
+  "projectCompletion": "in_progress"
+}

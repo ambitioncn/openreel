@@ -1,0 +1,22 @@
+{
+  "schema": "openreel-local-qualification/v1",
+  "status": "passed",
+  "scope": "credential-free regression qualification of the exhausted cp319/cp320 two-shot authorization envelope",
+  "changes": [
+    "assert the runner pins exactly two maximum submissions, 13,890 aggregate units and zero provider retries",
+    "assert the runner has one bounded two-shot submission loop and requires exactly two completed submissions",
+    "assert temporary retained-media paths are explicit for exactly two outputs and both are included in isolated cleanup",
+    "assert browser acceptance requires two authenticated direct asset URLs, two timeline clips, non-empty bytes and positive playback duration",
+    "assert the two-shot browser acceptance path does not use Blob Object URLs"
+  ],
+  "verification": {
+    "focused": "node --test test/e01-runner-result.test.js test/ark.test.js test/e01-single-video-runner.test.js test/e01-phase-one-runner.test.js test/billing-evidence.test.js",
+    "focusedResult": "52 passed, 0 failed",
+    "secretScan": "npm run scan:secrets",
+    "secretScanResult": "408 files passed",
+    "providerCalls": 0,
+    "externalWrites": 0
+  },
+  "boundary": "This qualification prevents future code drift from silently broadening or weakening the already-consumed cp319 authorization. It does not authorize another provider call and does not change the cp320 negative C-01 visual result.",
+  "projectCompletion": "in_progress"
+}

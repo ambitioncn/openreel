@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "project": "openreel-libtv-parity",
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T21:05:00.000Z",
+  "scope": "local-only canvas relationship validation",
+  "change": {
+    "implementation": "scripts/backup.mjs requires sessions to resolve to projects, nodes to resolve to same-project sessions, edges to resolve to same-project endpoint nodes, and non-empty de-duplicated groups to resolve to same-project nodes",
+    "boundary": "backup creation and restore reject dangling or cross-project canvas relationships before atomic promotion",
+    "negativeFixtures": ["missing session project", "missing node session", "missing edge endpoint", "missing group member node"]
+  },
+  "verification": {
+    "opsTest": { "command": "node --test test/ops.test.js", "passed": 28, "failed": 0 },
+    "fullSuite": { "command": "npm test", "passed": 196, "failed": 0 },
+    "dependencyAudit": { "command": "npm audit --omit=dev --audit-level=high", "highSeverityFindings": 0 },
+    "secretScan": { "command": "npm run scan:secrets", "status": "passed", "filesScanned": 198 },
+    "diffCheck": { "command": "git diff --check", "status": "passed" }
+  },
+  "externalActions": [],
+  "limitations": [
+    "This increment validates core canvas ownership and references but does not independently review or operate a deployed backup system.",
+    "Independent review, off-host retention, staging drills and production rollback remain separately gated."
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-qualified-pass-attempt/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "failed_closed",
+  "attemptedAt": "2026-08-25T05:26:10Z",
+  "necessity": "T11 requires a retained Beijing production ordinary-account qualified-pass state paired with the already retained rejection state.",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "candidateFingerprint": "4ce7e3b5218a7fd816812d6d49174d58b7a73217681a202fb37dfd185295f068",
+  "ordinaryAccount": true,
+  "projectId": "9ad58906-502b-4225-aea9-519d34d976ca",
+  "jobId": "a4324cf2-36de-476a-a5a0-b40da90578b4",
+  "directorBinding": {
+    "personIdentityReference": true,
+    "characterContinuity": true,
+    "sceneContinuity": true,
+    "styleContinuity": true,
+    "quoteReady": true
+  },
+  "quote": {
+    "currency": "CNY",
+    "estimatedCny": 16.2,
+    "generationEstimatedCny": 16,
+    "evaluationEstimatedCny": 0.2,
+    "evaluationCalls": 2,
+    "maximumCostCnyPerCall": 0.1,
+    "perActionLimitCny": 100
+  },
+  "result": {
+    "status": "failed",
+    "stage": "quality",
+    "attempts": 1,
+    "retryable": false,
+    "errorCode": "NOT_FOUND",
+    "qualifiedResultRetained": false
+  },
+  "accounting": {
+    "subscriptionCurrency": "USD",
+    "unitScale": 10000,
+    "hardLimitUnits": 40000,
+    "spentUnitsAfterAttempt": 8854,
+    "reservedUnitsAfterAttempt": 0,
+    "maximumCnyAtReviewedRate": 28.8,
+    "settledCommercialJobCost": null
+  },
+  "safety": {
+    "blindRetries": 0,
+    "publicationCalls": 0,
+    "externalMessages": 0,
+    "credentialChanges": 0,
+    "candidateMutation": false
+  },
+  "decision": "Stop after the single failed attempt. Do not replay provider work or claim T11 acceptance. Diagnose the quality-stage NOT_FOUND from retained state before any separately justified future action."
+}

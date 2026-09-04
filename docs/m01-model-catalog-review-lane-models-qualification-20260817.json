@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "qualification": "model_catalog_review_lane_models",
+  "status": "passed",
+  "scope": "credential_free_local",
+  "result": {
+    "model_bound_review_lanes": [
+      "inventory",
+      "taxonomy",
+      "routing",
+      "capabilities"
+    ],
+    "metadata_model_ids": [],
+    "deterministically_sorted": true,
+    "counts_match_model_ids": true,
+    "deeply_immutable": true,
+    "executed_provider_calls": false
+  },
+  "verification": [
+    "node --test test/model-catalog.test.js: 15/15 passed",
+    "npm test: 302/302 passed",
+    "npm run scan:secrets: 391 files passed",
+    "git diff --check: passed"
+  ],
+  "external_actions": [],
+  "notes": "Each model-bound review lane now carries deterministic affected model IDs. Metadata-only drift deliberately carries no model IDs, avoiding false attribution."
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "openreel-e01-single-video-execution-evidence/v1",
+  "status": "failed_cleanup_complete",
+  "scope": {
+    "environment": "isolated_private_staging",
+    "model": "seedance-2-fast",
+    "input": {"kind":"text_to_video","durationSeconds":5,"resolution":"480p","ratio":"16:9","generateAudio":false,"watermark":false},
+    "maximumSubmissions": 1,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "maximumUnits": 6945,
+    "currency": "USD"
+  },
+  "preflight": {
+    "credentialReferencePresentAndNonempty": true,
+    "credentialValueReadOrRetained": false,
+    "seedanceModelMappingPresentAndNonempty": true,
+    "stagingReady": true,
+    "productionReady": true,
+    "databaseQuickCheck": "ok",
+    "openTemporaryAccess": 0
+  },
+  "observed": {
+    "terminalStatus": "failed",
+    "sanitizedErrorCode": "ARK_PROVIDER_ERROR",
+    "sanitizedUpstreamStatus": 503,
+    "providerSubmissions": 1,
+    "spentUnits": 0,
+    "reservedUnitsAfterReconciliation": 0,
+    "reservationStatus": "failed",
+    "temporaryKeyStatus": "revoked",
+    "temporarySubscriptionStatus": "stopped"
+  },
+  "reliabilityFix": {
+    "finding": "An asynchronous polling error previously left its reservation open after temporary access was stopped.",
+    "change": "Ark polling now settles the reservation as failed before returning a sanitized polling error; stopped access also has an exact administrative open-reservation cleanup primitive.",
+    "historicalReservationReconciled": true,
+    "regressionTested": true,
+    "durableCrashRecoveryTested": true,
+    "durableCrashRecoveryResult": "A persisted failed settlement recovered after restart under two concurrent polls with one failed usage entry, zero reserved units, zero spend and zero provider calls."
+  },
+  "cleanup": {
+    "paidInferenceEnabled": false,
+    "openReservations": 0,
+    "activeTemporaryKeys": 0,
+    "activeTemporarySubscriptions": 0,
+    "activeTemporaryApplications": 0,
+    "stagingReady": true,
+    "productionReady": true
+  },
+  "retention": {"credentialValues":false,"providerTaskIds":false,"providerOutputUrls":false,"accountIdentifiers":false,"otpValues":false},
+  "limitations": [
+    "The provider returned a sanitized upstream 503, so no video asset, visual-quality result, timeline playback or browser E2E acceptance was produced.",
+    "This exact authorization is exhausted; any further provider submission, audio task, production action or publication requires a separate gate."
+  ],
+  "nextProviderSubmissionAuthorized": false,
+  "projectCompletion": "in_progress"
+}

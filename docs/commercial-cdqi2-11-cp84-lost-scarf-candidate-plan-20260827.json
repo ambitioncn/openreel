@@ -1,0 +1,85 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp84-lost-scarf-candidate-plan/v1",
+  "capturedAt": "2026-08-27T23:55:00Z",
+  "backlogItem": "CDQI2-11",
+  "sourceEvidence": [
+    "commercial-cdqi2-11-cp79-three-beat-rejection-20260827.json",
+    "commercial-cdqi2-11-cp82-reference-bound-first-terminal-20260827.json",
+    "commercial-cdqi2-11-cp83-ark-diagnostic-production-deployment-20260827.json"
+  ],
+  "diagnosis": {
+    "rejectedApproach": "Replay the cp82 blue-cloth unfolding candidate unchanged",
+    "reason": "That exact candidate already reached a paid first-terminal provider failure; replaying it would be a blind retry and would not test a materially new creative contract.",
+    "materialChange": "Use an observable lost-scarf causal arc: notice and reach, catch and turn, return and share a relieved smile. This changes object interaction, causal progression, actions and payoff while retaining the accepted identity-reference and safety constraints."
+  },
+  "candidateContract": {
+    "mode": "fresh",
+    "sourceJobId": null,
+    "inheritedShotIds": [],
+    "inheritedAssetIds": [],
+    "intent": "same fictional adult performer",
+    "shotCount": 3,
+    "shots": [
+      {
+        "strategyBeat": "hook",
+        "duration": 4,
+        "prompt": "same fictional adult performer in identical plain blue wardrobe notices an unbranded blue scarf falling in a controlled studio and reaches naturally for it"
+      },
+      {
+        "strategyBeat": "development",
+        "duration": 5,
+        "prompt": "same fictional adult performer in identical plain blue wardrobe catches the unbranded blue scarf in the same controlled studio and turns with a natural concerned expression"
+      },
+      {
+        "strategyBeat": "payoff",
+        "duration": 4,
+        "prompt": "same fictional adult performer in identical plain blue wardrobe returns the unbranded blue scarf in the same controlled studio and shares a warm relieved smile"
+      }
+    ],
+    "continuityLocks": [
+      "same byte-backed fictional adult identity reference",
+      "identical plain blue wardrobe",
+      "same unbranded blue scarf",
+      "same neutral controlled studio",
+      "matching medium framing",
+      "soft neutral light"
+    ],
+    "requiredDimensions": [
+      "intent",
+      "beat",
+      "composition",
+      "visual_identity_consistency",
+      "performance_naturalness",
+      "story",
+      "pacing",
+      "continuity"
+    ],
+    "threshold": 0.8,
+    "decisionPolicy": "all required checks must pass; no averaging"
+  },
+  "executionGate": {
+    "default": "disabled",
+    "preconditions": [
+      "this candidate-plan checkpoint accepted",
+      "fresh zero-paid production quote recorded",
+      "quote total <= CNY 100",
+      "necessity recorded",
+      "no outstanding reservation",
+      "exactly one job and one execute",
+      "zero retry and fallback",
+      "stop at first terminal result",
+      "retain byte, diagnostic and settlement evidence",
+      "no publication"
+    ]
+  },
+  "activityThisCheckpoint": {
+    "providerCalls": 0,
+    "paidJobs": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0
+  },
+  "status": "prepared_not_quoted_or_executed",
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "milestone": "OCP-12-YOUTUBE-RUNTIME-GATE",
+  "captured_at": "2026-08-21T03:04:00Z",
+  "status": "ready_for_owner_gate",
+  "production": {
+    "host": "123.57.67.213",
+    "release": "/opt/openreel/releases/20260821T030307Z-youtube-runtime-ui-prep",
+    "previous_release": "/opt/openreel/releases/20260821T030031Z-youtube-runtime-prep",
+    "service_active": true,
+    "service_restarts": 0,
+    "public_root": 200,
+    "public_ready": 404,
+    "oauth_configuration_entries": 0,
+    "publishing_state_created": false
+  },
+  "implemented": [
+    "Production constructs the durable publishing runtime only when the complete credential/configuration tuple is present.",
+    "Batch intent includes project identity and preflight loads the tenant-owned rendered MP4 through the authorized store boundary.",
+    "Rendered role, video/mp4 MIME, byte length and SHA-256 must match before confirmation.",
+    "Only an active tenant-owned YouTube binding and bounded title, description, privacy and audience metadata can reach awaiting_confirmation.",
+    "TikTok, Douyin and Instagram remain unavailable in this YouTube-first slice.",
+    "OAuth callback returns to a validated local path and exposes no token response body.",
+    "The UI exposes explicit YouTube connect and confirmation-gated disconnect actions; neither runs automatically.",
+    "Activation initializes exactly six publishing recovery files and the backup unit includes them whenever publishing state is configured."
+  ],
+  "verification": {
+    "full_regression": "429 passed, 0 failed",
+    "runtime_http_oauth_focus": "50 passed before UI; 34 passed after callback/UI change",
+    "desktop_mobile_browser": "passed at 1440x900 and 390x844; providerCalls=0; publicationCalls=0",
+    "secret_scan": "549 files passed",
+    "dependency_audit": "0 vulnerabilities",
+    "release_manifest": "24 artifacts verified; tamper rejected",
+    "backup_restore": "passed before deployment",
+    "actual_runtime_release_rollback_and_reactivation": "passed",
+    "provider_calls": 0,
+    "uploads": 0,
+    "publications": 0
+  },
+  "smallest_next_gate": {
+    "id": "OCP12-YOUTUBE-GOOGLE-CLIENT",
+    "required_input": [
+      "Exact Google Cloud project identifier selected for OpenReel YouTube acceptance",
+      "Confirmation that YouTube Data API v3 is enabled and the OAuth consent configuration is suitable for the named owner-controlled test channel",
+      "Authorization to add the exact Web OAuth client id/client secret and a newly generated separate publishing master key to Beijing production",
+      "Confirmation that the only redirect URI registered is https://openreel.duobiai.cn:4173/api/v1/publishing/oauth/youtube_shorts/callback"
+    ],
+    "not_authorized_by_this_gate": ["OAuth consent", "channel binding", "upload", "publication"]
+  },
+  "later_gates": [
+    "Named-channel OAuth consent using only https://www.googleapis.com/auth/youtube.upload",
+    "Exact reviewed MP4 upload",
+    "Exact title, description, privacy and made-for-kids publication confirmation"
+  ],
+  "project_completion": "in_progress"
+}

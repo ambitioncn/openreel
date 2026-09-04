@@ -1,0 +1,33 @@
+{
+  "schema":"openreel-qualification/v1",
+  "project":"openreel-one-click-publishing",
+  "milestone":"OCP-12",
+  "status":"in_progress",
+  "scope":"Beijing Aliyun deployment, publishing-state backup, isolated restore and rollback",
+  "implemented":[
+    "Production environment contract declares a dedicated publishing state root and separately managed 32-byte OAuth master key",
+    "Operations runbook requires OAuth, four job stores and batch/audit state to share one recovery point and forbids partial restore",
+    "Replayable local qualification copies and restores the complete publishing bundle, reconstructs all four lifecycles and proves stable batch idempotency",
+    "The primary strict backup manifest now optionally admits exactly the complete six-file publishing namespace, hashes it, rejects incomplete or unexpected state and restores it atomically with core state",
+    "Unprivileged production-mode loopback rehearsal starts the real server and reaches readiness",
+    "An isolated full rollback rehearsal atomically returns the application release pointer from release-2 to release-1, restores core and six-file publishing state from the strict manifest, rejects an incomplete backup before promotion and proves four-platform batch idempotency without provider calls"
+  ],
+  "verification":[
+    {"command":"npm run qualify:publishing-operations","result":"passed: four destinations, idempotent recovery, encrypted OAuth snapshot, externalActions=0"},
+    {"command":"npm run rehearse:deployment","result":"passed: isolated production-mode loopback readiness"},
+    {"command":"npm test","result":"421 passed, 0 failed"},
+    {"command":"npm run scan:secrets","result":"540 files, passed"}
+    ,{"command":"node --test test/publishing-backup.test.js test/ops.test.js","result":"44 passed, 0 failed"}
+    ,{"command":"npm test","result":"423 passed, 0 failed"}
+    ,{"command":"npm run scan:secrets","result":"542 files, passed"},
+    {"command":"npm run rehearse:publishing-rollback","result":"passed: release-2 to release-1, six publishing files, four destinations, idempotent recovery, rejected backup promotions=1, provider calls=0"},
+    {"command":"node --test test/publishing-backup.test.js test/ops.test.js","result":"44 passed, 0 failed"},
+    {"command":"npm test","result":"423 passed, 0 failed"},
+    {"command":"npm run scan:secrets","result":"543 files, passed"}
+  ],
+  "remaining":[
+    "After explicit authorization, deploy and collect Beijing Aliyun backup/restore/rollback evidence"
+  ],
+  "safety":{"external_calls":false,"credential_mutations":0,"production_mutations":0,"publications":0},
+  "project_completion":"in_progress"
+}

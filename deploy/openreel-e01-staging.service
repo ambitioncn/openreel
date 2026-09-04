@@ -1,0 +1,22 @@
+[Unit]
+Description=OpenReel E-01 isolated private staging
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=openreel-staging
+Group=openreel-staging
+WorkingDirectory=/opt/openreel-staging/current
+EnvironmentFile=/etc/openreel/openreel.env
+EnvironmentFile=/etc/openreel/openreel-e01-staging.env
+ExecStart=/usr/bin/node server.mjs
+Restart=no
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/openreel-staging
+
+[Install]
+WantedBy=multi-user.target

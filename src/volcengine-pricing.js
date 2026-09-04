@@ -29,7 +29,7 @@ export const VOLCENGINE_PRICING = Object.freeze({
   unitScale: USD_SCALE,
   cnyPerUsd: CNY_PER_USD,
   models: Object.freeze({
-    "seedance-2-fast": Object.freeze({ maxCostMicros: ceiling(5), inputMicrosPerMillion: 0, outputMicrosPerMillion: perMillion(37), costBasis: "CNY 37/million tokens converted at 7.20 CNY/USD; request ceiling CNY 5" }),
+    "seedance-2-fast": Object.freeze({ maxCostMicros: ceiling(13), inputMicrosPerMillion: 0, outputMicrosPerMillion: perMillion(37), costBasis: "CNY 37/million tokens converted at 7.20 CNY/USD; bounded 10-second request ceiling CNY 13" }),
     "seedance-2": Object.freeze({ maxCostMicros: ceiling(100), inputMicrosPerMillion: 0, outputMicrosPerMillion: perMillion(46), costBasis: "CNY 46/million tokens converted at 7.20 CNY/USD" }),
     "seedream-5-lite": Object.freeze({ maxCostMicros: ceiling(2), inputMicrosPerMillion: 0, outputMicrosPerMillion: perUnit(0.22), costBasis: "CNY 0.22/image converted at 7.20 CNY/USD" }),
     "seedream-5-pro": Object.freeze({ maxCostMicros: ceiling(2), inputMicrosPerMillion: 0, outputMicrosPerMillion: perUnit(0.30), costBasis: "CNY 0.30/image converted at 7.20 CNY/USD" }),

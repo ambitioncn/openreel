@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "capturedAt": "2026-08-17T00:25:00Z",
+  "scope": "Local payment-disconnected B-01 credit-product contract qualification",
+  "sourceEvidence": "docs/b01-libtv-points-store-readonly-20260817.json v2",
+  "implementation": [
+    "src/credit-products.js",
+    "test/credit-products.test.js",
+    "docs/b01-credit-product-contract.md"
+  ],
+  "coveredSemantics": [
+    "general and model-specific point products",
+    "minimum membership tier",
+    "basis-point purchase bonus",
+    "fixed validity period",
+    "weekly or monthly purchase limit",
+    "CNY money metadata"
+  ],
+  "safetyBoundary": {
+    "quoteExecutable": false,
+    "paymentConnected": false,
+    "requiresHumanGate": true,
+    "orderCreated": false,
+    "balanceMutated": false,
+    "providerCalled": false
+  },
+  "verification": {
+    "targetedTests": "3/3 passed",
+    "negativeCoverage": [
+      "membership insufficient",
+      "periodic purchase limit reached",
+      "general product bound to a model",
+      "missing model-specific scope",
+      "currency drift",
+      "negative bonus",
+      "unknown execution-authority field",
+      "accessor-backed input"
+    ]
+  },
+  "remaining": [
+    "Durable point-lot entitlement, expiry consumption and account reconciliation are not implemented by this quote-only increment.",
+    "Order creation, payment collection and balance grants remain behind a separately approved payment-provider staging gate."
+  ]
+}

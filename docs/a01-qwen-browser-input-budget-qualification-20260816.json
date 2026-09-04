@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "milestone": "A-01",
+  "qualifiedAt": "2026-08-16T08:42:19Z",
+  "scope": "local synthetic browser preparation boundary",
+  "result": "pass",
+  "controls": {
+    "promptMaximumUnicodeCodePoints": 1000,
+    "optionalTextMaximumUnicodeCodePoints": 500,
+    "reviewedRequiresExactBooleanWhenPresent": true,
+    "providerCalls": 0,
+    "tailnetRequests": 0
+  },
+  "evidence": [
+    "test/qwen-tts-ui.test.js",
+    "src/qwen-tts-ui.js"
+  ],
+  "verification": [
+    "node --test test/qwen-tts-ui.test.js test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 29/29 pass",
+    "npm test: 256/256 pass",
+    "npm run scan:secrets: 288 files pass",
+    "git diff --check: pass"
+  ],
+  "externalActions": []
+}

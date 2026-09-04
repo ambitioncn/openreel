@@ -1,0 +1,36 @@
+{
+  "schema": "openreel-v4-07-production-revision-readonly-diagnosis/v1",
+  "captured_at": "2026-08-22T02:57:02Z",
+  "target": "https://openreel.duobiai.cn:4173",
+  "scope": "public read-only production revision probe; no login, provider call, deployment, process control or mutation",
+  "observations": {
+    "root_http_status": 200,
+    "server": "nginx/1.28.3 (Ubuntu)",
+    "public_readiness_http_status": 404,
+    "public_readiness_policy": "expected deny boundary retained",
+    "production_index_sha256": "0f58da6f50687ba241d5f12455c51cdbb5b6e99e903c29fc225aa0aeaf1080bf",
+    "workspace_index_sha256": "81af59d2bea6fd0da6e860048a222cb51f4ec471e22cd3f38f6ecdfc293f10bd",
+    "production_app_sha256": "eb2a028b821060ce952455d1e89ff1d30212aecb2dafe89f781a38c703bed2b8",
+    "workspace_app_sha256": "0334735ab9ce2c934f2c28f681c1cc682e3dd135e2399b636c4544c4ad2084bf",
+    "production_app_bytes": 65207,
+    "required_v4_markers_found_in_production_app": []
+  },
+  "required_v4_markers_checked": [
+    "product-understanding",
+    "commercial/jobs",
+    "agent/films",
+    "workbench-commercial",
+    "explicit-reuse"
+  ],
+  "diagnosis": "The reachable production browser bundle is not the reviewed local V4 revision and exposes none of the checked V4 route or binding markers. Running the requested ordinary-account production acceptance now would exercise an older deployment and cannot qualify V4-01 through V4-07.",
+  "next_safe_action": "Build a manifest-scoped release from the reviewed V4 files, verify backup and rollback inputs, then use the standing OpenReel deployment authorization to deploy before any paid ordinary-account acceptance run.",
+  "safety": {
+    "provider_calls": 0,
+    "paid_actions": 0,
+    "logins": 0,
+    "credential_reads_or_changes": 0,
+    "production_mutations": 0,
+    "external_sends": 0,
+    "publications": 0
+  }
+}

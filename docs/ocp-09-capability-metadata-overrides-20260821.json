@@ -1,0 +1,29 @@
+{
+  "schema": "openreel-qualification/v1",
+  "project": "openreel-one-click-publishing",
+  "milestone": "OCP-09",
+  "status": "passed",
+  "scope": "Capability-aware per-platform publishing metadata overrides",
+  "implemented": [
+    "authenticated account view exposes only whitelisted privacy, audience and interaction capabilities",
+    "selected destinations render responsive capability-derived controls without weakening server validation",
+    "per-platform privacy, audience, interaction and feed-sharing choices enter the durable batch destination metadata",
+    "final publication remains disabled pending action-specific owner authorization"
+  ],
+  "verification": [
+    { "command": "node --check src/app.js && node --check server.mjs && node --check scripts/publishing-browser-e2e.mjs", "result": "passed" },
+    { "command": "node --test test/http.test.js test/publishing-orchestration.test.js", "result": "34 passed, 0 failed" },
+    { "command": "npm run smoke:publishing-browser", "result": "desktop 1440x900 and mobile 390x844 passed; override request bodies matched; providerCalls=0; publicationCalls=0" },
+    { "command": "npm test", "result": "418 passed, 0 failed" },
+    { "command": "npm run scan:secrets", "result": "534 files scanned, passed" },
+    { "command": "node scripts/qualify-release-artifacts.mjs", "result": "verified local artifacts; externalCalls=false; deploymentActivated=false" }
+  ],
+  "external_actions": [],
+  "remaining": [
+    "action-specific authorization consumption and live platform acceptance remain owner-gated",
+    "OCP-10 retention/export/delete and publishing observability",
+    "OCP-11 security/regression terminal qualification",
+    "OCP-12 Beijing Aliyun operations and terminal acceptance"
+  ],
+  "project_completion": "in_progress"
+}

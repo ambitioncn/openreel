@@ -1,0 +1,20 @@
+{
+  "schema": "openreel-qualification/v1",
+  "milestone": "OCP-09",
+  "status": "in_progress",
+  "scope": "sanitized account capability view and responsive destination controls",
+  "implemented": [
+    "complete four-platform account status response",
+    "explicit response-field allowlist that excludes injected credentials",
+    "account-aware destination enablement and status copy",
+    "fail-closed default with all destinations unbound"
+  ],
+  "verification": [
+    { "command": "node --check src/app.js", "result": "passed" },
+    { "command": "node --test test/http.test.js test/publishing-orchestration.test.js", "result": "33 passed, 0 failed" },
+    { "command": "npm test", "result": "417 passed, 0 failed" },
+    { "command": "npm run scan:secrets", "result": "529 files scanned, passed" }
+  ],
+  "external_actions": [],
+  "remaining": ["interactive batch/preflight/progress UI", "desktop and mobile browser E2E", "OCP-10 through OCP-12"]
+}

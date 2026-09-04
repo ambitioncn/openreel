@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "date": "2026-08-16",
+  "scope": "credential-free IEEE-float sample-value admission",
+  "implementation": "src/wav.js decodes every supported 32-bit or 64-bit IEEE-float data sample and requires Number.isFinite before admission",
+  "negativeEvidence": [
+    "a canonical one-frame WAV containing NaN was rejected",
+    "a canonical one-frame WAV containing positive infinity was rejected"
+  ],
+  "positiveEvidence": "a canonical one-frame finite IEEE-float WAV remained accepted",
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js",
+    "targetedResult": "15/15 passed",
+    "externalCalls": 0,
+    "retainedExternalMedia": 0
+  },
+  "boundary": "No OTP replay, Tailnet request, real synthesis, Provider call, deployment, service change, credential change or publication occurred."
+}

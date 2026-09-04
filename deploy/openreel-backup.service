@@ -7,6 +7,7 @@ Type=oneshot
 User=openreel
 Group=openreel
 WorkingDirectory=/opt/openreel/current
+EnvironmentFile=-/etc/openreel/openreel.env
 UMask=0077
 ExecStart=/opt/openreel/current/deploy/run-backup
 NoNewPrivileges=true

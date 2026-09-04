@@ -1,0 +1,63 @@
+{
+  "schema": "openreel-m01-vision-authorization/v2",
+  "status": "consumed_success",
+  "authorized": false,
+  "milestone": "M-01",
+  "supersedesForFutureExecution": "m01-vision-two-call-authorization-packet.json (consumed; not replayable)",
+  "purpose": "Validate the corrected official embedding-vision request contract with one bounded image input and, only after image success, one bounded video input.",
+  "authorizationPhrase": "授权 M-01 修正后的 vision 两次私有验证：embedding-vision，image-to-text 1 次、成功后 video-to-text 1 次，零重试，总费用上限 4 元，不部署、不公开发布。",
+  "environment": "Beijing isolated private staging",
+  "provider": "Volcengine Ark",
+  "model": "embedding-vision",
+  "credentialReference": "existing restricted server-side OPENREEL_VOLCENGINE_API_KEY reference; value must not be copied or logged",
+  "requestContract": {
+    "encoding_format": "float",
+    "image_url": { "url": "private bounded fixture URL" },
+    "video_url": { "url": "private bounded fixture URL" },
+    "rejectLegacyStringMediaFieldsBeforeProvider": true
+  },
+  "pricing": {
+    "version": "volcengine-2026-08-06-usd-7.20-markup-1.5",
+    "currency": "USD",
+    "unitScale": 10000,
+    "maximumReservedUnitsPerCall": 2778,
+    "maximumReservedUnitsTotal": 5556,
+    "maximumReservedDisplay": "USD 0.5556",
+    "ownerCeilingCny": 4
+  },
+  "calls": [
+    { "caseId": "m01-vision-corrected-image-1", "mode": "image-to-text", "count": 1 },
+    { "caseId": "m01-vision-corrected-video-1", "mode": "video-to-text", "count": 1, "requiresPriorCaseSuccess": "m01-vision-corrected-image-1" }
+  ],
+  "executionLimits": {
+    "maximumProviderSubmissions": 2,
+    "automaticRetries": 0,
+    "uniqueIdempotencyKeyPerCall": true,
+    "stopAfterFirstFailure": true,
+    "deployOrSwitchTraffic": false,
+    "publish": false
+  },
+  "preflight": [
+    "consume this packet's exact authorization once; the previous packet remains consumed",
+    "verify the configured route, model, endpoint reference, pricing version and credential reference without disclosing values",
+    "verify production paid inference remains disabled and isolated retries are zero",
+    "verify both fixtures are private, non-sensitive, bounded and use the reviewed object-shaped media contract",
+    "abort before submission on any drift or if the aggregate owner ceiling cannot be enforced"
+  ],
+  "notAuthorized": [
+    "any Provider submission before this packet's exact owner gate is consumed",
+    "reuse of the prior consumed authorization",
+    "more than two submissions, any retry, or video submission after image failure",
+    "credential creation, replacement, disclosure or copying",
+    "deployment, traffic switch, production change, payment or subscription change, or publication"
+  ],
+  "negativeEvidence": {
+    "providerCallsUnderThisPacket": 2,
+    "credentialReads": 0,
+    "credentialWrites": 0,
+    "spendUnderThisPacket": 2,
+    "deployments": 0,
+    "publications": 0
+  },
+  "projectCompletion": "in_progress"
+}

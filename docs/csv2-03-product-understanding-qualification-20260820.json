@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "project": "openreel-short-video-commercial-v2",
+  "backlog_item": "CSV2-03",
+  "status": "accepted",
+  "implementation": ["src/product-understanding.js", "server.mjs", "test/product-understanding.test.js", "test/http.test.js"],
+  "route": "POST /api/v1/product-url/understand",
+  "contract": {
+    "grounded": "Product name, description and feature facts carry evidence IDs bound to the fetched final URL, content SHA-256 and fetch time.",
+    "partial": "Sparse fetched evidence is returned as partial and requiresReview=true rather than filled with guesses.",
+    "fallback": "Expected fetch failures degrade only when explicit user fallback is present; confidence=0, requiresReview=true and every item is labeled user_input.",
+    "unsupported": ["audience", "price", "availability", "comparativeClaims"],
+    "claim_policy": "Creative generation may use only facts linked to evidence IDs; unsupported claims must not be invented."
+  },
+  "verification": [
+    {"command": "node --test test/product-understanding.test.js test/product-url.test.js test/http.test.js", "result": "36 passed, 0 failed"},
+    {"command": "npm test", "result": "347 passed, 0 failed"}
+  ],
+  "negative_coverage": ["invalid source digest", "sparse evidence", "fetch failure with explicit fallback", "fetch failure without meaningful fallback", "unsupported audience and price claims"],
+  "provider_calls": 0,
+  "blockers": [],
+  "residual_risks": ["This deterministic evidence layer does not call a model; real cloud model orchestration begins in CSV2-04.", "User fallback remains unverified until reviewed and must not be promoted to fetched evidence."]
+}

@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T17:16:06Z",
+  "scope": "local-only staged platform snapshot validation",
+  "result": "passed",
+  "claims": [
+    "Backup creation validates the staged platform.json copy rather than relying on a pre-copy source check.",
+    "Malformed or non-object staged platform state is rejected before manifest creation and atomic promotion.",
+    "A failed staged platform validation leaves no visible backup destination or staging residue."
+  ],
+  "verification": {
+    "opsTest": {
+      "command": "node --test test/ops.test.js",
+      "passed": 18,
+      "failed": 0
+    },
+    "fullTest": {
+      "command": "npm test",
+      "passed": 186,
+      "failed": 0
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "vulnerabilities": 0
+    },
+    "secretScan": {
+      "command": "npm run scan:secrets",
+      "status": "passed",
+      "files": 163
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  },
+  "externalActions": [],
+  "notClaimed": [
+    "staging or production backup/restore",
+    "external backup copy or off-host retention",
+    "signing or activation",
+    "independent review",
+    "provider calls or credential access"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "qualificationId": "A-01-qwen-riff-fourcc-qualification-20260816",
+  "backlogId": "A-01",
+  "capturedAt": "2026-08-16",
+  "sourceClass": "OpenReel-local",
+  "claim": "Qwen WAV admission rejects RIFF chunks whose four-byte identifier contains non-printable binary or control bytes.",
+  "implementation": [
+    "src/wav.js validates every chunk identifier as printable ASCII before interpreting or skipping the chunk.",
+    "test/qwen-tts.test.js injects a structurally bounded unknown chunk containing a NUL identifier byte and requires QWEN_TTS_RESULT_INVALID."
+  ],
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js",
+    "npm test",
+    "npm run scan:secrets",
+    "git diff --check"
+  ],
+  "externalActions": [],
+  "limitations": [
+    "This is synthetic local qualification and does not prove the real Qwen service encoding or media quality.",
+    "Real synthesis and retained-media graphical-browser E2E remain separately human-gated."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp58-deployment-payment-gate/v1",
+  "capturedAt": "2026-08-25T16:46:00Z",
+  "authorization": "consumed_cp57_attestation_and_openreel_standing_authorization",
+  "deployment": {
+    "release": "/opt/openreel/releases/20260825T164300Z-cdqi2-cp58-retained-asset-compat",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T162200Z-cdqi2-cp56-redo-version-binding",
+    "backup": "/var/backups/openreel/2026-08-25T164300Z-cdqi2-cp58",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T164300Z-cdqi2-cp58-isolated-restore",
+    "restoredDatabase": "ok",
+    "restoredAssets": 164,
+    "restoredPublishing": "ok",
+    "localAndProductionHashesMatch": true,
+    "focusedTests": "30 passed, 0 failed",
+    "productionSuite": "56 passed, 0 failed",
+    "live": "ok",
+    "ready": "database and assets ok",
+    "service": "active/running; NRestarts=0",
+    "stateMetadata": "openreel:openreel 0640"
+  },
+  "redo": {
+    "firstPreJobAttempt": "failed closed in the private runner because its assertion used a non-canonical historical qualificationStatus field",
+    "secondPreJobAttempt": "production rejected redo job creation with 402 PAYMENT_REQUIRED",
+    "quotePartition": "2 failed shots selected and 1 byte-backed successful shot preserved",
+    "redoJobsCreated": 0,
+    "executeCalls": 0,
+    "providerCalls": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "publications": 0,
+    "authorizationConsumed": false,
+    "stopReason": "zero-blind-retry policy requires a fresh billing-state preflight before any later attempt"
+  },
+  "sessionSafety": {
+    "runnerUsesFinallyRevocation": true,
+    "temporarySessionsRevoked": 2,
+    "recentUnrevokedAcceptanceSessions": 0
+  },
+  "status": "compatibility_deployed_redo_payment_gated",
+  "projectCompletion": "in_progress"
+}

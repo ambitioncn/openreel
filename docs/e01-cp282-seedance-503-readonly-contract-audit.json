@@ -1,0 +1,71 @@
+{
+  "schema": "openreel-e01-seedance-readonly-contract-audit/v1",
+  "status": "complete_local_and_public_contract_branch_closed",
+  "capturedAt": "2026-08-17T06:30:00.000Z",
+  "scope": "credential-free public documentation and static implementation comparison after cp281",
+  "externalActions": { "providerCalls": 0, "paidRequests": 0, "credentialReads": 0, "configurationChanges": 0, "serviceChanges": 0 },
+  "officialEvidence": [
+    {
+      "url": "https://www.volcengine.com/docs/82379/2291680",
+      "retrievedAt": "2026-08-17",
+      "observed": [
+        "CreateContentGenerationTask uses a direct model ID and a text content item",
+        "ratio, duration, generate_audio and watermark are top-level task parameters",
+        "the documented Seedance 2.0 example uses the doubao-seedance-2-0-260128 model family"
+      ]
+    },
+    {
+      "url": "https://docs.volcengine.com/docs/82379/1521309",
+      "retrievedAt": "2026-08-17",
+      "observed": [
+        "video generation task status is queried through the dedicated task endpoint",
+        "the API surface documents create, query, list and cancel/delete operations"
+      ]
+    },
+    {
+      "url": "https://www.volcengine.com/docs/6492/2165104?lang=zh",
+      "retrievedAt": "2026-08-17",
+      "observed": [
+        "480p and 16:9 are documented values",
+        "integer duration is documented for video task creation",
+        "generate_audio=false represents silent output where the model supports the field"
+      ]
+    }
+  ],
+  "openReelEvidence": {
+    "implementation": "src/ark.js",
+    "implementationSha256": "5ec9de11ac038e52bb5024cf3f0f4fcfa6cbec3545f91ced50624e4b26adae00",
+    "pricing": "src/volcengine-pricing.js",
+    "pricingSha256": "7fcee580068d53e3d2adea0aa519252c0a3eab2f34bdc2ee103b52df1bd56c4c",
+    "verifiedContract": [
+      "POST /api/v3/contents/generations/tasks",
+      "GET /api/v3/contents/generations/tasks/{taskId}",
+      "direct model ID plus [{type:text,text:prompt}] content",
+      "top-level resolution, ratio, duration, generate_audio and watermark",
+      "safe async result normalization and bounded provider diagnostics"
+    ],
+    "beijingNonSecretShape": {
+      "officialApiV3Base": true,
+      "directFastModelMatchesOfficialFamilyShape": true,
+      "directFastModelLength": 31,
+      "secretOrModelValueRetained": false
+    },
+    "verification": "node --test test/ark.test.js: 30/30 passed"
+  },
+  "finding": {
+    "requestContractMismatchSupportedByEvidence": false,
+    "localTransportOrPersistenceDefectSupportedByEvidence": false,
+    "providerSideStateStillPlausible": [
+      "model activation or account entitlement",
+      "quota or regional availability",
+      "provider service health or capacity"
+    ],
+    "classificationLimit": "The retained cp281 evidence contains only sanitized HTTP 503 and no provider console event, safe provider code or request-id correlation artifact, so these provider-side causes cannot be distinguished locally."
+  },
+  "decision": {
+    "repeatSameRequest": "not_recommended",
+    "nextEvidence": "Read-only provider console/API usage or activation evidence correlated to cp281, without changing activation, quota, credentials or payment; otherwise choose a different already-configured real-video route under a new exact gate.",
+    "newProviderCallAuthorized": false,
+    "projectCompletion": "in_progress"
+  }
+}

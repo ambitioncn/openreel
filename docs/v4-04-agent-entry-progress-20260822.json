@@ -1,0 +1,24 @@
+{
+  "schema": "openreel-v4-progress/v1",
+  "milestone": "V4-04",
+  "status": "in_progress",
+  "implemented": [
+    "One authenticated project Agent-film endpoint accepts prepare and execute actions",
+    "Prepare uses the configured real text model and binds the resulting story and storyboard revisions before quoting",
+    "Execute reuses the browser commercial quote confirmation, CNY 100 ceiling, durable lifecycle, revision checks and provider idempotency key",
+    "Same-process prepare replay returns the original revision-bound quote without another planning call",
+    "Preparation records persist atomically and replay across server restart without another planning call",
+    "Authenticated GET status lookup is scoped by owner, project and idempotency key and fails closed with 404",
+    "Dedicated GET /api/v1/projects/:projectId/agent-films/:preparationKey/progress aggregates preparation with the linked durable commercial execution status, stage and stage detail",
+    "Execution-to-preparation linking rejects missing, omitted or quote-mismatched preparation records before a provider call"
+  ],
+  "verification": {
+    "focused": "V4-04/V4-06 combined regression 56/56 passed at cp55",
+    "full": "487/487 passed at cp55"
+  },
+  "remaining": [
+    "Production authenticated ordinary-account evidence"
+  ],
+  "externalActions": false,
+  "paidProviderCalls": false
+}

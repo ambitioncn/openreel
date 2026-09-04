@@ -1,0 +1,54 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp85-object-only-first-terminal/v1",
+  "capturedAt": "2026-08-28T00:47:00Z",
+  "backlogItem": "CDQI2-11",
+  "preservedEvidence": {
+    "reservationAudit": "cp84 five historical reservations audited and reconciled without canceling in-flight work",
+    "reservationBaseline": { "openCount": 0, "reservedUnits": 0 },
+    "lostScarfSettlementCny": 5.50656,
+    "lostScarfShot0Sha256": "a5ed7b303c295db95e3f27d372479dfc26e28cec4f73674f2c1cbb5e305cf701"
+  },
+  "strategy": {
+    "sourceTerminal": "cp84 shot 1 provider HTTP 400 privacy-sensitive-content",
+    "requestFingerprint": "d8158e92fbbb62e353c3932d1d48c19157b6d8ba2842ba1ffdc45d121e4aa4c6",
+    "materialChange": "removed performer, face, body, hands, portrait and identity likeness; used a new abstract scarf-and-hook reference and object-only stop-motion prompts",
+    "replayOfCp84": false
+  },
+  "preflight": {
+    "policyAccepted": true,
+    "performerProfile": "object_only",
+    "referenceSha256": "b677614ec801b8b795a2eec42ee8fb9ce1a2277e487fd9c699d12481fce055c6",
+    "directorReady": true,
+    "lineage": { "mode": "fresh", "sourceJobId": null, "inheritedShotIds": [], "inheritedAssetIds": [] },
+    "quoteCny": 46.4,
+    "limitCny": 100,
+    "openReservations": 0
+  },
+  "deployment": {
+    "authorization": "standing_authorization_openreel_2026-08-19",
+    "release": "/opt/openreel/releases/20260828T0035Z-cdqi2-cp85-object-policy",
+    "rollbackAnchor": "/opt/openreel/releases/20260827T163258Z-cdqi2-cp83-ark-diagnostic",
+    "backup": "/var/backups/openreel/20260828T0035Z-cp85-object-policy",
+    "service": "active_ready",
+    "nRestarts": 0
+  },
+  "execution": {
+    "projectId": "88c3ce0a-2cab-43b0-a0d0-c39e4bfffb25",
+    "jobId": "f80e979e-5aac-4482-a187-0ad4431be445",
+    "jobs": 1,
+    "executeCalls": 1,
+    "attempts": 1,
+    "terminal": { "status": "failed", "stage": "videos", "shotIndex": 2, "upstreamStatus": 403, "providerCode": "AccountOverdueError" },
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0
+  },
+  "retainedMedia": [
+    { "shotIndex": 0, "byteLength": 1204950, "sha256": "ddc190af87832c924b596849c587302ce43cce5d4eedec9778b22d18c90d6004", "codec": "h264", "width": 720, "height": 1280, "fps": 24, "durationSeconds": 4.041667, "fullDecode": "passed" },
+    { "shotIndex": 1, "byteLength": 2188524, "sha256": "57fd12b5f296ea781f8e1ad01ee9365ef5e62084749129e2aa5cc6aa45d2be3c", "codec": "h264", "width": 720, "height": 1280, "fps": 24, "durationSeconds": 5.041667, "fullDecode": "passed" }
+  ],
+  "settlement": { "spentUnits": 16502, "spentCnyAt7_2": 11.88144, "reservedUnits": 0, "reconciliationConsistent": true },
+  "quality": { "status": "unqualified_incomplete_fail_closed", "releaseEligible": false, "reason": "shot 2 and complete render/final perceptual evaluation do not exist" },
+  "status": "immutable_release_ineligible",
+  "projectCompletion": "in_progress"
+}

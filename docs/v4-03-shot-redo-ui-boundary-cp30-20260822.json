@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "milestone": "V4-03",
+  "checkpoint": "cp30",
+  "implemented": {
+    "browser_quote": "A failed job with failed-shot evidence exposes a separate redo quote action.",
+    "browser_confirmation": "The quote displays failed and preserved shot counts and cost, then requires a fresh checkbox confirmation.",
+    "durable_boundary": "Confirmation creates the already-tested owner-scoped, idempotent, current-revision-bound queued redo job.",
+    "paid_action": false
+  },
+  "execution_boundary": {
+    "status": "fail_closed",
+    "reason": "The generic orchestrator can generate the selected redo shots, but composition does not yet merge them with the source job's preserved current-revision assets.",
+    "required_before_enable": [
+      "Revalidate project, story and storyboard versions immediately before provider execution and composition.",
+      "Generate only the redo job shotIds with provider idempotency retained across bounded retries.",
+      "Load preservedAssetIds only from the owner-scoped source job and reject missing, stale or unrelated assets.",
+      "Build a complete storyboard-ordered composition manifest that replaces only failed shot outputs.",
+      "Retain a new render and timeline bound to the same current versions; never mutate the source render.",
+      "Prove locally that unchanged shot asset digests remain identical and no provider call occurs before explicit execution approval."
+    ]
+  },
+  "dispatcher_diagnosis": "The superseded development dispatch failed because the remote model stream disconnected and the local fallback connection failed; later checkpoints cp4-cp29 demonstrate successful development using a new dispatch round.",
+  "gates_preserved": [
+    "No provider call",
+    "No deployment or restart",
+    "No production browser or remote administration",
+    "No external send, publish, destructive action or credential change"
+  ]
+}

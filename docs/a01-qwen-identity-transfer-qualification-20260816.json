@@ -1,0 +1,17 @@
+{
+  "schema": "openreel-a01-qwen-identity-transfer-qualification/v1",
+  "capturedAt": "2026-08-16T07:38:00.000Z",
+  "scope": "credential-free local Qwen HTTP transfer admission",
+  "result": "pass",
+  "controls": {
+    "requestAcceptEncoding": "identity",
+    "acceptedResponseEncoding": "identity",
+    "encodedResponseRead": false,
+    "externalProviderCall": false
+  },
+  "verification": [
+    "The reviewed request mapping asserts Accept-Encoding: identity.",
+    "Synthetic gzip and br responses fail before their body reader is acquired.",
+    "No Tailnet request, Provider call, retained media or external write occurred."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-production-t11/v1",
+  "capturedAt": "2026-08-25T08:47:00Z",
+  "candidate": {
+    "fingerprint": "a4bf504d8b97226bee5e5bce47945a0646d401877620959deec3ecf88c444f53",
+    "artifacts": 106,
+    "localQualification": "passed",
+    "fullRegression": "559/559 passed",
+    "remoteManifestVerification": "passed"
+  },
+  "deployment": {
+    "target": "Beijing Aliyun production",
+    "backup": "/var/backups/openreel/2026-08-25T084021Z",
+    "activeRelease": "/opt/openreel/releases/20260825T164100Z-cdqi2-a4bf504d",
+    "readiness": {"database":"ok","assets":"ok"},
+    "service": {"activeState":"active","subState":"running","nRestarts":0},
+    "rollbackAnchorRetained": true
+  },
+  "paidAcceptance": {
+    "jobId": "cdcf1010-eea0-4a91-989a-ce6025d01196",
+    "attempts": 1,
+    "retryable": false,
+    "quotedCny": 16.2,
+    "status": "failed",
+    "errorCode": "COMMERCIAL_QUALITY_REJECTED",
+    "releaseEligible": false,
+    "shotScores": {"intent":0.75,"beat":0.7,"composition":0.85,"visual_identity_consistency":0.9,"performance_naturalness":0.85},
+    "finalScores": {"story":0.7,"pacing":0.6,"continuity":0.9},
+    "threshold": 0.8,
+    "videoEvidence": {"byteLength":2087750,"sha256":"a9e01da4b7c94db6e4835f3dcde11e2fe969fabd2f87da7b1b06c4f12612b666"},
+    "renderEvidence": {"byteLength":104279,"sha256":"20ba247861cf966cbc63b023ea7ef1a4ee24eeec5a5307f389e1aa3ad1356bae"},
+    "cost": {"currency":"CNY","status":"unsettled","settledCny":null,"generationSettledCny":6.37488,"evaluationSettledCny":0.04968},
+    "settlementProjectionFixVerified": true
+  },
+  "safety": {"secondJobCreated":false,"executeReplayed":false,"fallbackUsed":false,"publicationAttempted":false,"credentialChanged":false},
+  "status": "project_in_progress",
+  "unmet": [
+    "T11 still lacks an ordinary-account qualified pass because intent, beat, story and pacing failed the all-required threshold.",
+    "The consumed authorization permits no second job or replay; further paid execution requires a new independent action authorization.",
+    "T12 terminal audit remains pending until T11 is accepted."
+  ]
+}

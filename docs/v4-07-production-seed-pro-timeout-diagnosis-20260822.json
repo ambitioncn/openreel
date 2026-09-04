@@ -1,0 +1,43 @@
+{
+  "schema": "openreel-v4-07-production-seed-pro-timeout-diagnosis/v1",
+  "authorization": "consumed cp22 approval",
+  "deployment": {
+    "release": "/opt/openreel/releases/20260822T1225Z-v4-planning-seed-pro",
+    "planningModel": "seed-2.1-pro",
+    "manifestArtifacts": 84,
+    "readiness": "ready",
+    "restartCount": 0,
+    "browserAppMatchesWorkspace": true
+  },
+  "activationRecovery": {
+    "firstAttempt": "automatic rollback after service user could not traverse a tar-preserved 0700 release directory",
+    "diagnosis": "CHDIR permission denied before application start",
+    "correction": "normalize release ownership to root:root and directories to 0755 before manifest re-verification and activation",
+    "oldReleaseRestoredHealthyBeforeRetry": true
+  },
+  "realModelAttempt": {
+    "freshOrdinaryAccount": true,
+    "subscriptionHardLimit": {
+      "currency": "USD",
+      "amount": 10,
+      "maximumCnyAtReviewedRate": 72
+    },
+    "distinctProject": true,
+    "model": "seed-2.1-pro",
+    "providerJobId": "ef5996a5-a1f5-4427-9aef-a736a0b4fed8",
+    "status": "failed",
+    "errorCode": "ARK_PROVIDER_ERROR",
+    "durationSecondsApprox": 30,
+    "settledCost": {
+      "currency": "USD",
+      "unitScale": 10000,
+      "costUnits": 0
+    },
+    "seedreamCalls": 0,
+    "seedanceCalls": 0,
+    "ttsCalls": 0
+  },
+  "diagnosis": "Both reviewed text routes fail at the same approximately 30-second boundary. The Ark submit path hard-codes a 30000 ms timeout for every non-image capability, so switching catalog model alone cannot distinguish provider latency from route failure.",
+  "nextSafeStep": "Implement a bounded configurable text-submit timeout with focused and full regression tests before requesting any further production restart or paid replay.",
+  "projectCompletion": "in_progress"
+}

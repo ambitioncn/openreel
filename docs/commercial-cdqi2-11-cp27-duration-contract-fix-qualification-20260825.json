@@ -1,0 +1,38 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-duration-contract-fix-qualification/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "qualified_not_deployed",
+  "change": {
+    "model": "seedance-2-fast",
+    "supportedShotDurationsSeconds": [4, 5],
+    "unsupportedDurationsRejectedSynchronously": [1, 3, 6, 10],
+    "forcedDurationVariationRemoved": true,
+    "legalThreeShotRegressions": [[4, 5, 4], [4, 4, 4]]
+  },
+  "verification": {
+    "targeted": { "command": "node --test test/commercial-storyboard-preflight.test.js", "tests": 5, "passed": 5, "failed": 0 },
+    "full": { "command": "npm test", "tests": 564, "passed": 564, "failed": 0 },
+    "candidateQualification": { "command": "npm run qualify:director-candidate", "status": "qualified", "checks": 6 }
+  },
+  "candidate": {
+    "manifestEvidence": "docs/evidence/cdqs-14-production-candidate.json",
+    "manifestAlgorithm": "sha256",
+    "manifestFingerprint": "e43d20e1269adf82e819acd07a7457b7a8de404afc632907e606778ffe45fb85",
+    "manifestFileSha256": "2bef02bb973289607ced65837575b38662053620ebad3cb9f1595cdf2932f15c",
+    "artifactCount": 107,
+    "frozen": true
+  },
+  "boundaries": {
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "newCommercialJobs": 0,
+    "deploymentActivated": false,
+    "productionMutated": false,
+    "publicationAttempted": false,
+    "credentialChanges": 0,
+    "blindRetries": 0,
+    "projectCompletionClaimed": false
+  },
+  "nextAction": "Acceptance review of this zero-paid fix; production deployment and any later paid ordinary-account acceptance remain separate gates."
+}

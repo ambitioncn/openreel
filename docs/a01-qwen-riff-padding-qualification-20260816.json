@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-16T06:44:58.596Z",
+  "backlogId": "A-01",
+  "scope": "local synthetic RIFF padding qualification",
+  "claim": "Odd-sized RIFF chunks are admitted only when the required alignment byte is present and zero-valued.",
+  "positiveCase": "An odd-sized JUNK chunk followed by a zero padding byte remains accepted.",
+  "negativeCase": "The same chunk with nonzero padding is rejected as QWEN_TTS_RESULT_INVALID.",
+  "externalActions": [],
+  "providerCalls": 0,
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 12/12 passed",
+    "npm test: 241/241 passed",
+    "npm run scan:secrets: passed across 268 files",
+    "git diff --check and JSON parsing: passed"
+  ]
+}

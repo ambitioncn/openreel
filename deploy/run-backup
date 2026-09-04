@@ -2,6 +2,14 @@
 set -eu
 
 stamp=$(date -u +%Y-%m-%dT%H%M%SZ)
+if [ -n "${OPENREEL_PUBLISHING_STATE:-}" ]; then
+  exec /usr/bin/node scripts/backup.mjs create \
+    /var/lib/openreel/openreel.sqlite \
+    /var/lib/openreel/assets \
+    /var/lib/openreel/platform.json \
+    "/var/backups/openreel/$stamp" \
+    "$OPENREEL_PUBLISHING_STATE"
+fi
 exec /usr/bin/node scripts/backup.mjs create \
   /var/lib/openreel/openreel.sqlite \
   /var/lib/openreel/assets \

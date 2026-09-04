@@ -1,0 +1,35 @@
+{
+  "schema": "openreel-commercial-cdqi2-10-acceptance/v1",
+  "backlogItem": "CDQI2-10",
+  "terminalCriterion": "T10",
+  "status": "accepted",
+  "candidate": {
+    "manifestEvidence": "docs/evidence/cdqs-14-production-candidate.json",
+    "manifestAlgorithm": "sha256",
+    "manifestFingerprint": "4ce7e3b5218a7fd816812d6d49174d58b7a73217681a202fb37dfd185295f068",
+    "artifactCount": 106,
+    "frozen": true
+  },
+  "qualification": {
+    "fixedSet": "qualified",
+    "reliability": "passed",
+    "backupRestoreSecurityTenant": "passed",
+    "rollbackRehearsal": "passed",
+    "browserWorkflow": "passed",
+    "securityTenantBillingRegression": "passed",
+    "fullRegression": {
+      "command": "npm test",
+      "tests": 556,
+      "passed": 556,
+      "failed": 0
+    }
+  },
+  "boundaries": {
+    "externalCalls": false,
+    "paidCalls": false,
+    "deploymentActivated": false,
+    "publicationAttempted": false,
+    "projectCompletionClaimed": false
+  },
+  "nextGate": "CDQI2-11 must deploy and accept this exact manifest fingerprint on Beijing Aliyun under the standing OpenReel production authorization."
+}

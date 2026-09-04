@@ -1,0 +1,32 @@
+{
+  "schema": "openreel-csv2-qualification/v1",
+  "project": "openreel-short-video-commercial-v2",
+  "backlog_item": "CSV2-05",
+  "status": "accepted",
+  "scope": "Durable commercial job lifecycle around the accepted CSV2-04 provider orchestrator",
+  "evidence": {
+    "implementation": [
+      "src/commercial-job-lifecycle.js",
+      "test/commercial-job-lifecycle.test.js"
+    ],
+    "behaviors": [
+      "owner-scoped idempotent creation",
+      "atomic fsync-backed file persistence and restart reconstruction",
+      "bounded retry with stable provider-stage idempotency keys",
+      "queued and cooperative running cancellation",
+      "recovery of interrupted queued/running jobs",
+      "sanitized failure persistence",
+      "allowance reservation and settlement remain delegated to the accepted Ark provider boundary"
+    ],
+    "verification": {
+      "command": "npm test",
+      "passed": 357,
+      "failed": 0
+    }
+  },
+  "boundaries": [
+    "No provider call or paid action was made for this qualification.",
+    "CSV2-06 through CSV2-10 remain required; this milestone is not project completion.",
+    "Running cancellation is cooperative: an in-flight provider request completes at its transport boundary, while the local result is discarded after cancellation is observed."
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "openreel-v4-final-acceptance-budget-reservation-stop/v1",
+  "checkpoint": "cp49",
+  "authorization": {
+    "sourceGate": "cp48",
+    "ordinaryAccountRunsAuthorized": 1,
+    "ordinaryAccountRunsConsumed": 1,
+    "totalMaximumCny": 30,
+    "modelRetries": 0,
+    "deploymentAuthorizedByGate": false,
+    "publicationAuthorized": false,
+    "externalSendAuthorized": false
+  },
+  "attempt": {
+    "result": "stopped_before_provider_call",
+    "freshAccountRegistered": true,
+    "bootstrapProjectSettled": true,
+    "distinctPromptProjectCreated": true,
+    "subscriptionApplicationApproved": true,
+    "subscriptionHardLimit": {
+      "amount": 4,
+      "currency": "USD",
+      "maximumCnyAtReviewedRate": 28.8
+    },
+    "failure": "workbench-plan returned HTTP 402 BUDGET_EXHAUSTED: request would exceed subscription hard limit",
+    "providerCalls": 0,
+    "commercialJobs": 0,
+    "modelRetries": 0,
+    "costCny": 0,
+    "publications": 0,
+    "externalSends": 0
+  },
+  "diagnosis": {
+    "newEvidence": "Production request order reached the corrected two-project boundary, then POST /workbench-plan returned 402 before Ark submission.",
+    "rootCause": "The deployed seed-2.1-pro billing reservation ceiling is USD 50, while the cp48 account hard ceiling is USD 4 / CNY 28.8. Reservation admission therefore rejects the request even though expected settled token cost is much lower.",
+    "strategyChange": "Do not retry or raise the account limit beyond the authorized CNY 30. Separate the reservation-ceiling correction/deployment from a future explicitly authorized final run.",
+    "sameFailedApproachRepeated": false
+  },
+  "verification": {
+    "runnerSyntax": "passed",
+    "productionRoot": "HTTP 200",
+    "approvedMusicSha256": "73c1cc30bf06796607a8792ae34fede312b488d9dfb2b457368d41a12705f66f",
+    "productionRequestEvidence": [
+      "POST /api/v1/auth/register 201",
+      "POST /api/v1/key-applications 201",
+      "POST /api/v1/admin/key-applications/<redacted>/approve 201",
+      "POST /api/v1/projects 201 for the distinct prompt project",
+      "POST /api/v1/projects/<redacted>/workbench-plan 402 BUDGET_EXHAUSTED"
+    ],
+    "finalEvidenceFileCreated": false,
+    "finalMp4Created": false
+  },
+  "nextGate": "Authorize a bounded reservation-ceiling correction and production deployment, then separately authorize exactly one new final ordinary-account run under a total CNY 30 ceiling and zero retries."
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "openreel-local-qualification/v1",
+  "createdAt": "2026-08-15T22:44:52.000Z",
+  "backlogItem": "S-01",
+  "scope": "Tenant-scoped local object storage backup admission",
+  "result": "passed",
+  "controls": [
+    "persisted objects use their actual tenantId/key/value schema instead of a nonexistent generic id",
+    "object keys are non-empty and unique within each tenant",
+    "the same key may be isolated across distinct valid tenants",
+    "each object retains a defined value and references an existing tenant",
+    "invalid object state fails before atomic backup promotion and leaves no visible or staging residue"
+  ],
+  "verification": [
+    "node --test test/ops.test.js: 41 passed, 0 failed",
+    "npm test: 209 passed, 0 failed",
+    "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "npm run scan:secrets: passed across 214 files"
+  ],
+  "boundaries": {
+    "fixtures": "local synthetic data only",
+    "providerCalls": 0,
+    "externalWrites": 0,
+    "credentialsRead": false,
+    "deployment": false
+  }
+}

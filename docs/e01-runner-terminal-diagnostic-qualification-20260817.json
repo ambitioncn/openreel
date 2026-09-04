@@ -1,0 +1,23 @@
+{
+  "schema": "openreel-e01-runner-terminal-diagnostic-qualification/v1",
+  "capturedAt": "2026-08-17T11:31:00.000Z",
+  "scope": "local-only future-run diagnostic hardening",
+  "externalProviderCalls": 0,
+  "productionChanges": 0,
+  "qualified": {
+    "terminalStates": ["failed", "canceled"],
+    "safeErrorCodePattern": "^[A-Z][A-Z0-9_]{0,63}$",
+    "fallbackErrorCode": "ARK_TASK_FAILED",
+    "localBillingFacts": ["spentUnits", "reservedUnits", "reconciliation"],
+    "postSuccessAcceptanceStages": ["project_snapshot", "asset_metadata", "asset_download", "billing", "timeline"],
+    "providerPrivateMessagesRetained": false,
+    "providerTaskIdentifiersRetained": false
+  },
+  "verification": {
+    "focusedTests": "40/40 passed",
+    "secretScan": "370 files passed",
+    "diffCheck": "passed"
+  },
+  "limitation": "This hardening is prospective and cannot recover the provider-private diagnosis or isolated billing ledger removed after cp288 cleanup.",
+  "projectCompletion": "in_progress"
+}

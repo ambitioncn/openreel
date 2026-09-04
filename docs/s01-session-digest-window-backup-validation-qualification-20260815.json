@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "S-01",
+  "capturedAt": "2026-08-15T18:21:50.000Z",
+  "scope": "credential-free local backup and isolated-restore validation",
+  "claim": "Platform snapshots fail closed before atomic promotion unless every session tokenHash is a lowercase 64-character SHA-256 digest and any revocation occurs within the session creation-to-expiry window.",
+  "evidence": [
+    "scripts/backup.mjs",
+    "test/ops.test.js"
+  ],
+  "verification": {
+    "focused": "node --test test/ops.test.js: 21 passed, 0 failed",
+    "fullSuite": "npm test: 189 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "npm run scan:secrets: passed across 175 files"
+  },
+  "externalActions": [],
+  "limitations": [
+    "No live session token or credential was read, generated or changed.",
+    "No external backup, off-host retention, staging mutation, restore activation or production rollback occurred."
+  ]
+}

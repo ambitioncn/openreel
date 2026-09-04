@@ -2,7 +2,9 @@
 
 Status: prepared, not authorized. This plan does not grant permission to deploy, use credentials, subscribe, or make paid calls.
 
-The concrete phase-one request is `e01-authorization-packet.json` with its human-readable companion `e01-authorization-packet.md`. It is intentionally `authorized: false`, caps eight vision/image/video submissions at USD 3.0558, and excludes audio until a reviewed endpoint and immutable positive price exist.
+The historical phase-one request is `e01-authorization-packet.json`. Its authority is consumed and must not be replayed. Previously accepted image, video and audio results are reconciled in `m01-existing-real-provider-evidence-reconciliation-20260818.json`.
+
+The current narrow request is `m01-vision-two-call-authorization-packet.json` with its human-readable companion. It is intentionally `authorized: false` and permits no execution until the exact owner gate is consumed. It covers only one image-to-text and one video-to-text call through `embedding-vision`, zero retries, USD 0.5556 maximum reservation and a CNY 4 owner ceiling.
 
 ## Human gate
 

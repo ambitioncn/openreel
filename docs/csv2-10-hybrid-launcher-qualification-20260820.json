@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "project": "openreel-short-video-commercial-v2",
+  "backlog_item": "CSV2-10",
+  "status": "qualified_not_executed",
+  "strategy_change": "Correct the acceptance launcher to select the historically verified standard Seedream credential/model mapping and the historically verified direct Seedance credential/model mapping through the explicit hybrid route. This replaces the prior attempt's direct-image assumption without changing credentials.",
+  "launcher": {
+    "path": "scripts/csv2-commercial-full-film-launcher.cjs",
+    "sha256": "b1ec1dd472a05ef50f7230cc8d3a6e0354b76f56d7590fc74aa244f09c2925e0",
+    "route_preference": "hybrid",
+    "image_mapping": "standard",
+    "image_endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
+    "video_mapping": "direct",
+    "video_endpoint": "https://ark.cn-beijing.volces.com/api/plan/v3/contents/generations/tasks",
+    "automatic_retries": 0,
+    "maximum_submissions": 2,
+    "maximum_ledger_units": 9723
+  },
+  "verification": {
+    "ark_tests": "36 passed, 0 failed",
+    "full_regression": "370 passed, 0 failed",
+    "hybrid_config_preflight": "passed; standard image and direct video mappings selected",
+    "launcher_syntax": "passed",
+    "runner_syntax": "passed",
+    "provider_calls": 0
+  },
+  "constraints": {
+    "credentials_changed": false,
+    "production_changed": false,
+    "paid_action_performed": false,
+    "reason_not_executed": "The current L3 task contract explicitly gates production configuration changes. The local execution host also has no readable Beijing production release or environment connection, so production state could not be independently reverified from this tick."
+  },
+  "project_completion": "in_progress",
+  "next_action": "After an explicit production-action gate and production access are available, deploy the qualified launcher/release and run at most one zero-retry full-film acceptance attempt under the standing CNY 100 per-independent-action ceiling."
+}

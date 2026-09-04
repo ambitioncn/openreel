@@ -1,0 +1,10 @@
+{
+  "schema": "openreel-acceptance-evidence-index/v1",
+  "entries": [],
+  "policy": {
+    "rawOutputRoots": [".artifacts", "artifacts", "runtime"],
+    "requiredFields": ["releaseId", "path", "sha256", "check", "result", "observedAt"],
+    "forbidSecrets": true,
+    "forbidExpiringProviderUrls": true
+  }
+}

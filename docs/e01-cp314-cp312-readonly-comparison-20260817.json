@@ -1,0 +1,68 @@
+{
+  "schema": "openreel-e01-cp314-cp312-readonly-comparison/v1",
+  "status": "diagnosis_complete_no_external_generation",
+  "scope": {
+    "failedRun": "cp312",
+    "successfulComparator": "cp290",
+    "providerSubmissions": 0,
+    "configurationChanges": 0,
+    "serviceChanges": 0
+  },
+  "comparison": {
+    "sameExecutionHost": "root@123.57.67.213",
+    "sameEnvironmentClass": "beijing_isolated_private_staging",
+    "sameRoute": "direct_plan_v3",
+    "sameEndpoint": "https://ark.cn-beijing.volces.com/api/plan/v3/contents/generations/tasks",
+    "sameLogicalModel": "seedance-2-fast",
+    "sameRequestShape": {
+      "durationSeconds": 5,
+      "resolution": "480p",
+      "aspectRatio": "16:9",
+      "audio": false
+    },
+    "sameLimits": {
+      "maximumSubmissions": 1,
+      "automaticRetries": 0,
+      "maximumUnits": 6945
+    },
+    "cp290TerminalBranch": "succeeded",
+    "cp312TerminalBranch": "failed",
+    "cp312SanitizedErrorCode": "ARK_TASK_FAILED"
+  },
+  "currentReadOnlyHostAudit": {
+    "productionService": "active",
+    "loopbackListener4273": 1,
+    "loopbackHttpStatus": 200,
+    "arkDnsResolved": true,
+    "arkTcp443Reachable": true,
+    "requiredStandardAndDirectCredentialReferencesPresent": true,
+    "requiredStandardAndDirectSeedanceMappingsPresent": true,
+    "requiredStandardAndDirectBaseReferencesPresent": true,
+    "cp312TemporaryArtifacts": 0
+  },
+  "diagnosis": {
+    "supported": [
+      "The machine, route, logical model, request shape and hard limits do not distinguish cp312 from the cp290 provider-success run.",
+      "The current Beijing host has no observed DNS, TCP 443, service-health or required-reference absence that explains cp312.",
+      "cp312 was accepted into asynchronous processing and later returned a provider terminal failed state; this is distinct from cp290's already-proven local asset.size acceptance defect.",
+      "The evidence most strongly supports a task-specific provider generation failure or transient provider capacity/moderation/runtime outcome, not a proven Beijing host or OpenReel routing defect."
+    ],
+    "notProven": [
+      "The exact upstream provider failure subtype cannot be reconstructed because provider-private payloads and task identifiers were intentionally not retained.",
+      "No conclusion is made about account quota, moderation, transient capacity or a model-specific provider bug without provider-console evidence."
+    ]
+  },
+  "decisionOptions": [
+    "Use zero-generation provider-console read-only evidence, if the owner authorizes the authenticated scope, to identify the cp312 task failure subtype and billing state.",
+    "Choose a previously verified model mapping for a newly authorized bounded E2E.",
+    "Authorize a new bounded Seedance E2E only after selecting whether provider-console evidence is sufficient."
+  ],
+  "retention": {
+    "credentialValues": false,
+    "credentialHashes": false,
+    "providerTaskIds": false,
+    "providerOutputUrls": false,
+    "providerPrivatePayloads": false
+  },
+  "projectCompletion": "in_progress"
+}

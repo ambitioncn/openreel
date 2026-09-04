@@ -1,0 +1,98 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-progress/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "in_progress",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "candidate": {
+    "manifestFingerprint": "102ff46ffd751348fedebc910daa7ba5edf3a2b78d6e06bdb9624057765356f8",
+    "artifactCount": 106,
+    "archiveSha256": "2397aab311a3301fd40e4ec28f7058a54f0c7d900160c69e74a10d4b158e2d38",
+    "release": "/opt/openreel/releases/20260825T061000Z-cdqi2-102ff46f",
+    "previousRelease": "/opt/openreel/releases/20260825T050500Z-cdqi2-4ce7e3b5",
+    "remoteManifestVerification": "passed"
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-25T060107Z",
+    "serviceResult": "success",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T060107Z-cdqi2-isolated-restore",
+    "database": "ok",
+    "assets": 111,
+    "publishing": "ok"
+  },
+  "activation": {
+    "activeRelease": "/opt/openreel/releases/20260825T061000Z-cdqi2-102ff46f",
+    "service": "active",
+    "subState": "running",
+    "nRestarts": 0,
+    "readiness": {
+      "status": "ready",
+      "database": "ok",
+      "assets": "ok"
+    },
+    "rollbackAnchorRetained": true,
+    "rollbackPathExercisedDuringOperatorCheck": true,
+    "finalActivationPassed": true
+  },
+  "acceptance": {
+    "fixedSet": {
+      "status": "qualified",
+      "cases": 15,
+      "severeHardFailures": 15
+    },
+    "ordinaryAccountBrowser": {
+      "status": "passed",
+      "identityDimensionVisible": true,
+      "performanceDimensionVisible": true,
+      "releaseDeniedByDefault": true
+    },
+    "ordinaryAccountQualifiedPass": "pending"
+  },
+  "operatorIncidents": [
+    "The first backup discovery used an obsolete compact timestamp pattern; the backup itself succeeded and was then verified by its actual ISO timestamp path.",
+    "The first staged candidate verifier used invalid dynamic-import syntax and stopped before activation.",
+    "The first activation readiness probe did not wait for startup and automatically restored the previous release; the corrected bounded wait activation then passed.",
+    "The production fixed-set command created one unmanifested evidence file inside the release; that exact generated file was removed and all 106 manifest artifacts were reverified."
+  ],
+  "safety": {
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "publicationCalls": 0,
+    "externalMessages": 0,
+    "credentialChanges": 0
+  },
+  "remaining": [
+    "Retain a production ordinary-account qualified-pass path, paired with the observed fail-closed rejection, before accepting T11."
+  ],
+  "fixedCandidateQualification": {
+    "evidence": "docs/commercial-cdqi2-11-fixed-candidate-qualification-20260825.json",
+    "status": "deployed_acceptance_pending",
+    "manifestFingerprint": "102ff46ffd751348fedebc910daa7ba5edf3a2b78d6e06bdb9624057765356f8",
+    "artifactCount": 106,
+    "fullRegression": "557/557"
+  },
+  "latestDiagnosis": {
+    "evidence": "docs/commercial-cdqi2-11-quality-not-found-diagnosis-20260825.json",
+    "status": "root_cause_fixed_locally",
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "productionMutations": 0
+  },
+  "latestQualifiedPassAttempt": {
+    "evidence": "docs/commercial-cdqi2-11-qualified-pass-attempt-20260825.json",
+    "status": "failed_closed",
+    "jobId": "a4324cf2-36de-476a-a5a0-b40da90578b4",
+    "stage": "quality",
+    "attempts": 1,
+    "retryable": false,
+    "blindRetries": 0
+  },
+  "fixedCandidateDeployment": {
+    "evidence": "docs/commercial-cdqi2-11-fixed-candidate-deployment-20260825.json",
+    "status": "deployed_acceptance_pending",
+    "rollbackAnchorRetained": true,
+    "providerCalls": 0,
+    "paidCalls": 0
+  },
+  "projectCompletion": "in_progress"
+}

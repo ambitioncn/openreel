@@ -1,0 +1,16 @@
+{
+  "schema": "openreel-prompt-director-v2-project-contract/v1",
+  "terminalOutcome": "Every ordinary fixed five-second MiniMax H3 commercial shot is compiled from an editable validated creative_spec into a compact model_prompt and sent through the dedicated first-frame image-to-video adapter in Beijing production.",
+  "inScope": ["attribution-only prompt knowledge guidance", "structured scene/action-beat/constraint schema", "five-part directing grammar", "camera/motion/pacing controls", "MiniMax H3 image-to-video adapter", "tests", "documentation", "Beijing deployment and rollback"],
+  "outOfScope": ["bundling third-party media", "changing the separately accepted three-micro-shot frozen-crop strategy", "performing a paid or real model generation solely for deployment acceptance"],
+  "backlog": [
+    {"id":"PD2-01","requirement":"Editable creative_spec schema and validation","status":"accepted","evidence":["src/prompt-director-v2.js","test/prompt-director-v2.test.js"]},
+    {"id":"PD2-02","requirement":"Compact model_prompt compiler with all required five-second controls","status":"accepted","evidence":["src/prompt-director-v2.js","test/prompt-director-v2.test.js"]},
+    {"id":"PD2-03","requirement":"Dedicated H3 image-to-video production integration with first frame","status":"accepted","evidence":["src/commercial-provider-orchestrator.js","test/commercial-provider-orchestrator.test.js","test/comfyui.test.js"]},
+    {"id":"PD2-04","requirement":"Attribution-compliant knowledge documentation without third-party media","status":"accepted","evidence":["docs/prompt-director-v2.md"]},
+    {"id":"PD2-05","requirement":"Targeted, negative, adjacent and full regression acceptance","status":"accepted","evidence":["local targeted 33/33","local full 609/609","Beijing targeted 33/33","Beijing formal test tree exit 0"]},
+    {"id":"PD2-06","requirement":"Production-safe Beijing release, retained rollback and live/readiness health","status":"accepted","evidence":["/opt/openreel/releases/20260901T1530Z-prompt-director-v2","/health/live ok","/health/ready ready"]}
+  ],
+  "completionRule": "No milestone alone completes this project; all backlog items and terminal production checks must be accepted.",
+  "finalAcceptance": {"status":"accepted","unmetItems":[],"blockers":[]}
+}

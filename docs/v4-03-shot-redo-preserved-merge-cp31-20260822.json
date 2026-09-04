@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "milestone": "V4-03",
+  "checkpoint": "cp31",
+  "result": "local_boundary_complete",
+  "contract": {
+    "generation_scope": "Only failed shotIds enter image/video generation.",
+    "preserved_scope": "Preserved asset ids are resolved through the authenticated account/project asset boundary before any provider stage.",
+    "composition_scope": "The complete current storyboard orders preserved and regenerated videos into a new timeline with a new audio asset.",
+    "render_scope": "Composition creates a new revision-bound render; the source render asset and bytes remain unchanged."
+  },
+  "fail_closed": [
+    "stale project, story or storyboard binding",
+    "cross-owner or cross-project asset",
+    "missing preserved asset",
+    "preserved video associated with another shot",
+    "duplicate or unrelated timed source asset",
+    "incomplete full-storyboard shot partition"
+  ],
+  "verification": {
+    "targeted": "24/24 passed",
+    "full": "466/466 passed",
+    "provider_calls": 0,
+    "production_mutations": 0
+  }
+}

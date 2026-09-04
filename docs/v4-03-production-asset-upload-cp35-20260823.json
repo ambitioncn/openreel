@@ -1,0 +1,10 @@
+{
+  "schema": "openreel-v4-progress-evidence/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp35",
+  "status": "local_boundary_verified",
+  "summary": "The beginner workbench can upload and review shot-bound PNG caption cards and WAV/MP3 music with a source declaration, preserve the current creative revision, select the assets in a quote, and pass them through productionArtifacts to byte-backed composition.",
+  "bindings": ["projectVersion", "storyVersion", "storyboardVersion", "shotId for captions"],
+  "safety": { "providerCalls": 0, "deploymentActivated": false, "externalCalls": false, "musicAuthorizationJudgementByOpenReel": false },
+  "verification": ["focused commercial/model/AV/orchestrator tests: 29/29", "npm test: 471/471", "release artifact qualification: 85/85 with tamper rejection"]
+}

@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "project": "openreel-libtv-parity",
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T20:14:57.512Z",
+  "scope": "local-only backup manifest admission hardening",
+  "change": {
+    "implementation": "scripts/backup.mjs now emits and verifies one deterministic manifest serialization",
+    "boundary": "restore rejects semantically equivalent but byte-noncanonical JSON before creating a destination",
+    "negativeFixture": "a valid generated manifest rewritten as compact JSON"
+  },
+  "verification": {
+    "opsTest": {
+      "command": "node --test test/ops.test.js",
+      "passed": 22,
+      "failed": 0
+    },
+    "fullSuite": {
+      "command": "npm test",
+      "passed": 190,
+      "failed": 0
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "highSeverityFindings": 0
+    },
+    "secretScan": {
+      "command": "npm run scan:secrets",
+      "status": "passed",
+      "filesScanned": 191
+    }
+  },
+  "externalActions": [],
+  "limitations": [
+    "Canonical serialization is deterministic admission evidence, not cryptographic authentication or signing.",
+    "Independent review, off-host retention, staging drills and production rollback remain separately gated."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema": "openreel-a01-seed-tts-dedicated-diagnostic-evidence/v1",
+  "recordedAt": "2026-08-16T05:12:00Z",
+  "scope": {
+    "target": "Beijing private staging",
+    "credentialReference": "existing dedicated SeedAudio environment reference",
+    "providerHost": "openspeech.bytedance.com",
+    "resourceId": "seed-tts-2.0",
+    "maximumCalls": 1,
+    "maximumCharacters": 100,
+    "maximumSpendCny": 0.05,
+    "automaticRetries": 0
+  },
+  "outcome": {
+    "status": "stopped_before_http_submission_on_dns_failure",
+    "attemptedExecutions": 1,
+    "providerRequestsSubmitted": 0,
+    "successfulCalls": 0,
+    "automaticRetries": 0,
+    "estimatedSpendCny": 0,
+    "retainedAudioFiles": 0,
+    "sanitizedFailure": "provider hostname resolution returned EAI_AGAIN"
+  },
+  "safety": {
+    "credentialValueOutput": false,
+    "credentialChanged": false,
+    "rawProviderResponseRetained": false,
+    "productionTrafficChanged": false,
+    "deploymentChanged": false,
+    "serviceChanged": false,
+    "publicAction": false
+  },
+  "verification": [
+    "The dedicated credential reference was loaded by Node's native environment-file parser without printing or copying its value.",
+    "The executor was hard-limited to one request, 100 characters, zero retries and a CNY 0.05 ceiling.",
+    "DNS resolution failed before an HTTP request could be submitted; no Provider response, usage receipt or media existed.",
+    "Execution stopped immediately and the authorization was treated as consumed rather than retried."
+  ],
+  "limitations": [
+    "The run does not prove or disprove the dedicated credential's product or speaker entitlement.",
+    "No successful audio, timeline synchronization or browser E2E evidence was produced.",
+    "Any retry requires a new exact authorization."
+  ]
+}

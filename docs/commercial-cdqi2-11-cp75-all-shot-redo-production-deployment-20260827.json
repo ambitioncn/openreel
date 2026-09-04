@@ -1,0 +1,49 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp75-all-shot-redo-production-deployment/v1",
+  "capturedAt": "2026-08-27T05:44:00Z",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "scope": "Deploy the accepted cp74 all-shot finite-redo contract to Beijing production without provider execution or payment",
+  "release": "/opt/openreel/releases/20260827T0545Z-cdqi2-cp75-all-shot-redo",
+  "rollbackAnchor": "/opt/openreel/releases/20260827T0215Z-cdqi2-cp72-fresh-candidate",
+  "backup": {
+    "path": "/var/backups/openreel/20260827T0545Z-cp75",
+    "isolatedRestore": "/var/backups/openreel/20260827T0545Z-cp75-isolated-restore",
+    "database": "ok",
+    "assets": 184,
+    "publishing": "ok"
+  },
+  "sourceHashes": {
+    "src/commercial-provider-orchestrator.js": "87a641b26b913ff4c6cc438b7e19ac4dd219121f5a4a94bd89878e22b9e8022b",
+    "test/commercial-provider-orchestrator.test.js": "a202f71b2b614b363e158ed4146fd47dc362b02aa2a4e08f61c6f707dcaf6976"
+  },
+  "verification": {
+    "cp74Acceptance": "accepted",
+    "remoteFocused": "42 passed, 0 failed",
+    "sourceHashParity": true,
+    "rollbackRehearsal": "cp75 healthy, cp72 healthy after actual rollback, cp75 healthy after reactivation",
+    "finalReadiness": {
+      "live": "ok",
+      "database": "ok",
+      "assets": "ok"
+    },
+    "service": "active/running; NRestarts=0",
+    "processRelease": "/opt/openreel/releases/20260827T0545Z-cdqi2-cp75-all-shot-redo"
+  },
+  "behavior": {
+    "allShotRedo": "An empty preserved set is valid only when selected redo shots exactly cover the source composition storyboard",
+    "fullRequalification": "Every redo creates a new complete render and re-evaluates all shot and final perceptual dimensions",
+    "releaseGate": "Rejected source and successor candidates remain fail-closed and are not published"
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidJobs": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0
+  },
+  "status": "deployed_ready_for_acceptance",
+  "projectCompletion": "in_progress"
+}

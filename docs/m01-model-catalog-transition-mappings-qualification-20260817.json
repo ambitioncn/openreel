@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "scope": "credential-free model catalog transition mappings",
+  "change": "Verified catalog drift reports now group kind and adapter migrations into deterministic transition-to-model mappings.",
+  "semantics": {
+    "kindTransitions": "maps each before->after kind migration to sorted affected model identifiers",
+    "adapterTransitions": "maps each before->after adapter migration to sorted affected model identifiers",
+    "nonMigrationChanges": "schema-only changes and unchanged kind/adapter values do not create transition entries",
+    "unchangedOrSourceOnly": "reports empty transition mappings"
+  },
+  "safety": {
+    "executedProviderCalls": false,
+    "credentialsAccessedOrChanged": false,
+    "otpUsed": false,
+    "deploymentChanged": false,
+    "externalWrite": false
+  },
+  "verification": [
+    {
+      "command": "node --test test/model-catalog.test.js",
+      "result": "15/15 passed"
+    },
+    {
+      "command": "npm test",
+      "result": "302/302 passed"
+    },
+    {
+      "command": "npm run scan:secrets; jq empty; git diff --check",
+      "result": "385-file secret scan passed; qualification/backlog JSON valid; no whitespace errors"
+    }
+  ],
+  "status": "qualified_local_increment",
+  "projectCompletion": "in_progress"
+}

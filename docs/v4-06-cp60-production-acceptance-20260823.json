@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "checkpoint": "cp60",
+  "createdAt": "2026-08-23T19:38:00Z",
+  "scope": "V4-06 production deployment and one ordinary-account product-understanding acceptance",
+  "authorization": {"sourceGate": "cp59", "ceilingCny": 10, "modelRetries": 0, "privateEvidenceOnly": true},
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-23T193411Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-23T193411Z-cp60-isolated-restore",
+    "database": "ok",
+    "assets": 89,
+    "publishing": "absent"
+  },
+  "deployment": {
+    "activeRelease": "/opt/openreel/releases/20260824T034000Z-cp60-product-quote-filter",
+    "changedFiles": ["src/product-understanding.js"],
+    "sha256": "67990c71f1abf3c159725b55d5828389daa718731e956236301afd08142e020d",
+    "restartCommands": 1,
+    "active": true,
+    "nRestarts": 0,
+    "tlsStatus": 200,
+    "rollbackUsed": false,
+    "releaseCorrection": "The first cp -a command copied the current symlink instead of its directory target and updated the cp59 path. The service loaded the reviewed cp60 bytes on its sole restart. A real immutable cp60 directory was then created from those same bytes and current was atomically corrected with ln -sfnT without another restart."
+  },
+  "acceptance": {
+    "status": "passed",
+    "ordinaryAccount": true,
+    "productOnly": true,
+    "requests": 1,
+    "retries": 0,
+    "agentCalls": 0,
+    "sourceMode": "fetched_model",
+    "sourceBytes": 9279,
+    "sourceSha256": "a6e572bec156bf80ff3149b89b6d218cdcf8866ccc26ccf69a5431db8e142c6a",
+    "provider": "ark",
+    "model": "seed-2.1-turbo",
+    "jobId": "06e6bcc9-9143-4990-820e-f4299d8700b7",
+    "usage": {"costMicros": 13, "currency": "USD", "unitScale": 10000, "inputTokens": 827, "outputTokens": 248},
+    "facts": 2,
+    "evidenceQuotes": 3,
+    "privateEvidence": "docs/evidence/v4-06-production-ordinary-account-cp60.json"
+  },
+  "safety": {"publications": 0, "externalSends": 0, "credentialChanges": 0, "historyCleanup": 0, "derperChanges": 0, "tcp80Or443Changes": 0},
+  "projectCompletion": "ready_for_acceptance"
+}

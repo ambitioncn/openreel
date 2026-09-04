@@ -1,0 +1,49 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp60-production-deployment/v1",
+  "capturedAt": "2026-08-25T17:23:00Z",
+  "authorization": "consumed_cp59_deployment_only_attestation",
+  "candidate": {
+    "release": "/opt/openreel/releases/20260825T172100Z-cdqi2-cp60-redo-director-policy",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T164300Z-cdqi2-cp58-retained-asset-compat",
+    "sourceHashes": {
+      "src/workbench-commercial.js": "57d585dbd66a788bedb877c8f4c07a4f95c7f8aee757d2a400d2d9f6b7fb39ad",
+      "test/workbench-commercial.test.js": "8fcaa86e3ec901ac9c48adae9c5cdcc19ecb130e514864f0d54305270d4413b3"
+    },
+    "localAndProductionHashesMatch": true
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-25T172100Z-cdqi2-cp60",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T172100Z-cdqi2-cp60-isolated-restore",
+    "database": "ok",
+    "assets": 164,
+    "publishing": "ok"
+  },
+  "verification": {
+    "remoteFocusedBeforeActivation": "48 passed, 0 failed",
+    "remoteFullBeforeActivation": "56 passed, 0 failed",
+    "remoteFocusedAfterActivation": "48 passed, 0 failed",
+    "remoteFullAfterActivation": "56 passed, 0 failed",
+    "live": "ok",
+    "ready": "database and assets ok",
+    "service": "active/running; NRestarts=0",
+    "processCwd": "/opt/openreel/releases/20260825T172100Z-cdqi2-cp60-redo-director-policy",
+    "stateMetadata": "openreel:openreel 0640"
+  },
+  "behavior": {
+    "redoDirectorBinding": "redo quote snapshots the immutable source director context and successor job retains it",
+    "redoPolicyBinding": "source policy-safety evidence is preserved when present",
+    "existingGates": "version, retained-asset, explicit confirmation and release gates remain fail-closed"
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "redoQuotes": 0,
+    "redoJobs": 0,
+    "executeCalls": 0,
+    "publicationCalls": 0,
+    "credentialChanges": 0,
+    "deploymentWindowExecutionMarkers": 0
+  },
+  "status": "deployed_ready_for_acceptance",
+  "projectCompletion": "in_progress"
+}

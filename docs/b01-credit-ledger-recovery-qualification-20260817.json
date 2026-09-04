@@ -1,0 +1,24 @@
+{
+  "schema": "openreel-b01-credit-ledger-recovery-qualification/v1",
+  "date": "2026-08-17",
+  "scope": "local payment-disconnected abandoned-lock inspection and recovery",
+  "claims": [
+    "lock owners use a ledger-bound v2 record with pid, creation instant and random nonce",
+    "inspection validates the complete owner record and returns a SHA-256 fingerprint without mutation",
+    "recovery requires the exact inspected fingerprint and atomically writes an exclusive claim inside the canonical lock directory before deletion",
+    "a crashed recoverer leaves the canonical lock and claim present so ledger mutation remains blocked",
+    "malformed, missing, replaced or drifted ownership fails closed",
+    "elapsed time never authorizes recovery"
+  ],
+  "verification": {
+    "targeted": "11/11 passed",
+    "fullSuite": "288/288 passed",
+    "secretScan": "345 files passed"
+  },
+  "externalActions": [],
+  "paymentConnected": false,
+  "limitations": [
+    "an operator must independently establish abandonment before recovery",
+    "this is a single-host file boundary, not a distributed transaction protocol"
+  ]
+}

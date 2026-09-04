@@ -1,6 +1,6 @@
 # E-01 bounded authorization packet
 
-Status: prepared, not authorized. The machine-readable source is `e01-authorization-packet.json`; its `authorized` field is false and required human inputs are deliberately null.
+Status: E-01 phase one stopped fail-closed after the first `seedream-5-lite` submission returned a sanitized provider error. The remaining seven submissions were not attempted, the failed reservation settled at zero, temporary access was stopped, and staging paid inference was disabled again. No further provider submission is authorized by this packet. See `e01-phase-one-execution-evidence.json`; audio and E-02 remain excluded.
 
 ## Requested first phase
 

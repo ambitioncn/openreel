@@ -1,0 +1,51 @@
+{
+  "schema": "openreel-v4-progress-evidence/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp37",
+  "status": "production_acceptance_failed_local_repair_ready",
+  "deployment": {
+    "release": "/opt/openreel/releases/20260823T012000Z-cp36-refresh",
+    "previousRelease": "/opt/openreel/releases/20260823T004601Z-cp35-assets",
+    "manifestArtifactsVerified": 85,
+    "service": "active",
+    "restartCount": 0,
+    "loopbackReady": 200,
+    "public4173Root": 200,
+    "rollbackUsed": false
+  },
+  "productionAcceptance": {
+    "freshOrdinaryAccount": true,
+    "initialPrompt": "美女在海滩跳舞",
+    "requestedDurationSeconds": 5,
+    "attempts": 1,
+    "result": "failed_before_media_generation",
+    "errorCode": "MODEL_OUTPUT_INVALID",
+    "safeError": "shot durations do not match the requested duration",
+    "mediaProviderSubmission": false,
+    "mp4Produced": false,
+    "successEvidenceFileProduced": false
+  },
+  "localRepair": {
+    "summary": "The single bounded repair prompt now includes the sanitized parser error and exact requested total duration instead of only saying that the JSON schema was violated.",
+    "creativeSource": "real text model",
+    "hardcodedCreativeTemplateAdded": false,
+    "verification": [
+      "focused planning/commercial tests 18/18",
+      "full suite 474/474",
+      "release manifest 85/85 with tamper rejection",
+      "git diff --check passed"
+    ],
+    "deployed": false
+  },
+  "safety": {
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "mediaGenerationCalls": 0,
+    "acceptanceRetries": 0,
+    "portsChanged": false,
+    "derperTouched": false
+  },
+  "projectCompletion": "in_progress",
+  "nextGate": "Review cp37, then separately approve deployment of the bounded planning-repair prompt and one new zero-retry ordinary-account full-chain acceptance capped at CNY 100."
+}

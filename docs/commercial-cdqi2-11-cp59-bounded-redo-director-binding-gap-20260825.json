@@ -1,0 +1,49 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp59-redo-director-binding-gap/v1",
+  "capturedAt": "2026-08-25T17:13:00Z",
+  "authorization": "consumed_cp58_bounded_subscription_and_single_redo_attestation",
+  "billing": {
+    "quoteCny": 31.3,
+    "priorSpentUnits": 26734,
+    "redoLimitUnits": 43473,
+    "hardLimitUnits": 70207,
+    "availableBeforeExecution": 43473,
+    "reservedAfterExecution": 0,
+    "incrementalSpentUnits": 0,
+    "incrementalSpentCny": 0,
+    "reconciliationConsistent": true
+  },
+  "redo": {
+    "jobId": "bb6b99ec-18ef-4cac-ad5a-6e397fed8f7e",
+    "sourceJobId": "3a0c05de-0225-4446-9ea5-45d6f773baa4",
+    "selectedFailedShots": 2,
+    "preservedShots": 1,
+    "preservedAssetId": "27fa685d-df5a-4440-bfc9-f0f2e0dc1519",
+    "status": "failed",
+    "stage": "prepare",
+    "attempts": 1,
+    "errorCode": "COMMERCIAL_DIRECTOR_BINDING_REQUIRED",
+    "executeCalls": 1,
+    "providerCalls": 0,
+    "retries": 0,
+    "publications": 0,
+    "releaseEligible": false
+  },
+  "diagnosis": {
+    "cause": "The redo quote and successor job did not carry the immutable source director and policy-safety bindings into paid-generation prepare.",
+    "failClosed": true,
+    "sourceCandidateMutated": false
+  },
+  "localFix": {
+    "behavior": "Snapshot source director and policy-safety bindings into the redo quote and carry them into the successor job.",
+    "focusedTests": "50 passed, 0 failed",
+    "fullSuite": "578 passed, 0 failed",
+    "productionDeployed": false
+  },
+  "sessionSafety": {
+    "scopedSessionRevoked": true,
+    "recentUnrevokedAcceptanceSessions": 0
+  },
+  "status": "single_redo_consumed_local_fix_ready",
+  "projectCompletion": "in_progress"
+}

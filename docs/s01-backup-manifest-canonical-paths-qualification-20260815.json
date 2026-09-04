@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "S-01",
+  "capturedAt": "2026-08-15",
+  "scope": "credential-free local backup manifest admission",
+  "claim": "Restore admission requires manifest file entries to retain the backup creator's deterministic lexical order and canonical POSIX-relative path spelling.",
+  "negativeChecks": [
+    "reordered manifest entries are rejected before destination creation",
+    "dot-segment path spelling is rejected before destination creation",
+    "absolute, empty, backslash, repeated-separator and parent-segment paths fail the canonical path predicate"
+  ],
+  "verification": {
+    "focused": "node --test test/ops.test.js: 22 passed, 0 failed",
+    "fullSuite": "npm test: 190 passed, 0 failed",
+    "dependencies": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "npm run scan:secrets: passed across 189 files",
+    "diff": "git diff --check: passed"
+  },
+  "externalActions": [],
+  "limitations": [
+    "This does not cryptographically sign a backup manifest.",
+    "No off-host copy, retention action, restore activation or production operation occurred."
+  ]
+}

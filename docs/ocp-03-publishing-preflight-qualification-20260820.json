@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "project": "openreel-one-click-publishing",
+  "milestone": "OCP-03",
+  "status": "accepted_local_implementation",
+  "implementation": ["src/publishing-preflight.js", "test/publishing-preflight.test.js"],
+  "verified_contract": [
+    "The caller's tenant must own a role=render video/mp4 asset.",
+    "Stored byte length and SHA-256 must match non-empty structurally bounded MP4 bytes containing ftyp and media boxes.",
+    "A server-side probe must describe the same bytes and provide bounded container, video/audio codec, dimensions, duration, frame rate and audio sample rate.",
+    "Every requested destination requires a matching date-stamped dynamic account capability record.",
+    "Per-platform account eligibility, bytes, duration, codecs, resolution, frame rate, aspect ratio, privacy and hashtag limits produce actionable blockers.",
+    "Title or copy overflow produces adaptation_required with an explicit proposed value and never mutates the source metadata.",
+    "Missing, malformed, contradictory or unsupported destination capabilities fail before any upload."
+  ],
+  "platform_coverage": ["tiktok", "douyin", "instagram_reels", "youtube_shorts"],
+  "verification": [
+    {"command":"node --test test/publishing-preflight.test.js","result":"7 passed, 0 failed"},
+    {"command":"npm test","result":"383 passed, 0 failed"},
+    {"command":"npm run scan:secrets","result":"passed, 508 files scanned"}
+  ],
+  "external_actions": {"capability_calls":0,"uploads":0,"publications":0,"credential_reads":0,"credential_writes":0},
+  "boundary": "This milestone validates caller-supplied server probe and capability evidence. It does not implement ffprobe process execution, platform capability retrieval, transcoding, upload or publication.",
+  "next_item": "OCP-04"
+}

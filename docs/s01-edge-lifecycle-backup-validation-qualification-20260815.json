@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "qualificationId": "S-01-edge-lifecycle-backup-validation-20260815",
+  "scope": "credential-free local backup admission",
+  "result": "passed",
+  "controls": [
+    "Every persisted edge requires non-empty input and output ports, a string title, a positive version, and canonical ordered lifecycle timestamps.",
+    "Self-edges, duplicate directed pairs, and cycles are rejected independently of project index integrity.",
+    "Invalid graph state fails before atomic backup promotion and leaves no visible destination or staging residue."
+  ],
+  "verification": {
+    "targeted": "node --test test/ops.test.js: 42 passed, 0 failed",
+    "fullSuite": "npm test: 210 passed, 0 failed",
+    "highSeverityDependencies": 0,
+    "secretScan": "passed across 215 files",
+    "diffCheck": "passed"
+  },
+  "externalActions": [],
+  "limitations": [
+    "Uses local synthetic SQLite fixtures only.",
+    "Does not claim an external backup, production restore, signing, retention, deployment, provider call, or authenticated LibTV action."
+  ]
+}

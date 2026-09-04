@@ -1,0 +1,46 @@
+{
+  "schema": "openreel-v4-progress-evidence/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp42",
+  "status": "production_chain_succeeded_visual_caption_acceptance_needs_new_run",
+  "deployment": {
+    "release": "/opt/openreel/releases/20260823T031500Z-cp42-render-png",
+    "previousRelease": "/opt/openreel/releases/20260823T023500Z-cp40-caption-length",
+    "archiveSha256": "c32266b1a1f25c5aa28b89d19097f332f3d62e497c1836a05e7e3ddc5dea79a5",
+    "manifestArtifactsVerified": 85,
+    "backup": "/var/backups/openreel/20260823T031500Z-cp42",
+    "backupVerification": {"files": 68, "assets": 60, "database": "ok", "publishing": "ok"},
+    "service": "active",
+    "restartCount": 0,
+    "loopbackReady": 200,
+    "public4173Root": 200,
+    "publicAppSha256": "046b5c699311f972499d2b1d6794c8502b45d2c293cb91777de7852689515b80",
+    "rollbackUsed": false
+  },
+  "productionAcceptance": {
+    "attempts": 1,
+    "retries": 0,
+    "freshOrdinaryAccount": true,
+    "initialPrompt": "美女在海滩跳舞",
+    "quoteCny": 16,
+    "commercialJobId": "9ce38b4a-e962-4852-aba0-c401d4ab0366",
+    "jobStatus": "succeeded",
+    "jobAttempts": 1,
+    "projectId": "bb932a2e-0d91-4efb-ae49-b2b254a93a97",
+    "binding": {"projectVersion": 6, "storyVersion": 2, "storyboardVersion": 2, "timelineVersion": 3},
+    "models": {"text": "seed-2.1-pro", "image": "seedream-5-lite", "video": "seedance-2-fast", "audio": "qwen-tts-tailnet"},
+    "providerAssets": {"images": 1, "videos": 1, "audio": 1},
+    "render": {"assetId": "e8cf54d4-791d-494f-854d-1b6523c13e28", "bytes": 77763, "sha256": "9e67aa19b4fd2030a5974d1da380a36b3fb81f22761c80709b022f8639a66685", "durationSeconds": 5.083333, "video": "h264 640x360", "audio": "aac mono 24000Hz", "playable": true},
+    "cost": {"estimatedCny": 16, "status": "unsettled", "settledCny": null},
+    "scriptFailure": "The post-success evidence assertion counted the uploaded caption PNG as a provider image (2 versus 1). No second provider run occurred."
+  },
+  "visualAudit": {
+    "productionResult": "The uploaded one-pixel fixture was enlarged into an opaque block, so the production MP4 does not satisfy readable-caption acceptance even though the render and audio track exist.",
+    "sourceVsRenderFramePsnrDb": 8.723219,
+    "localRepair": "The browser runner now renders the exact storyboard prompt into a 500x140 PNG caption card and counts only openreel-commercial-artifact/v1 media as provider results.",
+    "localReplay": {"captionBytes": 44306, "renderBytes": 128096, "sha256": "75915ae4c131a1ad5ac6e9672c200f1c1825f2470b794f04df060395d0d6f01e", "durationSeconds": 5.083333, "hasCaptions": true, "hasMusic": true, "visualTextReadable": true}
+  },
+  "verification": {"fullTests": "477/477", "releaseManifest": "85/85 with tamper rejection", "paidRetries": 0, "publications": 0, "externalSends": 0, "portsChanged": false, "derperTouched": false},
+  "projectCompletion": "in_progress",
+  "nextGate": "Accept the deployment and diagnosis, then separately approve exactly one new zero-retry ordinary-account production acceptance using the readable caption-card runner; no new deployment is required for that runner-only change."
+}

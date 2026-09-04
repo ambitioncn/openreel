@@ -1,0 +1,43 @@
+{
+  "schema": "openreel-a01-seed-tts-execution-evidence/v1",
+  "recordedAt": "2026-08-16T03:33:00Z",
+  "scope": {
+    "target": "Beijing private staging",
+    "providerHost": "openspeech.bytedance.com",
+    "resourceId": "seed-tts-2.0",
+    "maximumCalls": 2,
+    "maximumCharactersPerCall": 500,
+    "aggregateMaximumCharacters": 1000,
+    "aggregateMaximumSpendCny": 0.5,
+    "automaticRetries": 0
+  },
+  "outcome": {
+    "status": "stopped_on_first_provider_anomaly",
+    "attemptedCalls": 1,
+    "successfulCalls": 0,
+    "unattemptedCalls": 1,
+    "automaticRetries": 0,
+    "sanitizedTerminalCode": 45000010,
+    "retainedAudioFiles": 0,
+    "isolatedOutputCleanupVerified": true
+  },
+  "safety": {
+    "credentialValueRetained": false,
+    "rawProviderResponseRetained": false,
+    "rawProviderRequestIdRetained": false,
+    "productionTrafficChanged": false,
+    "deploymentChanged": false,
+    "publicAction": false
+  },
+  "verification": [
+    "The approved credential reference existed in the Beijing service environment without being printed or copied.",
+    "The official V3 Agent Plan request shape used X-Api-Key and X-Api-Resource-Id with usage-return control.",
+    "The runner stopped on the first non-success terminal event before the second call and performed no retry.",
+    "The exact isolated output directory was absent after cleanup; OpenReel and Nginx remained active and loopback readiness returned HTTP 200."
+  ],
+  "limitations": [
+    "No successful audio asset, billed-usage receipt, timeline synchronization or browser E2E evidence was produced.",
+    "The one-call anomaly consumed this authorization; no retry or corrected call is authorized.",
+    "This result does not close A-01, T-01, E-01 or the project."
+  ]
+}

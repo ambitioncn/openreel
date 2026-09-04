@@ -1,0 +1,26 @@
+{
+  "schema": "openreel-s01-platform-ownership-backup-validation-qualification/v1",
+  "qualifiedAt": "2026-08-15T18:00:00.000Z",
+  "scope": "credential-free local backup creation and isolated restore validation",
+  "result": "passed",
+  "claims": [
+    "Invite and collaborative-document tenant ownership must match the referenced team.",
+    "API keys and usage reservations must remain owned by the account and subscription they reference.",
+    "Usage ledger and refund records must preserve the ownership chain of their reservation and usage entry.",
+    "Ownership drift is rejected before backup or restore atomic promotion."
+  ],
+  "verification": {
+    "opsTests": { "passed": 20, "failed": 0 },
+    "fullTests": { "passed": 188, "failed": 0 },
+    "dependencyHighFindings": 0,
+    "secretScan": "passed",
+    "jsonValidation": "passed",
+    "diffCheck": "passed"
+  },
+  "externalActions": [],
+  "limitations": [
+    "No staging or production restore was performed.",
+    "No provider, payment, credential, signing, retention, deployment or publication action was performed.",
+    "Independent review and externally retained rollback evidence remain separately gated."
+  ]
+}

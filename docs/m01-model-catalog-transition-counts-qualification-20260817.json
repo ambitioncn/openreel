@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "scope": "credential-free model catalog transition counts",
+  "change": "Verified catalog drift reports now expose deterministic per-transition affected-model counts and aggregate distinct kind/adapter transition counts.",
+  "semantics": {
+    "kindTransitionCounts": "maps each kind before->after migration to its affected model count",
+    "adapterTransitionCounts": "maps each adapter before->after migration to its affected model count",
+    "driftCounts": "reports the distinct number of kind and adapter transition routes",
+    "unchangedOrSourceOnly": "reports zero aggregate transition counts and empty per-transition mappings"
+  },
+  "safety": {
+    "executedProviderCalls": false,
+    "credentialsAccessedOrChanged": false,
+    "otpUsed": false,
+    "deploymentChanged": false,
+    "externalWrite": false
+  },
+  "verification": [
+    {
+      "command": "node --test test/model-catalog.test.js",
+      "result": "15/15 passed"
+    },
+    {
+      "command": "npm test",
+      "result": "302/302 passed"
+    },
+    {
+      "command": "npm run scan:secrets; jq empty; git diff --check",
+      "result": "386-file secret scan passed; qualification/backlog JSON valid; no whitespace errors"
+    }
+  ],
+  "status": "qualified_local_increment",
+  "projectCompletion": "in_progress"
+}

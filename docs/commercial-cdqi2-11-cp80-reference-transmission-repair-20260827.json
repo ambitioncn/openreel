@@ -1,0 +1,26 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp80-reference-transmission-repair/v1",
+  "capturedAt": "2026-08-27T06:33:00Z",
+  "sourceCheckpoint": "cp79",
+  "diagnosis": {
+    "observed": "Each shot passed in-shot identity, but the final evaluator identified three different performers and wardrobe variants across the cut.",
+    "rootCause": "The commercial orchestrator supplied internal reference_asset_ids, but the Volcengine image-generation protocol serializer discarded that field. Each Seedream first frame was therefore generated from text alone.",
+    "testGap": "The existing orchestrator test asserted only the pre-serialization Ark submission and never asserted the provider request body."
+  },
+  "repair": {
+    "referenceResolution": "Resolve tenant-scoped director references from durable asset storage and include their bytes in the orchestration boundary.",
+    "providerContract": "Encode the reviewed reference as a bounded data URL in the Volcengine image-generation image field; each video remains bound to its resulting first frame.",
+    "failClosed": "Missing, non-image, empty, over-10-MiB or out-of-scope references reject before provider contact.",
+    "immutability": "No cp79 bytes or evidence are modified."
+  },
+  "verification": {
+    "focused": "82 passed, 0 failed",
+    "full": "586 passed, 0 failed",
+    "providerBodyAssertion": true,
+    "missingReferenceProviderCalls": 0,
+    "invalidReferenceProviderCalls": 0
+  },
+  "safety": { "providerCalls": 0, "paidJobs": 0, "paidCny": 0, "deployments": 0, "restarts": 0, "publications": 0 },
+  "status": "local_repair_verified_not_deployed",
+  "projectCompletion": "in_progress"
+}

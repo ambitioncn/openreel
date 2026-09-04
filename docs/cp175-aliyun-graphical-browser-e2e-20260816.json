@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "checkpoint": "cp175",
+  "target": "Beijing Aliyun private staging",
+  "authorization": "consumed cp174 bounded graphical-browser gate",
+  "runner": { "name": "Playwright", "version": "1.62.1", "browser": "Chromium", "viewport": "1440x900" },
+  "isolation": {
+    "binding": "127.0.0.1:4284",
+    "state": "temporary isolated database, asset and platform paths",
+    "providerEnvironment": "explicitly empty",
+    "productionServiceMutation": false
+  },
+  "result": {
+    "status": "passed",
+    "registrationLogin": true,
+    "canvasVideoNode": true,
+    "localGeneration": true,
+    "storyStoryboard": true,
+    "reviewedMp4Download": true,
+    "mp4Bytes": 2410,
+    "mp4Signature": "ftyp",
+    "tutorialsVisible": 8,
+    "logout": true,
+    "providerCalls": 0,
+    "costUsd": 0
+  },
+  "postconditions": {
+    "sidecarPortClosed": true,
+    "openreelService": "active",
+    "nginxService": "active",
+    "publicRootHttp": 200,
+    "publicReadinessHttp": 404,
+    "publicMetricsHttp": 404
+  },
+  "limitations": [
+    "This closes the deterministic zero-provider graphical-browser dimension only.",
+    "It does not prove representative real-provider media, authenticated LibTV format/quality parity or remaining modality coverage."
+  ]
+}

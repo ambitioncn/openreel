@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "milestone": "M-01",
+  "qualifiedAt": "2026-08-17",
+  "scope": "credential-free verified model-catalog drift observability",
+  "result": "passed",
+  "claims": [
+    "Each emitted review reason has a deterministic affected-item count.",
+    "Source revision drift counts as one revision event; model add, remove and change reasons count affected models.",
+    "Unchanged reports expose an empty reason-count map.",
+    "Reason-count output is deeply immutable and does not authorize or execute provider calls."
+  ],
+  "verification": [
+    "node --test test/model-catalog.test.js: 15/15 passed",
+    "npm test: 302/302 passed"
+  ],
+  "externalActions": {
+    "providerCalls": 0,
+    "credentialReadsOrChanges": 0,
+    "deployments": 0,
+    "publications": 0
+  },
+  "limitations": [
+    "Static catalog drift counts do not prove provider availability, routing validity or output quality.",
+    "Real-provider M-01 closure remains separately gated."
+  ]
+}

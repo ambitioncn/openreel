@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "project": "openreel-libtv-parity",
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T20:21:31.116Z",
+  "scope": "local-only backup manifest path admission hardening",
+  "change": {
+    "implementation": "scripts/backup.mjs rejects C0 and DEL control characters in manifest file paths",
+    "boundary": "restore fails closed before creating a destination when a path can inject log lines or create cross-tool parsing ambiguity",
+    "negativeFixture": "a canonical manifest whose first path contains an embedded newline"
+  },
+  "verification": {
+    "opsTest": {
+      "command": "node --test test/ops.test.js",
+      "passed": 22,
+      "failed": 0
+    },
+    "fullSuite": {
+      "command": "npm test",
+      "passed": 190,
+      "failed": 0
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "highSeverityFindings": 0
+    },
+    "secretScan": {
+      "command": "npm run scan:secrets",
+      "status": "passed",
+      "filesScanned": 192
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  },
+  "externalActions": [],
+  "limitations": [
+    "Control-character rejection prevents path-transport ambiguity but does not cryptographically authenticate or sign a manifest.",
+    "Independent review, off-host retention, staging drills and production rollback remain separately gated."
+  ]
+}

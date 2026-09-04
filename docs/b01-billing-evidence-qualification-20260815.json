@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "milestone": "B-01",
+  "qualifiedAt": "2026-08-15T16:30:19.272Z",
+  "scope": "Credential-free local qualification of account-scoped billing evidence snapshots.",
+  "evidence": {
+    "implementation": "src/billing-evidence.js",
+    "tests": "test/billing-evidence.test.js",
+    "boundary": "docs/api-key-billing.md",
+    "focusedTests": { "passed": 5, "failed": 0 },
+    "fullSuite": { "passed": 180, "failed": 0 }
+  },
+  "verifiedProperties": [
+    "account and subscription scope",
+    "reserved, settled, refunded and spent arithmetic",
+    "clean reconciliation",
+    "disconnected payment boundary",
+    "secret-bearing field rejection",
+    "unique ledger event identifiers and valid usage/reservation references",
+    "subscription currency and unit-scale consistency across ledger events",
+    "safe-integer aggregate precision with overflow rejection",
+    "deterministic SHA-256 evidence fingerprint"
+  ],
+  "externalActions": false,
+  "credentialsRead": false,
+  "providerCalls": 0,
+  "paymentOperations": 0,
+  "refundOperations": 0,
+  "limitations": [
+    "This qualification proves only local ledger snapshot consistency.",
+    "It does not connect or verify a payment provider, external invoice, subscription, charge, refund or authenticated production UX."
+  ]
+}

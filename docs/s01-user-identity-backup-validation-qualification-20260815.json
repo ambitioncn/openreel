@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualification": "user_identity_backup_validation",
+  "date": "2026-08-15",
+  "scope": "local synthetic SQLite and filesystem fixtures only",
+  "controls": [
+    "Every persisted user has a non-empty display name.",
+    "Every persisted user createdAt value is a canonical ISO-8601 timestamp.",
+    "Invalid user identity records fail closed before backup atomic promotion."
+  ],
+  "negative_cases": [
+    "blank user display name",
+    "non-canonical user creation timestamp"
+  ],
+  "targeted_verification": {
+    "command": "node --test test/ops.test.js",
+    "passed": 35,
+    "failed": 0
+  },
+  "regression_verification": {
+    "command": "npm test",
+    "passed": 203,
+    "failed": 0
+  },
+  "security_verification": {
+    "dependency_audit_high": "0 vulnerabilities",
+    "secret_scan": "passed across 206 files"
+  },
+  "external_actions": [],
+  "claims_excluded": [
+    "live identity-provider recovery",
+    "production authorization behavior",
+    "external backup, signing, retention or activation"
+  ]
+}

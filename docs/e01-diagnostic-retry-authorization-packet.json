@@ -1,0 +1,55 @@
+{
+  "schema": "openreel-e01-diagnostic-retry-authorization/v1",
+  "status": "executed_stopped_fail_closed_provider_503",
+  "authorized": true,
+  "executionAuthorized": true,
+  "supersedesExecutionAuthority": null,
+  "scope": {
+    "environment": "existing isolated private staging only",
+    "model": "seedream-5-lite",
+    "capability": "image",
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "inputSize": "2560x1440",
+    "maximumReservedUnits": 2778,
+    "currency": "USD",
+    "maximumReservedDisplay": "USD 0.2778"
+  },
+  "credentialSourceReference": "/etc/openreel/secrets/e01-retry-api-key",
+  "executionOutcome": {
+    "providerSubmissions": 1,
+    "terminalStatus": "failed",
+    "failureCode": "ARK_PROVIDER_ERROR",
+    "upstreamStatus": 503,
+    "spentUnits": 0,
+    "reservedUnits": 0,
+    "nextProviderSubmissionAuthorized": false
+  },
+  "preconditions": [
+    "cp56 temporary access remains stopped and staging paid inference starts false",
+    "the exact existing endpoint mapping and restricted credential reference pass structural checks without outputting values",
+    "the deployed revision includes Seedream 5 pre-provider dimension validation",
+    "staging and production readiness pass before execution",
+    "a human explicitly approves this exact packet"
+  ],
+  "stopConditions": [
+    "stop after exactly one terminal provider result whether success or failure",
+    "stop on provider error, timeout, untrusted usage, ledger mismatch, budget breach, unsafe asset metadata or readiness regression",
+    "do not retry and do not execute any of the seven remaining cp54 matrix cases"
+  ],
+  "retainedEvidence": [
+    "sanitized upstream HTTP status when available",
+    "terminal status and result shape without provider task id or expiring URL",
+    "ledger spent and reserved units",
+    "temporary-key and subscription cleanup state",
+    "post-run staging and production readiness"
+  ],
+  "excluded": [
+    "audio",
+    "remaining E-01 matrix submissions",
+    "production deployment or traffic",
+    "credential mutation",
+    "subscription change",
+    "public publishing"
+  ]
+}

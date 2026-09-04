@@ -1,0 +1,27 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-qwen-tts-zero-paid-diagnosis/v1",
+  "capturedAt": "2026-08-26T04:00:00Z",
+  "sourceCheckpoint": "cp64",
+  "scope": {
+    "providerCalls": 0,
+    "paidJobsCreated": 0,
+    "paidRetries": 0,
+    "publications": 0
+  },
+  "observations": {
+    "productionService": "active",
+    "productionRestarts": 0,
+    "qwenEnabledConfigurationPresent": true,
+    "tailnetBackend": "Running",
+    "approvedPeerOnline": true,
+    "cp64DurableErrorCode": "QWEN_TTS_PROVIDER_ERROR"
+  },
+  "finding": "The cp64 durable job discarded the Qwen client's bounded upstreamStatus or causeCode details, so historical evidence cannot distinguish an HTTP rejection from a transport failure. Service health and Tailnet peer presence rule out a broad OpenReel process outage but do not prove endpoint request success.",
+  "localRemediation": {
+    "status": "implemented",
+    "behavior": "Commercial jobs now retain only a bounded Qwen diagnostic: provider identity, http or transport category, an integer HTTP status when present, and an allow-pattern transport cause code when present.",
+    "privacy": "Raw messages, response bodies, URLs, tokens, credentials and arbitrary cause strings are not persisted.",
+    "deployment": "not_performed"
+  },
+  "nextBoundary": "Deploying the local diagnostic patch and executing any provider-backed successor remain separate actions. A paid successor requires new explicit one-action authority and must retain the existing CNY limit and zero-blind-retry controls."
+}

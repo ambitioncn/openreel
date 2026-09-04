@@ -1,0 +1,24 @@
+{
+  "schema": "openreel-qualification/v1",
+  "milestone": "OCP-10",
+  "status": "local_slice_complete",
+  "scope": [
+    "tenant-isolated redacted audit export",
+    "terminal-record deletion with active and unknown-remote fail-closed policy",
+    "durable memory and file-store deletion",
+    "publishing operation Prometheus counter",
+    "redacted structured publishing operation log"
+  ],
+  "verification": {
+    "targeted": { "passed": 35, "failed": 0 },
+    "fullSuite": { "passed": 419, "failed": 0 },
+    "secretScanFiles": 535,
+    "externalCalls": false,
+    "deploymentActivated": false
+  },
+  "limits": [
+    "No live platform authorization, credential mutation or publication was attempted.",
+    "No Beijing Aliyun production configuration, restore or rollback was changed.",
+    "OCP-11 and OCP-12 remain outstanding and live platform acceptance remains owner-gated."
+  ]
+}

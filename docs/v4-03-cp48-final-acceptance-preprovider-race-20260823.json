@@ -1,0 +1,44 @@
+{
+  "schema": "openreel-v4-final-acceptance-preprovider-stop/v1",
+  "checkpoint": "cp48",
+  "authorization": {
+    "sourceGate": "cp47",
+    "ordinaryAccountRunsAuthorized": 1,
+    "totalMaximumCny": 30,
+    "modelRetries": 0,
+    "consumedConservatively": true
+  },
+  "attempt": {
+    "result": "stopped_before_paid_boundary",
+    "freshAccountRegistered": true,
+    "failure": "initial project assertion observed zero before asynchronous bootstrap project creation settled",
+    "providerCalls": 0,
+    "keyApplications": 0,
+    "commercialJobs": 0,
+    "planningJobs": 0,
+    "costCny": 0,
+    "publications": 0,
+    "externalSends": 0
+  },
+  "diagnosis": {
+    "newEvidence": "Production request logs show the first GET /api/v1/projects returned before the browser's subsequent POST /api/v1/projects 201.",
+    "rootCause": "The runner treated an asynchronous browser bootstrap side effect as synchronous.",
+    "strategyChange": "Poll until exactly one bootstrap project exists, then preserve the terminal assertion that the new creative creates a second distinct project.",
+    "sameFailedApproachRepeated": false
+  },
+  "runnerHardening": {
+    "subscriptionHardLimitUsd": 4,
+    "maximumCnyAtReviewedRate": 28.8,
+    "quoteMaximumCny": 30,
+    "approvedMusicSha256": "73c1cc30bf06796607a8792ae34fede312b488d9dfb2b457368d41a12705f66f",
+    "musicProviderReplay": false,
+    "bootstrapWaitAdded": true
+  },
+  "verification": {
+    "productionLog": "runtime/cp48-preprovider-stop-production-log.txt",
+    "runnerSyntax": "passed",
+    "fullSuite": "485/485 passed",
+    "productionReleaseUnchanged": "/opt/openreel/releases/20260823T081500Z-cp47b-music-wiring"
+  },
+  "nextGate": "A new exact one-run final ordinary-account acceptance authorization is required because cp47 is conservatively treated as consumed."
+}

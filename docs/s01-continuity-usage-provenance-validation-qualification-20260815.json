@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "qualificationId": "S-01-continuity-usage-provenance-validation-20260815",
+  "capturedAt": "2026-08-15T21:28:19.780Z",
+  "scope": "credential-free local synthetic backup creation and restore admission",
+  "result": "passed",
+  "controls": [
+    "continuity entity reference provenance is ordered one-to-one with same-project reference assets",
+    "provenance entries bind asset identity, canonical creation time and non-empty source operation/source asset identity",
+    "storyboard continuity usage identities and order exactly match continuityEntityIds",
+    "historical usage snapshots retain valid kind, name, version, attributes, locks, reference assets and provenance without requiring equality to the entity current version",
+    "usage references must be included in the shot reference set and drift fails before atomic backup or restore promotion"
+  ],
+  "verification": {
+    "opsTests": { "passed": 32, "failed": 0 },
+    "fullSuite": { "passed": 200, "failed": 0 },
+    "highSeverityDependencyFindings": 0,
+    "secretScan": "passed across 202 files",
+    "diffCheck": "passed"
+  },
+  "externalActions": {
+    "otp": 0,
+    "providerCalls": 0,
+    "deployments": 0,
+    "credentialChanges": 0,
+    "publications": 0
+  },
+  "limitations": [
+    "The validator proves structural provenance continuity, not third-party authenticity or cryptographic signing.",
+    "Synthetic local fixtures do not qualify off-host retention, staging restore or production rollback.",
+    "S-01 remains in progress pending independent review and separately authorized external reliability evidence."
+  ]
+}

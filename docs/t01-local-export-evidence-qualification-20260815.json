@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "milestone": "T-01",
+  "qualifiedAt": "2026-08-15T16:30:00.000Z",
+  "scope": "Credential-free local qualification of retained MP4 export and deterministic replay evidence.",
+  "evidence": {
+    "implementation": "src/export-evidence.js",
+    "tests": "test/export-evidence.test.js",
+    "focusedTests": { "passed": 3, "failed": 0 },
+    "fullSuite": { "passed": 175, "failed": 0 }
+  },
+  "verifiedProperties": [
+    "MP4 ftyp container signature",
+    "asset byte count and SHA-256",
+    "openreel-edl/v1 clip count, ordering and duration",
+    "MP4 preview-360p, 100-clip and 600-second boundaries",
+    "stable asset, output digest and input digest on deterministic replay",
+    "productionReady=false local-preview boundary"
+  ],
+  "externalActions": false,
+  "credentialsRead": false,
+  "providerCalls": 0,
+  "deployments": 0,
+  "limitations": [
+    "This qualification uses deterministic local fixture media.",
+    "It does not prove a graphical-browser download, real provider media, production codec quality, or authenticated LibTV format/quality parity."
+  ]
+}

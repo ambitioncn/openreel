@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "qualifiedAt": "2026-08-17T12:33:16Z",
+  "scope": "credential-free model catalog drift field-to-model observability",
+  "result": "passed",
+  "claims": [
+    "Drift reports expose a deterministic changedFieldModelIds object keyed by canonical changed field path.",
+    "Each field maps to the sorted identifiers of changed models containing that field path.",
+    "Unchanged and source-revision-only reports expose an empty changedFieldModelIds object.",
+    "Field-to-model mappings are deeply immutable and every structural drift remains review_required and failClosed."
+  ],
+  "verification": {
+    "targeted": "node --test test/model-catalog.test.js: 14/14 passed",
+    "fullSuite": "npm test: 301/301 passed"
+  },
+  "externalActions": {
+    "providerCalls": 0,
+    "credentialReadsOrChanges": 0,
+    "deployments": 0,
+    "publications": 0
+  },
+  "boundary": "Static field-to-model drift evidence does not prove live provider availability, supported controls, or output quality."
+}

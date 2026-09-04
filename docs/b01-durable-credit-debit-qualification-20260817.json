@@ -1,0 +1,30 @@
+{
+  "schema": "openreel-qualification/v1",
+  "backlogItem": "B-01",
+  "capturedAt": "2026-08-17T00:00:00.000Z",
+  "scope": "local durable credit-debit application",
+  "evidence": {
+    "implementation": "src/credit-ledger.js createCreditLedgerStore",
+    "tests": "test/credit-ledger.test.js",
+    "properties": [
+      "atomic temp-file replacement with file and directory fsync",
+      "exact expected-revision concurrency control",
+      "operation-id binding to complete plan fingerprint",
+      "restart-safe idempotent replay without a second debit",
+      "corrupt state and stale plans fail closed",
+      "paymentConnected remains false"
+    ]
+  },
+  "externalActions": {
+    "orders": 0,
+    "payments": 0,
+    "balanceGrants": 0,
+    "providerCalls": 0,
+    "deployments": 0
+  },
+  "limitations": [
+    "No payment-provider integration evidence",
+    "No authenticated LibTV personal balance or usage-ledger comparison",
+    "This is a single-process file ledger, not a distributed transaction service"
+  ]
+}

@@ -1,12 +1,18 @@
 const INTENTS = new Set(["voice", "music", "sfx"]);
 const FORMATS = new Set(["wav", "mp3"]);
 const SAMPLE_RATES = new Set([16000, 24000, 44100, 48000]);
+const FIELDS = new Set(["intent", "voice", "speed", "pitch", "volume", "sampleRate", "format"]);
 
 export function normalizeAudioSpec(value) {
-  if (!value || typeof value !== "object" || Array.isArray(value) || !INTENTS.has(value.intent)) throw new TypeError("audioSpec.intent must be voice, music, or sfx");
+  if (!value || typeof value !== "object" || Array.isArray(value) || Object.getPrototypeOf(value) !== Object.prototype) throw new TypeError("audioSpec must be a plain record");
+  for (const name of Reflect.ownKeys(value)) {
+    const descriptor = typeof name === "string" ? Object.getOwnPropertyDescriptor(value, name) : null;
+    if (typeof name !== "string" || !FIELDS.has(name) || !descriptor?.enumerable || !("value" in descriptor)) throw new TypeError("audioSpec contains a noncanonical field");
+  }
+  if (!INTENTS.has(value.intent)) throw new TypeError("audioSpec.intent must be voice, music, or sfx");
   const spec = { intent: value.intent };
   if (value.voice !== undefined) {
-    if (value.intent !== "voice" || typeof value.voice !== "string" || !value.voice.trim() || value.voice.length > 64) throw new TypeError("audioSpec.voice requires a voice intent and 1-64 characters");
+    if (value.intent !== "voice" || typeof value.voice !== "string" || !value.voice.trim() || [...value.voice.trim()].length > 64) throw new TypeError("audioSpec.voice requires a voice intent and 1-64 characters");
     spec.voice = value.voice.trim();
   }
   for (const [field, min, max] of [["speed", 0.5, 2], ["pitch", -12, 12], ["volume", 0, 2]]) {
@@ -22,7 +28,5 @@ export function normalizeAudioSpec(value) {
     if (!FORMATS.has(value.format)) throw new TypeError("audioSpec.format is unsupported");
     spec.format = value.format;
   }
-  const allowed = new Set(["intent", "voice", "speed", "pitch", "volume", "sampleRate", "format"]);
-  if (Object.keys(value).some(key => !allowed.has(key))) throw new TypeError("audioSpec contains an unsupported field");
   return Object.freeze(spec);
 }

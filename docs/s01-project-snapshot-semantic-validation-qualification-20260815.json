@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "qualificationId": "S-01-project-snapshot-semantic-validation-20260815",
+  "capturedAt": "2026-08-15T21:17:30.808Z",
+  "scope": "credential-free local synthetic backup creation and restore admission",
+  "result": "passed",
+  "controls": [
+    "continuity entities require unique identities, supported kinds, valid locked attributes and same-project reference assets",
+    "story scene identities, order and project sceneIds must agree exactly",
+    "storyboard shot identities, order, scenes, continuity references, assets and project shotIds must agree exactly",
+    "timeline tracks and clips require unique identities, canonical order and same-project media-kind-compatible assets",
+    "semantic drift fails before atomic backup or restore promotion"
+  ],
+  "verification": {
+    "opsTests": { "passed": 30, "failed": 0 },
+    "fullSuite": { "passed": 198, "failed": 0 },
+    "highSeverityDependencyFindings": 0,
+    "secretScan": "passed across 200 files",
+    "diffCheck": "passed"
+  },
+  "externalActions": {
+    "otp": 0,
+    "providerCalls": 0,
+    "deployments": 0,
+    "credentialChanges": 0,
+    "publications": 0
+  },
+  "limitations": [
+    "Synthetic local fixtures do not qualify off-host retention, signing, staging restore or production rollback.",
+    "S-01 remains in progress pending independent review and separately authorized external reliability evidence."
+  ]
+}

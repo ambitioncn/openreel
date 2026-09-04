@@ -14,6 +14,37 @@ function fixture() {
   return { store, project, session, node };
 }
 
+test("guided short-video story persists editable hooks, script, and shot fields", () => {
+  const { store, project } = fixture();
+  const story = store.upsertStory(project.id, { title: "Coffee", synopsis: "Editable full script", hooks: ["Hook A", "Hook B", "Hook C"], selectedHook: 1, scenes: [{ title: "Hook", summary: "Editable line" }] });
+  const storyboard = store.upsertStoryboard(project.id, { shots: [{ sceneId: story.scenes[0].id, prompt: "Editable vertical visual", duration: 12 }] });
+  const recovered = store.snapshot(project.id);
+  assert.deepEqual(recovered.story.hooks, ["Hook A", "Hook B", "Hook C"]);
+  assert.equal(recovered.story.selectedHook, 1); assert.equal(recovered.story.synopsis, "Editable full script");
+  assert.equal(recovered.story.scenes[0].summary, "Editable line"); assert.equal(storyboard.shots[0].prompt, "Editable vertical visual");
+  assert.throws(() => store.upsertStory(project.id, { hooks: ["A"], selectedHook: 2, scenes: [] }), error => error.code === "INVALID_INPUT");
+});
+
+test("guided draft writes reject stale story and storyboard versions", () => {
+  const { store, project } = fixture();
+  const story = store.upsertStory(project.id, { version: 0, hooks: ["Hook"], scenes: [{ title: "Opening" }] });
+  const storyboard = store.upsertStoryboard(project.id, { version: 0, shots: [{ sceneId: story.scenes[0].id, prompt: "Opening", duration: 5 }] });
+  assert.throws(() => store.upsertStory(project.id, { version: 0, hooks: ["Stale"], scenes: story.scenes }), error => error.code === "VERSION_CONFLICT" && error.status === 409);
+  assert.throws(() => store.upsertStoryboard(project.id, { version: 0, shots: storyboard.shots }), error => error.code === "VERSION_CONFLICT" && error.status === 409);
+  assert.equal(store.snapshot(project.id).story.hooks[0], "Hook");
+});
+
+test("guided production controls and per-shot B-roll persist and reject invalid settings", () => {
+  const { store, project } = fixture();
+  const production = { voice: "energetic", captions: false, music: "upbeat", safeZone: "reels" };
+  const story = store.upsertStory(project.id, { title: "Launch", synopsis: "Script", hooks: ["Hook"], selectedHook: 0, production, scenes: [{ title: "Opening", summary: "Line" }] });
+  store.upsertStoryboard(project.id, { shots: [{ sceneId: story.scenes[0].id, prompt: "Presenter", broll: "Product close-up", duration: 10 }] });
+  const recovered = store.snapshot(project.id);
+  assert.deepEqual(recovered.story.production, production);
+  assert.equal(recovered.storyboard.shots[0].broll, "Product close-up");
+  assert.throws(() => store.upsertStory(project.id, { production: { ...production, voice: "unknown" }, scenes: story.scenes }), error => error.code === "INVALID_INPUT");
+});
+
 test("project and session lifecycle preserves isolation and closes once", () => {
   const { store, project, session } = fixture();
   const snapshot = store.snapshot(project.id);

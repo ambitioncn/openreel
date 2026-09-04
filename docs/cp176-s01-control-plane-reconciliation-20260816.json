@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "checkpoint": "cp176",
+  "backlogItem": "S-01",
+  "finding": "The authoritative backlog still listed Beijing public readiness and metrics restriction as remaining after cp173 completed it and cp175 reconfirmed the postcondition.",
+  "correction": {
+    "evidenceAdded": [
+      "docs/cp173-aliyun-nginx-observability-deny-20260816.json",
+      "docs/cp175-aliyun-graphical-browser-e2e-20260816.json"
+    ],
+    "staleRemainingRemoved": "Restrict public /health/ready and /metrics at the Beijing staging reverse proxy under a new exact configuration gate",
+    "capabilityMatrixUpdated": "CAP-13 now distinguishes completed deterministic staging/browser hardening from gated real-provider and production evidence"
+  },
+  "verification": {
+    "publicRootHttp": 200,
+    "publicReadinessHttp": 404,
+    "publicMetricsHttp": 404,
+    "loopbackReadinessHttp": 200,
+    "loopbackMetricsHttp": 200,
+    "services": ["openreel active", "nginx active"]
+  },
+  "externalActions": [],
+  "providerCalls": 0,
+  "projectCompleted": false
+}

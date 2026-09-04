@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "createdAt": "2026-08-16T05:47:51Z",
+  "backlogItem": "A-01",
+  "scope": "local-only Qwen TTS response-length integrity qualification",
+  "result": "passed",
+  "claims": [
+    "A nonzero Content-Length must equal the bounded body byte count.",
+    "Both truncated and overlong bodies are rejected before WAV admission.",
+    "The existing 20 MiB streamed-body ceiling and cancellation behavior remain intact."
+  ],
+  "verification": [
+    "node --test test/qwen-tts.test.js: 5/5 passed",
+    "npm test: 237/237 passed",
+    "npm run scan:secrets: passed across 257 files",
+    "git diff --check: passed"
+  ],
+  "externalActions": [],
+  "providerCalls": 0,
+  "tailnetRequests": 0,
+  "retainedMedia": 0,
+  "deploymentChanges": 0,
+  "amendmentVersion": 5
+}

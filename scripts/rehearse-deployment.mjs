@@ -14,4 +14,4 @@ try {
   for (let attempt = 0; attempt < 50; attempt++) { try { response = await fetch(`http://127.0.0.1:${port}/health/ready`); break; } catch { await new Promise(resolve => setTimeout(resolve, 50)); } }
   if (!response?.ok || (await response.json()).status !== "ready") throw new Error(`real service did not become ready: ${stderr}`);
   console.log(JSON.stringify({ status: "passed", binding: `127.0.0.1:${port}`, isolatedRoot: root }));
-} finally { child.kill("SIGTERM"); await new Promise(resolve => child.once("exit", resolve)); }
+} finally { if (child.exitCode === null && child.signalCode === null) { child.kill("SIGTERM"); await new Promise(resolve => child.once("exit", resolve)); } }

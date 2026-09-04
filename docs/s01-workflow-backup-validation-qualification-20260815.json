@@ -1,0 +1,34 @@
+{
+  "schema": "openreel-local-qualification/v1",
+  "qualifiedAt": "2026-08-15T22:30:00.000Z",
+  "milestone": "S-01-workflow-backup-validation",
+  "scope": "credential-free local synthetic backup admission",
+  "controls": [
+    "require openreel-workflow/v1 schema, positive version and non-empty template",
+    "require at least one uniquely identified supported typed node",
+    "bind persisted workflow content to its canonical SHA-256 import digest",
+    "require canonical local-import provenance and UTC ISO-8601 millisecond timestamp",
+    "fail before atomic backup promotion and clean failed staging directories"
+  ],
+  "negativeCases": [
+    "unsupported schema",
+    "empty template",
+    "duplicate node identity",
+    "unsupported node type",
+    "content digest drift",
+    "non-canonical import timestamp",
+    "unsupported provenance source"
+  ],
+  "verification": {
+    "targeted": "node --test test/ops.test.js",
+    "targetedResult": "37 passed, 0 failed",
+    "fullSuite": "npm test: 205 passed, 0 failed; npm audit: 0 vulnerabilities; secret scan: passed across 210 files"
+  },
+  "externalActions": [],
+  "claimsExcluded": [
+    "authenticated LibTV workflow comparison",
+    "provider execution",
+    "staging or production mutation",
+    "off-host retention or restore activation"
+  ]
+}

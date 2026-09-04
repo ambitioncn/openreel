@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "status": "passed",
+  "providerCalls": 0,
+  "sourceProviderCalls": 1,
+  "sourceSha256": "6ef317e14a67293502a4fe199972a243e30e2247fa2a2fd4092e628fdb0d6ffa",
+  "assetCount": 1,
+  "timelineAudioClipCount": 1,
+  "download": {
+    "status": 200,
+    "contentType": "audio/wav",
+    "byteLength": 253484
+  },
+  "playback": {
+    "loaded": true,
+    "duration": 5.28
+  },
+  "screenshot": "browser-recovery.png"
+}

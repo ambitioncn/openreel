@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "capturedAt": "2026-08-19",
+  "scope": "credential-presence and execution-boundary preflight for owner-selected Alibaba Cloud OSS Beijing Object Lock retention",
+  "decision": {
+    "provider": "Alibaba Cloud OSS",
+    "region": "Beijing",
+    "retentionMode": "compliance",
+    "retentionDays": 30,
+    "dataClass": "synthetic-only",
+    "perIndependentPaidActionCnyCeiling": 100,
+    "accountPreference": "reuse an existing Alibaba Cloud account identity"
+  },
+  "observations": {
+    "localAliyunCliPresent": false,
+    "localOssutilPresent": false,
+    "localStandardCredentialConfigPresent": false,
+    "localRelevantEnvironmentVariableNamesPresent": false,
+    "beijingHostReachableReadOnly": true,
+    "beijingHostAliyunCliPresent": false,
+    "beijingHostOssutilPresent": false,
+    "beijingHostStandardCredentialConfigPresent": false,
+    "beijingHostRelevantEnvironmentVariableNamesPresent": false,
+    "beijingHostRamRoleAvailable": false,
+    "credentialValuesReadOrRecorded": false
+  },
+  "credentialGap": {
+    "status": "missing",
+    "required": "A non-secret reference to an existing Alibaba Cloud RAM identity usable from the execution environment, with narrowly scoped permission to create and inspect one Beijing OSS bucket, configure and inspect 30-day Object Lock/WORM, and put/get/delete only the synthetic validation objects needed for the deny-delete and isolated-readback checks.",
+    "acceptableDelivery": [
+      "Attach an appropriate RAM role to the registered Beijing host and identify the role without sharing temporary keys.",
+      "Provision a restricted credential through an existing secret manager and provide only its reference and loading procedure; do not paste AccessKey material into chat or repository files."
+    ]
+  },
+  "plannedValidation": [
+    "Confirm the resolved account and Beijing endpoint with a safe identity/bucket preflight and estimate every independently billable action below CNY 100.",
+    "Create one uniquely named private Beijing bucket using synthetic validation data only.",
+    "Configure compliance-mode Object Lock/WORM for 30 days and read back the effective policy.",
+    "Upload a small deterministic synthetic object and record only non-sensitive hashes and bounded metadata.",
+    "Attempt deletion and require a policy denial while retention is active; do not weaken, shorten, or remove retention.",
+    "Read back into a fresh isolated local restore path and verify byte length and SHA-256.",
+    "Leave the locked synthetic object governed by its retention policy and record lifecycle/cost exposure; do not attempt destructive cleanup that conflicts with compliance mode."
+  ],
+  "stopConditions": [
+    "No usable credential reference or RAM role is available.",
+    "The identity, region, private-access posture, retention mode, or 30-day duration cannot be verified before upload.",
+    "Any independently billable action could exceed CNY 100.",
+    "The candidate input is not demonstrably synthetic.",
+    "The requested policy would permit retention bypass or require production-data access."
+  ],
+  "externalActionsExecuted": false,
+  "productionDataAccessed": false,
+  "secretsRetained": false,
+  "projectCompletion": "in_progress"
+}

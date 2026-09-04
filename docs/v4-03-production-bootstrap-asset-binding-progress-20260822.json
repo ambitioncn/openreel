@@ -1,0 +1,27 @@
+{
+  "schema": "openreel-v4-03-progress/v1",
+  "backlogItem": "V4-03",
+  "status": "in_progress",
+  "scope": "production bootstrap construction and revision-bound commercial artifact persistence; zero provider calls and no deployment",
+  "implemented": [
+    "production bootstrap constructs the commercial provider orchestrator and durable file lifecycle only when Ark, Qwen TTS, image/video models and a positive reviewed audio ceiling are all present",
+    "startup recovery requeues durable active jobs",
+    "provider artifact sink persists image, video and audio bytes through the shared memory/SQLite project store",
+    "every artifact and timeline clip retains source project, story and storyboard versions plus shot identity",
+    "storyboard drift rejects later artifacts from the old job before persistence",
+    "no-provider production rehearsal remains supported and fail-closed"
+  ],
+  "verification": [
+    "13/13 focused commercial tests passed",
+    "OPS-2 unprivileged real production-service rehearsal passed",
+    "npm test passed 443/443"
+  ],
+  "providerCalls": 0,
+  "productionChanges": 0,
+  "remaining": [
+    "captions, music, composition and settled-cost lifecycle stages",
+    "paid per-shot redo that preserves successful bound assets",
+    "Beijing deployment and ordinary-account production browser evidence"
+  ],
+  "projectCompletion": "in_progress"
+}

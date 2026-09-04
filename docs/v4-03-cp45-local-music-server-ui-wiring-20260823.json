@@ -1,0 +1,26 @@
+{
+  "schema": "openreel-v4-progress-evidence/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp45",
+  "status": "local_wiring_complete_provider_disabled",
+  "summary": "SeedAudio 1.0 generation is selectable in the beginner workbench, bound into the commercial quote and durable job input, and included in the quote ceiling. Production startup injects the default-disabled service. Execution fails before Ark, TTS, artifact, or composition calls while the service is disabled.",
+  "safety": {
+    "providerCalls": 0,
+    "credentialReads": 0,
+    "deploymentActivated": false,
+    "serviceRestarted": false,
+    "automaticRetries": 0,
+    "musicMaximumCny": 10
+  },
+  "verification": {
+    "targeted": "30/30 passed",
+    "fullSuite": "484/484 passed",
+    "releaseArtifacts": "86/86 verified; tamper rejection passed",
+    "syntax": ["server.mjs", "src/app.js"]
+  },
+  "remaining": [
+    "Exact official endpoint/resource id and account-visible immutable quote evidence",
+    "Separately approved single private provider call",
+    "Separately approved deployment/restart and final ordinary-account production acceptance"
+  ]
+}

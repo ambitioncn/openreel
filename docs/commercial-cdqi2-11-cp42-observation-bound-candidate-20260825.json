@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "candidateId": "commercial-cdqi2-11-observation-bound-5638f170a0a8976a1ca956f6552986478f3b5119efc8d15747fa94ed59f5b5f4",
+  "status": "immutable_local_candidate",
+  "scope": "zero-paid local evaluator observation-bound repair",
+  "contract": {
+    "maximumObservationCharacters": 4000,
+    "handling": "preserve the complete trimmed observation; never truncate or summarize",
+    "overLimit": "fail closed with COMMERCIAL_QUALITY_EVIDENCE_INVALID",
+    "scoreDimensions": [
+      "intent",
+      "beat",
+      "composition",
+      "visual_identity_consistency",
+      "performance_naturalness",
+      "story",
+      "pacing",
+      "continuity"
+    ],
+    "evidenceBinding": ["assetId", "sha256", "observed"]
+  },
+  "files": [
+    {"path":"src/ark-commercial-perceptual-evaluator.js","sha256":"a33c2e7624188e861ece5bae77edf13231e9dc953a46ec647ad8c7e39d91997d"},
+    {"path":"src/director-shot-quality.js","sha256":"d88a9b37e3d41aae0fd636319e2e6cbe270f2f070b841c3bb38d34abe8672de0"},
+    {"path":"src/director-final-quality.js","sha256":"f447668e28938b137b4bacb6de9cb9174f25dff3779a8e4e7a5f707df3cdbbae"},
+    {"path":"test/ark-commercial-perceptual-evaluator.test.js","sha256":"13602e4cfdb9cb20c0e24362055a60b14bfcfcc62d6986c2aebb29ffacee5ccb"},
+    {"path":"test/commercial-quality-inspector.test.js","sha256":"bf682a5cb238fd9f457db50b61dcf265e68539df8ebeea909264b4805caa0017"}
+  ],
+  "aggregateSha256": "5638f170a0a8976a1ca956f6552986478f3b5119efc8d15747fa94ed59f5b5f4",
+  "verification": {
+    "targeted": "24/24 passed",
+    "full": "572/572 passed",
+    "providerCalls": 0,
+    "paidActions": 0,
+    "retries": 0,
+    "replays": 0,
+    "productionChanges": 0
+  },
+  "createdAt": "2026-08-25T12:32:00Z"
+}

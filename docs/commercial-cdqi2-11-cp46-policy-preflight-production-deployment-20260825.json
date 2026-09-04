@@ -1,0 +1,52 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp46-policy-preflight-production-deployment/v1",
+  "capturedAt": "2026-08-25T13:15:00Z",
+  "authorization": "consumed_cp45_deployment_attestation",
+  "baseCandidate": {
+    "id": "commercial-cdqi2-11-observation-bound-5638f170a0a8976a1ca956f6552986478f3b5119efc8d15747fa94ed59f5b5f4",
+    "release": "/opt/openreel/releases/20260825T124500Z-cdqi2-observation-5638f170"
+  },
+  "deployedDelta": {
+    "scope": "the exact cp45 zero-paid fail-closed storyboard preflight module and its focused test",
+    "files": [
+      {"path":"src/commercial-storyboard-preflight.js","sha256":"8238ff3a1ec4cdad4e4927bba36eddd8e12e32db4204d8483d7c53edd9e81eb5"},
+      {"path":"test/commercial-storyboard-preflight.test.js","sha256":"88ed417b1c7d4945a06106515376fb14f134f8948262ddc0d5068edf638f8361"}
+    ],
+    "runtimeIntegrationBoundary": "The module remains independently testable and is not yet invoked by the commercial job runtime; this deployment does not claim runtime enforcement."
+  },
+  "backup": {
+    "path": "/var/backups/openreel/20260825T131337Z-cp46-preflight",
+    "manifestSha256": "690b0ad3e9d882f93faa0f165276d1057913d7ce8004b287f970e1f5a9f2e655",
+    "isolatedRestore": "/var/backups/openreel/20260825T131337Z-cp46-preflight-isolated-restore",
+    "database": "ok",
+    "assets": 155,
+    "publishing": "ok"
+  },
+  "activation": {
+    "activeRelease": "/opt/openreel/releases/20260825T131500Z-cdqi2-cp46-preflight",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T124500Z-cdqi2-observation-5638f170",
+    "remoteFocusedTests": "8/8 passed",
+    "remoteFileHashes": "exact match",
+    "live": {"httpStatus":200,"status":"ok"},
+    "ready": {"httpStatus":200,"status":"ready","database":"ok","assets":"ok"},
+    "service": {"activeState":"active","subState":"running","nRestarts":0},
+    "automaticRollback": "armed for activation verification failure; not triggered"
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "commercialJobs": 0,
+    "providerRetries": 0,
+    "jobRetriesOrReplays": 0,
+    "videoGenerations": 0,
+    "publicationCalls": 0,
+    "credentialChanges": 0
+  },
+  "status": "deployment_accepted_t11_pending",
+  "projectCompletion": "in_progress",
+  "remaining": [
+    "Wire the fail-closed storyboard preflight into the commercial runtime under a separately reviewed candidate and regression set.",
+    "Run a separately authorized, necessary paid T11 ordinary-account acceptance action with zero blind retry.",
+    "Complete T12 terminal evidence and production acceptance only after T11 is accepted."
+  ]
+}

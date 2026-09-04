@@ -1,0 +1,27 @@
+{
+  "schema": "openreel-local-qualification/v1",
+  "milestone": "A-01",
+  "qualification": "qwen-tts-environment-data-property-boundary",
+  "date": "2026-08-16",
+  "scope": "credential-free local synthetic verification",
+  "result": "passed",
+  "claims": [
+    "Qwen environment configuration reads only its two named own enumerable data properties.",
+    "Inherited, hidden and accessor environment values fail with QWEN_TTS_CONFIG_INVALID before an accessor can run.",
+    "A null-prototype environment record with canonical values remains supported."
+  ],
+  "external_actions": {
+    "tailnet_qwen_calls": 0,
+    "provider_calls": 0,
+    "deployments": 0,
+    "credential_changes": 0
+  },
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js: 33/33 passed",
+    "npm test: 260/260 passed",
+    "node --test test/project-governance.test.js: 3/3 passed",
+    "npm run scan:secrets: 297 files passed",
+    "jq empty and git diff --check passed"
+  ],
+  "boundary": "This qualification does not authorize or claim a real Qwen synthesis, retained media, deployment or production behavior."
+}

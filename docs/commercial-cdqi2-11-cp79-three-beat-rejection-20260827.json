@@ -1,0 +1,20 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp79-three-beat-rejection/v1",
+  "capturedAt": "2026-08-27T06:24:09.377Z",
+  "necessity": "T11 required one materially revised three-beat candidate after two single-shot structures repeatedly failed beat and story.",
+  "projectId": "1a06cac6-ac93-4818-a212-c96c93bbdbf2",
+  "jobId": "9fd70b76-07fd-47d3-a914-9cb1927dff3c",
+  "terminal": { "status": "failed", "stage": "quality", "attempts": 1, "code": "COMMERCIAL_QUALITY_REJECTED", "releaseEligible": false },
+  "quoteCny": 46.4,
+  "settled": { "currency": "CNY", "total": 19.2492, "generation": 19.12464, "evaluation": 0.12456, "reservedUnits": 0, "reconciliationConsistent": true },
+  "shots": [
+    { "sha256": "932781af2bd3a8bff6143f75c75651934c11e8466b673c1a11921b72fe833870", "byteLength": 1618117, "scores": { "intent": 0.75, "beat": 0.7, "composition": 0.85, "visual_identity_consistency": 0.95, "performance_naturalness": 0.9 }, "failed": ["intent", "beat"] },
+    { "sha256": "a9bb6e4211baf9aea882decc16041f1d8a582eab2de3d9742e7e2a99f030d4df", "byteLength": 2224930, "scores": { "intent": 0.85, "beat": 0.7, "composition": 0.8, "visual_identity_consistency": 0.9, "performance_naturalness": 0.85 }, "failed": ["beat"] },
+    { "sha256": "208e408318e081965daedcd91d8022b2b1eeb2a5f71d2dff4f8e100a7c1ec610", "byteLength": 4434759, "scores": { "intent": 0.85, "beat": 0.7, "composition": 0.9, "visual_identity_consistency": 0.95, "performance_naturalness": 0.9 }, "failed": ["beat"] }
+  ],
+  "final": { "sha256": "f92c4d1382ddb1c542bf965a2b0e478bd183559b89ae6a86b95c99c34bc22d4c", "byteLength": 431106, "scores": { "story": 0.5, "pacing": 0.6, "continuity": 0.2 }, "failed": ["story", "pacing", "continuity"] },
+  "diagnosis": "Every shot independently preserved in-shot identity and natural performance, but all three had weak beat scores. Across the cut the provider produced three visibly different performers and wardrobe variants, so final continuity collapsed despite the continuity locks.",
+  "safety": { "jobs": 1, "executeCalls": 1, "retries": 0, "fallbacks": 0, "publications": 0, "externalSends": 0 },
+  "status": "immutable_release_ineligible",
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "openreel-v4-progress/v1",
+  "milestone": "V4-03",
+  "status": "in_progress",
+  "summary": "Commercial jobs now durably retain the confirmed estimate, current provider stage and trusted actual-cost settlement. Missing provider usage remains explicitly unsettled and cannot be presented as actual cost.",
+  "implemented": [
+    "Persist prepare/images/videos/voice stage and bounded detail through the existing durable job store",
+    "Persist confirmed quote amount as reserved estimated cost",
+    "Settle actual CNY only when every Ark and Qwen provider result includes trusted costMicros, unitScale and currency",
+    "Keep actual cost unsettled when any provider omits trusted usage"
+  ],
+  "verification": [
+    "node --test test/commercial-provider-orchestrator.test.js test/commercial-job-lifecycle.test.js test/workbench-commercial.test.js: 15/15 passed",
+    "npm test: 445/445 passed"
+  ],
+  "remaining": [
+    "Real captions, music and production composition into a playable bound MP4",
+    "Version-safe paid per-shot redo",
+    "Production deployment and ordinary-account browser evidence"
+  ],
+  "paidProviderCalls": 0,
+  "productionChanges": false
+}

@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "project": "openreel-short-video-commercial-v2",
+  "backlog_item": "CSV2-10",
+  "status": "blocked",
+  "strategy_change": "Split direct Ark routing by protocol: Seedance uses /api/plan/v3; Seedream, chat, and embedding use /api/v3. The prior attempt incorrectly sent Seedream through the plan route.",
+  "local_qualification": {
+    "ark_tests": "35 passed, 0 failed",
+    "full_regression": "369 passed, 0 failed",
+    "secret_scan": "passed across 497 files",
+    "dependency_scan": "0 vulnerabilities"
+  },
+  "production": {
+    "host": "Beijing Aliyun OpenReel production",
+    "previous_release": "/opt/openreel/releases/20260820T203900Z-commercial-v2",
+    "active_release": "/opt/openreel/releases/20260820T204100Z-commercial-v2-routefix",
+    "backup": "/var/backups/openreel/csv2-routefix-20260820T205500Z/predeploy",
+    "backup_manifest_sha256": "b2cc4de69e8a8f777ab5b0f8e9cf9c7fa3513f6c98785f0cc8fc46b86a9becd1",
+    "backup_files": 25,
+    "isolated_restore": "passed",
+    "ark_tests": "35 passed, 0 failed",
+    "bounded_release_qualification": "57 passed, 0 failed",
+    "service_active": true,
+    "service_restarts": 0,
+    "https_proxy_root": 200,
+    "public_ready": 404,
+    "public_metrics": 404,
+    "rollback_target_preserved": true
+  },
+  "real_provider_attempt": {
+    "authorization": "standing OpenReel authorization dated 2026-08-19; each independent paid action capped at CNY 100",
+    "route": "Seedream /api/v3 then Seedance /api/plan/v3",
+    "automatic_retries": 0,
+    "maximum_submissions": 2,
+    "maximum_ledger_units": 9723,
+    "result": "stopped_fail_closed_on_first_image_action",
+    "safe_error": { "code": "ARK_PROVIDER_AUTH", "http_status": 502 },
+    "diagnosis": "The corrected Seedream route reached an authorization boundary. The existing direct credential/model mapping is not authorized or accepted for the standard-v3 image API.",
+    "video_submitted": false,
+    "playable_full_film_created": false,
+    "temporary_allowance_and_key_stopped": true,
+    "isolated_process_and_state_cleaned": true,
+    "production_service_unchanged_by_provider_attempt": true
+  },
+  "blockers": [
+    "CSV2-10 still lacks a paid image-to-video-to-audio playable MP4. A new credential/permission or owner-selected already-authorized image provider is required before another bounded attempt; no retry was performed."
+  ],
+  "project_completion": "in_progress"
+}

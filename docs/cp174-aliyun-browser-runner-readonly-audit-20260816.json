@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "checked_at": "2026-08-16T02:24:01Z",
+  "target": "root@123.57.67.213:/opt/openreel/current",
+  "scope": "read_only",
+  "browser_commands": {
+    "chromium": "missing",
+    "chromium-browser": "missing",
+    "google-chrome": "missing",
+    "google-chrome-stable": "missing",
+    "firefox": "missing"
+  },
+  "runner_commands": {
+    "playwright": "missing",
+    "xvfb-run": "missing"
+  },
+  "node_dependencies": {
+    "playwright": "missing",
+    "playwright-core": "missing",
+    "puppeteer": "missing",
+    "puppeteer-core": "missing"
+  },
+  "service_state": {
+    "openreel": "active",
+    "loopback_root_http": 200
+  },
+  "finding": "No existing bounded graphical browser or browser automation runner is available on the Beijing target, so the cp173 gate is not already satisfied.",
+  "mutation_performed": false
+}

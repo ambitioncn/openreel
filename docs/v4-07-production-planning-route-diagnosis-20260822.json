@@ -1,0 +1,40 @@
+{
+  "schema": "openreel-v4-07-production-planning-route-diagnosis/v1",
+  "productionRelease": "/opt/openreel/releases/20260822T060350Z-v4-project-version",
+  "deployment": {
+    "manifestArtifacts": 84,
+    "manifestSha256": "adb9b373ac047939d89f1a945f2d7914fdf53b8a9d56a6187bb7a7807ef86fcf",
+    "coreBackup": "/var/backups/openreel/v4-cp21-core-pre-activation-20260822T060323Z",
+    "isolatedVerify": "/var/backups/openreel/v4-cp21-core-verify-20260822T060323Z",
+    "assets": 25,
+    "publishing": "absent",
+    "active": true,
+    "readiness": "ready",
+    "productionAppMatchesWorkspace": true
+  },
+  "deploymentRecovery": {
+    "firstCandidateFailure": "locked runtime dependency undici was not installed",
+    "serviceRestored": true,
+    "correction": "npm ci --omit=dev --ignore-scripts, dependency audit, manifest re-verification, explicit if/else rollback",
+    "finalRestartCount": 0
+  },
+  "realModelAttempt": {
+    "freshOrdinaryAccount": true,
+    "subscriptionHardLimit": { "currency": "USD", "amount": 10, "maximumCnyAtReviewedRate": 72 },
+    "distinctProject": true,
+    "projectVersionFixPassed": true,
+    "model": "seed-2.1-turbo",
+    "providerJobId": "3a38f414-5f98-4c5a-9e8e-ea9f9aa6233c",
+    "status": "failed",
+    "errorCode": "ARK_PROVIDER_ERROR",
+    "durationSecondsApprox": 30,
+    "settledCost": { "currency": "USD", "unitScale": 10000, "costUnits": 0 },
+    "seedreamCalls": 0,
+    "seedanceCalls": 0,
+    "ttsCalls": 0
+  },
+  "diagnosis": "Production chose the first catalog text model, seed-2.1-turbo. That real request failed after the transport timeout and settled at zero cost. Production also has seed-2.1-pro configured and retained historical success evidence, but the workbench had no explicit reviewed planning-model route.",
+  "localFix": "Add OPENREEL_WORKBENCH_TEXT_MODEL and use it for both browser and Agent planning before catalog-order fallback; pin the reviewed production route to seed-2.1-pro.",
+  "verification": { "focused": "11/11", "full": "458/458", "releaseManifest": "84/84 and tamper rejection passed" },
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp89-process-control-state-recheck/v1",
+  "capturedAt": "2026-08-27T07:41:07Z",
+  "sourceCheckpoint": "cp88",
+  "humanInput": {
+    "gates": [],
+    "processControlConfirmed": false
+  },
+  "amendmentVersion": null,
+  "productionReadOnly": {
+    "release": "/opt/openreel/releases/20260827T064256Z-cdqi2-cp81-reference-transmission",
+    "service": "active",
+    "mainPid": 352386,
+    "nRestarts": 0,
+    "diskUsedPercent": 43,
+    "deployedArkSha256": "f13d5a3aaa2d47a190b8da3d9147a94688a5bdedd6c8d653231951675ad8be73",
+    "deployedLifecycleSha256": "ef2f1a9c9cdd71978f70f565d179ec29f17403c0c33b324efe96d46929a5fbaf"
+  },
+  "acceptedDiagnosticSource": {
+    "arkSha256": "403618016b493b9aea9350d4b05de25d413dfedf69aa608fba288d582b198818",
+    "lifecycleSha256": "793ebf648ce0cd976c7eb240973d07a46d591420486dcd43e58ad076c0ef9e7a",
+    "alreadyActive": false
+  },
+  "safety": {
+    "processControlActions": 0,
+    "providerCalls": 0,
+    "paidJobs": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0,
+    "externalSends": 0
+  },
+  "status": "blocked_unchanged_after_read_only_recheck",
+  "projectCompletion": "in_progress"
+}

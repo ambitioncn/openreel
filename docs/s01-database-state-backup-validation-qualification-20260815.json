@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "qualifiedAt": "2026-08-15T16:52:51.000Z",
+  "milestone": "S-01",
+  "scope": "credential-free local OpenReel SQLite restore validation",
+  "claims": {
+    "quickCheckRequired": true,
+    "requiredApplicationTablesValidated": true,
+    "migrationSequenceValidated": true,
+    "revisionValidated": true,
+    "entityKindsAndJsonShapeValidated": true,
+    "integrityValidNonOpenReelDatabaseRejected": true,
+    "failureLeavesFinalDestinationAbsent": true,
+    "failureCleansRestoreStaging": true,
+    "externalCopy": false,
+    "restoreActivated": false,
+    "productionReady": false
+  },
+  "verification": [
+    "node --test test/ops.test.js: 15 passed, 0 failed",
+    "npm test: 183 passed, 0 failed",
+    "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "npm run scan:secrets: passed across 159 files",
+    "git diff --check: passed"
+  ],
+  "limits": [
+    "Validation covers the current OpenReel SQLite schema and entity envelope, not every domain-level relationship between stored entities.",
+    "No staging or production restore, off-host retention, signing, deployment, provider call, credential read or external write occurred."
+  ]
+}

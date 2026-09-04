@@ -28,11 +28,105 @@
     <main id="workspace-shell" class="app-shell" hidden>
       <header class="topbar">
         <div><span class="mark">OR</span><strong>OpenReel</strong><span id="project-name" class="crumb">/ Loading…</span></div>
-        <div class="project-actions"><button id="tutorials" type="button">Tutorials</button><button id="api-access" type="button">API access</button><button id="rename-project">Rename</button><button id="archive-project">Archive</button><button id="logout" type="button">Sign out</button><div class="status"><span></span> Secure workspace</div></div>
+        <div class="project-actions"><button id="workbench-home" type="button">作品工作台</button><button id="advanced-canvas" type="button">高级画布</button><button id="tutorials" type="button">教程</button><button id="product-feedback" type="button">反馈</button><button id="api-access" type="button">API access</button><button id="rename-project">Rename</button><button id="archive-project">Archive</button><button id="logout" type="button">Sign out</button><div class="status"><span></span> Secure workspace</div></div>
       </header>
       <section id="collaboration-conflict" class="collaboration-conflict" role="alert" hidden>
         <div><strong id="collaboration-conflict-title"></strong><p id="collaboration-conflict-message"></p></div>
         <button id="reload-collaboration" type="button">Load latest version</button>
+      </section>
+      <section id="creator-workbench" class="creator-workbench" aria-label="短视频作品工作台">
+        <div class="workbench-wrap">
+          <section class="project-shelf" aria-labelledby="project-shelf-title">
+            <div class="section-title"><div><p class="eyebrow">我的作品</p><h2 id="project-shelf-title">作品与草稿</h2></div><button id="toggle-new-project" type="button">新建作品</button></div>
+            <form id="new-project-form" hidden><label>作品名称<input id="new-project-name" maxlength="120" placeholder="例如：咖啡小技巧" required /></label><button type="submit">创建空白草稿</button><button id="cancel-new-project" type="button">取消</button></form>
+            <div id="workbench-projects" class="workbench-projects" aria-live="polite"></div>
+            <p id="project-shelf-state" role="status">正在加载作品…</p>
+          </section>
+          <header class="workbench-hero">
+            <p class="eyebrow">OPENREEL 短视频工作台</p>
+            <h1>一个想法，变成可以发布的短视频</h1>
+            <p>不用学习节点和模型。告诉我们你想做什么，OpenReel 会带你完成脚本、分镜、画面、配音、字幕和成片。</p>
+          </header>
+          <section id="publishing-accounts" class="publishing-accounts" aria-labelledby="publishing-accounts-title">
+            <div><p class="eyebrow">发布账号</p><h2 id="publishing-accounts-title">连接发布平台</h2><p>先绑定发布账号，之后可在任意作品的成片步骤选择。无需先创建脚本或成片。</p></div>
+            <div class="publishing-account-card"><div><strong>TikTok</strong><small id="tiktok-publishing-account-state">正在检查账号状态…</small></div><button id="tiktok-publishing-account-action" type="button" class="secondary" disabled>连接账号</button></div>
+            <div class="publishing-account-card"><div><strong>YouTube Shorts</strong><small id="youtube-publishing-account-state">正在检查账号状态…</small></div><button id="youtube-publishing-account-action" type="button" class="secondary" disabled>连接账号</button></div>
+            <p id="publishing-account-progress" role="status">连接账号只会启动平台官方授权，不会发布任何内容。</p>
+          </section>
+          <section class="quick-start" aria-labelledby="quick-start-title">
+            <div><span>推荐</span><h2 id="quick-start-title">TikTok / 抖音 竖屏短视频</h2><p>30–60 秒 · 9:16 · 自动 Hook、字幕、配音与 B-roll</p></div>
+            <button id="start-short-video" type="button">开始创作</button>
+          </section>
+          <section id="short-video-flow" class="short-video-flow" hidden>
+            <ol class="flow-steps" aria-label="创作步骤">
+              <li class="active">1 创意</li><li>2 脚本</li><li>3 分镜</li><li>4 生成</li><li>5 成片</li>
+            </ol>
+            <div class="brief-panel">
+              <div><p class="eyebrow">第 1 步 · 告诉我们你要做什么</p><h2>描述你的短视频</h2><p>一句话、商品卖点、知识主题或网页内容都可以。</p></div>
+              <form id="short-video-brief-form">
+                <fieldset class="creative-targets"><legend>保存到哪个作品？</legend><label><input type="radio" name="creative-target" value="new" checked />创建独立新作品（推荐）</label><label><input type="radio" name="creative-target" value="current" />继续当前作品 <strong id="creative-current-project"></strong></label><label id="creative-current-confirm-field" hidden><input id="creative-current-confirm" type="checkbox" />我确认用这个新创意改写当前作品</label><small>选择新作品不会覆盖当前脚本、分镜或素材。继续当前作品必须在本次提交前明确确认。</small></fieldset>
+                <fieldset class="intake-sources"><legend>从哪里开始？</legend><label><input type="radio" name="intake-source" value="idea" checked />一句话</label><label><input type="radio" name="intake-source" value="copy" />文案</label><label><input type="radio" name="intake-source" value="url" />商品链接</label><label><input type="radio" name="intake-source" value="asset" />上传素材</label></fieldset>
+                <label id="short-video-brief-label">视频主题<textarea id="short-video-brief" rows="5" maxlength="6000" placeholder="例如：用轻松有趣的方式，介绍三种让咖啡更好喝的小技巧" required></textarea></label>
+                <label id="product-url-field" hidden>商品链接<input id="short-video-url" type="url" maxlength="2000" placeholder="https://example.com/product" /></label>
+                <label id="intake-asset-field" hidden>参考素材<input id="short-video-asset" type="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,audio/mpeg,audio/wav" /><small>素材通过现有安全上传链路保存到当前作品，不会自动调用模型。</small></label>
+                <div class="brief-options">
+                  <label>作品类型<select id="short-video-type"><option value="knowledge">知识分享</option><option value="product">商品种草</option><option value="story">故事叙述</option><option value="talking">口播观点</option><option value="news">资讯解读</option></select></label>
+                  <label>目标时长<select id="short-video-duration"><option value="5">约 5 秒</option><option value="30">约 30 秒</option><option value="60" selected>约 60 秒</option></select></label>
+                </div>
+                <button type="submit">生成脚本与分镜</button>
+                <p id="short-video-state" role="status">此步骤只创建可审阅的创作方案，不会调用付费模型。</p>
+              </form>
+            </div>
+            <section id="script-editor" class="script-editor" hidden aria-labelledby="script-editor-title">
+              <div class="editor-heading"><div><p class="eyebrow">第 2 步 · 脚本</p><h2 id="script-editor-title">选择 Hook，打磨完整脚本</h2></div><span>自动保存到当前作品</span></div>
+              <fieldset id="hook-options"><legend>3 个开场 Hook</legend></fieldset>
+              <label>完整口播脚本<textarea id="short-video-script" rows="10" maxlength="6000" required></textarea></label>
+            </section>
+            <section id="storyboard-editor" class="storyboard-editor" hidden aria-labelledby="storyboard-editor-title">
+              <div class="editor-heading"><div><p class="eyebrow">第 3 步 · 分镜</p><h2 id="storyboard-editor-title">逐镜调整台词、画面和时长</h2></div><span id="storyboard-duration">总时长 0 秒</span></div>
+              <div id="storyboard-shots"></div>
+              <section class="simple-timeline" aria-labelledby="simple-timeline-title"><div class="editor-heading"><div><p class="eyebrow">生成前检查</p><h3 id="simple-timeline-title">简化时间线</h3></div><strong id="workbench-cost-hint">正在估算…</strong></div><ol id="simple-timeline-track"></ol><p>成本为生成前估算，确认生成前不会产生付费调用。</p></section>
+              <fieldset id="production-controls" class="production-controls"><legend>声音、字幕与平台安全区</legend><label>配音风格<select id="workbench-voice"><option value="natural">自然</option><option value="energetic">活力</option><option value="calm">沉稳</option></select></label><label>背景音乐<select id="workbench-music"><option value="none">无音乐</option><option value="light">轻柔</option><option value="upbeat">动感</option></select></label><label><input id="workbench-generate-music" type="checkbox" />使用 SeedAudio 1.0 生成背景音乐（服务默认禁用）</label><label>音乐提示词<input id="workbench-music-prompt" maxlength="500" placeholder="轻快、无歌词的海滩舞蹈配乐" /></label><label>音乐时长<select id="workbench-music-duration"><option value="5">5 秒</option><option value="10">10 秒</option></select></label><label>上传字幕卡（PNG）<input id="workbench-caption-upload" type="file" accept="image/png" /></label><label>字幕对应镜头<select id="workbench-caption-shot"></select></label><label>字幕文字<input id="workbench-caption-text" maxlength="500" /></label><label>上传背景音乐（WAV/MP3）<input id="workbench-music-upload" type="file" accept="audio/wav,audio/mpeg" /></label><label>音乐来源声明<input id="workbench-music-source" maxlength="500" placeholder="例如：本人创作或已取得许可" /></label><p id="workbench-production-asset-state" role="status">上传后将绑定当前分镜版本并标记为已审核。</p><label>已审核音乐素材<select id="workbench-music-asset"><option value="">不使用素材库音乐</option></select></label><label><input id="workbench-music-rights" type="checkbox" />我确认已取得所需音乐权利，并自行承担上传、生成、使用与发布责任；OpenReel 不替我判定授权状态。</label><label>字幕卡素材<select id="workbench-caption-assets" multiple></select></label><label>安全区<select id="workbench-safe-zone"><option value="tiktok">TikTok / 抖音</option><option value="reels">Instagram Reels</option><option value="shorts">YouTube Shorts</option></select></label><label class="caption-toggle"><input id="workbench-captions" type="checkbox" checked />自动字幕</label></fieldset>
+              <div class="editor-actions"><button id="save-script-storyboard" type="button">保存脚本与分镜</button><p id="editor-state" role="status">所有内容都可以修改；保存不会调用付费模型。</p></div>
+            </section>
+            <section id="generation-workbench" class="storyboard-editor" hidden aria-labelledby="generation-workbench-title">
+              <div class="editor-heading"><div><p class="eyebrow">第 4 步 · 生成</p><h2 id="generation-workbench-title">费用预检、确认与生成进度</h2></div><span>确认前不会调用付费模型</span></div>
+              <p id="commercial-quote-state" role="status">保存最新脚本与分镜后获取费用预检。</p>
+              <fieldset class="production-controls"><legend>商业安全与参考图证据</legend><label>人物/物体参考图<select id="commercial-identity-reference"><option value="">选择分镜已绑定的参考图</option></select></label><label>主体类型<select id="commercial-performer"><option value="fictional_adult">虚构成人</option><option value="object_only">纯物体</option></select></label><label><input id="commercial-reference-rights" type="checkbox" />我确认拥有或已取得该参考图的使用许可</label><label><input id="commercial-no-brands" type="checkbox" />我确认素材与要求不含未经许可的品牌</label><label><input id="commercial-no-public-figures" type="checkbox" />我确认素材与要求不含公众人物</label><p>报价时会读取所选图片的真实字节，核验实际尺寸并计算 SHA-256；不会产生模型费用。</p></fieldset>
+              <section class="director-runtime" aria-labelledby="director-runtime-title"><p class="eyebrow">导演质量责任</p><h3 id="director-runtime-title">生成与合格状态分离</h3><p id="director-runtime-state" role="status">阶段 awaiting_director_workflow · 生成 not_started · 质量 not_qualified · 发布资格 禁止</p><h4>实际视频感知证据</h4><ol id="commercial-perceptual-evidence" aria-live="polite"><li><strong>未通过 · 人物视觉身份一致性 / 表演自然度</strong><small>等待实际视频字节质量评估</small></li></ol></section>
+              <div class="editor-actions"><button id="commercial-quote" type="button">获取费用预检</button><label><input id="commercial-confirmed" type="checkbox" disabled />我确认按当前报价与版本开始真实生成</label><button id="commercial-start" type="button" disabled>确认并开始生成</button><button id="commercial-retry" type="button" hidden>重试失败任务</button><button id="commercial-redo-quote" type="button" hidden>仅重做失败镜头</button><label id="commercial-redo-confirm-label" hidden><input id="commercial-redo-confirmed" type="checkbox" />我确认按单镜头报价创建重做任务</label><button id="commercial-redo-start" type="button" hidden disabled>确认重做</button><button id="commercial-cancel" type="button" hidden>取消未开始任务</button></div>
+              <p id="commercial-redo-state" role="status" hidden></p>
+              <p id="commercial-job-state" role="status">尚未创建生成任务。</p>
+            </section>
+            <section id="final-workbench" class="final-workbench" hidden aria-labelledby="final-workbench-title">
+              <div class="editor-heading"><div><p class="eyebrow">第 5 步 · 成片</p><h2 id="final-workbench-title">预览、导出与发布文案</h2></div><span>导出前需确认时间线</span></div>
+              <div class="final-grid"><div class="final-preview"><video id="workbench-final-video" controls playsinline hidden></video><p id="workbench-final-empty">尚无成片。生成镜头并加入时间线后即可预览和导出。</p></div><form id="publishing-form"><label>作品标题<input id="publishing-title" maxlength="80" required /></label><label>发布文案<textarea id="publishing-copy" rows="8" maxlength="1000" required></textarea></label><button type="submit">保存标题与文案</button></form></div>
+              <div class="final-actions"><label><input id="workbench-export-reviewed" type="checkbox" />我已检查时间线与成片内容</label><button id="workbench-export" type="button">导出 MP4</button><a id="workbench-download" hidden download>下载 MP4 成片</a></div>
+              <section class="publishing-launch" aria-labelledby="publishing-launch-title"><div><p class="eyebrow">一键发布</p><h3 id="publishing-launch-title">选择已绑定账号与目标平台</h3><p>发布前逐平台校验并再次最终确认；单个平台失败不会隐藏其他平台结果。</p></div><fieldset id="publishing-destinations"><legend>发布目标</legend><label><input type="checkbox" value="tiktok" disabled />TikTok <small>未绑定账号</small></label><label><input type="checkbox" value="douyin" disabled />抖音 <small>未绑定账号</small></label><label><input type="checkbox" value="instagram_reels" disabled />Instagram Reels <small>未绑定账号</small></label><label><input type="checkbox" value="youtube_shorts" disabled />YouTube Shorts <small>未绑定账号</small></label></fieldset><div id="publishing-overrides" aria-live="polite"></div><button id="publishing-preflight" type="button" disabled>校验并进入最终确认</button><button id="publishing-recover" type="button" hidden>恢复最近批次</button><button id="publishing-confirm" type="button" hidden disabled>最终确认并发布</button><ol id="publishing-results" aria-label="逐平台发布状态"></ol><p id="publishing-progress" role="status">绑定账号后可用；此处不会自动授权或对外发布。</p></section>
+              <p id="workbench-final-state" role="status">导出使用本地预览渲染，不会调用付费模型。</p>
+            </section>
+          </section>
+          <section id="workbench-model-router" class="model-router" aria-labelledby="model-router-title">
+            <div class="section-title"><div><p class="eyebrow">自动模型路由</p><h2 id="model-router-title">选择生成偏好</h2></div><span>无需选择具体模型</span></div>
+            <fieldset><legend>OpenReel 会按画面、视频和声音任务自动匹配模型</legend><label><input type="radio" name="workbench-quality" value="fast" checked /><strong>快速</strong><small>优先速度与低成本，适合草稿和试做</small></label><label><input type="radio" name="workbench-quality" value="quality" /><strong>高质量</strong><small>优先成片质量，适合最终生成</small></label></fieldset>
+            <p id="workbench-route-state" role="status">正在检查可用生成能力…</p>
+          </section>
+          <section id="asset-manager" class="asset-manager" aria-labelledby="asset-manager-title">
+            <div class="section-title"><div><p class="eyebrow">作品素材</p><h2 id="asset-manager-title">素材库</h2></div><label>筛选<select id="workbench-asset-kind"><option value="">全部</option><option value="image">图片</option><option value="video">视频</option><option value="audio">音频</option></select></label></div>
+            <div class="asset-toolbar"><label>上传素材<input id="workbench-asset-upload" type="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,audio/mpeg,audio/wav" /></label><label>绑定到分镜<select id="asset-shot-target"><option value="">先创建分镜</option></select></label><button id="bind-workbench-asset" type="button" disabled>绑定选中素材</button></div>
+            <div id="workbench-assets" class="workbench-assets"></div>
+            <p id="workbench-asset-state" role="status">正在加载素材…</p>
+          </section>
+          <section class="workflow-gallery" aria-labelledby="workflow-gallery-title">
+            <div class="section-title"><div><p class="eyebrow">更多工作流</p><h2 id="workflow-gallery-title">你想制作哪种作品？</h2></div><small>即将开放</small></div>
+            <div class="workflow-cards">
+              <article><b>🛍️</b><h3>商品种草视频</h3><p>从商品卖点生成 Hook、口播和场景化素材。</p></article>
+              <article><b>💡</b><h3>知识分享视频</h3><p>把复杂主题讲成清晰、有节奏的竖屏短片。</p></article>
+              <article><b>🎙️</b><h3>观点口播视频</h3><p>优化表达结构，自动匹配字幕与辅助画面。</p></article>
+              <article><b>📖</b><h3>故事短片</h3><p>从故事梗概生成分镜、角色和连续镜头。</p></article>
+            </div>
+          </section>
+        </div>
       </section>
       <aside class="toolbox" aria-label="Node toolbox">
         <p class="eyebrow">ADD NODE</p>
@@ -85,7 +179,8 @@
             <label>Prompt<textarea id="generation-prompt" rows="3">A cinematic local simulation</textarea></label>
             <fieldset id="parameter-fields"><legend>Model parameters</legend><label>Model<select id="generation-model"></select></label><label>Mode<select id="generation-mode"></select></label><label>Aspect<select id="generation-aspect"></select></label><label>Resolution<select id="generation-resolution"></select></label><label>Duration<select id="generation-duration"></select></label><label><input id="generation-audio" type="checkbox" /> Audio</label><div id="generation-controls" class="generation-controls" hidden></div><output id="reference-limit"></output></fieldset>
             <fieldset id="audio-spec-fields" hidden><legend>Reviewed audio settings</legend><label>Intent<select id="audio-intent"><option value="voice">Voice</option><option value="music">Music</option><option value="sfx">SFX</option></select></label><label>Voice<input id="audio-voice" maxlength="64" /></label><label>Speed<input id="audio-speed" type="number" min="0.5" max="2" step="0.1" value="1" /></label><label>Pitch<input id="audio-pitch" type="number" min="-12" max="12" step="1" value="0" /></label><label>Volume<input id="audio-volume" type="number" min="0" max="2" step="0.1" value="1" /></label><label>Sample rate<select id="audio-sample-rate"><option>24000</option><option>16000</option><option>44100</option><option>48000</option></select></label><label>Format<select id="audio-format"><option>wav</option><option>mp3</option></select></label><label><input id="audio-reviewed" type="checkbox" /> I reviewed these settings</label></fieldset>
-            <p class="field-note">Ark generation uses your signed-in account's approved USD allowance. No platform key is required in the workspace.</p>
+            <fieldset id="qwen-fields" hidden><legend>Qwen voice preparation</legend><label>Language<input id="audio-language" maxlength="64" placeholder="Chinese" /></label><label>Voice instruction<textarea id="audio-instruct" maxlength="500" rows="2"></textarea></label></fieldset>
+            <p id="generation-safety" class="field-note">Ark generation uses your signed-in account's approved USD allowance. No platform key is required in the workspace.</p>
             <label class="failure-toggle"><input id="simulate-failure" type="checkbox" /> Simulate failure</label>
             <button id="generate" type="button">Generate locally</button>
             <p id="generation-state" role="status">Ready</p>
@@ -98,15 +193,9 @@
     <dialog id="api-access-dialog" class="access-dialog">
       <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
       <h2>API access</h2>
-      <p>Submit an allowance application for workspace generation. After approval, create a platform key only for external API or CLI access.</p>
-      <form id="key-application-form" class="auth-form">
-        <label>Why do you need access?<textarea id="key-application-reason" maxlength="1000" required></textarea></label>
-        <label>Requested usage limit (USD)<input id="key-application-limit" type="number" min="0.0001" step="0.0001" value="10.0000" required /></label>
-        <button type="submit">Submit application</button>
-      </form>
-      <p id="key-application-state" role="status">Loading applications…</p>
-      <ol id="key-application-list"></ol>
-      <section id="key-issue-panel" hidden>
+      <p>Your account includes an automatic 30-day USD 200 trial allowance. Create a platform key only for external API or CLI access.</p>
+      <p id="key-application-state" role="status">Loading access…</p>
+      <section id="key-issue-panel">
         <button id="create-api-key" type="button">Create external API key</button>
         <p id="issued-key" role="status">The full key is shown once after creation.</p>
         <ol id="api-key-list"></ol>
@@ -117,6 +206,16 @@
       <header><p class="eyebrow">OPENREEL ACADEMY</p><h2>从经典类型开始创作</h2><p>选择一个案例，把完整节点蓝图放到当前画布。教程不会自动调用付费模型。</p></header>
       <div id="tutorial-list" class="tutorial-list"></div>
       <article id="tutorial-detail" class="tutorial-detail" hidden></article>
+    </dialog>
+    <dialog id="feedback-dialog" class="access-dialog">
+      <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
+      <h2>告诉我们哪里需要改进</h2>
+      <form id="feedback-form">
+        <label>类别<select id="feedback-category" required><option value="generation">生成</option><option value="editing">编辑</option><option value="export">导出</option><option value="publishing">发布</option><option value="reliability">稳定性</option><option value="other">其他</option></select></label>
+        <label>评分<select id="feedback-rating" required><option value="5">5 · 很满意</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1 · 很不满意</option></select></label>
+        <label>补充说明<textarea id="feedback-comment" maxlength="1000" rows="5"></textarea></label>
+        <button type="submit">提交反馈</button><p id="feedback-state" role="status"></p>
+      </form>
     </dialog>
     <script type="module" src="src/app.js"></script>
   </body>

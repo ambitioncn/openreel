@@ -1,0 +1,28 @@
+{
+  "schema": "openreel-e01-cp319-browser-acceptance-path-qualification/v1",
+  "status": "passed",
+  "scope": "credential-free local reliability hardening after cp318",
+  "changes": [
+    "Browser acceptance is bound to the authenticated direct asset URL used by the product path.",
+    "Blob Object URL playback remains recorded as diagnostic evidence but cannot create a false-negative acceptance result.",
+    "Temporary retained-media writing remains conditional on an explicit retention output path.",
+    "The isolated launcher enumerates the retained media path in mandatory cleanup."
+  ],
+  "verification": {
+    "focusedTests": {
+      "passed": 49,
+      "failed": 0
+    },
+    "secretScanFiles": 402,
+    "secretScanPassed": true,
+    "providerCalls": 0,
+    "productionChanges": 0,
+    "credentialReadsOrChanges": 0
+  },
+  "acceptanceEffect": "Prevents recurrence of the cp316 Blob Object URL false negative and preserves cp318's product-representative direct-asset playback result.",
+  "limitations": [
+    "This local qualification does not add multi-shot continuity, remaining provider modality, authenticated LibTV comparison or production evidence.",
+    "Any additional provider call or deployment remains separately gated."
+  ],
+  "projectCompletion": "in_progress"
+}

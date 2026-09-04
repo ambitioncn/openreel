@@ -1,0 +1,42 @@
+{
+  "schema": "openreel-e01-execution-evidence/v1",
+  "authorizationId": "openreel-e01-phase-one-cp54",
+  "status": "stopped_fail_closed",
+  "staging": {
+    "hostReference": "botland-vps",
+    "baseUrl": "http://127.0.0.1:4273",
+    "isolatedFromProduction": true,
+    "paidInferenceAfterRun": false,
+    "readyAfterRun": true
+  },
+  "authorized": {
+    "maximumSubmissions": 8,
+    "maximumUnits": 30558,
+    "currency": "USD",
+    "unitScale": 10000,
+    "automaticRetries": 0
+  },
+  "observed": {
+    "providerSubmissions": 1,
+    "completedCases": 0,
+    "failedCases": 1,
+    "unexecutedCases": 7,
+    "failedCaseId": "image-continuity-1",
+    "failedModel": "seedream-5-lite",
+    "failureCode": "ARK_PROVIDER_ERROR",
+    "spentUnits": 0,
+    "reservedUnits": 0,
+    "ledgerEntries": 1,
+    "ledgerStatus": "failed",
+    "temporaryKeyStatus": "revoked",
+    "temporarySubscriptionStatus": "stopped"
+  },
+  "retention": {
+    "credentialValues": false,
+    "providerTaskIds": false,
+    "providerOutputUrls": false,
+    "accountIdentifiers": false,
+    "otpValues": false
+  },
+  "nextProviderSubmissionAuthorized": false
+}

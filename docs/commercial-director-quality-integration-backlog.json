@@ -1,0 +1,19 @@
+{
+  "schema": "openreel-project-backlog/v2",
+  "projectId": "openreel-commercial-director-quality-integration",
+  "status": "accepted",
+  "items": [
+    {"id":"CDQI2-01","terminal":["T01","T02"],"title":"Add explicit identity consistency and performance naturalness to the byte-backed evaluator and inspector","status":"accepted","dependsOn":[],"acceptedCheckpoint":"cp1"},
+    {"id":"CDQI2-02","terminal":["T02","T08"],"title":"Add strict missing/extra/malformed/stale evidence and independent pass/reject no-paid regressions","status":"accepted","dependsOn":["CDQI2-01"],"acceptedCheckpoint":"cp2"},
+    {"id":"CDQI2-03","terminal":["T03"],"title":"Extend initial and redo quote, confirmation, cost ceiling, necessity log and one-time settlement for the eight-dimension call set","status":"accepted","dependsOn":["CDQI2-01"],"acceptedCheckpoint":"cp3"},
+    {"id":"CDQI2-04","terminal":["T04"],"title":"Reconcile every qualification, export and publication preflight gate with the eight-dimension decision","status":"accepted","dependsOn":["CDQI2-02"],"acceptedCheckpoint":"cp6"},
+    {"id":"CDQI2-05","terminal":["T05"],"title":"Map identity/performance failures to finite shot redo while preserving accepted immutable artifacts","status":"accepted","dependsOn":["CDQI2-03","CDQI2-04"],"acceptedCheckpoint":"cp6"},
+    {"id":"CDQI2-06","terminal":["T06"],"title":"Persist and expose full policies, scores, evidence, provenance, quote/settlement, failure and redo lineage","status":"accepted","dependsOn":["CDQI2-03","CDQI2-05"],"acceptedCheckpoint":"cp7"},
+    {"id":"CDQI2-07","terminal":["T07"],"title":"Render both named dimensions, evidence, failures, evaluation price and release state in production UI","status":"accepted","dependsOn":["CDQI2-06"],"acceptedCheckpoint":"cp8"},
+    {"id":"CDQI2-08","terminal":["T08"],"title":"Complete zero-provider-call pass and rejection regression matrix","status":"accepted","dependsOn":["CDQI2-02","CDQI2-04","CDQI2-05","CDQI2-06","CDQI2-07"],"acceptedCheckpoint":"cp9"},
+    {"id":"CDQI2-09","terminal":["T09"],"title":"Run the minimum necessary authorized actual-video pass/reject evaluation with no blind retry and retained cost proof","status":"accepted","dependsOn":["CDQI2-08"],"acceptedCheckpoint":"cp13"},
+    {"id":"CDQI2-10","terminal":["T10"],"title":"Build, sign and qualify one immutable reviewed candidate through full regression, backup/restore and rollback","status":"accepted","dependsOn":["CDQI2-09"],"acceptedCheckpoint":"cp14"},
+    {"id":"CDQI2-11","terminal":["T11"],"title":"Back up, deploy and accept the exact candidate on Beijing Aliyun without external publication","status":"accepted","dependsOn":["CDQI2-10"],"acceptedCheckpoint":"cp19"},
+    {"id":"CDQI2-12","terminal":["T12"],"title":"Perform terminal evidence-ledger audit and accept project only when T01-T12 all pass","status":"accepted","dependsOn":["CDQI2-11"],"acceptedCheckpoint":"2026-08-31-terminal-audit"}
+  ]
+}

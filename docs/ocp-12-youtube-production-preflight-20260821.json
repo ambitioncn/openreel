@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "milestone": "OCP-12-YOUTUBE-PREFLIGHT",
+  "captured_at": "2026-08-21T03:08:00Z",
+  "status": "implementation_required_before_deploy",
+  "strategy_change": "Narrow live acceptance preparation to YouTube Shorts and verify the real Beijing production boundary before any rollout or owner gate.",
+  "production": {
+    "host": "123.57.67.213",
+    "public_origin": "https://openreel.duobiai.cn:4173",
+    "current_release": "/opt/openreel/releases/20260820T233000Z-commercial-v2-hybrid",
+    "service_active": true,
+    "service_restarts": 0,
+    "publishing_state_present": false,
+    "publishing_environment_keys_present": false
+  },
+  "youtube": {
+    "minimum_scope": "https://www.googleapis.com/auth/youtube.upload",
+    "proposed_callback": "https://openreel.duobiai.cn:4173/api/v1/publishing/oauth/youtube_shorts/callback",
+    "callback_ready": false,
+    "shorts_classification": "YouTube classifies eligible ordinary video uploads as Shorts; there is no separate Shorts upload endpoint."
+  },
+  "release_qualification": {
+    "deployable": false,
+    "findings": [
+      "The production entry point does not instantiate publishingOrchestrator or publishingAccounts, so batch routes fail closed with PUBLISHING_UNAVAILABLE.",
+      "src/publishing-oauth.js is not exposed through authenticated begin/callback/disconnect HTTP routes.",
+      "The production environment has no OPENREEL_PUBLISHING_STATE or OPENREEL_PUBLISHING_MASTER_KEY entries and /var/lib/openreel/publishing is absent.",
+      "scripts/qualify-release-artifacts.mjs does not include the publishing modules, publishing UI assets, publishing tests, publishing-state configuration, or publishing recovery scripts in its reviewed artifact set."
+    ]
+  },
+  "actions": {
+    "deployment_performed": false,
+    "production_mutation_performed": false,
+    "credential_mutation_performed": false,
+    "oauth_consent_performed": false,
+    "upload_performed": false,
+    "publication_performed": false
+  },
+  "next_safe_work": [
+    "Wire durable publishing runtime construction into the production entry point with unavailable-by-default provider transports.",
+    "Add authenticated OAuth begin/callback/disconnect routes and exact callback allowlisting without adding client credentials.",
+    "Expand the release manifest and production backup wrapper to cover the complete publishing release and six-file state bundle.",
+    "Pass local regression, secret scan, isolated deployment rehearsal and zero-provider production-mode HTTP qualification before deploying."
+  ],
+  "later_owner_gates": [
+    "Add or change the named Google OAuth client credentials.",
+    "Authorize the exact Google project and YouTube channel with the minimum youtube.upload scope.",
+    "Upload the reviewed MP4.",
+    "Publish the reviewed title, description, privacy and made-for-kids selection."
+  ]
+}

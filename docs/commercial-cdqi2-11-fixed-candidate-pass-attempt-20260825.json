@@ -1,0 +1,43 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-fixed-candidate-pass-attempt/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "failed_closed",
+  "attemptedAt": "2026-08-25T06:14:00Z",
+  "necessity": "T11 requires one Beijing production ordinary-account qualified pass on the exact fixed candidate after the production shot-binding defect was corrected, frozen, qualified and deployed.",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "candidateFingerprint": "102ff46ffd751348fedebc910daa7ba5edf3a2b78d6e06bdb9624057765356f8",
+  "projectId": "2875c2c3-f43c-4c06-b3c5-2767f0f91c14",
+  "jobId": "065dc4c6-4c79-4556-a39c-c5534119fc3b",
+  "quote": {
+    "currency": "CNY",
+    "estimatedCny": 16.2,
+    "generationEstimatedCny": 16,
+    "evaluationEstimatedCny": 0.2,
+    "evaluationCalls": 2,
+    "maximumCostCnyPerCall": 0.1,
+    "perActionLimitCny": 100
+  },
+  "observation": {
+    "client": "The single execute request exceeded its 30 second client timeout; no replay was made.",
+    "durableStatus": "failed",
+    "stage": "quality",
+    "attempts": 1,
+    "retryable": false,
+    "errorCode": "INVALID_API_KEY",
+    "errorMessage": "commercial generation failed",
+    "costStatus": "reserved",
+    "settledCny": null,
+    "service": "active/running",
+    "serviceRestarts": 0
+  },
+  "safety": {
+    "blindRetries": 0,
+    "newJobsAfterTimeout": 0,
+    "publicationCalls": 0,
+    "externalMessages": 0,
+    "credentialChanges": 0,
+    "candidateMutation": false
+  },
+  "decision": "The exact durable job reached a terminal fail-closed INVALID_API_KEY result. Do not replay execute, create another paid job, change credentials, or claim T11. Resolve the production credential condition through separately authorized handling before any future action. T11 and project completion remain in progress."
+}

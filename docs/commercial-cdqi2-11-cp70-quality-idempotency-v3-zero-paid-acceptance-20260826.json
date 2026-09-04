@@ -1,0 +1,36 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp70-quality-idempotency-v3-zero-paid-acceptance/v1",
+  "capturedAt": "2026-08-26T07:18:00Z",
+  "release": "/opt/openreel/releases/20260826T0707Z-quality-idempotency-v3",
+  "behavior": {
+    "contract": "commercial-perceptual-v3",
+    "keyBinding": ["evaluationRunId", "projectId", "storyboardVersion", "stage", "shotId", "assetId", "sha256"],
+    "replayProtection": "returned Ark job idempotencyKey must exactly match the current byte-bound evaluation key",
+    "persistedEvidence": "quality evaluation carries the contract, run digest and per-call job/key/asset/digest identity"
+  },
+  "cp69Diagnosis": {
+    "historicalEvaluationEntries": 4,
+    "historicalEvaluationUnits": 172,
+    "historicalEvaluationCny": 0.12384,
+    "cause": "legacy project/storyboard quality keys replayed four 2026-08-25 evaluator jobs and their historical usage into cp69 job cost",
+    "accountLedgerOutcome": "cp69 account subscription correctly recorded only the new generation delta; there was no missing new evaluation charge",
+    "v3Outcome": "run-and-byte-bound keys prevent future jobs from reusing those historical evaluator jobs"
+  },
+  "verification": {
+    "localFocused": "24 passed, 0 failed",
+    "localFull": "582 passed, 0 failed",
+    "remoteFocused": "24 passed, 0 failed",
+    "remoteFull": "65 passed, 0 failed",
+    "sourceHashParity": true,
+    "postDeployUsageEntries": 0,
+    "activeRecentScopedSessions": 0,
+    "readiness": "live ok; database/assets ready; service active/running; NRestarts=0"
+  },
+  "historicalLedgerCaveat": {
+    "unrelatedReservedUnits": 34725,
+    "scope": "four old subscriptions and reservations from 2026-08-06 through 2026-08-22, unrelated to the cp69 owner/subscription and unchanged by cp70",
+    "action": "retain as separate historical reconciliation risk; no mutation was authorized or performed"
+  },
+  "safety": {"providerCalls":0,"paidJobs":0,"paidCny":0,"retries":0,"publications":0,"externalSends":0,"credentialChanges":0},
+  "status": "deployed_zero_paid_acceptance_complete_project_in_progress"
+}

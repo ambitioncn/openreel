@@ -1,0 +1,11 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-production-attempt/v1",
+  "capturedAt": "2026-08-25T12:08:00Z",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "candidateFingerprint": "088c0f0fd06b6d24ef896271955f8e80013519ab8d6430417d8e652f779e4c96",
+  "status": "failed_closed",
+  "jobId": "3fb6a9fd-2645-43cf-9cf5-a04c936acce0",
+  "evidence": "Loop task artifact artifacts/cdqi2-11-qualified-pass-cp40.json retains exact media digests, finish reasons, settlement, and safety counters.",
+  "decision": "T11 remains in progress because the inspector rejected the quality evidence and no contract-valid eight-dimension result exists. No retry or publication is permitted by this attempt."
+}

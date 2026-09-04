@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-16T05:57:35Z",
+  "backlogItem": "A-01",
+  "scope": "local-only Qwen WAV format-metadata admission",
+  "implementation": [
+    "accept only PCM at 8/16/24/32 bits or IEEE float at 32/64 bits",
+    "require one or two channels and a sample rate from 8000 through 192000 Hz",
+    "require block alignment and byte rate to match channels, bit depth and sample rate",
+    "require the non-empty data chunk to contain complete sample frames"
+  ],
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js: 7/7 passed",
+    "fullSuite": "npm test: 239/239 passed",
+    "secretScan": "npm run scan:secrets: passed across 259 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "negativeCases": [
+    "unsupported encoding",
+    "excess channel count",
+    "out-of-range sample rate",
+    "inconsistent byte rate",
+    "inconsistent block alignment",
+    "unsupported bit depth",
+    "partial sample frame"
+  ],
+  "externalActions": [],
+  "providerCalls": 0,
+  "realMediaGenerated": false,
+  "projectComplete": false
+}

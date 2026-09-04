@@ -1,0 +1,42 @@
+{
+  "schema": "openreel-qualification/v1",
+  "milestone": "OCP-09",
+  "status": "passed",
+  "scope": "Responsive publishing preflight, per-platform status and read-only batch recovery",
+  "verification": {
+    "syntax": ["node --check src/app.js", "node --check scripts/publishing-browser-e2e.mjs"],
+    "browser": {
+      "command": "npm run smoke:publishing-browser",
+      "engine": "Chromium",
+      "desktop": "1440x900",
+      "mobile": "390x844",
+      "preflight": true,
+      "recovery": true,
+      "retry": true,
+      "cancel": true,
+      "unknownRemoteReconciliation": true,
+      "horizontalOverflow": false,
+      "finalPublicationDisabled": true,
+      "providerCalls": 0,
+      "publicationCalls": 0
+    },
+    "regression": "npm test: 418 passed, 0 failed",
+    "secretScan": "534 files passed",
+    "loopDoctor": "ok=true, failCount=0"
+  },
+  "safety": {
+    "fixtureBoundary": "Browser routes supply deterministic account and batch views only",
+    "blockedActionsObserved": false,
+    "externalMessages": 0,
+    "oauthGrants": 0,
+    "credentialMutations": 0,
+    "uploads": 0,
+    "publications": 0,
+    "productionMutations": 0
+  },
+  "remaining": [
+    "Authorization-consumption UX for a specifically approved platform/account/asset/metadata action",
+    "Capability-aware per-platform metadata override controls",
+    "OCP-10 audit/history, OCP-11 security/E2E completion and OCP-12 Beijing Aliyun operations acceptance"
+  ]
+}

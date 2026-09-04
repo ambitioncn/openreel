@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "milestone": "A-01",
+  "qualification": "qwen_buffered_body_admission",
+  "date": "2026-08-16",
+  "scope": "credential-free local synthetic response admission",
+  "result": "passed",
+  "behavior": {
+    "accepted_buffered_contract": "ArrayBuffer",
+    "buffer_and_typed_array_coercion_rejected": true,
+    "malformed_values_rejected_before_wav_inspection": true,
+    "stable_error_code": "QWEN_TTS_RESULT_INVALID",
+    "safe_diagnostic": "arrayBufferInvalid",
+    "private_response_value_retained": false
+  },
+  "verification": [
+    {
+      "command": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js",
+      "result": "passed 45/45"
+    },
+    {
+      "command": "npm test",
+      "result": "passed 272/272"
+    },
+    {
+      "command": "node --test test/project-governance.test.js",
+      "result": "passed 3/3"
+    },
+    {
+      "command": "npm run scan:secrets",
+      "result": "passed; 308 files scanned"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "external_actions": [],
+  "provider_calls": 0,
+  "retained_media": 0,
+  "remaining": "A precise owner gate is still required for real Qwen synthesis and retained-media graphical-browser E2E."
+}

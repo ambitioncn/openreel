@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-15",
+  "scope": "local-only atomic isolated restore promotion",
+  "backlogItem": "S-01",
+  "result": "passed",
+  "claims": [
+    "Restore copies into a private same-parent staging directory and runs SQLite PRAGMA quick_check there before promotion.",
+    "A failed integrity check removes only the staging directory created by that restore call and leaves the final destination absent.",
+    "A successful restore is promoted with a same-parent rename after rechecking that the final destination is absent.",
+    "Restore destinations equal to or nested under the backup source fail closed before mutation."
+  ],
+  "verification": [
+    { "command": "node --test test/ops.test.js", "result": "12 passed, 0 failed" },
+    { "command": "npm test", "result": "159 passed, 0 failed" },
+    { "command": "npm audit --omit=dev --audit-level=high", "result": "0 vulnerabilities" },
+    { "command": "npm run scan:secrets", "result": "passed, 139 files" }
+  ],
+  "externalActions": [],
+  "limitations": [
+    "This is a single-filesystem local atomic-promotion claim; it does not establish off-host retention, staging recovery, production rollback, signing, deployment, or activation.",
+    "The destination-absence check and rename rely on the local filesystem namespace; callers must not concurrently create the same restore destination."
+  ]
+}

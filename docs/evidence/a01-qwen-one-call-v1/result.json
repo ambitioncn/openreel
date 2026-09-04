@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "authorization": "A-01-QWEN-ONE-CALL-V1",
+  "status": "terminal_failure_after_single_call",
+  "providerCalls": 1,
+  "retries": 0,
+  "error": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "{\"error\":{\"code\":\"QWEN_TTS_PROVIDER_ERROR\",\"message\":\"Qwen TTS service rejected the request\",\"details\":{\"upstreamStatus\":500}}}\n\n502 !== 200\n",
+    "details": null
+  },
+  "externalActions": {
+    "qwenSynthesisRequests": 1,
+    "deployments": 0,
+    "credentialChanges": 0,
+    "publicWrites": 0,
+    "libtvWrites": 0
+  }
+}

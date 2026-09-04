@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "completed_at": "2026-08-16T02:20:43Z",
+  "target": "root@123.57.67.213",
+  "authorization_gate": "cp172",
+  "scope": "Back up the active OpenReel Nginx site, deny public /health/ready and /metrics, preserve loopback application access, validate and reload with rollback on failure.",
+  "backup": {
+    "path": "/etc/nginx/sites-available/openreel-ip.conf.cp172-20260816T0220Z.bak",
+    "mode": "0644",
+    "owner": "root:root",
+    "sha256": "a154a3bf79de1c3fa8416305eec08d3e7a8b0fd2e0890037e0db68fbcba3496f"
+  },
+  "active_config": {
+    "path": "/etc/nginx/sites-available/openreel-ip.conf",
+    "mode": "0644",
+    "owner": "root:root",
+    "sha256": "bbc9b2c0cf4c15996c6a45a21188db690b3a650e19994ccc3bac8d945a46c7bb",
+    "rules": [
+      "location = /health/ready { return 404; }",
+      "location = /metrics { return 404; }"
+    ]
+  },
+  "verification": {
+    "nginx_config_test": "passed",
+    "nginx_service": "active",
+    "openreel_service": "active",
+    "current_release": "/opt/openreel/releases/20260816T020000Z-cp170",
+    "public_root": 200,
+    "public_health_ready": 404,
+    "public_metrics": 404,
+    "loopback_application_health_ready": 200,
+    "loopback_application_metrics": 200
+  },
+  "execution_note": "Two guarded attempts restored the original automatically because immediate post-reload probes still reached old workers. A decomposed final attempt showed the new file and valid nginx syntax; after a two-second worker-settle interval, independent public and loopback verification passed. No provider, credential, domain, Phoenix, LibTV or publishing action occurred."
+}

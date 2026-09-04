@@ -1,0 +1,13 @@
+{
+  "schema": "openreel-commercial-real-evaluation-preflight/v1",
+  "taskId": "2026-08-25T02-55-58-120Z_routed-task-loop-engineering-loop-openreel-comme",
+  "necessity": "CDQI2-09 requires real-provider scoring of retained actual video bytes; deterministic fixtures cannot satisfy T09.",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "target": "Beijing Aliyun private production provider route",
+  "model": "seed-2.1-turbo",
+  "input": {"path":"openreel/runtime/t01-real-video-browser/representative-multishot.mp4","mimeType":"video/mp4","maximumBytes":1048576},
+  "limits": {"maximumSubmissions":1,"automaticRetries":0,"fallbacks":0,"maximumCostCny":0.1,"ownerPerActionLimitCny":100},
+  "stopConditions": ["any transport or provider error", "non-JSON score response", "missing identity or performance score", "untrusted usage", "cost above CNY 0.1"],
+  "externalPublication": false,
+  "status": "authorized_preflight_passed"
+}

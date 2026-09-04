@@ -1,0 +1,19 @@
+# Offsite immutable backup plan
+
+The 2026-08-19 read-only preflight found one checksum-valid Beijing cold copy, but no accepted offsite immutable copy. All four observed Beijing backup directories share the production system disk, the application backup timer is not installed, and none contains the `backup.mjs` `manifest.json` needed by the documented isolated verifier. The directory named `storyboard-repair-verified-*` is empty and must not be counted as recovery evidence.
+
+The owner canceled the Alibaba Cloud OSS/Object Lock route on 2026-08-19: no Alibaba Cloud OSS resource is to be created or used for OpenReel. The replacement candidate is `storageclaw` on the owner's Tailnet. Read-only discovery verified its identity and NFS/SMB services, but not capacity, an authorized OpenReel namespace, snapshot retention, or an enforceable anti-delete boundary. Until those properties and a synthetic denial/restore drill are verified, storageclaw is only an offsite-copy candidate and does not satisfy the mandatory immutable-copy criterion.
+
+The target remains a three-domain design. FD1 is Beijing production plus a short-retention local operational package. FD2 is a separately administered immutable or equivalently anti-delete failure domain; this is mandatory but provider-neutral. FD3 is Phoenix or another encrypted secondary recovery copy. Phoenix is geographically and operationally separate and has about 197 GB free, but its normal ext4 storage is mutable and therefore does not satisfy FD2. Storageclaw may satisfy FD2 only if its actual snapshot/read-only/WORM controls prevent the backup writer from deleting or altering retained generations; otherwise it is an FD3-style offsite copy.
+
+Every offsite package must be produced by the existing application-aware backup path, encrypted client-side with an envelope key controlled outside the production host, and bound to its canonical manifest, per-file SHA-256 and lengths. A signed generation index is published only after transfer checksum confirmation. The backup writer may create objects but may not delete versions, shorten retention, bypass governance, administer the bucket, or administer the encryption key.
+
+The proposed starting policy is 35 daily, 13 weekly, and 12 monthly generations; compliance retention is at least 90 days, with monthly generations retained 365 days. This is a proposal pending owner, legal/privacy, residency, and cost approval—not a configured policy.
+
+Verification is weekly manifest/integrity checking, monthly isolated restore on a non-production host, and quarterly recovery directly from the WORM target. A drill passes only when the exact file set and hashes match, SQLite `quick_check` passes, OpenReel semantic validation passes, and a read-only user journey succeeds. Until measured, RPO 24 hours and RTO 8 hours are objectives rather than claims.
+
+Implementation must be a separate authorized change. First use synthetic data to prove upload, retention denial, download, decryption, hash verification, isolated restore, and failure quarantine. Only then may a separately approved run transfer production data. No bucket, lock, key, credential, upload, restore, production write, deployment, service control, paid call, or external publication occurred during this preflight.
+
+Failure is fail-closed: an incomplete upload never gets a committed generation index; checksum or restore failure quarantines that generation and preserves the previous accepted copy; an Object Lock error stops the pipeline because locked retention cannot be rolled back in place; key loss falls back to another accepted failure domain and a newly approved key, never destructive mutation of the sole copy.
+
+The original baseline is in `docs/s01-offsite-immutable-backup-readonly-preflight-20260819.json`; the owner decision and storageclaw observations are in `docs/s01-storageclaw-readonly-discovery-20260819.json`.

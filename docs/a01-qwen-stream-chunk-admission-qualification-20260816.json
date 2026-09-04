@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "milestone": "A-01",
+  "qualification": "qwen_stream_chunk_admission",
+  "date": "2026-08-16",
+  "scope": "credential-free local synthetic response admission",
+  "result": "passed",
+  "behavior": {
+    "accepted_chunk_contract": "ArrayBufferView excluding DataView",
+    "malformed_chunks_rejected_before_concatenation": true,
+    "reader_lock_released_on_rejection": true,
+    "stable_error_code": "QWEN_TTS_RESULT_INVALID",
+    "safe_diagnostic": "streamChunkInvalid",
+    "private_error_text_retained": false
+  },
+  "verification": [
+    {
+      "command": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js",
+      "result": "passed 44/44"
+    },
+    {
+      "command": "npm test",
+      "result": "passed 271/271"
+    },
+    {
+      "command": "npm run scan:secrets",
+      "result": "passed; 307 files scanned"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "external_actions": [],
+  "provider_calls": 0,
+  "retained_media": 0,
+  "remaining": "A precise owner gate is still required for real Qwen synthesis and retained-media graphical-browser E2E."
+}

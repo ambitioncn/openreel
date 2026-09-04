@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-15",
+  "scope": "local-only backup and isolated-restore integrity qualification",
+  "result": "passed",
+  "controls": [
+    "database and platform sources must be regular files",
+    "asset root must be a real directory",
+    "every referenced asset must be a regular file",
+    "backup verification rejects symbolic links and other non-regular entries",
+    "backup verification requires the actual file set to exactly match the manifest",
+    "manifest file paths, byte counts and SHA-256 digests fail closed"
+  ],
+  "verification": [
+    { "command": "node --test test/ops.test.js", "result": "10 passed, 0 failed" },
+    { "command": "npm run qualify:release-artifacts", "result": "passed; externalCalls=false; deploymentActivated=false" },
+    { "command": "npm test", "result": "157 passed, 0 failed" },
+    { "command": "npm run scan:secrets", "result": "passed across 137 files" },
+    { "command": "npm run scan:dependencies", "result": "0 vulnerabilities" }
+  ],
+  "boundaries": {
+    "localTemporaryDataOnly": true,
+    "externalBackupCopy": false,
+    "productionRestore": false,
+    "deploymentActivated": false,
+    "productionChanged": false
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "backlogId": "A-01",
+  "qualifiedAt": "2026-08-16T06:30:07Z",
+  "scope": "credential-free local Qwen WAV encoding provenance qualification",
+  "result": "passed",
+  "claims": [
+    "The shared strict WAV inspector derives canonical pcm or ieee-float encoding and bit depth from retained bytes.",
+    "Durable Qwen reconciliation requires caller metadata to match the byte-verified encoding and bit depth before creating an asset or timeline clip.",
+    "Accepted assets persist the byte-verified encoding and bit depth as reviewable provenance."
+  ],
+  "negativeEvidence": [
+    "A PCM WAV presented as ieee-float was rejected before result mutation.",
+    "A 16-bit WAV presented as 24-bit was rejected before result mutation."
+  ],
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 10/10 passed",
+    "npm test: 239/239 passed",
+    "npm run scan:secrets: passed across 265 files",
+    "git diff --check: passed"
+  ],
+  "externalActions": [],
+  "limitations": [
+    "No Tailnet request or real synthesis occurred.",
+    "This does not establish voice quality, latency, lip-sync, silence semantics or retained real-media browser parity."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "capturedAt": "2026-08-16",
+  "scope": "local synthetic Qwen TTS oversized-stream cancellation failure",
+  "claim": "An oversized audio stream remains classified as a byte-limit violation even when reader cancellation fails; the cancellation failure is represented only by a boolean diagnostic and the reader lock is released.",
+  "implementation": [
+    "src/qwen-tts.js attempts cancellation after crossing the byte ceiling without allowing cancellation failure to replace the primary capacity rejection",
+    "test/qwen-tts.test.js verifies one-read termination, cancellationFailed=true, private-message suppression and reader-lock release"
+  ],
+  "verification": {
+    "focused": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js: 38/38 passed",
+    "full": "npm test: 265/265 passed",
+    "governance": "node --test test/project-governance.test.js: 3/3 passed",
+    "secretScan": "npm run scan:secrets: passed; 301 files scanned",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": {
+    "tailnetQwenRequests": 0,
+    "providerCalls": 0,
+    "otpReplays": 0,
+    "deployments": 0,
+    "serviceRestarts": 0,
+    "credentialChanges": 0,
+    "publicActions": 0
+  },
+  "limitations": [
+    "The synthetic cancellation failure does not establish transport-level cleanup behavior of the real Tailnet service.",
+    "Real synthesis and retained-media browser E2E remain separately gated."
+  ]
+}

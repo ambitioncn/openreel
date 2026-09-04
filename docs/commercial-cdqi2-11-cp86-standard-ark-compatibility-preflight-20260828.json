@@ -1,0 +1,58 @@
+{
+  "schema": "openreel-cdqi2-standard-ark-compatibility-preflight/v1",
+  "capturedAt": "2026-08-28T01:08:00Z",
+  "status": "stopped_before_submission",
+  "amendmentVersion": 1,
+  "scope": "zero-paid standard Ark Seedance contract, model-mapping, route and budget preflight",
+  "contract": {
+    "provider": "volcengine-ark",
+    "route": "standard_api_v3",
+    "create": "POST /api/v3/contents/generations/tasks",
+    "poll": "GET /api/v3/contents/generations/tasks/{taskId}",
+    "request": {
+      "durationSeconds": 5,
+      "resolution": "480p",
+      "ratio": "16:9",
+      "generateAudio": false,
+      "watermark": false
+    },
+    "maximumSubmissions": 1,
+    "automaticRetries": 0,
+    "fallbacks": 0,
+    "maximumCostCny": 100
+  },
+  "verification": {
+    "focusedTests": {
+      "command": "node --test test/ark.test.js test/volcengine-pricing.test.js",
+      "passed": 41,
+      "failed": 0
+    },
+    "implementationHashes": {
+      "src/ark.js": "403618016b493b9aea9350d4b05de25d413dfedf69aa608fba288d582b198818",
+      "src/volcengine-pricing.js": "55f5f1ffd6ed9bc1db03b0342b28beab3d5dcc53d7e50b10d22105a41bc758bf"
+    },
+    "mappingPresence": {
+      "standardCredentialReferenceAvailable": false,
+      "standardSeedanceModelReferenceAvailable": false,
+      "systemEnvironmentFileAvailable": false,
+      "directPlanCredentialReferenceAvailable": true,
+      "secretOrModelValuesRecorded": false
+    }
+  },
+  "decision": {
+    "preflightPassed": false,
+    "providerSubmissionMade": false,
+    "reason": "The standard route cannot be proven or launched from the current execution environment because both its credential reference and Seedance model reference are absent. The available direct-plan credential cannot be substituted because amendment v1 forbids changing the production/default route and requires a standard-route probe.",
+    "safeNextAction": "Make the existing standard Ark credential and Seedance model references available to the authorized isolated execution surface, then rerun the complete zero-paid preflight before consuming the single probe authorization."
+  },
+  "externalActions": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0,
+    "credentialChanges": 0,
+    "productionRouteChanges": 0
+  },
+  "projectCompletion": "in_progress"
+}

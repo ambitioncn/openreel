@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "scope": "Beijing OpenReel staging read-only reliability observation",
+  "target": "loopback OpenReel service on the authorized Beijing staging host",
+  "window": {
+    "startedAt": "2026-08-17T04:12:02Z",
+    "completedAt": "2026-08-17T04:38:43Z",
+    "wallClockMinutes": 26.68,
+    "note": "The formal health sampling began at 04:12:28Z after endpoint discovery. Baseline and post-run resource observations extend the authorized observation window beyond 30 minutes."
+  },
+  "requestBudget": {
+    "authorizedMaximum": 300,
+    "observedRequests": 254,
+    "concurrency": 1,
+    "businessMutations": 0,
+    "mediaGenerations": 0,
+    "providerCalls": 0
+  },
+  "formalSamples": {
+    "healthLive": 125,
+    "healthReady": 124,
+    "total": 249,
+    "http200": 249,
+    "errorRate": 0
+  },
+  "endpointDiscovery": {
+    "requests": 5,
+    "expectedHttp404": 3,
+    "description": "Read-only discovery identified /health/live and /health/ready as the canonical loopback endpoints. Expected negative probes are excluded from the formal service error rate."
+  },
+  "controlPlane": {
+    "sshSessionInterrupted": true,
+    "serviceImpactObserved": false,
+    "postInterruptionLiveStatus": 200,
+    "postInterruptionReadyStatus": 200
+  },
+  "postconditions": {
+    "serviceActive": true,
+    "restartCount": 0,
+    "memoryBytes": 28016640,
+    "diskPercentUsed": 16,
+    "warningJournalEntries": 0,
+    "liveLatencySeconds": 0.003629,
+    "readyLatencySeconds": 0.002910
+  },
+  "result": "passed_with_control_connection_interruption",
+  "limitations": [
+    "This qualifies a low-risk sustained read-only staging observation only; it does not qualify chaos, tenant isolation, signing, off-host retention, production deployment or rollback.",
+    "The SSH control connection was interrupted once; OpenReel remained active, ready, at zero restarts and without resource degradation.",
+    "No business endpoint, authenticated workflow, payment path or provider path was exercised."
+  ]
+}

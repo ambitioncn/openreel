@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "scope": "credential-free model catalog drift observability",
+  "change": "Verified catalog comparisons expose deterministic per-kind counts for added and removed models plus the before/after kind of changed models.",
+  "semantics": {
+    "added": "models introduced in the current catalog",
+    "removed": "models present only in the previous catalog",
+    "changedBefore": "changed models classified by their previous kind",
+    "changedAfter": "changed models classified by their current kind",
+    "emptyKinds": "omitted from driftByKind; unchanged and source-revision-only reports expose an empty object"
+  },
+  "safety": {
+    "executedProviderCalls": false,
+    "credentialsAccessedOrChanged": false,
+    "otpUsed": false,
+    "deploymentChanged": false,
+    "externalWrite": false
+  },
+  "verification": [
+    {
+      "command": "node --test test/model-catalog.test.js",
+      "result": "14/14 passed"
+    },
+    {
+      "command": "npm test",
+      "result": "301/301 passed"
+    }
+  ],
+  "status": "qualified_local_increment",
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "openreel-a01-seedaudio-cny10-preflight/v1",
+  "capturedAt": "2026-08-18T10:20:00Z",
+  "scope": "authorization lineage and execution result for one private five-second SeedAudio 1.0 validation",
+  "authorization": {
+    "maximumCalls": 1,
+    "durationSeconds": 5,
+    "automaticRetries": 0,
+    "maximumSpendCny": null,
+    "preSubmitPriceProofRequired": false,
+    "deploymentAuthorized": false,
+    "publicationAuthorized": false
+  },
+  "evidence": [
+    {
+      "source": "official public Volcengine model catalog",
+      "finding": "SeedAudio1.0 / Doubao-audio-generation-1.0 is listed with QPS 5, but no unit price, billing unit, minimum billable duration or request estimate is displayed."
+    },
+    {
+      "source": "official Volcengine product and documentation search",
+      "finding": "The product is described as billable and savings-plan eligible, but no exact price sufficient to bound this five-second request was found."
+    },
+    {
+      "source": "sanitized Beijing host inspection",
+      "finding": "A dedicated model API credential reference exists, but no authenticated account-console session or account-level billing credential was available for a read-only price-card or estimate check; no credential value or digest was emitted."
+    }
+  ],
+  "supersedingHumanInput": {
+    "status": "consumed",
+    "effect": "The owner removed the price-proof condition and spending ceiling, while preserving exactly one private five-second call, zero retries, no deployment and no publication."
+  },
+  "decision": {
+    "providerRequestSubmitted": true,
+    "authorizationConsumed": true,
+    "requestCount": 1,
+    "retryCount": 0,
+    "result": "success",
+    "providerDurationSeconds": 5,
+    "providerOriginalDurationSeconds": 5,
+    "containerDurationSeconds": 5.041633
+  },
+  "observations": {
+    "providerRequestsSubmitted": 1,
+    "retries": 0,
+    "spendCny": 0,
+    "retainedMedia": 1,
+    "credentialValuesOutput": 0,
+    "deploymentChanges": 0,
+    "publications": 0
+  },
+  "artifact": {
+    "host": "openreel-aliyun",
+    "path": "/var/lib/openreel/staging/seedaudio-cp343-single/seedaudio-private-validation.mp3",
+    "permissions": "0600",
+    "bytes": 81729,
+    "sha256": "f0493978c8cf3aa66af9d217147c913db64fc82d99aa36efa501e1da60247039",
+    "format": "mp3",
+    "rawProviderResponseRetained": false
+  },
+  "replayPolicy": "The one-call authorization is consumed and must not be replayed."
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "C-01",
+  "scope": "credential-free bounded-memory and concurrent-mutation continuity artifact verification",
+  "controls": [
+    "hash retained artifact bytes as a stream from the already verified read-only file descriptor",
+    "avoid retaining the complete artifact payload in process memory",
+    "require device, inode, size, nanosecond modification time and nanosecond change time to remain stable across the read",
+    "require the streamed byte count to match the stable descriptor size before accepting the declared digest"
+  ],
+  "verification": {
+    "focused": "node --test test/continuity-evaluation.test.js: 9 passed, 0 failed",
+    "fullSuite": "npm test: 220 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 229 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "real-provider origin of verified bytes",
+    "retained real-media multi-shot outputs",
+    "human visual acceptance",
+    "provider execution",
+    "deployment or production readiness"
+  ]
+}

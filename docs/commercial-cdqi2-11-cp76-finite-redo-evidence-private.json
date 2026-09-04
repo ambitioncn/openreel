@@ -1,0 +1,2231 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp76-finite-redo/v1",
+  "capturedAt": "2026-08-27T05:54:19.280Z",
+  "authorization": {
+    "scope": "fresh bounded subscription plus one cp73 all-shot successor redo; CNY <=100; zero retry; first terminal stop; no publication",
+    "necessity": "capture the deployed bounded Qwen diagnostic on failure or obtain retained T11 qualification evidence"
+  },
+  "source": {
+    "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+    "jobId": "c738be08-b8b3-4d5c-afec-91c0788e0fa6",
+    "immutable": true
+  },
+  "session": {
+    "scoped": true,
+    "expiresAt": "2026-08-27T06:51:35.922Z",
+    "passwordChanged": false
+  },
+  "quote": {
+    "schema": "openreel-commercial-redo-quote/v1",
+    "id": "7ec2a475-9b8c-4b41-b58f-256f9edb90a5",
+    "ownerId": "ff85d094-2b7e-4fbc-8f6a-fdb69ff76e81",
+    "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+    "sourceJobId": "c738be08-b8b3-4d5c-afec-91c0788e0fa6",
+    "shotIds": [
+      "5bbfec87-928a-4488-b94e-77bc9363f8fb"
+    ],
+    "reasons": {
+      "5bbfec87-928a-4488-b94e-77bc9363f8fb": [
+        "beat"
+      ]
+    },
+    "preservedShotIds": [],
+    "preservedAssetIds": [],
+    "preservedShots": [],
+    "models": {
+      "image": "seedream-5-lite",
+      "video": "seedance-2-fast"
+    },
+    "quality": "quality",
+    "binding": {
+      "projectVersion": 11,
+      "storyVersion": 1,
+      "storyboardVersion": 1
+    },
+    "director": {
+      "schema": "openreel-commercial-director-context/v1",
+      "ready": true,
+      "shots": [
+        {
+          "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+          "ready": true,
+          "roleEntityIds": [
+            "b8cab263-9e8f-44e1-80cc-5f0a643069a0"
+          ],
+          "sceneEntityIds": [
+            "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe"
+          ],
+          "style": "natural documentary commercial, soft neutral studio light",
+          "continuityEntityUsages": [
+            {
+              "entityId": "b8cab263-9e8f-44e1-80cc-5f0a643069a0",
+              "kind": "character",
+              "version": 1,
+              "referenceAssetIds": [
+                "a55b67c8-973c-48b5-891a-b9964b6391c4"
+              ]
+            },
+            {
+              "entityId": "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe",
+              "kind": "scene",
+              "version": 1,
+              "referenceAssetIds": [
+                "a55b67c8-973c-48b5-891a-b9964b6391c4"
+              ]
+            }
+          ],
+          "referenceAssetIds": [
+            "a55b67c8-973c-48b5-891a-b9964b6391c4"
+          ]
+        }
+      ]
+    },
+    "policySafety": {
+      "schema": "openreel-commercial-storyboard-policy-safety-preflight/v1",
+      "accepted": true,
+      "shotCount": 1,
+      "referenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+      "paidProviderCalls": 0,
+      "providerPolicyGuaranteed": false
+    },
+    "cost": {
+      "currency": "CNY",
+      "estimatedCny": 16.2,
+      "generationEstimatedCny": 16,
+      "evaluationEstimatedCny": 0.2,
+      "evaluation": {
+        "schema": "openreel-commercial-perceptual-evaluation/v2",
+        "shotDimensions": [
+          "intent",
+          "beat",
+          "composition",
+          "visual_identity_consistency",
+          "performance_naturalness"
+        ],
+        "finalDimensions": [
+          "story",
+          "pacing",
+          "continuity"
+        ],
+        "calls": 2,
+        "maximumCostCnyPerCall": 0.1,
+        "necessity": "qualify actual generated shot bytes and the composed render before release eligibility"
+      },
+      "perActionLimitCny": 100
+    },
+    "confirmationRequired": true,
+    "paidActionStarted": false,
+    "createdAt": "2026-08-27T05:51:38.580Z"
+  },
+  "subscription": {
+    "applicationId": "d6cb789c-bf89-4628-a8f0-7d8d205a22ac",
+    "priorSpentUnits": 8922,
+    "priorPeriodEndsAt": "2026-08-27T05:56:45.770Z",
+    "redoLimitUnits": 22500,
+    "hardLimitUnits": 31422,
+    "availableBefore": 22500
+  },
+  "terminal": {
+    "schema": "openreel-commercial-job/v1",
+    "id": "56adb193-d44b-49f6-b780-2594e6828046",
+    "ownerId": "ff85d094-2b7e-4fbc-8f6a-fdb69ff76e81",
+    "idempotencyKey": "cdqi2-cp76-1787809899801",
+    "status": "failed",
+    "stage": "quality",
+    "stageDetail": null,
+    "director": {
+      "schema": "openreel-commercial-director-workflow/v1",
+      "currentStage": "automatic_qc",
+      "status": "rejected",
+      "stages": [
+        {
+          "id": "creative",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "56adb193-d44b-49f6-b780-2594e6828046",
+            "stage": "creative",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": true,
+                "shots": [
+                  {
+                    "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "b8cab263-9e8f-44e1-80cc-5f0a643069a0"
+                    ],
+                    "sceneEntityIds": [
+                      "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "b8cab263-9e8f-44e1-80cc-5f0a643069a0",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                        ]
+                      },
+                      {
+                        "entityId": "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                    ]
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-27T05:51:39.841Z"
+          }
+        },
+        {
+          "id": "script",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "56adb193-d44b-49f6-b780-2594e6828046",
+            "stage": "script",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": true,
+                "shots": [
+                  {
+                    "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "b8cab263-9e8f-44e1-80cc-5f0a643069a0"
+                    ],
+                    "sceneEntityIds": [
+                      "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "b8cab263-9e8f-44e1-80cc-5f0a643069a0",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                        ]
+                      },
+                      {
+                        "entityId": "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                    ]
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-27T05:51:39.841Z"
+          }
+        },
+        {
+          "id": "visual_bible",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "56adb193-d44b-49f6-b780-2594e6828046",
+            "stage": "visual_bible",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": true,
+                "shots": [
+                  {
+                    "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "b8cab263-9e8f-44e1-80cc-5f0a643069a0"
+                    ],
+                    "sceneEntityIds": [
+                      "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "b8cab263-9e8f-44e1-80cc-5f0a643069a0",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                        ]
+                      },
+                      {
+                        "entityId": "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                    ]
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-27T05:51:39.841Z"
+          }
+        },
+        {
+          "id": "dynamic_storyboard",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "56adb193-d44b-49f6-b780-2594e6828046",
+            "stage": "dynamic_storyboard",
+            "status": "accepted",
+            "detail": {
+              "binding": {
+                "schema": "openreel-commercial-director-context/v1",
+                "ready": true,
+                "shots": [
+                  {
+                    "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+                    "ready": true,
+                    "roleEntityIds": [
+                      "b8cab263-9e8f-44e1-80cc-5f0a643069a0"
+                    ],
+                    "sceneEntityIds": [
+                      "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe"
+                    ],
+                    "style": "natural documentary commercial, soft neutral studio light",
+                    "continuityEntityUsages": [
+                      {
+                        "entityId": "b8cab263-9e8f-44e1-80cc-5f0a643069a0",
+                        "kind": "character",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                        ]
+                      },
+                      {
+                        "entityId": "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe",
+                        "kind": "scene",
+                        "version": 1,
+                        "referenceAssetIds": [
+                          "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                        ]
+                      }
+                    ],
+                    "referenceAssetIds": [
+                      "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                    ]
+                  }
+                ]
+              }
+            },
+            "recordedAt": "2026-08-27T05:51:39.841Z"
+          }
+        },
+        {
+          "id": "formal_generation",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "56adb193-d44b-49f6-b780-2594e6828046",
+            "stage": "formal_generation",
+            "status": "accepted",
+            "detail": {
+              "generated": true
+            },
+            "recordedAt": "2026-08-27T05:53:47.231Z"
+          }
+        },
+        {
+          "id": "post_production",
+          "status": "accepted",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "56adb193-d44b-49f6-b780-2594e6828046",
+            "stage": "post_production",
+            "status": "accepted",
+            "detail": {
+              "renderCreated": true
+            },
+            "recordedAt": "2026-08-27T05:53:48.170Z"
+          }
+        },
+        {
+          "id": "automatic_qc",
+          "status": "rejected",
+          "evidence": {
+            "schema": "openreel-commercial-stage-evidence/v1",
+            "jobId": "56adb193-d44b-49f6-b780-2594e6828046",
+            "stage": "automatic_qc",
+            "status": "rejected",
+            "detail": {
+              "qualificationStatus": "rejected",
+              "releaseEligible": false,
+              "quality": {
+                "schema": "openreel-commercial-quality-result/v2",
+                "accepted": false,
+                "releaseEligible": false,
+                "evaluation": {
+                  "provider": "volcengine-ark",
+                  "model": "seed-2.1-turbo",
+                  "identity": {
+                    "contract": "commercial-perceptual-v3",
+                    "runIdSha256": "c3f40fb8504e670eaf5898b1f169e9c91167b94db0aea010e2e10552ce44ab1e",
+                    "calls": [
+                      {
+                        "jobId": "4295e44a-96c2-45a7-ac09-ab9ee92bcc84",
+                        "idempotencyKey": "commercial-perceptual-v3:7ede9bc674cbdcd739bd5af225e908e712efcaafcbbd1a7cb980355b463a6d92",
+                        "assetId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                        "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8"
+                      },
+                      {
+                        "jobId": "2e3d6b20-cd60-444a-851f-b50a2ead562f",
+                        "idempotencyKey": "commercial-perceptual-v3:9cd96a831038b71cba32f2daa981e75b9856df7f822e72d5e9c046beeda46368",
+                        "assetId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                        "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc"
+                      }
+                    ]
+                  },
+                  "usage": {
+                    "currency": "USD",
+                    "unitScale": 10000,
+                    "costMicros": 69,
+                    "inputTokens": 9401,
+                    "outputTokens": 305,
+                    "pricingVersion": "volcengine-2026-08-06-usd-7.20-markup-1.5"
+                  },
+                  "maximum": {
+                    "currency": "CNY",
+                    "maximumCostCny": 0.2,
+                    "maximumCostCnyPerCall": 0.1,
+                    "calls": 2
+                  }
+                },
+                "shots": [
+                  {
+                    "schema": "openreel-director-shot-quality-result/v1",
+                    "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+                    "workflowId": "commercial",
+                    "revision": 1,
+                    "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+                    "continuityLedgerFingerprint": "7e96bcf753c5b601636d0c9258901b9942bb828703af04142fc2270cfd13167b",
+                    "generationAsset": {
+                      "assetId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                      "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                      "status": "succeeded"
+                    },
+                    "technicalChecks": [
+                      {
+                        "checkId": "decodable_video",
+                        "status": "passed",
+                        "severity": "severe",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "decodable_video:true"
+                        }
+                      },
+                      {
+                        "checkId": "frame_integrity",
+                        "status": "passed",
+                        "severity": "severe",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "frame_integrity:true"
+                        }
+                      },
+                      {
+                        "checkId": "audio_integrity",
+                        "status": "passed",
+                        "severity": "severe",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "audio_integrity:true"
+                        }
+                      },
+                      {
+                        "checkId": "duration_match",
+                        "status": "passed",
+                        "severity": "major",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "duration_match:true"
+                        }
+                      },
+                      {
+                        "checkId": "resolution_match",
+                        "status": "passed",
+                        "severity": "major",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "resolution_match:true"
+                        }
+                      },
+                      {
+                        "checkId": "safety",
+                        "status": "passed",
+                        "severity": "severe",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "safety:true"
+                        }
+                      }
+                    ],
+                    "creativePolicy": {
+                      "threshold": 0.8,
+                      "dimensions": [
+                        "intent",
+                        "beat",
+                        "composition",
+                        "visual_identity_consistency",
+                        "performance_naturalness"
+                      ]
+                    },
+                    "creativeChecks": [
+                      {
+                        "dimension": "intent",
+                        "score": 0.75,
+                        "status": "failed",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                        }
+                      },
+                      {
+                        "dimension": "beat",
+                        "score": 0.6,
+                        "status": "failed",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                        }
+                      },
+                      {
+                        "dimension": "composition",
+                        "score": 0.8,
+                        "status": "passed",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                        }
+                      },
+                      {
+                        "dimension": "visual_identity_consistency",
+                        "score": 0.95,
+                        "status": "passed",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                        }
+                      },
+                      {
+                        "dimension": "performance_naturalness",
+                        "score": 0.85,
+                        "status": "passed",
+                        "evidence": {
+                          "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                          "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                        }
+                      }
+                    ],
+                    "generationStatus": "succeeded",
+                    "qualificationStatus": "rejected",
+                    "accepted": false,
+                    "severeFailures": [],
+                    "technicalFailures": [],
+                    "creativeFailures": [
+                      "intent",
+                      "beat"
+                    ],
+                    "decisionPolicy": "all_required_checks_must_pass_no_averaging",
+                    "fingerprint": "e1df658eee2c18f3a9c2e0933b84a14cef2460bb2dafb726ab2df2fc9c8ced30",
+                    "checks": {
+                      "playableMp4": true,
+                      "durationBound": true,
+                      "roleBound": true,
+                      "sceneBound": true,
+                      "styleBound": true,
+                      "referencesBound": true
+                    },
+                    "evidence": {
+                      "assetId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                      "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                      "byteLength": 1383824
+                    }
+                  }
+                ],
+                "final": {
+                  "schema": "openreel-director-final-quality-result/v1",
+                  "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+                  "workflowId": "commercial",
+                  "revision": 1,
+                  "cutId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                  "renderAsset": {
+                    "assetId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                    "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                    "status": "succeeded"
+                  },
+                  "expectedShotIds": [
+                    "5bbfec87-928a-4488-b94e-77bc9363f8fb"
+                  ],
+                  "shotResults": [
+                    {
+                      "schema": "openreel-director-shot-quality-result/v1",
+                      "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+                      "fingerprint": "e1df658eee2c18f3a9c2e0933b84a14cef2460bb2dafb726ab2df2fc9c8ced30",
+                      "qualificationStatus": "rejected",
+                      "accepted": false
+                    }
+                  ],
+                  "compositionEvidence": {
+                    "schema": "openreel-final-composition-evidence/v1",
+                    "workflowId": "commercial",
+                    "revision": 1,
+                    "renderAssetSha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                    "technicalChecks": [
+                      {
+                        "checkId": "container_integrity",
+                        "status": "passed",
+                        "severity": "severe",
+                        "evidence": {
+                          "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                          "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                          "observed": "container_integrity:true"
+                        }
+                      },
+                      {
+                        "checkId": "duration_timeline",
+                        "status": "passed",
+                        "severity": "major",
+                        "evidence": {
+                          "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                          "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                          "observed": "duration_timeline:true"
+                        }
+                      },
+                      {
+                        "checkId": "av_sync",
+                        "status": "passed",
+                        "severity": "major",
+                        "evidence": {
+                          "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                          "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                          "observed": "av_sync:true"
+                        }
+                      },
+                      {
+                        "checkId": "audio_integrity",
+                        "status": "passed",
+                        "severity": "severe",
+                        "evidence": {
+                          "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                          "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                          "observed": "audio_integrity:true"
+                        }
+                      },
+                      {
+                        "checkId": "caption_safe_zone",
+                        "status": "passed",
+                        "severity": "major",
+                        "evidence": {
+                          "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                          "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                          "observed": "caption_safe_zone:true"
+                        }
+                      },
+                      {
+                        "checkId": "resolution",
+                        "status": "passed",
+                        "severity": "major",
+                        "evidence": {
+                          "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                          "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                          "observed": "resolution:true"
+                        }
+                      }
+                    ]
+                  },
+                  "directorPolicy": {
+                    "threshold": 0.8,
+                    "dimensions": [
+                      "story",
+                      "pacing",
+                      "continuity"
+                    ]
+                  },
+                  "directorChecks": [
+                    {
+                      "dimension": "story",
+                      "score": 0.2,
+                      "status": "failed",
+                      "evidence": {
+                        "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                        "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                        "observed": "The clip is a single continuous medium shot in a neutral studio with soft light, featuring one performer in a plain blue top holding an unbranded blue cloth toward the camera; the cloth shifts slightly upward over the duration with no cuts, no text, no logos, and consistent lighting and framing. There is minimal narrative development, as the action only consists of holding and slightly adjusting the cloth with no clear story arc."
+                      }
+                    },
+                    {
+                      "dimension": "pacing",
+                      "score": 0.7,
+                      "status": "failed",
+                      "evidence": {
+                        "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                        "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                        "observed": "The clip is a single continuous medium shot in a neutral studio with soft light, featuring one performer in a plain blue top holding an unbranded blue cloth toward the camera; the cloth shifts slightly upward over the duration with no cuts, no text, no logos, and consistent lighting and framing. There is minimal narrative development, as the action only consists of holding and slightly adjusting the cloth with no clear story arc."
+                      }
+                    },
+                    {
+                      "dimension": "continuity",
+                      "score": 0.9,
+                      "status": "passed",
+                      "evidence": {
+                        "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                        "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                        "observed": "The clip is a single continuous medium shot in a neutral studio with soft light, featuring one performer in a plain blue top holding an unbranded blue cloth toward the camera; the cloth shifts slightly upward over the duration with no cuts, no text, no logos, and consistent lighting and framing. There is minimal narrative development, as the action only consists of holding and slightly adjusting the cloth with no clear story arc."
+                      }
+                    }
+                  ],
+                  "generationStatus": "succeeded",
+                  "qualificationStatus": "rejected",
+                  "releaseEligible": false,
+                  "failedShots": [
+                    "5bbfec87-928a-4488-b94e-77bc9363f8fb"
+                  ],
+                  "severeFailures": [],
+                  "technicalFailures": [],
+                  "directorFailures": [
+                    "story",
+                    "pacing"
+                  ],
+                  "decisionPolicy": "all_shots_composition_and_director_checks_must_pass",
+                  "fingerprint": "976a54fe54250dbb668cc892ee49e93d6d3615482dbda5b5038a914192f7ff99",
+                  "accepted": false,
+                  "checks": {
+                    "playableMp4": true,
+                    "allShotsAccepted": false
+                  },
+                  "evidence": {
+                    "assetId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                    "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                    "byteLength": 116711
+                  }
+                }
+              }
+            },
+            "recordedAt": "2026-08-27T05:54:06.645Z"
+          }
+        }
+      ]
+    },
+    "attempts": 1,
+    "maxAttempts": 3,
+    "cancelRequested": false,
+    "retryable": false,
+    "cost": {
+      "currency": "CNY",
+      "status": "settled",
+      "estimatedCny": 16.2,
+      "generationEstimatedCny": 16,
+      "evaluationEstimatedCny": 0.2,
+      "evaluation": {
+        "schema": "openreel-commercial-perceptual-evaluation/v2",
+        "shotDimensions": [
+          "intent",
+          "beat",
+          "composition",
+          "visual_identity_consistency",
+          "performance_naturalness"
+        ],
+        "finalDimensions": [
+          "story",
+          "pacing",
+          "continuity"
+        ],
+        "calls": 2,
+        "maximumCostCnyPerCall": 0.1,
+        "necessity": "qualify actual generated shot bytes and the composed render before release eligibility"
+      },
+      "settledCny": 6.42456,
+      "generationSettledCny": 6.37488,
+      "evaluationSettledCny": 0.04968
+    },
+    "input": {
+      "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+      "projectVersion": 11,
+      "storyVersion": 1,
+      "storyboardVersion": 1,
+      "quoteId": "7ec2a475-9b8c-4b41-b58f-256f9edb90a5",
+      "quoteCost": {
+        "currency": "CNY",
+        "estimatedCny": 16.2,
+        "generationEstimatedCny": 16,
+        "evaluationEstimatedCny": 0.2,
+        "evaluation": {
+          "schema": "openreel-commercial-perceptual-evaluation/v2",
+          "shotDimensions": [
+            "intent",
+            "beat",
+            "composition",
+            "visual_identity_consistency",
+            "performance_naturalness"
+          ],
+          "finalDimensions": [
+            "story",
+            "pacing",
+            "continuity"
+          ],
+          "calls": 2,
+          "maximumCostCnyPerCall": 0.1,
+          "necessity": "qualify actual generated shot bytes and the composed render before release eligibility"
+        },
+        "perActionLimitCny": 100
+      },
+      "estimatedCostCny": 16.2,
+      "script": "演员自然举起并向镜头展示无品牌蓝布",
+      "storyboard": {
+        "version": 1,
+        "shots": [
+          {
+            "id": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+            "sceneId": "0fe52683-1279-470d-b6db-e144811391b3",
+            "order": 0,
+            "prompt": "single continuous five-second medium shot: the same fictional adult performer in plain blue wardrobe naturally lifts and presents an unbranded blue cloth toward camera in one neutral controlled studio, stable face and body, soft neutral light, no cuts, no text, no logo",
+            "styleContinuity": "natural documentary commercial, soft neutral studio light",
+            "broll": "",
+            "duration": 5,
+            "continuityEntityIds": [
+              "b8cab263-9e8f-44e1-80cc-5f0a643069a0",
+              "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe"
+            ],
+            "continuityEntityUsages": [
+              {
+                "entityId": "b8cab263-9e8f-44e1-80cc-5f0a643069a0",
+                "kind": "character",
+                "name": "Fictional adult performer",
+                "version": 1,
+                "attributes": {
+                  "appearance": "fictional adult in plain blue studio wardrobe"
+                },
+                "lockedAttributes": [
+                  "appearance"
+                ],
+                "referenceAssetIds": [
+                  "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                ],
+                "referenceProvenance": [
+                  {
+                    "assetId": "a55b67c8-973c-48b5-891a-b9964b6391c4",
+                    "source": {
+                      "operation": "upload",
+                      "sourceAssetId": "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                    },
+                    "createdAt": "2026-08-27T05:26:44.324Z"
+                  }
+                ]
+              },
+              {
+                "entityId": "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe",
+                "kind": "scene",
+                "name": "Controlled studio",
+                "version": 1,
+                "attributes": {
+                  "environment": "neutral controlled studio with soft light"
+                },
+                "lockedAttributes": [
+                  "environment"
+                ],
+                "referenceAssetIds": [
+                  "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                ],
+                "referenceProvenance": [
+                  {
+                    "assetId": "a55b67c8-973c-48b5-891a-b9964b6391c4",
+                    "source": {
+                      "operation": "upload",
+                      "sourceAssetId": "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                    },
+                    "createdAt": "2026-08-27T05:26:44.324Z"
+                  }
+                ]
+              }
+            ],
+            "referenceAssetIds": [
+              "a55b67c8-973c-48b5-891a-b9964b6391c4"
+            ],
+            "generatedAssetId": null
+          }
+        ]
+      },
+      "director": {
+        "schema": "openreel-commercial-director-context/v1",
+        "ready": true,
+        "shots": [
+          {
+            "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+            "ready": true,
+            "roleEntityIds": [
+              "b8cab263-9e8f-44e1-80cc-5f0a643069a0"
+            ],
+            "sceneEntityIds": [
+              "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe"
+            ],
+            "style": "natural documentary commercial, soft neutral studio light",
+            "continuityEntityUsages": [
+              {
+                "entityId": "b8cab263-9e8f-44e1-80cc-5f0a643069a0",
+                "kind": "character",
+                "version": 1,
+                "referenceAssetIds": [
+                  "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                ]
+              },
+              {
+                "entityId": "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe",
+                "kind": "scene",
+                "version": 1,
+                "referenceAssetIds": [
+                  "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                ]
+              }
+            ],
+            "referenceAssetIds": [
+              "a55b67c8-973c-48b5-891a-b9964b6391c4"
+            ]
+          }
+        ]
+      },
+      "policySafety": {
+        "schema": "openreel-commercial-storyboard-policy-safety-preflight/v1",
+        "accepted": true,
+        "shotCount": 1,
+        "referenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+        "paidProviderCalls": 0,
+        "providerPolicyGuaranteed": false
+      },
+      "production": {
+        "voice": "natural",
+        "captions": true,
+        "music": "light",
+        "safeZone": "tiktok"
+      },
+      "models": {
+        "image": "seedream-5-lite",
+        "video": "seedance-2-fast"
+      },
+      "quality": "quality",
+      "redo": {
+        "schema": "openreel-commercial-redo/v1",
+        "sourceJobId": "c738be08-b8b3-4d5c-afec-91c0788e0fa6",
+        "shotIds": [
+          "5bbfec87-928a-4488-b94e-77bc9363f8fb"
+        ],
+        "preservedShotIds": [],
+        "preservedAssetIds": [],
+        "preservedShots": [],
+        "compositionStoryboard": {
+          "version": 1,
+          "shots": [
+            {
+              "id": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+              "sceneId": "0fe52683-1279-470d-b6db-e144811391b3",
+              "order": 0,
+              "prompt": "single continuous five-second medium shot: the same fictional adult performer in plain blue wardrobe naturally lifts and presents an unbranded blue cloth toward camera in one neutral controlled studio, stable face and body, soft neutral light, no cuts, no text, no logo",
+              "styleContinuity": "natural documentary commercial, soft neutral studio light",
+              "broll": "",
+              "duration": 5,
+              "continuityEntityIds": [
+                "b8cab263-9e8f-44e1-80cc-5f0a643069a0",
+                "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe"
+              ],
+              "continuityEntityUsages": [
+                {
+                  "entityId": "b8cab263-9e8f-44e1-80cc-5f0a643069a0",
+                  "kind": "character",
+                  "name": "Fictional adult performer",
+                  "version": 1,
+                  "attributes": {
+                    "appearance": "fictional adult in plain blue studio wardrobe"
+                  },
+                  "lockedAttributes": [
+                    "appearance"
+                  ],
+                  "referenceAssetIds": [
+                    "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                  ],
+                  "referenceProvenance": [
+                    {
+                      "assetId": "a55b67c8-973c-48b5-891a-b9964b6391c4",
+                      "source": {
+                        "operation": "upload",
+                        "sourceAssetId": "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                      },
+                      "createdAt": "2026-08-27T05:26:44.324Z"
+                    }
+                  ]
+                },
+                {
+                  "entityId": "ae579e8e-bdb0-4c5e-8cca-de027f77d3fe",
+                  "kind": "scene",
+                  "name": "Controlled studio",
+                  "version": 1,
+                  "attributes": {
+                    "environment": "neutral controlled studio with soft light"
+                  },
+                  "lockedAttributes": [
+                    "environment"
+                  ],
+                  "referenceAssetIds": [
+                    "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                  ],
+                  "referenceProvenance": [
+                    {
+                      "assetId": "a55b67c8-973c-48b5-891a-b9964b6391c4",
+                      "source": {
+                        "operation": "upload",
+                        "sourceAssetId": "a55b67c8-973c-48b5-891a-b9964b6391c4"
+                      },
+                      "createdAt": "2026-08-27T05:26:44.324Z"
+                    }
+                  ]
+                }
+              ],
+              "referenceAssetIds": [
+                "a55b67c8-973c-48b5-891a-b9964b6391c4"
+              ],
+              "generatedAssetId": null
+            }
+          ]
+        }
+      },
+      "idempotencyKey": "cdqi2-cp76-1787809899801"
+    },
+    "result": {
+      "schema": "openreel-commercial-provider-run/v1",
+      "status": "quality_failed",
+      "generationStatus": "succeeded",
+      "qualificationStatus": "rejected",
+      "releaseEligible": false,
+      "idempotencyKey": "cdqi2-cp76-1787809899801",
+      "shotCount": 1,
+      "shots": [
+        {
+          "id": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+          "status": "failed",
+          "assetIds": [
+            "f89bb539-ee18-41d0-b94c-785c64e6b3e1",
+            "8778d76f-e736-4a96-a3c6-90572f89f136"
+          ],
+          "quality": {
+            "schema": "openreel-director-shot-quality-result/v1",
+            "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+            "workflowId": "commercial",
+            "revision": 1,
+            "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+            "continuityLedgerFingerprint": "7e96bcf753c5b601636d0c9258901b9942bb828703af04142fc2270cfd13167b",
+            "generationAsset": {
+              "assetId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+              "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+              "status": "succeeded"
+            },
+            "technicalChecks": [
+              {
+                "checkId": "decodable_video",
+                "status": "passed",
+                "severity": "severe",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "decodable_video:true"
+                }
+              },
+              {
+                "checkId": "frame_integrity",
+                "status": "passed",
+                "severity": "severe",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "frame_integrity:true"
+                }
+              },
+              {
+                "checkId": "audio_integrity",
+                "status": "passed",
+                "severity": "severe",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "audio_integrity:true"
+                }
+              },
+              {
+                "checkId": "duration_match",
+                "status": "passed",
+                "severity": "major",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "duration_match:true"
+                }
+              },
+              {
+                "checkId": "resolution_match",
+                "status": "passed",
+                "severity": "major",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "resolution_match:true"
+                }
+              },
+              {
+                "checkId": "safety",
+                "status": "passed",
+                "severity": "severe",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "safety:true"
+                }
+              }
+            ],
+            "creativePolicy": {
+              "threshold": 0.8,
+              "dimensions": [
+                "intent",
+                "beat",
+                "composition",
+                "visual_identity_consistency",
+                "performance_naturalness"
+              ]
+            },
+            "creativeChecks": [
+              {
+                "dimension": "intent",
+                "score": 0.75,
+                "status": "failed",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                }
+              },
+              {
+                "dimension": "beat",
+                "score": 0.6,
+                "status": "failed",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                }
+              },
+              {
+                "dimension": "composition",
+                "score": 0.8,
+                "status": "passed",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                }
+              },
+              {
+                "dimension": "visual_identity_consistency",
+                "score": 0.95,
+                "status": "passed",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                }
+              },
+              {
+                "dimension": "performance_naturalness",
+                "score": 0.85,
+                "status": "passed",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                }
+              }
+            ],
+            "generationStatus": "succeeded",
+            "qualificationStatus": "rejected",
+            "accepted": false,
+            "severeFailures": [],
+            "technicalFailures": [],
+            "creativeFailures": [
+              "intent",
+              "beat"
+            ],
+            "decisionPolicy": "all_required_checks_must_pass_no_averaging",
+            "fingerprint": "e1df658eee2c18f3a9c2e0933b84a14cef2460bb2dafb726ab2df2fc9c8ced30",
+            "checks": {
+              "playableMp4": true,
+              "durationBound": true,
+              "roleBound": true,
+              "sceneBound": true,
+              "styleBound": true,
+              "referencesBound": true
+            },
+            "evidence": {
+              "assetId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+              "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+              "byteLength": 1383824
+            }
+          }
+        }
+      ],
+      "quality": {
+        "schema": "openreel-commercial-quality-result/v2",
+        "accepted": false,
+        "releaseEligible": false,
+        "evaluation": {
+          "provider": "volcengine-ark",
+          "model": "seed-2.1-turbo",
+          "identity": {
+            "contract": "commercial-perceptual-v3",
+            "runIdSha256": "c3f40fb8504e670eaf5898b1f169e9c91167b94db0aea010e2e10552ce44ab1e",
+            "calls": [
+              {
+                "jobId": "4295e44a-96c2-45a7-ac09-ab9ee92bcc84",
+                "idempotencyKey": "commercial-perceptual-v3:7ede9bc674cbdcd739bd5af225e908e712efcaafcbbd1a7cb980355b463a6d92",
+                "assetId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8"
+              },
+              {
+                "jobId": "2e3d6b20-cd60-444a-851f-b50a2ead562f",
+                "idempotencyKey": "commercial-perceptual-v3:9cd96a831038b71cba32f2daa981e75b9856df7f822e72d5e9c046beeda46368",
+                "assetId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc"
+              }
+            ]
+          },
+          "usage": {
+            "currency": "USD",
+            "unitScale": 10000,
+            "costMicros": 69,
+            "inputTokens": 9401,
+            "outputTokens": 305,
+            "pricingVersion": "volcengine-2026-08-06-usd-7.20-markup-1.5"
+          },
+          "maximum": {
+            "currency": "CNY",
+            "maximumCostCny": 0.2,
+            "maximumCostCnyPerCall": 0.1,
+            "calls": 2
+          }
+        },
+        "shots": [
+          {
+            "schema": "openreel-director-shot-quality-result/v1",
+            "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+            "workflowId": "commercial",
+            "revision": 1,
+            "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+            "continuityLedgerFingerprint": "7e96bcf753c5b601636d0c9258901b9942bb828703af04142fc2270cfd13167b",
+            "generationAsset": {
+              "assetId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+              "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+              "status": "succeeded"
+            },
+            "technicalChecks": [
+              {
+                "checkId": "decodable_video",
+                "status": "passed",
+                "severity": "severe",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "decodable_video:true"
+                }
+              },
+              {
+                "checkId": "frame_integrity",
+                "status": "passed",
+                "severity": "severe",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "frame_integrity:true"
+                }
+              },
+              {
+                "checkId": "audio_integrity",
+                "status": "passed",
+                "severity": "severe",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "audio_integrity:true"
+                }
+              },
+              {
+                "checkId": "duration_match",
+                "status": "passed",
+                "severity": "major",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "duration_match:true"
+                }
+              },
+              {
+                "checkId": "resolution_match",
+                "status": "passed",
+                "severity": "major",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "resolution_match:true"
+                }
+              },
+              {
+                "checkId": "safety",
+                "status": "passed",
+                "severity": "severe",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "safety:true"
+                }
+              }
+            ],
+            "creativePolicy": {
+              "threshold": 0.8,
+              "dimensions": [
+                "intent",
+                "beat",
+                "composition",
+                "visual_identity_consistency",
+                "performance_naturalness"
+              ]
+            },
+            "creativeChecks": [
+              {
+                "dimension": "intent",
+                "score": 0.75,
+                "status": "failed",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                }
+              },
+              {
+                "dimension": "beat",
+                "score": 0.6,
+                "status": "failed",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                }
+              },
+              {
+                "dimension": "composition",
+                "score": 0.8,
+                "status": "passed",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                }
+              },
+              {
+                "dimension": "visual_identity_consistency",
+                "score": 0.95,
+                "status": "passed",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                }
+              },
+              {
+                "dimension": "performance_naturalness",
+                "score": 0.85,
+                "status": "passed",
+                "evidence": {
+                  "artifactId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+                  "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+                  "observed": "The shot features a person holding a blue garment in a soft neutral light gray studio, matching the natural documentary commercial style. The blue fabric slowly rises upward across the sequence, gradually covering more of the person's torso while their head and upper neck remain visible, creating a clear steady beat of fabric movement. The composition centers the person's face in the upper portion of the frame with the blue garment occupying the lower majority, balancing focus on the person and the apparel product. The person's facial features, hair, and skin tone remain consistent throughout all frames with no identity distortion. The person maintains a calm neutral expression with steady gaze toward the camera; the fabric movement is smooth and natural, with no uncanny facial motion or unnatural physical movement visible."
+                }
+              }
+            ],
+            "generationStatus": "succeeded",
+            "qualificationStatus": "rejected",
+            "accepted": false,
+            "severeFailures": [],
+            "technicalFailures": [],
+            "creativeFailures": [
+              "intent",
+              "beat"
+            ],
+            "decisionPolicy": "all_required_checks_must_pass_no_averaging",
+            "fingerprint": "e1df658eee2c18f3a9c2e0933b84a14cef2460bb2dafb726ab2df2fc9c8ced30",
+            "checks": {
+              "playableMp4": true,
+              "durationBound": true,
+              "roleBound": true,
+              "sceneBound": true,
+              "styleBound": true,
+              "referencesBound": true
+            },
+            "evidence": {
+              "assetId": "8778d76f-e736-4a96-a3c6-90572f89f136",
+              "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+              "byteLength": 1383824
+            }
+          }
+        ],
+        "final": {
+          "schema": "openreel-director-final-quality-result/v1",
+          "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+          "workflowId": "commercial",
+          "revision": 1,
+          "cutId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+          "renderAsset": {
+            "assetId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+            "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+            "status": "succeeded"
+          },
+          "expectedShotIds": [
+            "5bbfec87-928a-4488-b94e-77bc9363f8fb"
+          ],
+          "shotResults": [
+            {
+              "schema": "openreel-director-shot-quality-result/v1",
+              "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+              "fingerprint": "e1df658eee2c18f3a9c2e0933b84a14cef2460bb2dafb726ab2df2fc9c8ced30",
+              "qualificationStatus": "rejected",
+              "accepted": false
+            }
+          ],
+          "compositionEvidence": {
+            "schema": "openreel-final-composition-evidence/v1",
+            "workflowId": "commercial",
+            "revision": 1,
+            "renderAssetSha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+            "technicalChecks": [
+              {
+                "checkId": "container_integrity",
+                "status": "passed",
+                "severity": "severe",
+                "evidence": {
+                  "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                  "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                  "observed": "container_integrity:true"
+                }
+              },
+              {
+                "checkId": "duration_timeline",
+                "status": "passed",
+                "severity": "major",
+                "evidence": {
+                  "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                  "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                  "observed": "duration_timeline:true"
+                }
+              },
+              {
+                "checkId": "av_sync",
+                "status": "passed",
+                "severity": "major",
+                "evidence": {
+                  "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                  "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                  "observed": "av_sync:true"
+                }
+              },
+              {
+                "checkId": "audio_integrity",
+                "status": "passed",
+                "severity": "severe",
+                "evidence": {
+                  "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                  "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                  "observed": "audio_integrity:true"
+                }
+              },
+              {
+                "checkId": "caption_safe_zone",
+                "status": "passed",
+                "severity": "major",
+                "evidence": {
+                  "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                  "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                  "observed": "caption_safe_zone:true"
+                }
+              },
+              {
+                "checkId": "resolution",
+                "status": "passed",
+                "severity": "major",
+                "evidence": {
+                  "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                  "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                  "observed": "resolution:true"
+                }
+              }
+            ]
+          },
+          "directorPolicy": {
+            "threshold": 0.8,
+            "dimensions": [
+              "story",
+              "pacing",
+              "continuity"
+            ]
+          },
+          "directorChecks": [
+            {
+              "dimension": "story",
+              "score": 0.2,
+              "status": "failed",
+              "evidence": {
+                "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                "observed": "The clip is a single continuous medium shot in a neutral studio with soft light, featuring one performer in a plain blue top holding an unbranded blue cloth toward the camera; the cloth shifts slightly upward over the duration with no cuts, no text, no logos, and consistent lighting and framing. There is minimal narrative development, as the action only consists of holding and slightly adjusting the cloth with no clear story arc."
+              }
+            },
+            {
+              "dimension": "pacing",
+              "score": 0.7,
+              "status": "failed",
+              "evidence": {
+                "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                "observed": "The clip is a single continuous medium shot in a neutral studio with soft light, featuring one performer in a plain blue top holding an unbranded blue cloth toward the camera; the cloth shifts slightly upward over the duration with no cuts, no text, no logos, and consistent lighting and framing. There is minimal narrative development, as the action only consists of holding and slightly adjusting the cloth with no clear story arc."
+              }
+            },
+            {
+              "dimension": "continuity",
+              "score": 0.9,
+              "status": "passed",
+              "evidence": {
+                "artifactId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+                "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+                "observed": "The clip is a single continuous medium shot in a neutral studio with soft light, featuring one performer in a plain blue top holding an unbranded blue cloth toward the camera; the cloth shifts slightly upward over the duration with no cuts, no text, no logos, and consistent lighting and framing. There is minimal narrative development, as the action only consists of holding and slightly adjusting the cloth with no clear story arc."
+              }
+            }
+          ],
+          "generationStatus": "succeeded",
+          "qualificationStatus": "rejected",
+          "releaseEligible": false,
+          "failedShots": [
+            "5bbfec87-928a-4488-b94e-77bc9363f8fb"
+          ],
+          "severeFailures": [],
+          "technicalFailures": [],
+          "directorFailures": [
+            "story",
+            "pacing"
+          ],
+          "decisionPolicy": "all_shots_composition_and_director_checks_must_pass",
+          "fingerprint": "976a54fe54250dbb668cc892ee49e93d6d3615482dbda5b5038a914192f7ff99",
+          "accepted": false,
+          "checks": {
+            "playableMp4": true,
+            "allShotsAccepted": false
+          },
+          "evidence": {
+            "assetId": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+            "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+            "byteLength": 116711
+          }
+        }
+      },
+      "artifacts": [
+        {
+          "id": "f89bb539-ee18-41d0-b94c-785c64e6b3e1",
+          "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+          "sessionId": null,
+          "jobId": null,
+          "nodeId": null,
+          "kind": "image",
+          "role": "result",
+          "mimeType": "image/jpeg",
+          "filename": "commercial-image-5bbfec87-928a-4488-b94e-77bc9363f8fb.jpg",
+          "byteLength": 197945,
+          "storageKey": "133954dd91c41c73fe6552182db3f72838b8833c66c66d584458e89ea217ea28/f920e07e10cd854a7345feab88058e66bd9f38dadc0ac8ab73d423d197c4f4aa.bin",
+          "sha256": "45671468e6364c49f389aa88de8febb046227025c2ab1318cfab55cc5f40be5c",
+          "metadata": {
+            "schema": "openreel-commercial-artifact/v1",
+            "identity": {
+              "schema": "openreel-revision-identity/v1",
+              "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+              "projectVersion": 11,
+              "storyVersion": 1,
+              "storyboardVersion": 1,
+              "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+              "origin": "fresh"
+            },
+            "reuseOfAssetId": null,
+            "sourceProjectVersion": 11,
+            "sourceStoryVersion": 1,
+            "sourceStoryboardVersion": 1,
+            "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+            "stage": "image",
+            "provider": "volcengine-ark",
+            "model": "seedream-5-lite",
+            "commercialProviderJobId": "9041c4fd-728b-4e74-af74-b6474bc291e7",
+            "duration": null
+          },
+          "createdAt": "2026-08-27T05:52:03.472Z",
+          "url": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/f89bb539-ee18-41d0-b94c-785c64e6b3e1/content",
+          "manifestUrl": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/f89bb539-ee18-41d0-b94c-785c64e6b3e1/manifest",
+          "downloadUrl": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/f89bb539-ee18-41d0-b94c-785c64e6b3e1/content"
+        },
+        {
+          "id": "8778d76f-e736-4a96-a3c6-90572f89f136",
+          "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+          "sessionId": null,
+          "jobId": null,
+          "nodeId": null,
+          "kind": "video",
+          "role": "result",
+          "mimeType": "video/mp4",
+          "filename": "commercial-video-5bbfec87-928a-4488-b94e-77bc9363f8fb.mp4",
+          "byteLength": 1383824,
+          "storageKey": "133954dd91c41c73fe6552182db3f72838b8833c66c66d584458e89ea217ea28/9789426c314bfeaa0e7f8ff6aa2f0886695dbe4b18fa51f90c5db4506f27c654.bin",
+          "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8",
+          "metadata": {
+            "schema": "openreel-commercial-artifact/v1",
+            "identity": {
+              "schema": "openreel-revision-identity/v1",
+              "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+              "projectVersion": 11,
+              "storyVersion": 1,
+              "storyboardVersion": 1,
+              "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+              "origin": "fresh"
+            },
+            "reuseOfAssetId": null,
+            "sourceProjectVersion": 11,
+            "sourceStoryVersion": 1,
+            "sourceStoryboardVersion": 1,
+            "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+            "stage": "video",
+            "provider": "volcengine-ark",
+            "model": "seedance-2-fast",
+            "commercialProviderJobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+            "duration": 5
+          },
+          "createdAt": "2026-08-27T05:53:43.296Z",
+          "url": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/8778d76f-e736-4a96-a3c6-90572f89f136/content",
+          "manifestUrl": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/8778d76f-e736-4a96-a3c6-90572f89f136/manifest",
+          "downloadUrl": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/8778d76f-e736-4a96-a3c6-90572f89f136/content"
+        },
+        {
+          "id": "f269ee5e-d7de-4dcf-9edd-10fbb94b5aef",
+          "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+          "sessionId": null,
+          "jobId": null,
+          "nodeId": null,
+          "kind": "audio",
+          "role": "result",
+          "mimeType": "audio/wav",
+          "filename": "commercial-audio-global.wav",
+          "byteLength": 241964,
+          "storageKey": "133954dd91c41c73fe6552182db3f72838b8833c66c66d584458e89ea217ea28/b659ee045f8c93724b5980cdc1b47a14b95b1034ab591ca6e31cd06ffda014a0.bin",
+          "sha256": "2b50b5a1ba0de8f314054bb93cffa9771830059a3ba0a382fc9ec26700485e32",
+          "metadata": {
+            "schema": "openreel-commercial-artifact/v1",
+            "identity": {
+              "schema": "openreel-revision-identity/v1",
+              "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+              "projectVersion": 11,
+              "storyVersion": 1,
+              "storyboardVersion": 1,
+              "shotId": null,
+              "origin": "fresh"
+            },
+            "reuseOfAssetId": null,
+            "sourceProjectVersion": 11,
+            "sourceStoryVersion": 1,
+            "sourceStoryboardVersion": 1,
+            "shotId": null,
+            "stage": "audio",
+            "provider": "qwen-tts-tailnet",
+            "model": "qwen-tts-tailnet",
+            "commercialProviderJobId": null,
+            "duration": 5
+          },
+          "createdAt": "2026-08-27T05:53:47.168Z",
+          "url": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/f269ee5e-d7de-4dcf-9edd-10fbb94b5aef/content",
+          "manifestUrl": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/f269ee5e-d7de-4dcf-9edd-10fbb94b5aef/manifest",
+          "downloadUrl": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/f269ee5e-d7de-4dcf-9edd-10fbb94b5aef/content"
+        }
+      ],
+      "preservedArtifacts": [],
+      "productionArtifacts": [],
+      "composition": {
+        "plan": {
+          "schema": "openreel-commercial-composition/v1",
+          "duration": 5,
+          "safeZone": {
+            "top": 0.08,
+            "right": 0.16,
+            "bottom": 0.2,
+            "left": 0.08
+          },
+          "timeline": [
+            {
+              "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+              "start": 0,
+              "end": 5,
+              "caption": "single continuous five-second medium shot: the same fictional adult performer in plain blue wardrobe naturally lifts and presents an unbranded blue cloth toward camera in one neutral controlled studio, stable face and body, soft neutral light, no cuts, no text, no logo"
+            }
+          ],
+          "audio": {
+            "voiceGainDb": -3,
+            "musicGainDb": -18,
+            "speechDuckDb": -9,
+            "peakCeilingDbfs": -1,
+            "targetLufs": -14
+          }
+        },
+        "render": {
+          "schema": "openreel-render/v1",
+          "asset": {
+            "id": "77893b41-510d-4d1b-a9ce-1bf34aab8989",
+            "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+            "sessionId": null,
+            "jobId": null,
+            "nodeId": null,
+            "kind": "video",
+            "role": "render",
+            "mimeType": "video/mp4",
+            "filename": "openreel-642bb060-3583-4240-b2c9-4657fa457fea-commercial.mp4",
+            "byteLength": 116711,
+            "storageKey": "133954dd91c41c73fe6552182db3f72838b8833c66c66d584458e89ea217ea28/4e02285a1e495fd764395b9ea24396e48c17f02f27fc1443d44fa8cbe383328b.bin",
+            "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+            "metadata": {
+              "schema": "openreel-render/v1",
+              "identity": {
+                "schema": "openreel-revision-identity/v1",
+                "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+                "projectVersion": 11,
+                "storyVersion": 1,
+                "storyboardVersion": 1,
+                "shotId": null,
+                "origin": "fresh"
+              },
+              "sourceArtifacts": [
+                "f89bb539-ee18-41d0-b94c-785c64e6b3e1",
+                "8778d76f-e736-4a96-a3c6-90572f89f136",
+                "f269ee5e-d7de-4dcf-9edd-10fbb94b5aef"
+              ],
+              "duration": 5,
+              "sourceTimelineVersion": 6,
+              "inputDigest": "930c8d6e90506de6d731e2e4706de3672de997133eeb59549490c0160bc5f06c",
+              "format": "mp4",
+              "quality": "source-media-360p",
+              "limits": {
+                "maxClips": 100,
+                "maxDuration": 600
+              },
+              "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+              "hasAudio": true,
+              "renderer": "ffmpeg-source-media",
+              "rendererVersion": "1",
+              "boundary": "byte-backed commercial source-media composition; caption burn-in, reviewed music and production quality acceptance remain separate"
+            },
+            "createdAt": "2026-08-27T05:53:48.026Z",
+            "url": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/77893b41-510d-4d1b-a9ce-1bf34aab8989/content",
+            "manifestUrl": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/77893b41-510d-4d1b-a9ce-1bf34aab8989/manifest",
+            "downloadUrl": "/api/v1/projects/642bb060-3583-4240-b2c9-4657fa457fea/assets/77893b41-510d-4d1b-a9ce-1bf34aab8989/content"
+          },
+          "duration": 5,
+          "playable": true,
+          "productionReady": false,
+          "hasAudio": true,
+          "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc",
+          "inputDigest": "930c8d6e90506de6d731e2e4706de3672de997133eeb59549490c0160bc5f06c",
+          "format": "mp4",
+          "quality": "source-media-360p",
+          "limits": {
+            "maxClips": 100,
+            "maxDuration": 600
+          },
+          "replayed": false,
+          "boundary": "byte-backed commercial source-media composition; caption burn-in, reviewed music and production quality acceptance remain separate",
+          "identity": {
+            "schema": "openreel-revision-identity/v1",
+            "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+            "projectVersion": 11,
+            "storyVersion": 1,
+            "storyboardVersion": 1,
+            "shotId": null,
+            "origin": "fresh"
+          },
+          "sourceProjectVersion": 11,
+          "sourceStoryVersion": 1,
+          "sourceStoryboardVersion": 1,
+          "sourceTimelineVersion": 6,
+          "compositionPlan": {
+            "schema": "openreel-commercial-composition/v1",
+            "duration": 5,
+            "safeZone": {
+              "top": 0.08,
+              "right": 0.16,
+              "bottom": 0.2,
+              "left": 0.08
+            },
+            "timeline": [
+              {
+                "shotId": "5bbfec87-928a-4488-b94e-77bc9363f8fb",
+                "start": 0,
+                "end": 5,
+                "caption": "single continuous five-second medium shot: the same fictional adult performer in plain blue wardrobe naturally lifts and presents an unbranded blue cloth toward camera in one neutral controlled studio, stable face and body, soft neutral light, no cuts, no text, no logo"
+              }
+            ],
+            "audio": {
+              "voiceGainDb": -3,
+              "musicGainDb": -18,
+              "speechDuckDb": -9,
+              "peakCeilingDbfs": -1,
+              "targetLufs": -14
+            }
+          },
+          "sourceArtifacts": [
+            "f89bb539-ee18-41d0-b94c-785c64e6b3e1",
+            "8778d76f-e736-4a96-a3c6-90572f89f136",
+            "f269ee5e-d7de-4dcf-9edd-10fbb94b5aef"
+          ]
+        }
+      },
+      "calls": [
+        {
+          "stage": "image",
+          "operation": "submit",
+          "jobId": "9041c4fd-728b-4e74-af74-b6474bc291e7",
+          "model": "seedream-5-lite",
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 1,
+            "costMicros": 459,
+            "currency": "USD",
+            "unitScale": 10000,
+            "pricingVersion": "volcengine-2026-08-06-usd-7.20-markup-1.5"
+          }
+        },
+        {
+          "stage": "image",
+          "operation": "complete",
+          "jobId": "9041c4fd-728b-4e74-af74-b6474bc291e7",
+          "model": "seedream-5-lite",
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 1,
+            "costMicros": 459,
+            "currency": "USD",
+            "unitScale": 10000,
+            "pricingVersion": "volcengine-2026-08-06-usd-7.20-markup-1.5"
+          }
+        },
+        {
+          "stage": "video",
+          "operation": "submit",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "model": "seedance-2-fast",
+          "usage": null
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "running"
+        },
+        {
+          "stage": "video",
+          "operation": "poll",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "status": "succeeded"
+        },
+        {
+          "stage": "video",
+          "operation": "complete",
+          "jobId": "e7cb2649-4c9c-4cdb-bc33-d6eb8e5f7e8d",
+          "model": "seedance-2-fast",
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 108900,
+            "costMicros": 8395,
+            "currency": "USD",
+            "unitScale": 10000,
+            "pricingVersion": "volcengine-2026-08-06-usd-7.20-markup-1.5"
+          }
+        },
+        {
+          "stage": "audio",
+          "operation": "synthesize",
+          "model": "qwen-tts-tailnet",
+          "maximumCostCny": 1
+        }
+      ],
+      "cost": {
+        "currency": "CNY",
+        "status": "settled",
+        "settledCny": 6.42456,
+        "generationSettledCny": 6.37488,
+        "evaluationSettledCny": 0.04968
+      },
+      "budget": {
+        "currency": "CNY",
+        "perActionLimit": 100,
+        "audioMaximum": 1,
+        "musicMaximum": 10,
+        "cnyPerUsd": 7.2
+      },
+      "boundary": "Generation success is distinct from qualification and release eligibility; quality is fail-closed."
+    },
+    "error": {
+      "code": "COMMERCIAL_QUALITY_REJECTED",
+      "message": "generation completed but quality rejected the result"
+    },
+    "createdAt": "2026-08-27T05:51:39.841Z",
+    "updatedAt": "2026-08-27T05:54:06.645Z",
+    "startedAt": "2026-08-27T05:51:39.888Z",
+    "finishedAt": "2026-08-27T05:54:06.645Z"
+  },
+  "billing": {
+    "before": {
+      "id": "56129197-b6f2-43b8-8474-7f8a7baa9d3e",
+      "accountId": "ff85d094-2b7e-4fbc-8f6a-fdb69ff76e81",
+      "plan": "cdqi2-t11-cp76-finite-redo",
+      "status": "active",
+      "hardLimitMicros": 31422,
+      "currency": "USD",
+      "unitScale": 10000,
+      "spentMicros": 8922,
+      "reservedMicros": 0,
+      "periodStartedAt": "2026-08-27T05:26:45.880Z",
+      "periodEndsAt": "2026-08-27T06:21:39.594Z",
+      "createdAt": "2026-08-27T05:26:45.880Z",
+      "updatedAt": "2026-08-27T05:51:39.693Z"
+    },
+    "after": {
+      "id": "56129197-b6f2-43b8-8474-7f8a7baa9d3e",
+      "accountId": "ff85d094-2b7e-4fbc-8f6a-fdb69ff76e81",
+      "plan": "cdqi2-t11-cp76-finite-redo",
+      "status": "active",
+      "hardLimitMicros": 31422,
+      "currency": "USD",
+      "unitScale": 10000,
+      "spentMicros": 17845,
+      "reservedMicros": 0,
+      "periodStartedAt": "2026-08-27T05:26:45.880Z",
+      "periodEndsAt": "2026-08-27T06:21:39.594Z",
+      "createdAt": "2026-08-27T05:26:45.880Z",
+      "updatedAt": "2026-08-27T05:51:39.693Z"
+    },
+    "spentUnits": 8923,
+    "spentCny": 6.42456,
+    "reservedUnits": 0,
+    "reconciliation": {
+      "accountId": "ff85d094-2b7e-4fbc-8f6a-fdb69ff76e81",
+      "consistent": true,
+      "mismatches": []
+    }
+  },
+  "safety": {
+    "subscriptionsActivated": 1,
+    "redoJobs": 1,
+    "executeCalls": 1,
+    "retries": 0,
+    "publications": 0,
+    "passwordChanges": 0
+  }
+}

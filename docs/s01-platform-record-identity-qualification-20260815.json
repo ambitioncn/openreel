@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T18:34:18Z",
+  "scope": "local-only platform collection record identity validation",
+  "result": "passed",
+  "claims": [
+    "Every record in every collection required by the stored platform schema has a non-empty string id.",
+    "Record ids are unique within each collection before backup creation or restore promotion.",
+    "A platform snapshot containing an account without an id fails closed without exposing a final backup destination."
+  ],
+  "verification": {
+    "opsTest": { "command": "node --test test/ops.test.js", "passed": 21, "failed": 0 },
+    "fullTest": { "command": "npm test", "passed": 189, "failed": 0 },
+    "dependencyAudit": { "command": "npm audit --omit=dev --audit-level=high", "vulnerabilities": 0 },
+    "secretScan": { "command": "npm run scan:secrets", "status": "passed", "files": 176 },
+    "diffCheck": { "command": "git diff --check", "status": "passed" }
+  },
+  "externalActions": [],
+  "notClaimed": [
+    "complete business-rule validation of every platform field",
+    "staging or production backup/restore",
+    "external backup copy or off-host retention",
+    "signing or activation",
+    "independent review"
+  ]
+}

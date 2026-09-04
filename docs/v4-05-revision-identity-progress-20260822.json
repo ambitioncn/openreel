@@ -1,0 +1,21 @@
+{
+  "schema": "openreel-v4-05-progress/v1",
+  "status": "local_phase_complete",
+  "project_completion": "in_progress",
+  "implemented": [
+    "Commercial assets carry one revision identity envelope with project, project version, story version, storyboard version, shot and origin.",
+    "Timeline clips copy the exact asset identity and composition rejects clip/asset identity drift.",
+    "Commercial renders retain revision identity and exact source asset ids.",
+    "Publishing jobs persist the reviewed revision identity and include it in idempotency identity.",
+    "Production publishing preflight requires an exact tenant-owned render identity match before provider access.",
+    "Reviewed reuse is marked explicit-reuse with its source asset id and cannot be represented as fresh generation."
+  ],
+  "verification": [
+    "Focused revision and publishing tests: 29/29 passed",
+    "Complete repository suite: 451/451 passed"
+  ],
+  "external_actions": [],
+  "remaining": [
+    "Beijing production ordinary-account evidence from generated assets through timeline, render and publish preflight."
+  ]
+}

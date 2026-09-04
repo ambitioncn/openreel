@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "capturedAt": "2026-08-19",
+  "scope": "Authenticated LibTV representative-video export format and quality comparison, read-only",
+  "evidenceClass": "authenticated-observed",
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "productionChanges": 0,
+    "deployments": 0,
+    "publications": 0,
+    "credentialChanges": 0
+  },
+  "libtv": {
+    "session": "existing authorized owner session remained authenticated",
+    "representativeNode": {
+      "kind": "video",
+      "terminal": true,
+      "progressPercent": 100,
+      "configuredResolution": "720p",
+      "configuredRatio": "16:9",
+      "configuredDurationSeconds": 15,
+      "soundEnabled": true
+    },
+    "downloadSurface": {
+      "observedContainer": "MP4",
+      "observedCodec": "H.264 High, yuv420p",
+      "observedAudio": "AAC-LC stereo, 32 kHz",
+      "formatSelectorObserved": false,
+      "qualitySelectorObserved": false,
+      "downloadVariantsExposedByCli": [
+        "default resource download",
+        "member original-link / without-AI-watermark preference"
+      ],
+      "note": "The read-only surface exposed resource selection and watermark/original-link preference, not an export transcode matrix. No alternative container, codec, bitrate or resolution was claimed."
+    },
+    "retainedExactBytes": {
+      "path": "/home/nickn/.openclaw-ironman/workspace/artifacts/libtv-nova-buds/15秒成片.mp4",
+      "sha256": "6b406fd88b5e093b3a51537f857a28c658860692c23fbd1f35b00bc34f6ff842",
+      "remoteBinding": "The current authenticated node resource basename equals this SHA-256; the URL and account/node identifiers are intentionally omitted.",
+      "bytes": 6559737,
+      "durationSeconds": 15.104,
+      "width": 1280,
+      "height": 720,
+      "frameRate": 24,
+      "videoBitRate": 3342528,
+      "audioBitRate": 127260,
+      "containerBitRate": 3474436,
+      "decodedVideoFrames": 361,
+      "decodedAudioFrames": 472,
+      "fullDecode": "passed"
+    }
+  },
+  "openreel": {
+    "currentExportContract": {
+      "container": "MP4",
+      "profile": "preview-360p",
+      "maximumClips": 100,
+      "maximumDurationSeconds": 600
+    },
+    "representativeBrowserInput": {
+      "path": "/home/nickn/.openclaw/workspace/openreel/runtime/t01-real-video-browser/representative-multishot.mp4",
+      "sha256": "8cfd36a52965e4ad6a2fc1af58c0946be046ca5f2fb0765e9ada12f6555c7a6a",
+      "bytes": 378927,
+      "durationSeconds": 4,
+      "container": "MP4",
+      "codec": "H.264 High, yuv420p",
+      "width": 640,
+      "height": 360,
+      "frameRate": 24,
+      "videoBitRate": 753814,
+      "audio": "none",
+      "decodedVideoFrames": 96,
+      "fullDecode": "passed"
+    }
+  },
+  "comparison": {
+    "common": [
+      "MP4 container",
+      "H.264 High profile",
+      "yuv420p pixel format",
+      "24 fps",
+      "fully decodable representative bytes"
+    ],
+    "differences": [
+      "The observed LibTV result is 1280x720 with AAC stereo; the current OpenReel local export contract is preview-360p and the representative browser input has no audio.",
+      "The LibTV representative video bitrate is about 3.34 Mb/s versus about 0.75 Mb/s for the OpenReel 360p representative input; these are different source contents and durations, so bitrate is a technical-envelope observation, not a perceptual-quality score.",
+      "The authenticated LibTV read-only surface did not expose alternative container, codec, bitrate or resolution selectors for this completed node."
+    ],
+    "limits": [
+      "No same-source encode pair exists, so PSNR, SSIM, VMAF and subjective visual parity are not claimed.",
+      "The failed live redownload attempt created no file; exact-byte binding instead relies on the authenticated current resource basename matching the retained file SHA-256.",
+      "One representative completed node does not prove every LibTV model or export path."
+    ],
+    "verdict": "T-01 format and quality limits are explicit. OpenReel matches the observed baseline container/codec family but its current local export ceiling remains preview-360p, below the observed LibTV 720p-plus-AAC result."
+  },
+  "verification": [
+    "Authenticated account info, project list, node list and completed video node detail returned successfully using the existing session.",
+    "sha256sum matched the retained LibTV bytes to the authenticated resource basename.",
+    "ffprobe identified both retained videos and counted frames.",
+    "ffmpeg decoded both retained videos to null with no errors."
+  ]
+}

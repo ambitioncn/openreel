@@ -1,0 +1,42 @@
+{
+  "schema": "openreel-e01-cp290-zero-call-replay-diagnosis/v1",
+  "status": "root_cause_identified_and_locally_corrected",
+  "externalCalls": 0,
+  "providerSubmissions": 0,
+  "diagnosis": {
+    "failedStage": "asset_metadata",
+    "incorrectField": "size",
+    "canonicalField": "byteLength",
+    "evidence": [
+      "OpenReel asset manifests omit stored bytes and retain the canonical byteLength field.",
+      "The cp290 runner asserted asset.size > 0, which deterministically raises ERR_ASSERTION because size is undefined.",
+      "The server's ark-poll route downloads and validates provider bytes, reconciles the successful canvas job, persists the asset, appends the video clip, and only then returns a succeeded local job."
+    ]
+  },
+  "boundedInference": {
+    "verifiedByControlFlow": [
+      "provider asynchronous terminal state was succeeded",
+      "provider output bytes passed Ark MIME and non-empty validation",
+      "the result asset was created before the succeeded local job was returned",
+      "a video timeline clip was appended before the succeeded local job was returned",
+      "the billing reservation was settled before the succeeded Ark job was returned"
+    ],
+    "notVerified": [
+      "the cleaned cp290 asset byte count",
+      "the cleaned cp290 browser playback result",
+      "provider-console final billing evidence"
+    ]
+  },
+  "correction": {
+    "runnerField": "asset.byteLength",
+    "downloadComparison": "download.value.byteLength === asset.byteLength",
+    "newProviderCallRequired": false
+  },
+  "safety": {
+    "credentialsRead": false,
+    "productionChanged": false,
+    "paidInferenceInvoked": false,
+    "consumedAuthorizationReused": false
+  },
+  "projectCompletion": "in_progress"
+}

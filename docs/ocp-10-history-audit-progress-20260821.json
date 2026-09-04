@@ -1,0 +1,26 @@
+{
+  "schema": "openreel-qualification/v1",
+  "project": "openreel-one-click-publishing",
+  "milestone": "OCP-10",
+  "status": "in_progress",
+  "scope": "tenant-scoped publication history and immutable transition audit read boundary",
+  "implemented": [
+    "memory and durable batch stores list only the authenticated tenant's batches",
+    "history is ordered newest first and includes intent/asset fingerprints, actor, timestamps, normalized destination state, attempts, remote identifiers and transition history",
+    "browser-facing audit output omits title, publication copy, credentials and raw remote request evidence",
+    "authenticated GET /api/v1/publishing/batches exposes the history boundary"
+  ],
+  "verification": [
+    {"command":"node --test test/publishing-orchestration.test.js test/http.test.js","result":"34 passed, 0 failed"},
+    {"command":"npm test","result":"418 passed, 0 failed"},
+    {"command":"npm run scan:secrets","result":"533 files scanned, passed"},
+    {"command":"loop-engineering doctor --root /home/nickn/.openclaw/workspace --json","result":"ok=true, failCount=0"}
+  ],
+  "external_actions": [],
+  "remaining": [
+    "bounded query filters, retention/export/delete policy and tests",
+    "publishing-specific metrics and structured event logging",
+    "OCP-11 security/regression completion and OCP-12 Beijing Aliyun operations acceptance"
+  ],
+  "project_completion": "in_progress"
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "capturedAt": "2026-08-16",
+  "scope": "local synthetic Qwen TTS audio-body read failure normalization",
+  "claim": "Buffered and streamed audio read failures are converted to stable, sanitized QWEN_TTS_RESULT_INVALID errors while streamed reader locks are released.",
+  "implementation": [
+    "src/qwen-tts.js preserves existing DomainError failures and normalizes other read failures without copying private exception messages",
+    "test/qwen-tts.test.js covers rejected arrayBuffer and reader.read paths, bounded cause codes and stream-lock release"
+  ],
+  "verification": {
+    "focused": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js: 37/37 passed",
+    "full": "npm test: 264/264 passed",
+    "governance": "node --test test/project-governance.test.js: 3/3 passed",
+    "secretScan": "npm run scan:secrets: passed; 300 files scanned",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": {
+    "tailnetQwenRequests": 0,
+    "providerCalls": 0,
+    "otpReplays": 0,
+    "deployments": 0,
+    "serviceRestarts": 0,
+    "credentialChanges": 0,
+    "publicActions": 0
+  },
+  "limitations": [
+    "Synthetic failures do not establish successful real Qwen synthesis or retained-media behavior.",
+    "A real synthesis and graphical-browser E2E remain behind a precise human authorization."
+  ]
+}

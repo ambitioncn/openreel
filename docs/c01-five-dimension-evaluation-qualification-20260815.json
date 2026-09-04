@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "C-01",
+  "scope": "credential-free five-dimension continuity-evaluation contract qualification",
+  "controls": [
+    "align executable score validation with the documented identity, scene, referenceAdherence, temporalCoherence and artifactFreedom dimensions",
+    "reject the legacy temporalContinuity field and any score record missing artifactFreedom",
+    "require every one of the five dimensions to meet the acceptance threshold"
+  ],
+  "verification": {
+    "focused": "node --test test/continuity-evaluation.test.js: 3 passed, 0 failed",
+    "fullSuite": "npm test: 214 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 223 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "retained real-media outputs",
+    "human visual acceptance",
+    "provider execution",
+    "deployment or production readiness"
+  ]
+}

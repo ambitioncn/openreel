@@ -1,0 +1,26 @@
+{
+  "schema": "openreel-commercial-runtime-preflight-candidate/v1",
+  "checkpoint": "cp47",
+  "mode": "zero-paid-local-development",
+  "status": "immutable_candidate_frozen",
+  "behavior": {
+    "productionDefault": "commercial quote requires policy-safe storyboard preflight before quote, job, reservation, or provider submit",
+    "rejections": ["1x1 identity reference", "missing policy declarations", "unsafe per-shot prompt"],
+    "acceptedEvidenceBinding": "preflight result is copied into the quote and durable job input"
+  },
+  "files": {
+    "src/workbench-commercial.js": "7babc2b71e826227f5a7745139ce0f925b4bb02fda96d347be7adfe9ff2d4543",
+    "server.mjs": "b760a5ae27cc046c7f8c57fdec7710c26c1dd0db81807bf51fc5840600fd39c9",
+    "test/workbench-commercial.test.js": "dc759f004f14ea85628b9c69868d2615ccc5690072e7dfacf4267343f0cfd543",
+    "src/commercial-storyboard-preflight.js": "8238ff3a1ec4cdad4e4927bba36eddd8e12e32db4204d8483d7c53edd9e81eb5",
+    "test/commercial-storyboard-preflight.test.js": "88ed417b1c7d4945a06106515376fb14f134f8948262ddc0d5068edf638f8361"
+  },
+  "verification": {
+    "focused": "24 passed, 0 failed",
+    "full": "575 passed, 0 failed",
+    "providerCalls": 0,
+    "paidActions": 0,
+    "jobsCreatedByThisTick": 0
+  },
+  "authorizationBoundary": "No provider/model call, paid action, real job, production mutation, deployment, publication, credential change, retry, or replay occurred."
+}

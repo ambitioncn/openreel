@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T17:25:22Z",
+  "scope": "local-only platform backup schema validation",
+  "result": "passed",
+  "claims": [
+    "Backup creation and restore accept only supported OpenReel platform schema versions 1 through 7.",
+    "Each supported schema must contain every collection introduced by that schema version as an array.",
+    "Missing schema metadata or malformed current-schema collections fail closed before backup or restore promotion."
+  ],
+  "verification": {
+    "opsTest": {
+      "command": "node --test test/ops.test.js",
+      "passed": 19,
+      "failed": 0
+    },
+    "fullTest": {
+      "command": "npm test",
+      "passed": 187,
+      "failed": 0
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "vulnerabilities": 0
+    },
+    "secretScan": {
+      "command": "npm run scan:secrets",
+      "status": "passed",
+      "files": 165
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  },
+  "externalActions": [],
+  "notClaimed": [
+    "deep semantic validation of every platform record",
+    "staging or production backup/restore",
+    "external backup copy or off-host retention",
+    "signing or activation",
+    "independent review"
+  ]
+}

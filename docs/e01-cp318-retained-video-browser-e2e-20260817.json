@@ -1,0 +1,83 @@
+{
+  "schema": "openreel-e01-cp318-retained-video-browser-e2e/v1",
+  "status": "passed_cleanup_complete",
+  "authorizationCheckpoint": "cp317",
+  "scope": {
+    "environment": "beijing_isolated_private_staging",
+    "route": "direct_plan_v3",
+    "model": "seedance-2-fast",
+    "durationSeconds": 5,
+    "resolution": "480p",
+    "aspectRatio": "16:9",
+    "audio": false,
+    "maximumSubmissions": 1,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "maximumUnits": 6945,
+    "ownerCeilingCny": 30
+  },
+  "observed": {
+    "providerTerminalState": "succeeded",
+    "assetMimeType": "video/mp4",
+    "assetBytes": 1099803,
+    "downloadedBytes": 1099803,
+    "sha256": "d9346ce77e4ca50ca4588298b99a637e0404529c3a9a24bc26e755b1779a846e",
+    "assetCount": 1,
+    "videoTimelineClipCount": 1,
+    "spentUnits": 3904,
+    "reservedUnits": 0,
+    "billingReconciliationConsistent": true,
+    "ffprobe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "codec": "h264",
+      "profile": "High",
+      "pixelFormat": "yuv420p",
+      "width": 864,
+      "height": 496,
+      "framesPerSecond": 24,
+      "durationSeconds": 5.041667
+    },
+    "ffmpegFullDecode": "passed",
+    "browserAuthenticated": true,
+    "browserFetchedBytes": 1099803,
+    "blobObjectUrlPlayback": {
+      "loaded": false,
+      "mediaErrorCode": 4
+    },
+    "directAuthenticatedAssetUrlPlayback": {
+      "loaded": true,
+      "readyState": 4,
+      "durationSeconds": 5.041667,
+      "mediaErrorCode": null
+    },
+    "sameBytesDataUrlControlPlayback": {
+      "loaded": true,
+      "readyState": 4,
+      "durationSeconds": 5.041667
+    }
+  },
+  "interpretation": [
+    "The exact retained provider output is structurally valid, fully decodable and playable in the selected Chromium runtime.",
+    "The cp316 failure was reproduced only through the acceptance harness Blob Object URL path; authenticated direct asset URL playback passed with the same original bytes.",
+    "Representative single real-video browser playback is accepted for this bounded route. Multi-shot continuity, remaining modalities, authenticated LibTV comparison and production acceptance remain separate project work."
+  ],
+  "cleanup": {
+    "isolatedPortClosed": true,
+    "remoteRetainedMediaRemoved": true,
+    "localRetainedMediaRemoved": true,
+    "temporaryCodeStatePacketsRemoved": true,
+    "temporaryBrowserCredentialsRemoved": true,
+    "productionServiceActive": true,
+    "productionChanged": false,
+    "credentialConfigurationChanged": false
+  },
+  "retention": {
+    "credentialValues": false,
+    "providerTaskIds": false,
+    "providerOutputUrls": false,
+    "temporaryAccountCredentials": false,
+    "humanInputSecrets": false,
+    "providerMediaBytes": false
+  },
+  "projectCompletion": "in_progress"
+}

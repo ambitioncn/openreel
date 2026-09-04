@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "capturedAt": "2026-08-16",
+  "scope": "local synthetic Qwen TTS HTTP response-envelope admission",
+  "claim": "Malformed transport results fail with stable QWEN_TTS_RESULT_INVALID errors before header or audio-body processing instead of leaking native type errors.",
+  "implementation": [
+    "src/qwen-tts.js requires an object response with an integer HTTP status in 100-599 and a callable headers.get interface",
+    "src/qwen-tts.js requires either a readable stream body or a callable arrayBuffer fallback before audio admission",
+    "test/qwen-tts.test.js covers null, undefined, primitive, missing-field, invalid-status, invalid-header and unreadable-body responses"
+  ],
+  "verification": {
+    "focused": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js: 36/36 passed",
+    "full": "npm test: 263/263 passed",
+    "governance": "node --test test/project-governance.test.js: 3/3 passed",
+    "secretScan": "npm run scan:secrets: passed; 299 files scanned",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": {
+    "tailnetQwenRequests": 0,
+    "providerCalls": 0,
+    "otpReplays": 0,
+    "deployments": 0,
+    "serviceRestarts": 0,
+    "credentialChanges": 0,
+    "publicActions": 0
+  },
+  "limitations": [
+    "This validates synthetic response-interface failures only and does not establish successful real Qwen synthesis.",
+    "A real synthesis and retained-media graphical-browser E2E remain behind a precise human authorization."
+  ]
+}

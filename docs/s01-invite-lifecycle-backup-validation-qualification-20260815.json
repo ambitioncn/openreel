@@ -1,0 +1,39 @@
+{
+  "schema": "openreel-s01-local-qualification/v1",
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T22:30:00.000Z",
+  "scope": "platform invitation lifecycle backup admission",
+  "controls": [
+    "invite email identities must be canonical lowercase addresses",
+    "invite roles must be admin, editor, or viewer",
+    "invite status must be pending, accepted, or revoked",
+    "invite creation timestamps must be canonical UTC ISO-8601 milliseconds",
+    "only revoked invites may carry a canonical revokedAt at or after creation",
+    "a team may not retain duplicate pending invitations for one email"
+  ],
+  "negativeFixtures": [
+    "non-canonical invite email",
+    "owner invite role",
+    "unknown invite status",
+    "non-canonical creation timestamp",
+    "pending invite carrying revokedAt",
+    "revoked invite without revokedAt",
+    "revocation before creation",
+    "duplicate pending team/email invitation"
+  ],
+  "positiveFixtures": [
+    "canonical revoked invitation is admitted and backed up"
+  ],
+  "verification": {
+    "targeted": "node --test test/ops.test.js: 35 passed, 0 failed",
+    "full": "npm test: 203 passed, 0 failed",
+    "dependencies": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secrets": "npm run scan:secrets: passed across 208 files",
+    "diff": "git diff --check: passed"
+  },
+  "externalActions": [],
+  "limitations": [
+    "No email delivery, identity-provider call, authenticated LibTV write, external backup, staging mutation, deployment, signing, or activation was performed.",
+    "Authenticated team comparison, independent review, and external reliability evidence remain separately gated."
+  ]
+}

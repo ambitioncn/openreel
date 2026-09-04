@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "milestone": "A-01",
+  "qualification": "qwen_exact_enabled_state",
+  "date": "2026-08-16",
+  "scope": "local_synthetic_only",
+  "claim": "The Qwen TTS client can be enabled only by exact boolean true; non-boolean injected configuration fails before client activation or network access.",
+  "negative_cases": [
+    "string_true",
+    "string_false",
+    "number_one",
+    "number_zero",
+    "object",
+    "array"
+  ],
+  "external_actions": {
+    "tailnet_requests": 0,
+    "provider_calls": 0,
+    "deployments": 0,
+    "credential_changes": 0
+  },
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js",
+    "npm test",
+    "npm run scan:secrets",
+    "git diff --check"
+  ],
+  "project_completion": "in_progress"
+}

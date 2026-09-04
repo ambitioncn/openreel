@@ -1,0 +1,25 @@
+{
+  "schema": "openreel-v4-03-progress/v1",
+  "date": "2026-08-22",
+  "scope": "revision-bound caption planning and playable local preview composition on the durable commercial lifecycle; zero provider calls and no deployment",
+  "implemented": [
+    "confirmed workbench jobs carry the reviewed voice, caption, music and platform-safe-zone settings from the bound story revision",
+    "the provider orchestrator persists compose and quality stage transitions after image, video and voice stages",
+    "a bounded caption and speech-first mix plan is created for the exact storyboard shots",
+    "the production bootstrap composes the retained revision-bound timeline through the shared store and returns a playable MP4 manifest with project, story, storyboard, timeline and source-asset bindings",
+    "composition requires bound video for every current shot and bound audio, and rejects missing, stale, foreign or undeclared timeline media before rendering",
+    "storyboard drift fails closed before composition"
+  ],
+  "verification": [
+    "node --test test/workbench-commercial.test.js test/commercial-provider-orchestrator.test.js test/commercial-job-lifecycle.test.js: 17/17 passed",
+    "npm test: 447/447 passed",
+    "the integration tests verify a non-empty MP4 ftyp signature plus stale-storyboard, missing-source and unrelated-timeline rejection"
+  ],
+  "not_claimed": [
+    "caption burn-in or a generated music asset",
+    "production codec or audiovisual quality acceptance",
+    "paid version-safe per-shot redo",
+    "Beijing production deployment or ordinary-account browser evidence",
+    "project completion"
+  ]
+}

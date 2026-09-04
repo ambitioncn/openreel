@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel",
+  "contractVersion": "4.0",
+  "backlogItem": "V4-01",
+  "status": "phase_implemented_local",
+  "behavior": [
+    "New creative defaults to creating and opening a distinct project before any story, storyboard or reference upload write.",
+    "Writing into the current project requires selecting current and checking a separate contemporaneous confirmation.",
+    "The selected current project id and version must still match at the write boundary; a switch or stale version fails closed.",
+    "The project shelf makes the new current work and preserved prior work visible."
+  ],
+  "files": ["src/workbench-project-boundary.js", "src/app.js", "index.html", "test/workbench-project-boundary.test.js", "scripts/workbench-browser-e2e.mjs"],
+  "verification": [
+    {"command":"node --test test/workbench-project-boundary.test.js test/workbench-draft.test.js test/http.test.js","result":"passed 35/35"},
+    {"command":"npm run smoke:workbench-browser","result":"exit 0; isolated desktop and mobile ordinary-account Chromium paths created two projects by default, rejected unconfirmed current-work writes, accepted separately confirmed writes, and preserved reload/edit behavior"}
+  ],
+  "providerCalls": 0,
+  "productionChanged": false,
+  "remaining": ["Deploy reviewed V4 release and retain the same ordinary-account negative and recovery evidence on Beijing production as part of V4-07."],
+  "blockers": []
+}

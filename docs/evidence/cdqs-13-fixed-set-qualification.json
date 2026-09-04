@@ -1,0 +1,128 @@
+{
+  "schema": "openreel-cdqs-13-qualification/v1",
+  "evaluationSetVersion": "2026-08-24.1",
+  "evaluationSetFingerprint": "b6883c892cc32c6c9353e53f730ec46461eef33cb9a366461bd6caa60ef7aa94",
+  "caseCount": 15,
+  "positive": {
+    "status": "qualified",
+    "releaseEligible": true,
+    "strategies": {
+      "comedy": "passed",
+      "talking_head": "passed",
+      "advertisement": "passed",
+      "narrative": "passed",
+      "tutorial": "passed"
+    }
+  },
+  "severeErrorCases": [
+    {
+      "caseId": "eval-001",
+      "strategy": "comedy",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-002",
+      "strategy": "comedy",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-003",
+      "strategy": "comedy",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-004",
+      "strategy": "talking_head",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-005",
+      "strategy": "talking_head",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-006",
+      "strategy": "talking_head",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-007",
+      "strategy": "advertisement",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-008",
+      "strategy": "advertisement",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-009",
+      "strategy": "advertisement",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-010",
+      "strategy": "narrative",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-011",
+      "strategy": "narrative",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-012",
+      "strategy": "narrative",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-013",
+      "strategy": "tutorial",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-014",
+      "strategy": "tutorial",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    },
+    {
+      "caseId": "eval-015",
+      "strategy": "tutorial",
+      "status": "rejected",
+      "releaseEligible": false,
+      "failure": "severe:decode_failure"
+    }
+  ],
+  "externalCalls": false,
+  "paidCalls": false,
+  "deploymentActivated": false,
+  "fingerprint": "65c3e87f5c069d923bfe41c68a5a3f7e49dcc222c19eafb2e9e6c790a31628ac"
+}

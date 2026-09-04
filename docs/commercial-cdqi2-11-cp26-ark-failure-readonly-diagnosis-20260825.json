@@ -1,0 +1,64 @@
+{
+  "schema": "openreel-commercial-ark-failure-readonly-diagnosis/v1",
+  "capturedAt": "2026-08-25T09:40:00Z",
+  "scope": "Read-only diagnosis of the first Ark failure for commercial job 13db49fc-f3d6-4fec-8685-24b4fc6f4b81; no retry, new job, provider call, spend, production mutation, publication, credential change, or external send.",
+  "production": {
+    "release": "/opt/openreel/releases/20260825T170400Z-cdqi2-a096c514",
+    "service": { "activeState": "active", "subState": "running", "nRestarts": 0 },
+    "readiness": { "status": "ready", "database": "ok", "assets": "ok" },
+    "paidInferenceEnabled": true,
+    "automaticArkRetries": 0,
+    "route": "Beijing direct content-generation endpoint configured"
+  },
+  "failedJob": {
+    "commercialStatus": "failed",
+    "commercialStage": "videos",
+    "shotIndex": 0,
+    "attempts": 1,
+    "retryable": true,
+    "result": null,
+    "providerJob": {
+      "model": "seedance-2-fast",
+      "status": "failed",
+      "providerTaskCreated": false,
+      "durationSeconds": 3,
+      "ratio": "9:16",
+      "firstFramePresent": true,
+      "usageCostMicros": 0
+    }
+  },
+  "billing": {
+    "imageReservation": "settled",
+    "imageUsageCostMicros": 459,
+    "videoReservation": "failed",
+    "videoUsageStatus": "failed",
+    "videoUsageCostMicros": 0,
+    "openReservationForFailedVideo": false
+  },
+  "comparison": {
+    "sameModelSuccessfulDurations": [4, 5],
+    "sameModelImmediateSubmitFailureDurations": [1, 3],
+    "recentSameRouteSuccessesBeforeFailure": 4,
+    "failedRequestDifference": "The first shot requested 3 seconds; otherwise it had the same content types, first-frame host family, 9:16 ratio, reference count, and model shape as recent successful requests."
+  },
+  "rootCause": {
+    "classification": "request_contract_provider_capability_mismatch",
+    "confidence": "high",
+    "finding": "The commercial structural preflight accepts 1-10 second shots and requires varied pacing, but the deployed provider path has no provider-capability admission check. It admitted a 3-second first shot that the observed seedance-2-fast route rejects synchronously before creating a provider task.",
+    "notSupportedByEvidence": [
+      "Beijing host outage",
+      "OpenReel service or database failure",
+      "general provider route or credential failure",
+      "insufficient account reservation",
+      "provider polling failure"
+    ],
+    "diagnosticLimit": "The durable Ark error intentionally stores only a sanitized generic code and the journal contains only the HTTP request record, so the exact upstream status/code was not retained. The causal classification rests on stage timing, zero-cost settlement, absence of provider task id, and same-route duration outcome comparison."
+  },
+  "changedStrategy": [
+    "Before any future paid action, intersect storyboard durations with the selected provider model's explicit supported-duration contract and reject unsupported shots before reservation.",
+    "Keep creative pacing variation in narrative beats and shot count; do not encode variation using unsupported provider durations.",
+    "Retain sanitized upstreamStatus, providerCode, providerParam, providerMessage, and request-id hash in durable Ark job diagnostics so future diagnosis does not depend on inference.",
+    "Do not replay this commercial job. Any future attempt must be a newly authorized job after the zero-paid contract fix, local negative regression, immutable candidate qualification, and independent necessity review."
+  ],
+  "status": "diagnosed_project_in_progress"
+}

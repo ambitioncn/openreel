@@ -1,0 +1,40 @@
+{
+  "schema": "openreel-v4-bounded-planning-reservation-deployment/v1",
+  "checkpoint": "cp50",
+  "authorization": {
+    "sourceGate": "cp49",
+    "boundedReservationFixAuthorized": true,
+    "productionDeploymentAuthorized": true,
+    "restartScope": "openreel.service once",
+    "modelCallsAuthorized": false,
+    "finalFilmAuthorized": false,
+    "publicationAuthorized": false,
+    "externalSendAuthorized": false
+  },
+  "implementation": {
+    "behavior": "Text requests with a positive max_completion_tokens reserve a conservative input-byte-plus-overhead and output-token ceiling, capped by the reviewed per-model maximum. Unbounded and non-text requests retain the full reviewed model ceiling.",
+    "settlementEnforcementUnchanged": true,
+    "productionFile": "src/ark.js",
+    "productionFileSha256": "54c96bddb2be13ecf4a146a6fd16b2a6263b38fcd2ee01a6dadc47868d341bbd"
+  },
+  "verification": {
+    "targetedTests": "76/76 passed",
+    "isolatedProductionReservationMicros": 462,
+    "ordinaryAccountHardLimitMicros": 40000,
+    "currency": "USD",
+    "unitScale": 10000,
+    "providerCalls": 0,
+    "healthReady": { "status": "ready", "database": "ok", "assets": "ok" },
+    "healthLive": "ok",
+    "service": "active"
+  },
+  "deployment": {
+    "previousRelease": "/opt/openreel/releases/20260823T081500Z-cp47b-music-wiring",
+    "activeRelease": "/opt/openreel/releases/20260823T165500Z-cp50-budget-reservation",
+    "backup": "/var/backups/openreel/2026-08-23T165154Z",
+    "restartCountForDeployment": 1,
+    "rollbackReleaseRetained": true
+  },
+  "strategyChange": "The failed USD 50 full-model reservation was not retried. The deployed code now derives a request-bounded text reservation and was verified with an injected stop at the reservation boundary, proving zero Provider calls.",
+  "remainingGate": "A new explicit authorization is required before any ordinary-account model-chain or final-film run."
+}

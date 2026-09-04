@@ -1,0 +1,119 @@
+{
+  "schema": "openreel-v4-07-production-ordinary-account/v1",
+  "capturedAt": "2026-08-22T14:53:39.193Z",
+  "target": "https://openreel.duobiai.cn:4173",
+  "initialPrompt": "美女在海滩跳舞",
+  "requestedDurationSeconds": 5,
+  "freshOrdinaryAccount": true,
+  "credentialRetained": false,
+  "distinctProject": {
+    "id": "00fb2dc3-8c6a-4768-b5f8-e095d1bc44fb",
+    "initialProjectCount": 1,
+    "finalProjectCount": 2
+  },
+  "planning": {
+    "browserState": "已创建独立作品：真实文本模型 seed-2.1-pro 已生成 5 秒方案，费用已记录。",
+    "storyVersion": 2,
+    "storyboardVersion": 2,
+    "shotCount": 1
+  },
+  "preflight": {
+    "subscriptionApplicationId": "1333425e-ee85-473f-944b-8c84b5e7d7a5",
+    "subscriptionHardLimit": {
+      "amount": 10,
+      "currency": "USD",
+      "unitScale": 10000,
+      "maximumCnyAtReviewedRate": 72
+    },
+    "quoteCny": 16,
+    "perActionLimitCny": 100,
+    "confirmedInBrowser": true
+  },
+  "generation": {
+    "browserState": "任务 2d5335f7-6d4b-4554-880b-f0ff202687d2 · succeeded · 已尝试 1/3",
+    "imageAssets": [
+      {
+        "id": "13437eaf-ec79-4603-a0fc-3e67f96f85b8",
+        "model": "seedream-5-lite",
+        "providerJobId": "68fc8890-449e-49ea-80e7-aceca943271c",
+        "shotId": "17868f14-5960-4876-a1d7-397840a480b8"
+      }
+    ],
+    "videoAssets": [
+      {
+        "id": "ac603324-91c0-4cc9-8c6c-94ec926b7458",
+        "model": "seedance-2-fast",
+        "providerJobId": "fd2f35f9-daa5-4d56-9541-1420addab17a",
+        "shotId": "17868f14-5960-4876-a1d7-397840a480b8"
+      }
+    ],
+    "audioAssets": [
+      {
+        "id": "914d596c-44e4-4938-ba34-457c8216a9fa",
+        "model": "qwen-tts-tailnet",
+        "providerJobId": null
+      }
+    ]
+  },
+  "binding": {
+    "projectId": "00fb2dc3-8c6a-4768-b5f8-e095d1bc44fb",
+    "projectVersion": 10,
+    "storyVersion": 2,
+    "storyboardVersion": 2,
+    "timelineVersion": 3,
+    "everyProviderAssetMatchesCurrentRevision": true
+  },
+  "render": {
+    "assetId": "9a140ae9-5ea1-44db-ac25-1d91fc8abc7c",
+    "byteLength": 257435,
+    "sha256": "fecc2756a093a103eb49e316f54a4826edd61688504e3b60248188a94e8b84d4",
+    "mimeType": "video/mp4",
+    "metadata": {
+      "schema": "openreel-render/v1",
+      "identity": {
+        "schema": "openreel-revision-identity/v1",
+        "projectId": "00fb2dc3-8c6a-4768-b5f8-e095d1bc44fb",
+        "projectVersion": 6,
+        "storyVersion": 2,
+        "storyboardVersion": 2,
+        "shotId": null,
+        "origin": "fresh"
+      },
+      "sourceArtifacts": [
+        "13437eaf-ec79-4603-a0fc-3e67f96f85b8",
+        "ac603324-91c0-4cc9-8c6c-94ec926b7458",
+        "914d596c-44e4-4938-ba34-457c8216a9fa"
+      ],
+      "duration": 5,
+      "sourceTimelineVersion": 3,
+      "inputDigest": "f2f44be6831e54ee0d32212141793c061972227dd3c9a889c1d48a14afe1545d",
+      "format": "mp4",
+      "quality": "source-media-360p",
+      "limits": {
+        "maxClips": 100,
+        "maxDuration": 600
+      },
+      "sha256": "fecc2756a093a103eb49e316f54a4826edd61688504e3b60248188a94e8b84d4",
+      "hasAudio": true,
+      "renderer": "ffmpeg-source-media",
+      "rendererVersion": "1",
+      "boundary": "byte-backed commercial source-media composition; caption burn-in, reviewed music and production quality acceptance remain separate"
+    },
+    "playback": {
+      "duration": 5.083333,
+      "readyState": 1,
+      "currentSrc": "/api/v1/projects/00fb2dc3-8c6a-4768-b5f8-e095d1bc44fb/assets/9a140ae9-5ea1-44db-ac25-1d91fc8abc7c/content"
+    }
+  },
+  "browser": {
+    "engine": "chromium",
+    "viewport": "1440x1000",
+    "serverErrors": []
+  },
+  "safety": {
+    "publications": 0,
+    "externalSends": 0,
+    "retries": 0,
+    "quoteWithinAuthorizedLimit": true
+  }
+}

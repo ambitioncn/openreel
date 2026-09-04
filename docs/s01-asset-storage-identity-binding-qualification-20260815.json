@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "project": "openreel-libtv-parity",
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T20:30:52.588Z",
+  "scope": "local-only asset identity and storage path binding",
+  "change": {
+    "implementation": "scripts/backup.mjs derives the expected storage key from SHA-256(projectId)/SHA-256(assetId).bin and requires an exact match",
+    "boundary": "backup creation and restore reject canonical-looking asset paths that are not bound to the stored asset identity before atomic promotion",
+    "negativeFixture": "a synthetic asset database row and matching local file moved to a different canonical two-segment hash path"
+  },
+  "verification": {
+    "opsTest": {
+      "command": "node --test test/ops.test.js",
+      "passed": 24,
+      "failed": 0
+    },
+    "fullSuite": {
+      "command": "npm test",
+      "passed": 192,
+      "failed": 0
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "highSeverityFindings": 0
+    },
+    "secretScan": {
+      "command": "npm run scan:secrets",
+      "status": "passed",
+      "filesScanned": 194
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  },
+  "externalActions": [],
+  "limitations": [
+    "Identity binding detects metadata-to-path drift but does not cryptographically authenticate the backup package.",
+    "Independent review, off-host retention, staging drills and production rollback remain separately gated."
+  ]
+}

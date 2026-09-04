@@ -1,0 +1,126 @@
+{
+  "schema": "openreel-v4-07-production-ordinary-account/v1",
+  "capturedAt": "2026-08-23T03:11:30.436Z",
+  "target": "https://openreel.duobiai.cn:4173",
+  "initialPrompt": "美女在海滩跳舞",
+  "requestedDurationSeconds": 5,
+  "freshOrdinaryAccount": true,
+  "credentialRetained": false,
+  "distinctProject": {
+    "id": "c9fb7b66-c05f-406f-ae8a-9bed749bde47",
+    "initialProjectCount": 1,
+    "finalProjectCount": 2
+  },
+  "planning": {
+    "browserState": "已创建独立作品：真实文本模型 seed-2.1-pro 已生成 5 秒方案，费用已记录。",
+    "storyVersion": 2,
+    "storyboardVersion": 2,
+    "shotCount": 1
+  },
+  "preflight": {
+    "subscriptionApplicationId": "f7f12119-9e79-473f-a996-5f65a83cb08a",
+    "subscriptionHardLimit": {
+      "amount": 10,
+      "currency": "USD",
+      "unitScale": 10000,
+      "maximumCnyAtReviewedRate": 72
+    },
+    "quoteCny": 16,
+    "perActionLimitCny": 100,
+    "confirmedInBrowser": true
+  },
+  "generation": {
+    "browserState": "任务 224427f2-cbd2-46a4-bd10-d287e4aa7a97 · succeeded · 已尝试 1/3",
+    "retries": 0,
+    "captionAssetIds": [
+      "c2a35b16-4299-44cf-bf39-90c6ada9ba45"
+    ],
+    "musicAssetId": "0d471d53-ccc3-46bd-8ad7-3fd6bbe97d20",
+    "musicSourceDeclaration": "user supplied",
+    "musicRightsResponsibilityConfirmed": true,
+    "imageAssets": [
+      {
+        "id": "23d364e5-d28d-4d53-a27c-980a8251ca27",
+        "model": "seedream-5-lite",
+        "providerJobId": "8ac02947-8699-4f3a-9e87-54797c89462f",
+        "shotId": "a0dd3059-447a-461a-8f99-eb0851a37e16"
+      }
+    ],
+    "videoAssets": [
+      {
+        "id": "af3a1ffa-f964-4cab-842d-e18472e79950",
+        "model": "seedance-2-fast",
+        "providerJobId": "7f70cd60-db8a-4dbb-b053-0fac7cc1368f",
+        "shotId": "a0dd3059-447a-461a-8f99-eb0851a37e16"
+      }
+    ],
+    "audioAssets": [
+      {
+        "id": "a9636c17-c00a-44a5-8da9-90e46a021a6c",
+        "model": "qwen-tts-tailnet",
+        "providerJobId": null
+      }
+    ]
+  },
+  "binding": {
+    "projectId": "c9fb7b66-c05f-406f-ae8a-9bed749bde47",
+    "projectVersion": 10,
+    "storyVersion": 2,
+    "storyboardVersion": 2,
+    "timelineVersion": 3,
+    "everyProviderAssetMatchesCurrentRevision": true
+  },
+  "render": {
+    "assetId": "42f7d3e5-087c-4e49-a89d-6d59153d22a8",
+    "byteLength": 195935,
+    "sha256": "b09cd76d6910c65849aadf8e72fe1f5eb5a9dc601c9ca70ab243b249421b1dd2",
+    "mimeType": "video/mp4",
+    "metadata": {
+      "schema": "openreel-render/v1",
+      "identity": {
+        "schema": "openreel-revision-identity/v1",
+        "projectId": "c9fb7b66-c05f-406f-ae8a-9bed749bde47",
+        "projectVersion": 6,
+        "storyVersion": 2,
+        "storyboardVersion": 2,
+        "shotId": null,
+        "origin": "fresh"
+      },
+      "sourceArtifacts": [
+        "23d364e5-d28d-4d53-a27c-980a8251ca27",
+        "af3a1ffa-f964-4cab-842d-e18472e79950",
+        "a9636c17-c00a-44a5-8da9-90e46a021a6c"
+      ],
+      "duration": 5,
+      "sourceTimelineVersion": 3,
+      "inputDigest": "f6b91415a0c1cb64b9770f73076de65d97c4eb1602ed52b849f565ca497e790a",
+      "format": "mp4",
+      "quality": "source-media-360p",
+      "limits": {
+        "maxClips": 100,
+        "maxDuration": 600
+      },
+      "sha256": "b09cd76d6910c65849aadf8e72fe1f5eb5a9dc601c9ca70ab243b249421b1dd2",
+      "hasAudio": true,
+      "renderer": "ffmpeg-source-media",
+      "rendererVersion": "1",
+      "boundary": "byte-backed commercial source-media composition; caption burn-in, reviewed music and production quality acceptance remain separate"
+    },
+    "playback": {
+      "duration": 5.083333,
+      "readyState": 1,
+      "currentSrc": "/api/v1/projects/c9fb7b66-c05f-406f-ae8a-9bed749bde47/assets/42f7d3e5-087c-4e49-a89d-6d59153d22a8/content"
+    }
+  },
+  "browser": {
+    "engine": "chromium",
+    "viewport": "1440x1000",
+    "serverErrors": []
+  },
+  "safety": {
+    "publications": 0,
+    "externalSends": 0,
+    "retries": 0,
+    "quoteWithinAuthorizedLimit": true
+  }
+}

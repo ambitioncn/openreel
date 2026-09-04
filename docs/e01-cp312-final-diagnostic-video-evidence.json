@@ -1,0 +1,15 @@
+{
+  "schema": "openreel-e01-cp312-final-diagnostic-video-evidence/v1",
+  "status": "provider_terminal_failed_cleanup_complete",
+  "authorizationCheckpoint": "cp311",
+  "scope": { "environment": "beijing_isolated_private_staging", "route": "direct_plan_v3", "model": "seedance-2-fast", "durationSeconds": 5, "resolution": "480p", "aspectRatio": "16:9", "audio": false, "maximumSubmissions": 1, "providerSubmissions": 1, "automaticRetries": 0, "maximumUnits": 6945, "ownerCeilingCny": 30 },
+  "preflight": { "stageDiagnosticsEnforced": true, "directSubmitAndPollEndpoint": "https://ark.cn-beijing.volces.com/api/plan/v3/contents/generations/tasks", "budgetEnforcedBeforeSubmission": true, "productionServiceChanged": false, "productionCredentialsChanged": false },
+  "observed": { "providerSubmissions": 1, "secondSubmission": false, "automaticRetries": 0, "acceptanceStage": "terminal", "terminalState": "failed", "sanitizedErrorCode": "ARK_TASK_FAILED", "spentUnits": 0, "reservedUnits": 0, "billingReconciliationConsistent": true, "assetPersistenceReached": false, "timelineInsertionReached": false, "graphicalBrowserReached": false },
+  "cleanup": { "isolatedProcessStopped": true, "isolatedPortClosed": true, "temporaryCodeStateAndPacketsRemoved": true, "productionServiceActive": true },
+  "retention": { "credentialValues": false, "providerTaskIds": false, "providerOutputUrls": false, "temporaryAccountCredentials": false, "humanInputSecrets": false },
+  "limitations": [
+    "The provider task failed before an output asset existed, so no asset, download, timeline or graphical-browser playback acceptance is claimed.",
+    "The one-call authority is consumed; no retry or second paid request is authorized."
+  ],
+  "projectCompletion": "in_progress"
+}

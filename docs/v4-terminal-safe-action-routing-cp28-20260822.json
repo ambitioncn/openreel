@@ -1,0 +1,39 @@
+{
+  "schema": "openreel-v4-safe-action-routing/v1",
+  "capturedAt": "2026-08-22T23:05:00.000Z",
+  "sourceCheckpoint": "cp27",
+  "humanInputApplied": {
+    "checkpoint": "cp27",
+    "outcome": "accepted",
+    "constraints": [
+      "continue V4-04, V4-06 and safe local V4-03 work",
+      "do not invoke a music provider or change entitlement/payment",
+      "do not publish, externally send, destructively mutate, change credentials or perform process-control actions"
+    ]
+  },
+  "routing": [
+    {
+      "backlogId": "V4-04",
+      "remaining": "production authenticated ordinary-account evidence",
+      "localImplementationState": "implemented and locally verified",
+      "nextEvidenceNeeds": ["ordinary-account subscription approval", "production authenticated execution", "browser or equivalent production client capture"],
+      "disposition": "deferred gate; no local implementation gap identified"
+    },
+    {
+      "backlogId": "V4-06",
+      "remaining": "production browser route and one real understanding-model evidence record",
+      "localImplementationState": "implemented and locally verified",
+      "nextEvidenceNeeds": ["ordinary-account subscription approval", "real model invocation", "production client capture"],
+      "disposition": "deferred gate; no local implementation gap identified"
+    },
+    {
+      "backlogId": "V4-03",
+      "remaining": "caption burn-in, reviewed music and paid version-safe per-shot redo",
+      "safeNow": "implement the per-shot redo quote/confirmation/version-binding boundary locally without invoking a provider",
+      "deferred": ["music-provider invocation", "production paid redo evidence", "caption runtime/deployment change"],
+      "disposition": "next safe development slice"
+    }
+  ],
+  "antiLoopDifference": "cp27 established the three V4-03 feature gaps; cp28 maps every remaining V4-03/V4-04/V4-06 acceptance item to the newly consumed human constraints and selects the only immediately actionable local slice instead of repeating a production or music attempt.",
+  "projectCompletion": "in_progress"
+}

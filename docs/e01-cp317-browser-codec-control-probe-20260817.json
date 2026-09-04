@@ -1,0 +1,49 @@
+{
+  "schema": "openreel-e01-cp317-browser-codec-control-probe/v1",
+  "status": "local_control_probe_complete",
+  "externalProviderCalls": 0,
+  "browser": {
+    "engine": "chromium",
+    "executable": "system_existing",
+    "sameRuntimeClassAsCp316": true
+  },
+  "fixtures": [
+    {
+      "container": "mp4",
+      "mimeType": "video/mp4",
+      "codec": "h264",
+      "profile": "High",
+      "pixelFormat": "yuv420p",
+      "bytes": 7012,
+      "metadataLoaded": true,
+      "durationSeconds": 1,
+      "readyState": 4,
+      "mediaErrorCode": null
+    },
+    {
+      "container": "webm",
+      "mimeType": "video/webm",
+      "codec": "vp9",
+      "profile": "Profile 0",
+      "pixelFormat": "yuv420p",
+      "bytes": 6471,
+      "metadataLoaded": true,
+      "durationSeconds": 1,
+      "readyState": 4,
+      "mediaErrorCode": null
+    }
+  ],
+  "diagnosis": [
+    "The cp316 MediaError code 4 is not explained by a blanket inability of the selected Chromium runtime to load MP4/H.264 or WebM/VP9.",
+    "The remaining evidence points toward a provider-output-specific codec/profile/container compatibility issue or malformed media, but the exact subtype cannot be proven because the cp316 isolated asset was removed during mandatory cleanup.",
+    "The next evidence-backed route is to retain one authorized generated asset long enough for bounded ffprobe and browser replay, then remove it after evidence capture."
+  ],
+  "safety": {
+    "providerCalls": 0,
+    "credentialsRead": false,
+    "productionChanged": false,
+    "networkPublication": false,
+    "temporaryFixturesRemoved": true
+  },
+  "projectCompletion": "in_progress"
+}

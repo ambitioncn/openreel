@@ -1,0 +1,39 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-production-t11/v1",
+  "capturedAt": "2026-08-25T09:05:00Z",
+  "candidate": {
+    "fingerprint": "a096c514406b6b5c04b264c8d392363e38006776b780db80bedfaf75bd5d3629",
+    "artifacts": 107,
+    "localQualification": "passed",
+    "structuralPreflight": { "accepted": true, "beats": ["hook", "development", "payoff"], "durations": [3, 5, 4], "totalDuration": 12, "paidProviderCalls": 0 }
+  },
+  "deployment": {
+    "target": "Beijing Aliyun production",
+    "manifestVerification": "passed",
+    "activeRelease": "/opt/openreel/releases/20260825T170400Z-cdqi2-a096c514",
+    "readiness": { "database": "ok", "assets": "ok" },
+    "service": { "activeState": "active", "subState": "running", "nRestarts": 0 },
+    "rollbackAnchorRetained": true
+  },
+  "paidAcceptance": {
+    "jobId": "13db49fc-f3d6-4fec-8685-24b4fc6f4b81",
+    "necessity": "One materially restructured T11 candidate was necessary to address retained intent, beat, story and pacing failures.",
+    "quotedCny": 46.4,
+    "perActionLimitCny": 100,
+    "attempts": 1,
+    "status": "failed",
+    "retryable": true,
+    "errorCode": "ARK_PROVIDER_ERROR",
+    "result": null,
+    "retryPerformed": false,
+    "secondJobCreated": false,
+    "fallbackUsed": false
+  },
+  "safety": { "publicationAttempted": false, "credentialChanged": false, "externalMessageSent": false },
+  "status": "project_in_progress",
+  "unmet": [
+    "T11 still lacks an ordinary-account qualified pass because the only authorized structurally revised job failed at the first provider stage.",
+    "The retryable flag is not authority to replay; a new independent paid-action authorization would be required.",
+    "T12 terminal audit remains pending until T11 is accepted."
+  ]
+}

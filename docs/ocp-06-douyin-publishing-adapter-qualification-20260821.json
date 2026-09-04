@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "project": "openreel-one-click-publishing",
+  "milestone": "OCP-06",
+  "status": "accepted_local_implementation",
+  "boundary": "Official Douyin Open Platform adapter contract tests only. No developer application mutation, credential access/change, real OAuth, network call, media upload or external publication occurred.",
+  "implementation": {
+    "source": "src/publishing-douyin.js",
+    "flow": ["oauth/userinfo capability identity", "video/upload byte transfer", "video/create with reviewed copy", "video/data review/publication reconciliation"],
+    "controls": ["server-side access token and open_id", "minimum video.create scope inherited from accepted OAuth profile", "tenant-bound asset reader", "128 MB single-upload ceiling with fail-closed multipart handoff", "explicit reviewed copy", "normalized auth/quota/policy/transient/permanent errors", "unknown review states become unknown_remote", "published item id and share URL retained when returned"]
+  },
+  "verification": [
+    {"command":"node --test test/publishing-douyin.test.js test/publishing-lifecycle.test.js test/publishing-oauth.test.js test/publishing-preflight.test.js","result":"26 passed, 0 failed"},
+    {"command":"npm test","result":"400 passed, 0 failed"}
+  ],
+  "limitations": [
+    "The local adapter deliberately rejects files above 128 MB until the official multipart protocol is implemented and independently qualified; preflight provides the actionable boundary.",
+    "Account-specific privacy and publishing eligibility beyond the minimum official video.create grant must be discovered during owner-approved live qualification."
+  ],
+  "live_acceptance_gate": {
+    "platform": "douyin",
+    "required_actions": ["owner identifies and approves a Douyin developer app with video.create enabled", "owner confirms credential addition or change for that app", "owner confirms OAuth for a named Douyin account", "owner separately confirms publication of a named MP4 with reviewed title and copy"],
+    "reason": "These are external authorization, credential and publication actions and were not authorized by this local milestone."
+  },
+  "next_item": "OCP-07"
+}

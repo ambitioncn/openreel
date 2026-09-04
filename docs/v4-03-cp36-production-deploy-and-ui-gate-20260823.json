@@ -1,0 +1,39 @@
+{
+  "schema": "openreel-v4-progress-evidence/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp36",
+  "status": "production_deployed_acceptance_needs_new_gate",
+  "deployment": {
+    "release": "/opt/openreel/releases/20260823T004601Z-cp35-assets",
+    "manifestArtifactsVerified": 85,
+    "backup": "/var/backups/openreel/20260823T004513Z-cp35",
+    "backupVerification": { "database": "ok", "assets": 45, "publishing": "ok" },
+    "service": "active",
+    "restartCount": 0,
+    "loopbackReady": 200,
+    "public4173Root": 200
+  },
+  "productionAcceptance": {
+    "freshOrdinaryAccount": true,
+    "initialPrompt": "美女在海滩跳舞",
+    "realTextPlanningCompleted": true,
+    "mediaProviderSubmission": false,
+    "retries": 0,
+    "mp4Produced": false,
+    "stoppedAt": "caption shot selector had no options after saving the generated storyboard"
+  },
+  "localFix": {
+    "summary": "Every project refresh now renders the commercial workbench and repopulates revision-current shot choices before production asset upload.",
+    "verification": ["focused commercial tests 12/12", "full suite 473/473", "release manifest 85/85 with tamper rejection"]
+  },
+  "safety": {
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "mediaProviderRetries": 0,
+    "portsChanged": false,
+    "derperTouched": false
+  },
+  "projectCompletion": "in_progress",
+  "nextGate": "Approve deployment of the bounded UI refresh fix and one new zero-retry ordinary-account full-chain acceptance capped at CNY 100."
+}

@@ -1,0 +1,129 @@
+{
+  "schema": "openreel-v4-07-production-ordinary-account/v1",
+  "capturedAt": "2026-08-23T17:42:14.802Z",
+  "target": "https://openreel.duobiai.cn:4173",
+  "initialPrompt": "美女在海滩跳舞",
+  "requestedDurationSeconds": 5,
+  "freshOrdinaryAccount": true,
+  "credentialRetained": false,
+  "distinctProject": {
+    "id": "a36d5c3b-5dd9-4e50-978c-b6b4ee689d00",
+    "initialProjectCount": 1,
+    "finalProjectCount": 2
+  },
+  "planning": {
+    "browserState": "已创建独立作品：真实文本模型 seed-2.1-pro 已生成 5 秒方案，费用已记录。",
+    "storyVersion": 2,
+    "storyboardVersion": 2,
+    "shotCount": 1
+  },
+  "preflight": {
+    "subscriptionApplicationId": "89b11efe-c365-47ed-95b4-2187a44f74c9",
+    "subscriptionHardLimit": {
+      "amount": 4,
+      "currency": "USD",
+      "unitScale": 10000,
+      "maximumCnyAtReviewedRate": 28.8
+    },
+    "quoteCny": 16,
+    "perActionLimitCny": 100,
+    "confirmedInBrowser": true
+  },
+  "generation": {
+    "browserState": "任务 dbd23264-7450-4e75-a1f4-9adfc5a5cf3d · succeeded · 已尝试 1/3",
+    "retries": 0,
+    "captionAssetIds": [
+      "68190142-95ee-46ed-8dcc-e6880461af41"
+    ],
+    "musicAssetId": "7767957e-2306-4c33-a684-107f06da3217",
+    "musicSha256": "73c1cc30bf06796607a8792ae34fede312b488d9dfb2b457368d41a12705f66f",
+    "musicSourceDeclaration": "OpenReel cp46 reviewed SeedAudio 1.0 private acceptance artifact",
+    "musicRightsResponsibilityConfirmed": true,
+    "imageAssets": [
+      {
+        "id": "fd1b9dda-bf1e-41b0-ba7e-337c719dd3ee",
+        "model": "seedream-5-lite",
+        "providerJobId": "59a1c5b3-a1c1-439e-9dec-2578cb800094",
+        "shotId": "270b49bc-415d-4a74-a603-edafd140e1db"
+      }
+    ],
+    "videoAssets": [
+      {
+        "id": "5b276baf-10de-4eac-a968-c93141a5178d",
+        "model": "seedance-2-fast",
+        "providerJobId": "5d0ff89f-e695-4a1a-89df-4184a2e5a036",
+        "shotId": "270b49bc-415d-4a74-a603-edafd140e1db"
+      }
+    ],
+    "audioAssets": [
+      {
+        "id": "fe8371b5-ea03-4caf-9f34-822953a485ae",
+        "model": "qwen-tts-tailnet",
+        "providerJobId": null
+      }
+    ]
+  },
+  "binding": {
+    "projectId": "a36d5c3b-5dd9-4e50-978c-b6b4ee689d00",
+    "projectVersion": 10,
+    "storyVersion": 2,
+    "storyboardVersion": 2,
+    "timelineVersion": 3,
+    "everyProviderAssetMatchesCurrentRevision": true
+  },
+  "render": {
+    "assetId": "2d9ecb14-1b94-42bf-90ab-f3a13ab139d9",
+    "byteLength": 163515,
+    "sha256": "37ae2cc5011eef9448d4a636a8e80ea1261e16f7e40f4f8041b8ed6c9d14d13c",
+    "mimeType": "video/mp4",
+    "metadata": {
+      "schema": "openreel-render/v1",
+      "identity": {
+        "schema": "openreel-revision-identity/v1",
+        "projectId": "a36d5c3b-5dd9-4e50-978c-b6b4ee689d00",
+        "projectVersion": 6,
+        "storyVersion": 2,
+        "storyboardVersion": 2,
+        "shotId": null,
+        "origin": "fresh"
+      },
+      "sourceArtifacts": [
+        "fd1b9dda-bf1e-41b0-ba7e-337c719dd3ee",
+        "5b276baf-10de-4eac-a968-c93141a5178d",
+        "fe8371b5-ea03-4caf-9f34-822953a485ae",
+        "68190142-95ee-46ed-8dcc-e6880461af41",
+        "7767957e-2306-4c33-a684-107f06da3217"
+      ],
+      "duration": 5,
+      "sourceTimelineVersion": 3,
+      "inputDigest": "642f4fc5f053b27de4ad09d6c3afac2696b861e1fb99f99815f3a73f70deab65",
+      "format": "mp4",
+      "quality": "source-media-360p",
+      "limits": {
+        "maxClips": 100,
+        "maxDuration": 600
+      },
+      "sha256": "37ae2cc5011eef9448d4a636a8e80ea1261e16f7e40f4f8041b8ed6c9d14d13c",
+      "hasAudio": true,
+      "renderer": "ffmpeg-source-media",
+      "rendererVersion": "1",
+      "boundary": "byte-backed commercial source-media composition; caption burn-in, reviewed music and production quality acceptance remain separate"
+    },
+    "playback": {
+      "duration": 5.083333,
+      "readyState": 4,
+      "currentSrc": "/api/v1/projects/a36d5c3b-5dd9-4e50-978c-b6b4ee689d00/assets/2d9ecb14-1b94-42bf-90ab-f3a13ab139d9/content"
+    }
+  },
+  "browser": {
+    "engine": "chromium",
+    "viewport": "1440x1000",
+    "serverErrors": []
+  },
+  "safety": {
+    "publications": 0,
+    "externalSends": 0,
+    "retries": 0,
+    "quoteWithinAuthorizedLimit": true
+  }
+}

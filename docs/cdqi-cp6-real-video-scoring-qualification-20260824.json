@@ -1,0 +1,58 @@
+{
+  "schema": "openreel-commercial-perceptual-qualification/v1",
+  "projectId": "openreel-commercial-director-quality-integration",
+  "milestone": "CDQI-06",
+  "environment": "Beijing Aliyun production configuration, isolated temporary fixtures",
+  "model": "seed-2.1-turbo",
+  "route": "volcengine-chat-completions",
+  "policy": {
+    "providerRetries": 0,
+    "maximumPerCallCny": 50.0004,
+    "standingAuthorizationPerActionCny": 100,
+    "productionConfigurationChanged": false,
+    "productionServiceRestarted": false,
+    "publicationAttempted": false
+  },
+  "results": [
+    {
+      "case": "creative_reject",
+      "fixture": {
+        "description": "one-second 160x284 blue MP4 with only the OPENREEL label",
+        "byteLength": 3562,
+        "sha256": "2519096babafa79244053c8374cbe58489d5cad44f39f05e595cc6b1d7eea635"
+      },
+      "status": "succeeded",
+      "scores": {"intent": 0, "beat": 0, "composition": 0},
+      "observation": "No person or dance action was visible; the evaluator identified only the static label.",
+      "usage": {"inputTokens": 1233, "outputTokens": 49, "costMicros": 10, "currency": "USD", "unitScale": 10000},
+      "settledCny": 0.0072
+    },
+    {
+      "case": "creative_pass",
+      "fixture": {
+        "description": "two-second 360x640 Golden Coffee card with product pack, benefit and CTA",
+        "byteLength": 7373,
+        "sha256": "07eea797563cc3e37e731b50b6946c4ed3e1410ff9cfba9b245cbaa62cb352dc"
+      },
+      "status": "succeeded",
+      "scores": {"intent": 1, "beat": 1, "composition": 1},
+      "observation": "The evaluator identified the product pack, RICH AROMA benefit and TRY IT TODAY CTA as the requested commercial evidence.",
+      "usage": {"inputTokens": 2386, "outputTokens": 97, "costMicros": 18, "currency": "USD", "unitScale": 10000},
+      "settledCny": 0.01296
+    }
+  ],
+  "failedPreProviderAttempts": [
+    "Shell loading of the systemd environment file stopped before service construction.",
+    "Two mistyped account-principal attempts stopped at local account lookup."
+  ],
+  "conclusion": {
+    "videoDataUrlAccepted": true,
+    "strictScoreJsonAccepted": true,
+    "realPassObserved": true,
+    "realRejectObserved": true,
+    "totalProviderCalls": 2,
+    "totalSettledCny": 0.02016,
+    "commercialQuoteReady": false,
+    "reason": "The reviewed text route global maximum is CNY 50.0004 per call. A one-shot commercial run requires at least shot and final evaluation, so evaluation maximum alone is CNY 100.0008 and cannot fit the CNY 100 total action ceiling alongside generation. A reviewed evaluation-specific reservation/quote ceiling or lower-cost route is still required."
+  }
+}

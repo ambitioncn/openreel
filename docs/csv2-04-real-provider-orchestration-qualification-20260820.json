@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "project": "openreel-short-video-commercial-v2",
+  "backlog_item": "CSV2-04",
+  "status": "accepted",
+  "implementation": ["src/commercial-provider-orchestrator.js", "test/commercial-provider-orchestrator.test.js"],
+  "provider_interfaces": {
+    "image": "Ark service submit/download with validated image MIME",
+    "video": "Ark asynchronous submit/poll/download with provider image result bound as first_frame",
+    "audio": "reviewed Qwen TTS synthesize authorization returning validated WAV",
+    "artifact_admission": "every validated byte result passes through the supplied durable artifactSink"
+  },
+  "controls": {
+    "input": ["script 1-1000 characters", "1-12 storyboard shots", "shot prompts bounded", "shot duration 1-10 seconds", "stable per-stage idempotency keys"],
+    "budget": ["CNY 100 maximum per independent action", "audited 7.20 CNY/USD conversion for the existing USD ledger", "one smallest-ledger-unit rounding tolerance only", "positive explicit audio maximum cost required"],
+    "execution": ["image before video per shot", "provider-bound image URL used as video first frame", "bounded asynchronous polling", "failure stops later paid stages", "MIME and non-empty bytes required before artifact admission"]
+  },
+  "verification": [
+    {"command": "node --test test/commercial-provider-orchestrator.test.js", "result": "5 passed, 0 failed"},
+    {"command": "npm test", "result": "352 passed, 0 failed"}
+  ],
+  "provider_calls": 0,
+  "blockers": [],
+  "residual_risks": ["Tests use injected provider interfaces because this tick permits only local code and tests; no paid call is claimed.", "Durable run lifecycle, restart recovery and persisted orchestration state remain CSV2-05.", "A real paid full-film result and playable final MP4 remain mandatory CSV2-10 terminal evidence."]
+}

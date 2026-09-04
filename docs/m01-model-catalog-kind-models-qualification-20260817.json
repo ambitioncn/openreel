@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "scope": "credential-free model catalog drift observability",
+  "change": "Verified catalog comparisons map each affected kind to deterministic model identifiers for additions, removals and changed models classified before and after a kind transition.",
+  "semantics": {
+    "added": "current-catalog model identifiers introduced under the kind",
+    "removed": "previous-catalog model identifiers removed from the kind",
+    "changedBefore": "changed model identifiers classified by their previous kind",
+    "changedAfter": "changed model identifiers classified by their current kind",
+    "emptyKinds": "omitted from driftModelIdsByKind; unchanged and source-revision-only reports expose an empty object"
+  },
+  "safety": {
+    "executedProviderCalls": false,
+    "credentialsAccessedOrChanged": false,
+    "otpUsed": false,
+    "deploymentChanged": false,
+    "externalWrite": false
+  },
+  "verification": [
+    {
+      "command": "node --test test/model-catalog.test.js",
+      "result": "14/14 passed"
+    },
+    {
+      "command": "npm test",
+      "result": "301/301 passed"
+    }
+  ],
+  "status": "qualified_local_increment",
+  "projectCompletion": "in_progress"
+}

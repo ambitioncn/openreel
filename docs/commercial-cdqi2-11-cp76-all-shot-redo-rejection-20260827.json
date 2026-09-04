@@ -1,0 +1,45 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp76-all-shot-redo-rejection/v1",
+  "capturedAt": "2026-08-27T05:57:00Z",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "necessity": "Exercise the deployed cp75 all-shot finite-redo contract exactly once against the immutable cp73 rejected candidate and either retain a qualified T11 successor or its fail-closed terminal evidence.",
+  "source": {
+    "projectId": "642bb060-3583-4240-b2c9-4657fa457fea",
+    "jobId": "c738be08-b8b3-4d5c-afec-91c0788e0fa6",
+    "immutable": true
+  },
+  "redo": {
+    "jobId": "56adb193-d44b-49f6-b780-2594e6828046",
+    "shotIds": ["5bbfec87-928a-4488-b94e-77bc9363f8fb"],
+    "preservedShotIds": [],
+    "attempts": 1,
+    "terminal": { "status": "failed", "stage": "quality", "releaseEligible": false }
+  },
+  "quoteAndSettlement": {
+    "quoteCny": 16.2,
+    "evaluationCalls": 2,
+    "maximumEvaluationCnyPerCall": 0.1,
+    "actualSettledCny": 6.42456,
+    "reservedUnitsAfter": 0,
+    "reconciliationConsistent": true,
+    "perActionLimitCny": 100
+  },
+  "byteEvidence": {
+    "shot": { "assetId": "8778d76f-e736-4a96-a3c6-90572f89f136", "sha256": "dea890b78ff1f5970e020f0c86b59451eb0b703d6ab3cdb5680df4a098173df8", "byteLength": 1383824 },
+    "render": { "assetId": "77893b41-510d-4d1b-a9ce-1bf34aab8989", "sha256": "d770c246eaff52750a04a496a79e4469faf9eb7b6ce1cc9a59aac25eb95968bc", "byteLength": 116711 }
+  },
+  "quality": {
+    "threshold": 0.8,
+    "technicalChecksPassed": true,
+    "shotScores": { "intent": 0.75, "beat": 0.6, "composition": 0.8, "visual_identity_consistency": 0.95, "performance_naturalness": 0.85 },
+    "shotFailures": ["intent", "beat"],
+    "finalScores": { "story": 0.2, "pacing": 0.7, "continuity": 0.9 },
+    "finalFailures": ["story", "pacing"],
+    "decisionPolicy": "all required checks must pass; no averaging"
+  },
+  "safety": { "redoJobs": 1, "executeCalls": 1, "retries": 0, "fallbacks": 0, "publications": 0, "externalSends": 0, "credentialChanges": 0 },
+  "productionHealth": { "live": "ok", "ready": { "database": "ok", "assets": "ok" }, "service": "active/running", "restarts": 0 },
+  "privateEvidence": "docs/commercial-cdqi2-11-cp76-finite-redo-evidence-private.json",
+  "status": "rejected_fail_closed",
+  "projectCompletion": "in_progress"
+}

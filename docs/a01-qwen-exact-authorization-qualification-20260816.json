@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "backlog_item": "A-01",
+  "qualification": "qwen_exact_authorization",
+  "date": "2026-08-16",
+  "scope": "local authorization boundary only",
+  "change": "Require exact boolean true at both the server authorization callback and Qwen client execution boundary.",
+  "acceptance": [
+    "Truthy strings, numbers, objects and arrays cannot authorize the Qwen client.",
+    "A truthy non-boolean server authorization result returns QWEN_TTS_CALL_GATED with HTTP 403.",
+    "Denied paths invoke the Provider service zero times."
+  ],
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js",
+    "full": "npm test",
+    "secret_scan": "npm run scan:secrets"
+  },
+  "external_actions": []
+}

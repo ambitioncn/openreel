@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "project": "openreel-one-click-publishing",
+  "backlog_item": "OCP-09",
+  "status": "in_progress",
+  "implemented": [
+    "Four-platform batch orchestration over the accepted per-platform lifecycle contracts",
+    "Stable batch intent identity and duplicate-click replay",
+    "All-destination initial preflight followed by explicit final confirmation",
+    "Independent per-platform progress, partial failure, targeted retry and renewed per-platform confirmation",
+    "Cancellation and explicit unknown-remote reconciliation without blind republish",
+    "Tenant isolation for batch reads and controls",
+    "Responsive destination/account entry UI that remains disabled until a real account is safely bound"
+  ],
+  "verification": [
+    {"command":"node --test test/publishing-orchestration.test.js test/publishing-lifecycle.test.js test/publishing-preflight.test.js test/publishing-oauth.test.js","result":"passed","tests":26,"failed":0},
+    {"command":"npm test","result":"passed","tests":414,"failed":0}
+  ],
+  "not_yet_accepted": [
+    "Persist publishing batches and expose authenticated server routes for account listing, preflight, confirmation, status, retry, cancel and reconciliation",
+    "Wire the browser controls to those routes and render per-platform overrides, progress and actionable errors",
+    "Add deterministic desktop and mobile browser E2E for success, partial failure, restart recovery and duplicate click suppression"
+  ],
+  "external_actions_performed": [],
+  "blockers": [],
+  "deferred_gates": [
+    "Each platform developer-app/scope approval",
+    "Each named real-account OAuth and credential addition/change",
+    "Each named MP4 live publication",
+    "Beijing Aliyun deployment/configuration, backup restore and rollback actions"
+  ]
+}

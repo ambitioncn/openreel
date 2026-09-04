@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "milestone": "A-01",
+  "qualifiedAt": "2026-08-16T08:46:15Z",
+  "scope": "local durable Qwen canvas job admission",
+  "result": "pass",
+  "controls": {
+    "optionalTextMaximumUnicodeCodePoints": 500,
+    "nonBmpBoundaryAccepted": 500,
+    "nonBmpOverLimitRejected": 501,
+    "providerCalls": 0,
+    "tailnetRequests": 0
+  },
+  "evidence": ["src/core.js", "test/qwen-tts-canvas.test.js"],
+  "verification": [
+    "node --test test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js test/qwen-tts.test.js: 29/29 pass",
+    "npm test: 256/256 pass",
+    "npm run scan:secrets: 289 files pass",
+    "git diff --check: pass"
+  ],
+  "externalActions": []
+}

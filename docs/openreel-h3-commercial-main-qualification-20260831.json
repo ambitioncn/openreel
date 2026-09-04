@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-08-31T04:20:00Z",
+  "scope": "OpenReel commercial main-chain MiniMax H3 first-frame continuity synchronization",
+  "status": "accepted",
+  "implementation": {
+    "model": "minimax-h3-fl2va-q5-turbo-v4",
+    "provider": "modelclaw-comfyui",
+    "workflowNode": "MiniMaxH3ImageToVideo",
+    "firstFramePath": "validated image input -> ComfyUI /upload/image -> dynamic LoadImage -> MiniMaxH3ImageToVideo.first_frame",
+    "outputContract": {"width": 960, "height": 544, "generatedDurationSeconds": 5, "commercialShotHandling": "four-second shots are trimmed during composition; requests above five seconds fail before provider submission"}
+  },
+  "evidence": {
+    "sourceFiles": ["src/comfyui.js", "src/commercial-provider-orchestrator.js"],
+    "focusedTests": ["test/comfyui.test.js", "test/commercial-provider-orchestrator.test.js"],
+    "regression": {"command": "npm test", "tests": 599, "passed": 599, "failed": 0, "executedAt": "2026-08-31T04:17:00Z"},
+    "beijingProduction": {"host": "123.57.67.213", "release": "/opt/openreel/releases/20260831T0055Z-commercial-h3-main", "service": "openreel.service", "serviceState": "active", "processModelEnvironment": "OPENREEL_COMMERCIAL_VIDEO_MODEL=minimax-h3-fl2va-q5-turbo-v4", "localRootHttpStatus": 200, "verifiedReadOnlyAt": "2026-08-31T04:18:00Z"}
+  },
+  "safety": {"realVideoGenerationCalls": 0, "paidCalls": 0, "productionMutationsDuringSynchronization": 0, "credentialChanges": 0, "externalPublications": 0},
+  "residualRisks": [
+    "This synchronization proves code, tests, deployed release identity, process configuration and service availability; it does not claim a new paid end-to-end H3 generation.",
+    "The project remains ready for human acceptance rather than automatically accepted by this evidence update."
+  ]
+}

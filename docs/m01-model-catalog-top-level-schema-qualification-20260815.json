@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "M-01",
+  "scope": "credential-free model-catalog top-level schema qualification",
+  "controls": [
+    "accept only id, kind, adapterId and schema at the catalog model boundary",
+    "reject unknown top-level model metadata before normalization or fingerprinting",
+    "explicitly project the backward-compatible HTTP model list into the strict catalog schema"
+  ],
+  "verification": {
+    "focused": "node --test test/model-catalog.test.js test/http.test.js: 33 passed, 0 failed",
+    "fullSuite": "npm test: 214 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 222 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "configured-provider support",
+    "real multimodal output",
+    "refreshed authenticated LibTV evidence",
+    "deployment or production readiness"
+  ]
+}

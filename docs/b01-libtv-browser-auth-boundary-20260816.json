@@ -1,0 +1,30 @@
+{
+  "version": 4,
+  "capturedAt": "2026-08-17T00:16:30Z",
+  "scope": "LibTV controlled Chromium billing/usage read-only authorization boundary",
+  "authorization": "Consumed bounded owner gates through cp258 for controlled phone authentication and read-only billing/quota/usage inspection; no payment, subscription, team, provider, deployment or publication write authorized",
+  "observations": {
+    "siteReachable": true,
+    "browserSessionAuthenticated": true,
+    "loginDialogOpened": true,
+    "availableLoginChoices": [
+      "WeChat one-click login",
+      "phone login"
+    ],
+    "verificationCodeSent": true,
+    "billingOrUsageSurfaceReached": "partial: the exact points-store button opened a stable product surface showing membership constraints, point-product validity, first-purchase bonus tiers and recharge choices, but no personal balance/quota/usage ledger was reached",
+    "paymentOrSubscriptionMutationAttempted": false,
+    "mediaGenerationAttempted": false
+  },
+  "evidenceBoundary": [
+    "The controlled Chromium profile was authenticated through the owner-gated phone verification flow; one-time codes were never copied into durable artifacts or output.",
+    "A post-submit read-only check confirmed that Registration/Login, phone-login and verification-code controls were absent.",
+    "The authenticated homepage exposed points-store and membership-center labels. The exact points-store button opened a product surface without a route guess; the membership entry remained unstable and no undocumented API endpoint was invoked.",
+    "Product discovery stopped before purchase or recharge and did not retain personal balances or transaction identifiers.",
+    "A structural DOM pass confirmed product cards as interactive but did not establish a stable Membership Center control, so the run stopped without a route guess."
+  ],
+  "remaining": [
+    "Continue read-only discovery of stable account, balance, quota, invoice and usage navigation using the authenticated controlled profile.",
+    "All additional verification-code sends, purchases, recharge, subscription changes, payment-method changes and media generation remain prohibited without exact authorization."
+  ]
+}

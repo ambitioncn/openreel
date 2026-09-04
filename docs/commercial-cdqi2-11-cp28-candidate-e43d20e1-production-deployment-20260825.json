@@ -1,0 +1,50 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-candidate-deployment/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "deployed_acceptance_pending",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "candidate": {
+    "manifestFingerprint": "e43d20e1269adf82e819acd07a7457b7a8de404afc632907e606778ffe45fb85",
+    "artifactCount": 107,
+    "archiveSha256": "cd62445824218c50f1ae4a0abe4ef1790271b3970118f2d072fdd2d49fafabe0",
+    "release": "/opt/openreel/releases/20260825T094000Z-cdqi2-e43d20e1",
+    "preActivationRemoteManifestVerification": "passed",
+    "postActivationRemoteManifestVerification": "passed"
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-25T093757Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T093757Z-cp28-isolated-restore",
+    "database": "ok",
+    "assets": 133,
+    "publishing": "ok"
+  },
+  "activation": {
+    "activeRelease": "/opt/openreel/releases/20260825T094000Z-cdqi2-e43d20e1",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T170400Z-cdqi2-a096c514",
+    "rollbackTriggered": false,
+    "service": "active",
+    "subState": "running",
+    "nRestarts": 0,
+    "readiness": {
+      "status": "ready",
+      "database": "ok",
+      "assets": "ok"
+    }
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "newCommercialJobs": 0,
+    "blindProviderRetries": 0,
+    "publicationCalls": 0,
+    "externalMessages": 0,
+    "credentialChanges": 0,
+    "scopeExpansion": false
+  },
+  "remaining": [
+    "Retain one separately justified Beijing production ordinary-account qualified pass on this exact candidate without replaying any prior failed job.",
+    "Complete the T12 terminal evidence-ledger audit only after T11 is accepted."
+  ],
+  "projectCompletion": "in_progress"
+}

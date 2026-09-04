@@ -1,0 +1,77 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-production-t11/v1",
+  "capturedAt": "2026-08-25T08:25:00Z",
+  "candidate": {
+    "fingerprint": "21288b86dbbfc356ec1a67db9ac552d63ed47a37999bd9244b05f23af96ef956",
+    "artifacts": 106,
+    "localQualification": "passed",
+    "remoteManifestVerification": "passed"
+  },
+  "deployment": {
+    "target": "root@123.57.67.213",
+    "backup": "/var/backups/openreel/2026-08-25T081729Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T081729Z-isolated-restore-cp23",
+    "previousRelease": "/opt/openreel/releases/20260825T065400Z-principal-fix",
+    "activeRelease": "/opt/openreel/releases/20260825T163000Z-cdqi2-21288b86",
+    "readiness": { "database": "ok", "assets": "ok" },
+    "service": { "activeState": "active", "subState": "running", "nRestarts": 0 },
+    "rollbackAnchorRetained": true
+  },
+  "paidAcceptance": {
+    "jobId": "28848198-1592-4d8d-993c-c108fdf79c21",
+    "attempts": 1,
+    "retryable": false,
+    "quotedCny": 16.2,
+    "status": "failed",
+    "stage": "quality",
+    "errorCode": "COMMERCIAL_QUALITY_REJECTED",
+    "releaseEligible": false,
+    "shotScores": {
+      "intent": 0.75,
+      "beat": 0.6,
+      "composition": 0.85,
+      "visual_identity_consistency": 0.95,
+      "performance_naturalness": 0.9
+    },
+    "shotThreshold": 0.8,
+    "videoEvidence": {
+      "assetId": "c567dbe2-5de2-4276-9d08-2f80de8f31c4",
+      "byteLength": 4855412,
+      "sha256": "6f99c2492730e5f87b6560a74eabc89c80331a4871b9058c140e2119cdd40cb4"
+    },
+    "renderEvidence": {
+      "assetId": "6c3f3e1b-7a26-48d8-8df1-c4b8b2e029a9",
+      "byteLength": 148334,
+      "sha256": "b5f119b3ccea7d57a9736a92aacaa6e1e703236e34328a59add998abc7a315c4"
+    },
+    "settledArkUsage": {
+      "currency": "USD",
+      "costMicros": 8922,
+      "costUsd": 0.8922,
+      "costCnyAt7_2": 6.42384,
+      "evaluationCostMicros": 68,
+      "evaluationCostCnyAt7_2": 0.04896,
+      "reservations": 4,
+      "allReservationsSettled": true
+    },
+    "commercialCostProjection": {
+      "status": "unsettled",
+      "generationSettledCny": null,
+      "evaluationSettledCny": 0.04896,
+      "finding": "The provider ledger is settled, but the commercial job cost projection did not reconcile generation settlement after fail-closed quality rejection."
+    }
+  },
+  "safety": {
+    "secondJobCreated": false,
+    "executeReplayed": false,
+    "fallbackUsed": false,
+    "publicationAttempted": false,
+    "credentialChanged": false
+  },
+  "status": "project_in_progress",
+  "unmet": [
+    "T11 has no retained qualified ordinary-account pass because intent and beat failed the all-required threshold.",
+    "Commercial job settlement projection must reconcile the already-settled generation ledger on quality rejection.",
+    "No second paid job is authorized in the consumed gate, so finite rework cannot be re-qualified in this run."
+  ]
+}

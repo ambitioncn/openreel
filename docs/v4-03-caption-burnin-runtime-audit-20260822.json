@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "milestone": "V4-03",
+  "status": "in_progress",
+  "scope": "read-only local caption burn-in runtime capability audit",
+  "findings": [
+    "The active ffmpeg 8.1 build exposes neither the subtitles/libass filter nor the drawtext/freetype filter.",
+    "No alternate system ffmpeg, ImageMagick executable or installed Node image-rendering package is available.",
+    "Chromium exists, but introducing a browser process as a production media compositor would be a new operational dependency and is not a surgical caption-filter change."
+  ],
+  "decision": "Do not claim caption burn-in and do not add an unreviewed browser compositor. Preserve the byte-backed composition implementation, record the runtime dependency gap, and continue unrelated safe local backlog work.",
+  "requiredResolution": "Deploy or package a reviewed ffmpeg build with subtitles/libass or drawtext/freetype support, then add pixel-difference and non-Latin caption tests before production qualification.",
+  "commands": [
+    "ffmpeg -hide_banner -filters | rg ' subtitles '",
+    "ffmpeg -hide_banner -filters | rg ' drawtext '",
+    "command -v magick || command -v convert",
+    "rg for sharp/canvas/pngjs in installed package locks"
+  ],
+  "externalActions": []
+}

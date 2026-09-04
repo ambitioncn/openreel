@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "backlog_item": "A-01",
+  "qualification": "qwen_zero_content_length_integrity",
+  "date": "2026-08-16",
+  "scope": "local synthetic response admission only",
+  "change": "Treat a present Content-Length header as an integrity assertion even when its canonical value is zero.",
+  "acceptance": [
+    "A non-empty WAV response carrying Content-Length: 0 fails with QWEN_TTS_RESULT_INVALID.",
+    "Truncated and overlong nonzero declarations continue to fail.",
+    "No Tailnet or Provider request is made."
+  ],
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js",
+    "full": "npm test",
+    "secret_scan": "npm run scan:secrets"
+  },
+  "external_actions": []
+}

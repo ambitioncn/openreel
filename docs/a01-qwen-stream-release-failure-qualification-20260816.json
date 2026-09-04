@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "backlogItem": "A-01",
+  "qualification": "qwen-stream-release-failure-boundary",
+  "date": "2026-08-16",
+  "result": "passed",
+  "claims": [
+    "A streamed Qwen response whose reader lock release fails retains an already-established body-read or byte-limit rejection as the primary result.",
+    "A release failure after an otherwise complete stream becomes a stable QWEN_TTS_RESULT_INVALID domain error.",
+    "Cleanup diagnostics expose only releaseFailed=true and never the private release exception message."
+  ],
+  "verification": {
+    "focused": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js: 39/39 passed",
+    "full": "npm test: 266/266 passed",
+    "governance": "node --test test/project-governance.test.js: 3/3 passed",
+    "secrets": "npm run scan:secrets: passed; 302 files scanned",
+    "diff": "git diff --check: passed"
+  },
+  "externalActions": {
+    "tailnetRequests": 0,
+    "providerCalls": 0,
+    "deployments": 0,
+    "serviceRestarts": 0,
+    "credentialChanges": 0
+  },
+  "remaining": "A successful real Qwen synthesis and retained-media graphical-browser E2E remain gated by a new precise authorization."
+}

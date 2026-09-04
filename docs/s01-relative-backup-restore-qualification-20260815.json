@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T17:12:33Z",
+  "scope": "local-only normalized backup restore paths",
+  "result": "passed",
+  "claims": [
+    "Backup verification consistently uses normalized absolute source and destination roots after its containment check.",
+    "A valid backup can be verified and restored through relative source and destination arguments.",
+    "The normalized destination remains outside the backup source and is still promoted only after integrity and state validation."
+  ],
+  "verification": {
+    "opsTest": {
+      "command": "node --test test/ops.test.js",
+      "passed": 18,
+      "failed": 0
+    },
+    "fullTest": {
+      "command": "npm test",
+      "passed": 186,
+      "failed": 0
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "vulnerabilities": 0
+    },
+    "secretScan": {
+      "command": "npm run scan:secrets",
+      "status": "passed",
+      "files": 162
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  },
+  "externalActions": [],
+  "notClaimed": [
+    "staging or production restore",
+    "external backup copy or off-host retention",
+    "signing or activation",
+    "independent review",
+    "provider calls or credential access"
+  ]
+}

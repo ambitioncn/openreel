@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T17:20:59Z",
+  "scope": "local-only stable asset copy validation",
+  "result": "passed",
+  "claims": [
+    "Each referenced asset copy records source metadata and SHA-256 before copying, then rechecks source metadata and SHA-256 after copying.",
+    "The staged asset SHA-256 must equal the pre-copy source digest.",
+    "A deterministic source mutation during copy is rejected instead of producing a silently mixed backup snapshot."
+  ],
+  "verification": {
+    "opsTest": {
+      "command": "node --test test/ops.test.js",
+      "passed": 19,
+      "failed": 0
+    },
+    "fullTest": {
+      "command": "npm test",
+      "passed": 187,
+      "failed": 0
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "vulnerabilities": 0
+    },
+    "secretScan": {
+      "command": "npm run scan:secrets",
+      "status": "passed",
+      "files": 164
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  },
+  "externalActions": [],
+  "notClaimed": [
+    "filesystem-level atomic snapshot semantics",
+    "staging or production backup/restore",
+    "external backup copy or off-host retention",
+    "signing or activation",
+    "independent review"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "schema": "openreel-offsite-immutable-backup-readonly-preflight/v1",
+  "observedAt": "2026-08-19",
+  "scope": "metadata-only inspection; no production data copied, no restore destination created, no credential read, no storage configuration changed",
+  "production": {
+    "host": "openreel-aliyun",
+    "region": "Beijing",
+    "backupRoot": "/var/backups/openreel",
+    "filesystem": "/dev/vda3 ext4 on /",
+    "separateFromProductionFailureDomain": false,
+    "backupDirectories": [
+      "pre-promote-cold-20260819T145058Z",
+      "pre-storyboard-repair-20260819T150534Z",
+      "pre-storyboard-repair-20260819T150605Z",
+      "storyboard-repair-verified-20260819T150650Z"
+    ],
+    "evidence": {
+      "prePromoteChecksum": "pass: 36/36 state-manifest.sha256 entries verified from the correct state/ base",
+      "emptyDirectory": "storyboard-repair-verified-20260819T150650Z contains no regular files",
+      "applicationBackupManifestCount": 0,
+      "backupTimer": "not installed",
+      "backupService": "not installed",
+      "deployedBackupScript": "/opt/openreel/current/scripts/backup.mjs present",
+      "deployedBackupWrapper": "/opt/openreel/current/deploy/run-backup present"
+    },
+    "limitations": [
+      "The checksum-valid cold copy is ad hoc and includes files outside the application backup package.",
+      "No current Beijing backup has the backup.mjs manifest.json required by the documented isolated verifier.",
+      "The other two populated copies have no checksum manifest and use broader 0755/0750/0640 permissions.",
+      "All observed Beijing copies share the production system disk and are mutable by privileged compromise.",
+      "No restore was run in this task because verification creates a destination and production writes are prohibited."
+    ]
+  },
+  "offsiteCandidate": {
+    "host": "botland-vps",
+    "region": "Phoenix",
+    "independentFailureDomain": true,
+    "filesystem": "/dev/sda2 ext4 on /",
+    "availableBytes": 197401710592,
+    "backupRoot": "/var/backups/openreel",
+    "backupTimer": "loaded, enabled, active/waiting; last trigger 2026-08-19T00:02:08Z; next 2026-08-20T00:05:10Z",
+    "inventoryReadableByCurrentAccount": false,
+    "worm": false,
+    "disposition": "capacity and scheduling candidate only; not accepted as immutable retention or recoverable backup"
+  },
+  "targetArchitecture": {
+    "failureDomains": [
+      "FD1: Beijing production plus short-RPO local operational staging",
+      "FD2: cross-region object storage under a separate backup writer identity, with versioning and Object Lock/WORM compliance retention",
+      "FD3: Phoenix or another independent provider for encrypted secondary recovery copies; ordinary ext4 is not immutable"
+    ],
+    "minimumAcceptance": "FD1 plus FD2 is mandatory; FD3 is strongly recommended and must not share provider, account root, or deletion authority with FD2.",
+    "objectLock": "Create a new bucket with Object Lock enabled at creation, use compliance mode for committed generations, deny retention bypass and lifecycle shortening to the backup writer, and keep break-glass administration separate.",
+    "encryption": "Encrypt each package client-side with an envelope key before transfer; keep the KEK in a separately administered KMS or offline recovery escrow; provider-side encryption is defense in depth, not the sole control.",
+    "integrity": "Retain backup.mjs manifest.json, SHA-256 and byte length for every member; add a signed package/index digest; verify upload checksum and later download checksum against the signed index.",
+    "retention": "Suggested baseline: 35 daily, 13 weekly and 12 monthly generations; WORM compliance retention at least 90 days, with monthly generations retained 365 days. Legal and privacy review must approve before implementation.",
+    "restoreDrill": "Weekly manifest/integrity verification and monthly isolated restore on a non-production host; quarterly sampled recovery from the WORM target using a fresh destination, SQLite quick_check, semantic validation and a read-only user journey.",
+    "rpoRtoProposal": "RPO 24 hours for immutable offsite copies; RTO 8 hours for declared regional loss, pending measured drill evidence."
+  },
+  "implementationGates": [
+    "Human approval of providers, regions, cost, retention and data residency.",
+    "Creation/configuration of storage, Object Lock, KMS and identities under a separately authorized change.",
+    "A credential-minimized writer path that cannot delete versions, shorten retention or administer keys.",
+    "One synthetic-data end-to-end upload/download/restore drill before any production-data transfer.",
+    "A separately approved first production transfer with monitoring, checksum evidence and egress/cost limits."
+  ],
+  "failureAndRollbackBoundary": {
+    "beforeFirstTransfer": "Abandon the candidate configuration; no production state changes are required.",
+    "partialUpload": "Do not publish the generation index; leave or lifecycle the incomplete object only under an approved storage policy.",
+    "checksumOrRestoreFailure": "Quarantine the generation, preserve evidence, keep the prior accepted generation, and do not alter live production.",
+    "objectLockMisconfiguration": "Stop the backup pipeline. Compliance-locked objects cannot be shortened or deleted; rollback means selecting a corrected new bucket/generation, not mutating retained objects.",
+    "keyLoss": "Treat the copy as unrecoverable; preserve other domains and rotate to a newly approved envelope key. Never test key rotation first on the only accepted generation."
+  },
+  "verdict": "design_ready_preflight_incomplete",
+  "blockers": [],
+  "deferredGates": [
+    "No WORM/object-lock target exists or was credibly read-only verified in this task.",
+    "Phoenix backup contents and restore evidence were not readable by the current account.",
+    "No external copy, cloud change, credential access, production restore or paid operation was authorized."
+  ]
+}

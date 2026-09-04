@@ -1,0 +1,53 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp49-single-job-summary/v1",
+  "capturedAt": "2026-08-25T13:47:00Z",
+  "necessity": "T11 requires one fresh ordinary-account production commercial result against the deployed policy-safe runtime.",
+  "authorization": "consumed_cp48_one_new_job_cny100_zero_retry",
+  "projectId": "81faf2e9-3122-44fb-add6-fb4518184c1a",
+  "jobId": "3ab547a8-7205-4485-9291-3ff9329d34cc",
+  "quote": {
+    "estimatedCny": 46.4,
+    "generationEstimatedCny": 46,
+    "evaluationEstimatedCny": 0.4,
+    "perActionLimitCny": 100,
+    "evaluationCalls": 4,
+    "maximumEvaluationCostCnyPerCall": 0.1
+  },
+  "policySafety": {
+    "accepted": true,
+    "shotCount": 3,
+    "referenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+    "paidProviderCalls": 0,
+    "providerPolicyGuaranteed": false
+  },
+  "terminal": {
+    "status": "failed",
+    "stage": "prepare",
+    "attempts": 1,
+    "code": "COMMERCIAL_DIRECTOR_BINDING_REQUIRED",
+    "releaseEligible": false,
+    "retainedVideoOrRenderBytes": 0
+  },
+  "billing": {
+    "currency": "USD",
+    "hardLimitMicros": 64445,
+    "spentMicros": 0,
+    "reservedMicros": 0,
+    "reconciliationConsistent": true,
+    "mismatches": []
+  },
+  "finding": "The policy-safe preflight passed, but the quote path did not fail closed on director.ready=false. The sole authorized job therefore failed in prepare before any provider reservation or submit. This is a zero-cost runtime ordering gap, not a provider failure.",
+  "safety": {
+    "newCommercialJobs": 1,
+    "executeCalls": 1,
+    "automaticRetries": 0,
+    "historicalReplays": 0,
+    "secondJobs": 0,
+    "providerCalls": 0,
+    "paidCost": 0,
+    "publications": 0,
+    "credentialChanges": 0
+  },
+  "projectCompletion": "in_progress",
+  "nextAction": "Accept the bounded fail-closed attempt, then perform a zero-paid local fix that rejects director-unready commercial quotes before job creation; do not authorize another paid job until that fix is reviewed and deployed."
+}

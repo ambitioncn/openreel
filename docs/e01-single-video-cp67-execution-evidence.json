@@ -1,0 +1,13 @@
+{
+  "schema": "openreel-e01-single-video-execution-evidence/v1",
+  "status": "failed_cleanup_complete",
+  "authorizationCheckpoint": "cp67",
+  "scope": {"environment":"isolated_private_staging","model":"seedance-2-fast","input":{"kind":"text_to_video","durationSeconds":5,"resolution":"480p","ratio":"16:9","generateAudio":false},"maximumSubmissions":1,"providerSubmissions":1,"automaticRetries":0,"maximumUnits":6945,"currency":"USD"},
+  "preflight": {"credentialReferencePresentAndNonempty":true,"credentialValueReadOrRetained":false,"seedanceModelMappingPresentAndNonempty":true,"paidInferenceInitiallyEnabled":false,"retryLimit":0,"stagingReady":true,"productionReady":true,"databaseQuickCheck":"ok","openTemporaryAccess":0},
+  "observed": {"terminalStatus":"failed","sanitizedErrorCode":"ARK_PROVIDER_ERROR","sanitizedUpstreamStatus":503,"providerSubmissions":1,"spentUnits":0,"reservedUnitsAfterCleanup":0,"reservationStatus":"failed","usageStatus":"failed"},
+  "cleanup": {"paidInferenceEnabled":false,"openReservations":0,"activeTemporaryKeys":0,"activeTemporarySubscriptions":0,"activeTemporaryApplications":0,"temporaryRunnerRemoved":true,"stagingReady":true,"productionReady":true,"databaseQuickCheck":"ok"},
+  "retention": {"credentialValues":false,"providerTaskIds":false,"providerOutputUrls":false,"accountIdentifiers":false,"humanInput":false},
+  "limitations": ["The provider again returned a sanitized upstream 503, so no video asset or browser/timeline acceptance was produced.","The cp67 one-call authorization is exhausted; no retry or additional provider submission is authorized.","This bounded result does not close E-01 or the project."],
+  "nextProviderSubmissionAuthorized": false,
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp57-compatibility/v1",
+  "sourceJobId": "3a0c05de-0225-4446-9ea5-45d6f773baa4",
+  "attempt": {
+    "outcome": "prequote_fail_closed",
+    "errorCode": "COMMERCIAL_REDO_INVALID",
+    "quoteCreated": false,
+    "redoJobsCreated": 0,
+    "executeCalls": 0,
+    "providerCalls": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "publications": 0
+  },
+  "diagnosis": {
+    "failedShots": 2,
+    "qualifiedShots": 1,
+    "historicalTopLevelAssetIds": [],
+    "retainedAssetId": "27fa685d-df5a-4440-bfc9-f0f2e0dc1519",
+    "retainedBinding": "result.shots[].quality.generationAsset.assetId",
+    "cause": "The redo planner required top-level assetIds and did not recognize the historical byte-backed quality evidence binding."
+  },
+  "fix": {
+    "behavior": "Resolve retained immutable assets from canonical top-level ids first, then the historical quality generation/evidence binding; keep missing evidence fail-closed.",
+    "sourceCandidateMutated": false,
+    "productionDeployed": false
+  },
+  "verification": {
+    "focused": "32 passed, 0 failed",
+    "fullSuite": "578 passed, 0 failed",
+    "sessionRevoked": true,
+    "recentUnrevokedAcceptanceSessions": 0,
+    "productionRedoJobs": 0
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "openreel-v4-progress-evidence/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp41",
+  "status": "local_renderer_input_repair_verified",
+  "diagnosis": {
+    "rootCause": "The 70-byte caption PNG embedded in the production acceptance runner has a corrupt IDAT stream. ffprobe and ffmpeg reported inflate error -3; looping that undecodable still image repeated decoder failures until the offline diagnostic was terminated by its bound.",
+    "differentialEvidence": "A five-second local composition with equivalent video, voice and 16044-byte music completed when given a valid PNG, while the exact embedded 70-byte PNG reproduced the hang/failure boundary.",
+    "priorOfflineProcess": "Two bounded local diagnostic ffmpeg processes remained after the corrupt-input and rejected -err_detect experiments; both were terminated under the consumed cp40 authorization, and no matching process remained"
+  },
+  "implementation": {
+    "renderer": "Caption PNG IDAT streams are inflated before ffmpeg. Invalid bytes fail closed with RENDER_INPUT_DECODE_FAILED and a one-way diagnostic hash; raw stderr and temporary paths are not persisted.",
+    "lifecycle": "Durable commercial jobs retain only rendererDiagnostic and stderrSha256 for renderer failures.",
+    "acceptanceFixture": "The corrupt embedded PNG was replaced by a locally decoded PNG fixture.",
+    "scope": "local source and tests only; no deployment, restart, provider call or paid acceptance"
+  },
+  "verification": {
+    "targeted": "10/10 passed",
+    "fullSuite": "477/477 passed",
+    "releaseManifest": "85/85 verified with tamper rejection; externalCalls=false; deploymentActivated=false",
+    "syntaxAndDiff": "passed"
+  },
+  "proposedNextGate": {
+    "deployment": "Build and verify the canonical 85-artifact archive containing only the reviewed renderer, lifecycle, acceptance runner and tests; create a coherent pre-switch backup; activate one immutable Beijing OpenReel release; restart only openreel.service; verify readiness, NRestarts=0 and browser hashes; automatically roll back on failure.",
+    "acceptance": "After healthy activation, create one fresh ordinary account and run exactly one public-4173 five-second '美女在海滩跳舞' browser chain with zero retries and a CNY 100 hard per-action ceiling; retain cost, job, per-shot asset, revision, timeline, render, MP4 hash and playback evidence.",
+    "excluded": "No derper, TCP 80/443, publication, external send, credential modification, destructive action or unrelated process control."
+  },
+  "projectCompletion": "in_progress"
+}

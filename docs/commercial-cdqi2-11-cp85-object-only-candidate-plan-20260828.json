@@ -1,0 +1,34 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp85-object-only-candidate-plan/v1",
+  "capturedAt": "2026-08-28T00:30:00Z",
+  "backlogItem": "CDQI2-11",
+  "sourceTerminal": "commercial-cdqi2-11-cp84-lost-scarf-first-terminal-20260828.json",
+  "sanitizedDiagnosis": {
+    "terminal": "provider HTTP 400 privacy-sensitive-content at shot 1",
+    "forbiddenAction": "retry or replay the cp84 lost-scarf request",
+    "riskHypothesis": "person identity conditioning, face/body continuity, and identity-reference transmission can trigger provider privacy classification even when local structural policy passes"
+  },
+  "materiallyDifferentStrategy": {
+    "subject": "nonhuman solid blue scarf and simple wooden hook only",
+    "visualMethod": "object-only stop-motion product tableau",
+    "removed": ["performer", "face", "body", "hands", "portrait", "identity likeness", "human interaction"],
+    "reference": "new locally drawn abstract scarf-and-hook image containing no person or personal information",
+    "story": ["scarf alone on tabletop", "scarf moves in an animated arc", "scarf rests neatly on hook"]
+  },
+  "lineage": {
+    "mode": "fresh",
+    "sourceJobId": null,
+    "inheritedShotIds": [],
+    "inheritedAssetIds": [],
+    "cp84Immutable": true
+  },
+  "executionBoundary": {
+    "firstStep": "zero-paid quote-only preflight",
+    "executeOnlyIf": ["policy accepted", "new reference byte hash recorded", "director ready", "fresh lineage", "quote <= CNY 100", "zero open reservations"],
+    "actions": 1,
+    "retries": 0,
+    "fallbacks": 0,
+    "publication": false
+  },
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "openreel-local-qualification/v1",
+  "milestone": "A-01",
+  "qualification": "qwen-tts-config-data-property-boundary",
+  "date": "2026-08-16",
+  "scope": "credential-free local synthetic verification",
+  "result": "passed",
+  "claims": [
+    "The Qwen provider client accepts configuration only as a plain record whose fields are allowlisted enumerable own data properties.",
+    "Inherited, hidden, accessor, symbol and unknown configuration fields fail with QWEN_TTS_CONFIG_INVALID before configuration values are read.",
+    "Rejected configuration accessors are not invoked and cannot reach fetch."
+  ],
+  "external_actions": {
+    "tailnet_qwen_calls": 0,
+    "provider_calls": 0,
+    "deployments": 0,
+    "credential_changes": 0
+  },
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js: 32/32 passed",
+    "npm test: 259/259 passed",
+    "node --test test/project-governance.test.js: 3/3 passed",
+    "npm run scan:secrets: 295 files passed",
+    "git diff --check"
+  ],
+  "boundary": "This qualification does not authorize or claim a real Qwen synthesis, retained media, deployment or production behavior."
+}

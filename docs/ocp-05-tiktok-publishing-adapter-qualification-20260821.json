@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "project": "openreel-one-click-publishing",
+  "milestone": "OCP-05",
+  "status": "accepted_local_implementation",
+  "boundary": "Official API adapter contract tests only. No developer app mutation, credential use, real OAuth, network call, or external publication occurred.",
+  "implementation": {
+    "source": "src/publishing-tiktok.js",
+    "flow": ["creator_info/query", "video/init with FILE_UPLOAD", "byte-exact PUT transfer", "status/fetch reconciliation"],
+    "controls": ["Bearer token remains server-side", "minimum video.publish scope is inherited from the accepted OAuth profile", "dynamic privacy/duration/interaction discovery", "tenant-bound asset reader", "explicit metadata and privacy", "normalized auth/quota/policy/transient/permanent errors", "ambiguous transfer/status fails to unknown_remote rather than blind retry", "published remote id retained when returned"]
+  },
+  "verification": [
+    {"command":"node --test test/publishing-tiktok.test.js test/publishing-lifecycle.test.js test/publishing-oauth.test.js test/publishing-preflight.test.js","result":"26 passed, 0 failed"},
+    {"command":"npm test","result":"396 passed, 0 failed"}
+  ],
+  "live_acceptance_gate": {
+    "platform": "tiktok",
+    "required_actions": ["owner identifies and approves a TikTok developer app with video.publish/audit state", "owner confirms credential addition or change for that app", "owner confirms OAuth for a named TikTok account", "owner separately confirms publication of a named MP4 with reviewed title, copy and privacy"],
+    "reason": "These are external authorization, credential and publication actions and were not authorized by this local milestone."
+  },
+  "next_item": "OCP-06"
+}

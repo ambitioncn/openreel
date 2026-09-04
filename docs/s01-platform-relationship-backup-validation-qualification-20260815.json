@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T17:30:54Z",
+  "scope": "local-only platform backup relationship validation",
+  "result": "passed",
+  "claims": [
+    "Backup creation and isolated restore reject malformed platform collection records and duplicate record identities.",
+    "Known account, team, tenant, subscription, reservation and usage relationships are required to resolve inside the same platform snapshot.",
+    "Invalid relationship state fails closed before backup or restore atomic promotion."
+  ],
+  "verification": {
+    "opsTest": { "command": "node --test test/ops.test.js", "passed": 20, "failed": 0 },
+    "fullTest": { "command": "npm test", "passed": 188, "failed": 0 },
+    "dependencyAudit": { "command": "npm audit --omit=dev --audit-level=high", "vulnerabilities": 0 },
+    "secretScan": { "command": "npm run scan:secrets", "status": "passed", "files": 166 },
+    "diffCheck": { "command": "git diff --check", "status": "passed" }
+  },
+  "externalActions": [],
+  "notClaimed": [
+    "complete business-rule validation of every platform field",
+    "staging or production backup/restore",
+    "external backup copy or off-host retention",
+    "signing or activation",
+    "independent review"
+  ]
+}

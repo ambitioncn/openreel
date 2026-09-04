@@ -1,0 +1,40 @@
+{
+  "schema": "openreel-e01-routing-failure-evidence/v1",
+  "status": "routing_implementation_failure",
+  "authorizationSource": "amendment-v2",
+  "scope": {
+    "environment": "isolated_private_staging",
+    "model": "seedance-2-fast",
+    "maximumSubmissions": 1,
+    "providerSubmissions": 0,
+    "automaticRetries": 0,
+    "maximumUnits": 6945,
+    "currency": "USD"
+  },
+  "localQualification": {
+    "failClosedTestsPassed": 46,
+    "failClosedTestsFailed": 0,
+    "authorizationId": "openreel-e01-seedance-amendment-v2-cp73"
+  },
+  "routing": {
+    "targetReachable": true,
+    "acceptedExistingSshIdentity": false,
+    "remotePreflightCompleted": false
+  },
+  "observed": {
+    "providerContacted": false,
+    "providerSubmissions": 0,
+    "spendUnits": 0,
+    "credentialRead": false,
+    "stagingMutation": false,
+    "productionMutation": false
+  },
+  "retention": {
+    "credentialValues": false,
+    "providerTaskIds": false,
+    "providerOutputUrls": false,
+    "humanInput": false
+  },
+  "nextAction": "repair runner routing to the already-authorized staging execution identity, then execute the same unconsumed amendment-v2 scope without requesting authorization again",
+  "projectCompletion": "in_progress"
+}

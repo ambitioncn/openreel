@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "backlog_id": "A-01",
+  "scope": "local Qwen TTS browser preparation property semantics",
+  "result": "pass",
+  "claims": [
+    "Browser preparation accepts only allowlisted string-named own fields.",
+    "Every accepted field must be an enumerable data property before any value is read.",
+    "Symbol, hidden and accessor fields fail before HTTP submission, preventing hidden authority and getter execution at the preparation boundary."
+  ],
+  "verification": [
+    "node --test test/qwen-tts-ui.test.js test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 29/29 passed",
+    "npm test: 256/256 passed",
+    "npm run scan:secrets: 287 files passed",
+    "git diff --check: passed"
+  ],
+  "external_actions": [],
+  "limitations": [
+    "No Tailnet or Provider request was made.",
+    "Real synthesis and retained-media graphical-browser evidence remain gated."
+  ]
+}

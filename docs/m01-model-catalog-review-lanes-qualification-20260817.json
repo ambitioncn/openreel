@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "qualification": "model_catalog_review_lanes",
+  "status": "passed",
+  "scope": "credential_free_local",
+  "result": {
+    "review_lanes": [
+      "metadata",
+      "inventory",
+      "taxonomy",
+      "routing",
+      "capabilities"
+    ],
+    "fail_closed_on_drift": true,
+    "deeply_immutable": true,
+    "executed_provider_calls": false
+  },
+  "verification": [
+    "node --test test/model-catalog.test.js: 15/15 passed",
+    "npm test: 302/302 passed",
+    "npm run scan:secrets: 389 files passed",
+    "git diff --check: passed"
+  ],
+  "external_actions": [],
+  "notes": "Catalog drift now identifies the exact reviewer lanes implicated by source metadata, model inventory, kind taxonomy, adapter routing, and capability-schema changes. Unchanged lanes remain false and the nested envelope is deeply immutable."
+}

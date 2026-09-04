@@ -1,0 +1,62 @@
+{
+  "schema": "openreel-e01-cp290-direct-single-video-evidence/v1",
+  "status": "post_provider_success_acceptance_failed_cleanup_complete",
+  "authorizationCheckpoint": "cp289",
+  "scope": {
+    "environment": "beijing_isolated_private_staging",
+    "route": "direct_plan_v3",
+    "model": "seedance-2-fast",
+    "input": { "kind": "text_to_video", "durationSeconds": 5, "resolution": "480p", "ratio": "16:9", "generateAudio": false },
+    "maximumSubmissions": 1,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "maximumUnits": 6945,
+    "maximumProviderCostUsd": 0.6945,
+    "ownerCeilingCny": 30
+  },
+  "preflight": {
+    "directSubmitAndPollEndpoint": "https://ark.cn-beijing.volces.com/api/plan/v3/contents/generations/tasks",
+    "terminalDiagnosticTestsPassed": 36,
+    "budgetEnforcedBeforeSubmission": true,
+    "productionPaidInferenceEnabled": false,
+    "productionServiceChanged": false
+  },
+  "observed": {
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "secondSubmission": false,
+    "openReelAsyncTerminalBranch": "succeeded",
+    "postSuccessAcceptance": "failed",
+    "sanitizedErrorCode": "ERR_ASSERTION",
+    "acceptanceStage": null,
+    "videoAssetVerified": false,
+    "assetDownloadVerified": false,
+    "billingReconciliationVerified": false,
+    "timelineClipVerified": false,
+    "browserPlaybackVerified": false,
+    "locallyObservedProviderCost": null
+  },
+  "interpretation": "The runner bypassed its explicit non-success terminal handler, proving the OpenReel asynchronous job was observed as succeeded. A later assertion in project snapshot, asset metadata, asset download, billing reconciliation or timeline acceptance failed. The cp290 runner did not yet label those post-success stages, so the exact failing assertion cannot be reconstructed after mandatory cleanup.",
+  "cleanup": {
+    "isolatedProcessStopped": true,
+    "isolatedPortClosed": true,
+    "isolatedCodeAndStateRemoved": true,
+    "temporaryRunnersRemoved": true,
+    "productionServiceActive": true,
+    "productionPaidInferenceEnabled": false
+  },
+  "followupHardening": {
+    "allowlistedAcceptanceStageLabelsAdded": true,
+    "maliciousStageFallback": "unknown",
+    "regressionTestsPassed": 40,
+    "externalCallsForHardening": 0
+  },
+  "retention": { "credentialValues": false, "providerTaskIds": false, "providerOutputUrls": false, "accountIdentifiers": false, "humanInputSecrets": false },
+  "limitations": [
+    "No acceptance claim is made for asset persistence, download, billing, timeline insertion or browser playback.",
+    "Final provider-side billing is not locally observed; the pre-submission hard ceiling was USD 0.6945, below the owner CNY 30 ceiling.",
+    "The cp289 one-call authorization is consumed and no retry or second paid request is authorized."
+  ],
+  "nextProviderSubmissionAuthorized": false,
+  "projectCompletion": "in_progress"
+}

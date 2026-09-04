@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "project": "openreel-one-click-publishing",
+  "milestone": "OCP-02",
+  "status": "accepted_local_implementation",
+  "implementation": ["src/publishing-oauth.js", "test/publishing-oauth.test.js"],
+  "controls": [
+    "Minimum scope profiles are fixed for TikTok, Douyin, both supported Instagram login paths and YouTube Shorts.",
+    "OAuth state is random, hashed at rest, single-use, expiring and bound to tenant, actor, platform, profile and exact allowlisted redirect URI.",
+    "PKCE S256 verifier remains encrypted server-side and is released only to the injected token exchange.",
+    "Access and refresh tokens use AES-256-GCM with per-record IV and purpose-bound authenticated data.",
+    "Public binding/list/disconnect results never contain credential envelopes or plaintext tokens.",
+    "Returned grants must exactly match the requested minimum scopes; missing or expanded grants fail closed.",
+    "Bindings are tenant-scoped; reconnecting the same external account reuses its identity.",
+    "Near-expiry refresh is single-flight, preserves scope and keeps refresh-token rotation encrypted.",
+    "Disconnect attempts remote revocation when supported and removes local usable credentials even if revocation fails.",
+    "Encrypted snapshots support restart without persisting OAuth codes, plaintext tokens or plaintext PKCE verifiers."
+  ],
+  "verification": [
+    {"command":"node --test test/publishing-oauth.test.js","result":"6 passed, 0 failed"},
+    {"command":"npm test","result":"376 passed, 0 failed"},
+    {"command":"npm run scan:secrets","result":"passed, 505 files scanned"}
+  ],
+  "negative_cases": ["state replay", "expired state", "tenant mismatch", "actor/platform mismatch", "unallowlisted redirect", "unsafe return path", "scope escalation", "cross-tenant binding read", "revoke-provider failure"],
+  "external_actions": {"credential_reads":0,"credential_writes":0,"oauth_grants":0,"uploads":0,"publications":0},
+  "boundary": "The implementation is a server-side domain module with injected platform transports. No route or live provider adapter is enabled and no local test constitutes real account authorization.",
+  "next_item": "OCP-03"
+}

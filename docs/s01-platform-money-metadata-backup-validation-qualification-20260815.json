@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "qualificationId": "S-01-platform-money-metadata-backup-validation-20260815",
+  "createdAt": "2026-08-15T17:58:10Z",
+  "scope": "credential-free local backup and isolated-restore platform billing money-metadata and status validation",
+  "implementation": [
+    "scripts/backup.mjs accepts only USD/10000 or CNY/1000000 money metadata",
+    "reservation, usage and refund money metadata must match their owning subscription",
+    "subscription, reservation and refund statuses must belong to their persisted state-machine enums",
+    "validation runs during backup creation and isolated restore before atomic promotion"
+  ],
+  "negativeCoverage": [
+    "reservation currency and unit-scale drift from its subscription",
+    "unsupported reservation status"
+  ],
+  "verification": {
+    "targeted": "node --test test/ops.test.js: 21 passed, 0 failed",
+    "fullSuite": "npm test: 189 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "npm run scan:secrets: passed across 170 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": [],
+  "claims": {
+    "backupOrRestoreExecutedExternally": false,
+    "deploymentChanged": false,
+    "providerCalled": false,
+    "credentialsReadOrChanged": false
+  }
+}

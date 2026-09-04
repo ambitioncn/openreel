@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "capturedAt": "2026-08-19",
+  "scope": "credential-free local project-governance reconciliation after T-01 acceptance",
+  "authoritativeSources": {
+    "terminalContract": "docs/project-completion-contract.md",
+    "backlog": "docs/libtv-parity-backlog.json",
+    "acceptanceLedger": "docs/project-acceptance-ledger.json"
+  },
+  "reconciledRegistry": "configs/loops/projects/openreel-libtv-parity.json",
+  "changes": [
+    {
+      "id": "CO-01",
+      "from": "in_progress",
+      "to": "human_gated",
+      "reason": "Local collaboration behavior is covered; the remaining authenticated team walkthrough requires an authorized team scope."
+    },
+    {
+      "id": "B-01",
+      "from": "in_progress",
+      "to": "human_gated",
+      "reason": "Local billing behavior is covered; remaining authenticated personal-ledger and staging payment-provider evidence require separate authority."
+    },
+    {
+      "id": "S-01",
+      "from": "in_progress",
+      "to": "human_gated",
+      "reason": "Local security and reliability qualification is covered; independent review, monitored chaos, signing/off-host retention and production rollback cross explicit operational gates."
+    }
+  ],
+  "result": {
+    "requiredAccepted": ["R-01", "R-02", "G-01", "M-01", "C-01", "A-01", "T-01", "X-01"],
+    "requiredHumanGated": ["CO-01", "B-01", "S-01", "E-01", "E-02"],
+    "requiredUngatedInProgress": [],
+    "nextSafeLocalImplementationItem": null,
+    "projectStatus": "in_progress"
+  },
+  "boundaries": [
+    "No Provider call, credential access or change, paid action, external message, deployment, production mutation, process control or publication occurred.",
+    "This reconciliation does not accept any remaining backlog item or the project terminal contract.",
+    "Future progress requires a new exact human gate for one remaining boundary; unrelated local work must not be blocked by deferred gates if new safe work is discovered."
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp51-single-job-summary/v1",
+  "capturedAt": "2026-08-25T14:58:00Z",
+  "authorization": {
+    "source": "consumed cp50 human attestation",
+    "scope": "one new ordinary-account T11 job, CNY <= 100, zero retry, no fallback, no publication",
+    "necessity": "obtain the missing production byte-backed eight-dimension T11 evidence after the director quote gate fix"
+  },
+  "production": {
+    "release": "/opt/openreel/releases/20260825T142500Z-cdqi2-cp50-director-quote-gate",
+    "projectId": "ecb326ef-ad0b-45a5-83c6-a0e1ef9d43e8",
+    "jobId": "3a0c05de-0225-4446-9ea5-45d6f773baa4",
+    "status": "failed",
+    "stage": "quality",
+    "attempts": 1,
+    "errorCode": "COMMERCIAL_QUALITY_REJECTED",
+    "releaseEligible": false
+  },
+  "bindings": {
+    "policySafetyAccepted": true,
+    "directorReady": true,
+    "identityReferenceAssetId": "883f82ad-a6a7-47f7-9f75-162dfe037573",
+    "identityReferenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+    "shotCount": 3
+  },
+  "retainedShotBytes": [
+    {"assetId":"9952f20b-dc69-4279-bfa1-ff17d552e973","byteLength":2435016,"sha256":"426d6050ec1298461d3fe7892d3c5f6c704be785eb81c0d6a0ebbf726dd56dce","qualificationStatus":"rejected","visualIdentityConsistency":0.95,"performanceNaturalness":0.85,"failures":["intent","beat","composition"]},
+    {"assetId":"27fa685d-df5a-4440-bfc9-f0f2e0dc1519","byteLength":3060404,"sha256":"aeaea21ef9d75035d4a8917f984311f99d389bfa00787724919ecb4027d3233b","qualificationStatus":"approved","visualIdentityConsistency":0.95,"performanceNaturalness":0.9,"failures":[]},
+    {"assetId":"67749e92-6e36-4360-b358-e2063df17d67","byteLength":2263835,"sha256":"3c488a53acc5050829870018db0802a3c8d730f6f547da4724009cadd30e7cfe","qualificationStatus":"rejected","visualIdentityConsistency":0.95,"performanceNaturalness":0.9,"failures":["composition"]}
+  ],
+  "finalEvidence": {
+    "assetId": "5eecd0d4-83f5-4b69-aaf0-1bdc4fc75811",
+    "byteLength": 283567,
+    "sha256": "5f33ff5271654a4fcd2402c8b5832044d1ca47d801cb32bff3f6e2da08938103",
+    "scores": {"story":0.2,"pacing":0.3,"continuity":0.1},
+    "download": "fail-closed 422 COMMERCIAL_RELEASE_EVIDENCE_INVALID"
+  },
+  "billing": {
+    "quoteCny": 46.4,
+    "generationSettledCny": 19.12464,
+    "evaluationSettledCny": 0.12384,
+    "totalSettledCny": 19.24848,
+    "subscriptionSpentUnits": 26734,
+    "currency": "USD",
+    "unitScale": 10000,
+    "reservations": 10,
+    "settledReservations": 10,
+    "reservedUnits": 0,
+    "ledgerConsistent": true,
+    "jobCostStatus": "unsettled"
+  },
+  "safety": {"newCommercialJobs":1,"executeCalls":1,"automaticRetries":0,"historicalReplays":0,"fallbacks":0,"publications":0,"credentialChanges":0},
+  "decision": "T11 remains in progress: the qualified-pass requirement was not met, the release gate correctly rejected the candidate, and terminal job cost-state semantics remain inconsistent with the fully settled account ledger."
+}

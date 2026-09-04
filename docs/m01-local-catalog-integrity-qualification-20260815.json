@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "M-01",
+  "scope": "credential-free local model-catalog admission before authenticated baseline comparison",
+  "controls": [
+    "rebuild the submitted catalog from models and source revision",
+    "require exact fingerprint, model count and kind-count agreement",
+    "reject malformed model schemas before capability gap calculation"
+  ],
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "provider support",
+    "real multimodal output",
+    "refreshed authenticated LibTV evidence"
+  ]
+}

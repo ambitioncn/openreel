@@ -1,0 +1,30 @@
+{
+  "schema": "openreel-project-terminal-contract/v2",
+  "projectId": "openreel-commercial-director-quality-integration",
+  "status": "accepted",
+  "supersedes": "openreel-project-terminal-contract/v1 accepted 2026-08-24",
+  "scope": "Extend the retained six-dimension commercial perceptual chain with explicit person visual identity consistency and performance naturalness, producing one eight-dimension fail-closed production path.",
+  "completionRule": "No field-only, domain-only, fixture-only, local-only, or single-phase result is project completion. T01-T12 require retained accepted evidence for the same immutable candidate bytes.",
+  "dimensionContract": {
+    "shot": ["intent", "beat", "composition", "visual_identity_consistency", "performance_naturalness"],
+    "final": ["story", "pacing", "continuity"],
+    "threshold": 0.8,
+    "decision": "every technical and perceptual dimension must pass; missing, malformed, stale, unbound, or below-threshold evidence rejects qualification and release eligibility"
+  },
+  "requiredTerminalAcceptance": [
+    {"id":"T01","area":"quality_runtime","criteria":"commercial qualityInspector evaluates all eight dimensions from actual retained shot/render bytes and digest-bound evaluator evidence."},
+    {"id":"T02","area":"scoring_contract","criteria":"Strict versioned policies require exactly the eight dimensions and fail closed on missing, extra, malformed, stale, or unbound evidence."},
+    {"id":"T03","area":"quote_settlement","criteria":"Initial and redo quotes visibly include bounded evaluation calls; trusted actual evaluation usage settles once; every paid action is necessary, recorded, at most CNY 100, and never blindly retried."},
+    {"id":"T04","area":"qualification_release","criteria":"Generation success is distinct from qualification; either new dimension can reject qualification and every export/publication path consumes the same fail-closed release decision."},
+    {"id":"T05","area":"bounded_rework","criteria":"Identity or performance rejection can request only implicated shots, preserves accepted immutable artifacts, requotes the bounded redo, and requalifies the complete composition."},
+    {"id":"T06","area":"persistence_api","criteria":"Policies, scores, byte evidence, provider provenance, quote/settlement, failures, redo lineage, qualification and release eligibility survive restart and are owner-scoped API-visible."},
+    {"id":"T07","area":"ui","criteria":"Production UI names both new dimensions, their price/evidence/failures, and never presents generation success as release approval."},
+    {"id":"T08","area":"no_paid_regression","criteria":"Deterministic no-paid tests prove eight-dimension pass plus independent identity, performance, malformed evidence, technical, stale candidate and pre-confirmation rejection paths with zero provider calls."},
+    {"id":"T09","area":"real_provider_evidence","criteria":"One authorized zero-retry real evaluation of actual video bytes proves parseable pass and reject evidence for both new dimensions with necessity and cost recorded."},
+    {"id":"T10","area":"immutable_candidate","criteria":"Targeted, full, persistence, backup/restore, rollback, browser, security, tenant, billing and release-artifact checks pass against one reviewed immutable candidate digest."},
+    {"id":"T11","area":"beijing_production","criteria":"That exact candidate is deployed under standing OpenReel authorization to Beijing Aliyun with backup, rollback, readiness, restart persistence, ordinary-account pass/reject and no-publication acceptance evidence."},
+    {"id":"T12","area":"terminal_audit","criteria":"An evidence ledger maps every terminal criterion to retained proof and independently confirms no phase-as-project overclaim or unauthorized external publication."}
+  ],
+  "projectCompletion": "accepted",
+  "terminalEvidence": "commercial-director-quality-integration-terminal-audit-20260831.json"
+}

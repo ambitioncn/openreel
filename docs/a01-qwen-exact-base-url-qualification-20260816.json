@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "milestone": "A-01",
+  "subject": "Qwen TTS exact base URL environment qualification",
+  "result": "pass",
+  "change": "OPENREEL_QWEN_TTS_BASE_URL now accepts only absence or the exact owner-approved Tailnet origin; normalization no longer lets empty, trailing-slash, whitespace-padded or non-string values pass.",
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 25/25 pass",
+    "npm test: 254/254 pass",
+    "npm run scan:secrets: 284 files pass",
+    "git diff --check: pass"
+  ],
+  "external_actions": [],
+  "limitations": [
+    "No Tailnet Qwen request or real synthesis was made.",
+    "Real-media browser E2E and deployment remain separately gated."
+  ]
+}

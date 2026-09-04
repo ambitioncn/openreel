@@ -1,0 +1,23 @@
+{
+  "schema": "openreel-commercial-real-evaluation-evidence/v1",
+  "taskId": "2026-08-25T02-55-58-120Z_routed-task-loop-engineering-loop-openreel-comme",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "necessity": "CDQI2-09 required strict real-provider pass evidence for identity consistency and performance naturalness from retained actual person-performance video bytes.",
+  "route": {"environment":"Beijing Aliyun private production provider route","provider":"volcengine-ark","model":"seed-2.1-turbo"},
+  "limits": {"maximumSubmissions":1,"providerSubmissions":1,"automaticRetries":0,"fallbacks":0,"maximumCostCny":0.1,"ownerPerActionLimitCny":100},
+  "asset": {"source":"runtime/v4-07-production-ordinary-account-cp26.mp4","mimeType":"video/mp4","byteLength":257435,"sha256":"fecc2756a093a103eb49e316f54a4826edd61688504e3b60248188a94e8b84d4"},
+  "response": {
+    "httpStatus": 200,
+    "scores": {"intent":0.95,"beat":0,"composition":0.85,"visual_identity_consistency":0.95,"performance_naturalness":0.9},
+    "observed": "A young woman in a light cream spaghetti-strap maxi dress dances naturally on a sandy beach with ocean waves behind her; her face, long dark hair, dress, and body identity stay consistent across the clip, movements are fluid, expression is cheerful, with no uncanny artifacts visible.",
+    "usage": {"inputTokens":2397,"outputTokens":105,"totalTokens":2502},
+    "calculatedCostCny": 0.008766,
+    "pricingBasis": "CNY 3 per million input tokens plus CNY 15 per million output tokens"
+  },
+  "newDimensionOutcomes": {"visual_identity_consistency":"passed","performance_naturalness":"passed"},
+  "wholeShotOutcome": "rejected_beat_below_threshold",
+  "contractResult": "strict_parseable_new_dimension_pass_evidence",
+  "publicationCalls": 0,
+  "status": "accepted_increment_cdqi2_09_still_incomplete",
+  "remaining": "CDQI2-09 still requires strict parseable real-provider rejection evidence for both new dimensions. The earlier no-person response cannot satisfy that requirement because its observed field was object-shaped."
+}

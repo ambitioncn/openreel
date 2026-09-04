@@ -5,3 +5,20 @@ coverage/
 *.log
 .DS_Store
 
+# Generated runtime and qualification output. Curated acceptance evidence belongs
+# in docs/evidence/ and is indexed by docs/evidence/index.json.
+.artifacts/
+artifacts/
+runtime/
+playwright-report/
+test-results/
+*.pid
+*.sqlite-shm
+*.sqlite-wal
+*.tmp
+*.bak
+*.compact
+
+# Local or credential-bearing deployment overlays are never source artifacts.
+deploy/*.env
+deploy/*-credential.conf

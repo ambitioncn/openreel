@@ -1,0 +1,65 @@
+{
+  "schema": "openreel-e01-cp316-direct-video-browser-e2e/v1",
+  "status": "provider_and_api_stages_succeeded_browser_playback_failed_cleanup_complete",
+  "authorizationCheckpoint": "cp315",
+  "scope": {
+    "environment": "beijing_isolated_private_staging",
+    "route": "direct_plan_v3",
+    "model": "seedance-2-fast",
+    "durationSeconds": 5,
+    "resolution": "480p",
+    "aspectRatio": "16:9",
+    "audio": false,
+    "maximumSubmissions": 1,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "maximumUnits": 6945,
+    "ownerCeilingCny": 30
+  },
+  "observed": {
+    "providerTerminalState": "succeeded",
+    "assetMimeType": "video/mp4",
+    "assetBytes": 1363536,
+    "downloadedBytes": 1363536,
+    "assetCount": 1,
+    "videoTimelineClipCount": 1,
+    "spentUnits": 3904,
+    "reservedUnits": 0,
+    "billingReconciliationConsistent": true,
+    "browserAuthenticated": true,
+    "browserAssetCount": 1,
+    "browserFetchedMimeType": "video/mp4",
+    "browserFetchedBytes": 1363536,
+    "browserTimelineClipCount": 1,
+    "browserPlaybackMetadataLoaded": false,
+    "browserMediaErrorCode": 4,
+    "browserCanPlayType": "maybe",
+    "browserAcceptanceStage": "browser_playback"
+  },
+  "interpretation": [
+    "The direct provider route and cp290 mapping produced a real video successfully.",
+    "OpenReel validated and persisted the bytes, served an exact-length download, settled billing, and inserted the video timeline clip.",
+    "The isolated Chromium session authenticated and fetched the same retained asset and timeline, but HTML video playback failed with MediaError code 4, indicating the browser could not use the media source or codec in that runtime.",
+    "Representative browser playback acceptance therefore remains unmet even though provider generation and all API-side stages passed."
+  ],
+  "cleanup": {
+    "isolatedPortClosed": true,
+    "temporaryCodeStatePacketsRemoved": true,
+    "temporaryBrowserCredentialsRemoved": true,
+    "productionServiceActive": true,
+    "productionChanged": false,
+    "credentialConfigurationChanged": false
+  },
+  "retention": {
+    "credentialValues": false,
+    "providerTaskIds": false,
+    "providerOutputUrls": false,
+    "temporaryAccountCredentials": false,
+    "humanInputSecrets": false
+  },
+  "limitations": [
+    "The isolated asset was removed during mandatory cleanup, so codec/container inspection cannot be reconstructed after the run.",
+    "The cp315 one-call authority is consumed; no retry or second provider request is authorized."
+  ],
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-16T06:02:01Z",
+  "backlogItem": "A-01",
+  "scope": "local-only Qwen actual-duration reconciliation",
+  "implementation": [
+    "derive duration, sample rate and channel count from the structurally validated WAV",
+    "require a finite positive duration no greater than the 600-second export boundary",
+    "persist actual duration and format metadata on the result asset",
+    "use actual duration for the timeline clip out-point and export preview"
+  ],
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 10/10 passed",
+    "fullSuite": "npm test: 239/239 passed",
+    "secretScan": "npm run scan:secrets: passed across 260 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "negativeCases": [
+    "result without validated duration metadata",
+    "non-positive or non-finite duration",
+    "duration exceeding the 600-second timeline/export boundary"
+  ],
+  "externalActions": [],
+  "providerCalls": 0,
+  "realMediaGenerated": false,
+  "projectComplete": false
+}

@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "project": "openreel-short-video-commercial-v2",
+  "backlog_item": "CSV2-07",
+  "status": "accepted",
+  "summary": "Deterministic final-composition planning and admission now bind platform caption safe zones, ordered timing, speech-first voice/music mix targets, and explainable recomposition failures.",
+  "implementation": [
+    "src/commercial-composition-quality.js",
+    "test/commercial-composition-quality.test.js"
+  ],
+  "verification": [
+    "node --test test/commercial-composition-quality.test.js: 4 passed, 0 failed",
+    "npm test: 366 passed, 0 failed"
+  ],
+  "negative_cases": [
+    "unsupported safe-zone platform",
+    "empty or overlong captions",
+    "duration mismatch",
+    "caption safe-zone violations",
+    "audio peak clipping and loudness drift",
+    "audio/video synchronization drift",
+    "incomplete probe evidence"
+  ],
+  "external_actions": [],
+  "paid_provider_calls": 0,
+  "blockers": [],
+  "residual_risks": [
+    "CSV2-07 qualifies deterministic planning and probe admission; a real paid full-film MP4 remains mandatory CSV2-10 evidence.",
+    "Beginner progress, failure explanation and local redo UX remain CSV2-08.",
+    "Desktop/mobile graphical E2E and production acceptance remain CSV2-09 and CSV2-10."
+  ]
+}

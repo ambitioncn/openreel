@@ -1,0 +1,31 @@
+[Unit]
+Description=OpenReel YouTube egress proxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=tinyproxy
+Group=tinyproxy
+RuntimeDirectory=tinyproxy
+RuntimeDirectoryMode=0750
+ExecStart=/usr/bin/tinyproxy -d -c /etc/tinyproxy/openreel-youtube.conf
+Restart=on-failure
+RestartSec=5s
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+LockPersonality=true
+CapabilityBoundingSet=
+SystemCallArchitectures=native
+ReadWritePaths=/var/log/tinyproxy /run/tinyproxy
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "C-01",
+  "scope": "credential-free retained continuity artifact byte verification",
+  "controls": [
+    "resolve every declared artifact below one caller-supplied real artifact root",
+    "reject missing paths, non-file targets and symlinks resolving outside the artifact root",
+    "hash retained bytes and require an exact lowercase SHA-256 match",
+    "bind verified byte sizes and digests to the validated evaluation fingerprint"
+  ],
+  "verification": {
+    "focused": "node --test test/continuity-evaluation.test.js: 7 passed, 0 failed",
+    "fullSuite": "npm test: 218 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 227 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "real-provider origin of verified bytes",
+    "retained real-media multi-shot outputs",
+    "human visual acceptance",
+    "provider execution",
+    "deployment or production readiness"
+  ]
+}

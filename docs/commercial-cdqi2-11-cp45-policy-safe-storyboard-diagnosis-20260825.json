@@ -1,0 +1,44 @@
+{
+  "schema": "openreel-commercial-policy-safe-storyboard-diagnosis/v1",
+  "capturedAt": "2026-08-25T13:07:24.000Z",
+  "sourceCheckpoint": "cp44",
+  "sourceJobId": "04c0ea87-77ca-4cdb-b7e7-470614cb32d9",
+  "mode": "zero-paid-local-read-only-evidence-review",
+  "observations": [
+    "The first video action failed with OutputVideoSensitiveContentDetected.PolicyViolation before video bytes existed.",
+    "The identity continuity entity was backed by a 1x1 placeholder PNG, so it could not provide meaningful visual identity evidence.",
+    "The retained 2848x1600 JPEG is byte-backed and SHA-256 verified. It visibly contains a photorealistic adult male, a public crowd, an urban-plaza setting, a vivid red scarf and a watermark-like mark at bottom right.",
+    "The retained image does not visually preserve the declared daylight-beach setting."
+  ],
+  "causalityBoundary": "The retained evidence does not identify which feature caused the provider policy decision. The visible features are diagnostic risk signals, not a claimed root cause, and the preflight cannot guarantee provider acceptance.",
+  "localFix": {
+    "function": "qualifyCommercialStoryboardPolicySafety",
+    "behavior": "Fail closed before any paid action unless the candidate has a byte-backed identity reference of at least 256x256 with SHA-256, owned-or-licensed rights, a fictional adult performer, no public figures, no brands, and per-shot controlled-studio/unbranded constraints.",
+    "providerPolicyGuaranteed": false,
+    "paidProviderCalls": 0
+  },
+  "finiteSafeTestCreative": {
+    "intent": "A fictional adult performer handles an unbranded blue cloth in a controlled studio.",
+    "shots": [
+      "fictional adult performer notices an unbranded blue cloth in a controlled studio",
+      "fictional adult performer folds the unbranded blue cloth in a controlled studio",
+      "fictional adult performer places the unbranded blue cloth down in a controlled studio"
+    ],
+    "constraints": [
+      "Use an owned or licensed, byte-backed fictional-performer reference; never use a placeholder.",
+      "No celebrity, public-figure, brand, franchise, artist-style, watermark, crowd or public-location request.",
+      "Keep the action ordinary and non-hazardous while preserving identity/performance observability.",
+      "Treat any future provider action as a new gated job; never retry or replay the source job."
+    ]
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "jobRetriesOrReplays": 0,
+    "newAccountsOrJobs": 0,
+    "productionChanges": 0,
+    "publications": 0,
+    "credentialChanges": 0
+  },
+  "decision": "The consumed cp44 gate is closed with a local diagnosis and fail-closed preflight. T11 remains in progress; no future paid acceptance is authorized by this artifact."
+}

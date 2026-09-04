@@ -1,0 +1,37 @@
+{
+  "schema": "openreel-qualification/v1",
+  "backlogItem": "B-01",
+  "capturedAt": "2026-08-17T00:00:00.000Z",
+  "scope": "local multi-process exclusion and crash-lock fail-closed behavior",
+  "evidence": {
+    "implementation": "src/credit-ledger.js createCreditLedgerStore",
+    "tests": "test/credit-ledger.test.js",
+    "properties": [
+      "initialization and debit application acquire one atomic sibling-directory lock",
+      "a second local process fails with CREDIT_LEDGER_LOCKED before reading or mutating state",
+      "a crash-abandoned lock is never guessed stale or automatically removed",
+      "contention and abandoned-lock rejection preserve durable ledger bytes",
+      "successful post-lock application retains revision and idempotency checks",
+      "paymentConnected remains false"
+    ]
+  },
+  "verification": {
+    "targeted": "8/8 passed",
+    "fullSuite": "285/285 passed",
+    "secretScan": "343 files passed",
+    "diffCheck": "passed"
+  },
+  "externalActions": {
+    "orders": 0,
+    "payments": 0,
+    "balanceGrants": 0,
+    "providerCalls": 0,
+    "deployments": 0
+  },
+  "limitations": [
+    "No distributed lock or database transaction claim",
+    "Abandoned-lock recovery remains an explicit operator procedure",
+    "No payment-provider integration evidence",
+    "No authenticated LibTV personal balance or usage-ledger comparison"
+  ]
+}

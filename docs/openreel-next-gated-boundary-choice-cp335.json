@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "checkpoint": "cp335",
+  "status": "awaiting_owner_choice",
+  "context": {
+    "previousGate": "cp333",
+    "previousOutcome": "one MiniMax CN free-model request terminated with insufficient balance",
+    "authorizationConsumed": true,
+    "projectCompletion": "in_progress"
+  },
+  "choices": [
+    {
+      "id": "fund_or_subscribe_minimax",
+      "effect": "prepare a purchase/subscription scope and cost ceiling for separate approval; do not purchase or retry from this choice alone",
+      "requiresFollowupGate": true
+    },
+    {
+      "id": "review_alternate_music_route",
+      "effect": "perform credential-free provider/model/terms/pricing research and prepare a separate one-call authorization packet; do not call a provider from this choice alone",
+      "requiresFollowupGate": true
+    },
+    {
+      "id": "prioritize_other_backlog_boundary",
+      "effect": "select one of M-01, T-01, CO-01, B-01, S-01, E-01 or E-02 and prepare its exact gate without executing it",
+      "requiresFollowupGate": true
+    }
+  ],
+  "forbiddenWithoutSeparateExactAuthorization": [
+    "purchase or subscription",
+    "provider request or retry",
+    "credential read, creation or change",
+    "LibTV team/payment write",
+    "deployment or service/process control",
+    "production change or publication"
+  ],
+  "boundary": "This packet records a product-priority choice only and grants no execution authority."
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-observation-bound-production-deployment/v1",
+  "capturedAt": "2026-08-25T12:45:00Z",
+  "candidate": {
+    "id": "commercial-cdqi2-11-observation-bound-5638f170a0a8976a1ca956f6552986478f3b5119efc8d15747fa94ed59f5b5f4",
+    "exactLocalHashes": "passed",
+    "fullRegression": "572/572 passed"
+  },
+  "backup": {
+    "path": "/var/backups/openreel/20260825T124500Z-cp43-observation-bound",
+    "manifestSha256": "87a15c0ab20be9169cb7c9ad46c7b35e176b1f01f21b5e445f3ec9820dbb87c8",
+    "isolatedRestore": "/var/backups/openreel/20260825T124500Z-cp43-observation-bound-isolated-restore",
+    "database": "ok",
+    "assets": 153,
+    "publishing": "ok"
+  },
+  "activation": {
+    "activeRelease": "/opt/openreel/releases/20260825T124500Z-cdqi2-observation-5638f170",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T114806Z-cdqi2-088c0f0f",
+    "runtimeFileHashes": "exact match",
+    "live": {"httpStatus": 200, "status": "ok"},
+    "ready": {"httpStatus": 200, "status": "ready", "database": "ok", "assets": "ok"},
+    "service": {"activeState": "active", "subState": "running", "nRestarts": 0}
+  },
+  "operatorCorrection": {
+    "summary": "The first activation verifier attempted to source the production environment file and exited on a non-shell-safe value after starting the candidate.",
+    "outcome": "The candidate service was already active and healthy; verification was corrected to use the established loopback port without reading or emitting credentials.",
+    "providerOrJobEffect": "none"
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "commercialJobs": 0,
+    "providerRetries": 0,
+    "jobRetriesOrReplays": 0,
+    "videoGenerations": 0,
+    "publicationCalls": 0,
+    "credentialChanges": 0
+  },
+  "status": "deployed_acceptance_pending",
+  "projectCompletion": "in_progress",
+  "remaining": [
+    "Run a separately scoped, necessary paid T11 ordinary-account acceptance action under the standing CNY 100 per-action limit with zero blind retry.",
+    "Complete T12 terminal evidence and Beijing production acceptance only after T11 is accepted."
+  ]
+}

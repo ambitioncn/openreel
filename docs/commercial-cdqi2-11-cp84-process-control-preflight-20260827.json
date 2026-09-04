@@ -1,0 +1,35 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp84-process-control-preflight/v1",
+  "capturedAt": "2026-08-27T07:12:00Z",
+  "sourceCheckpoint": "cp83",
+  "terminalCriterion": "T11",
+  "decision": "Production does not yet contain the accepted cp83 diagnostic bytes. Stop before backup, activation, restart, rollback rehearsal, paid provider work, or publication until the separately required process-control confirmation is received.",
+  "productionReadOnly": {
+    "host": "root@123.57.67.213",
+    "activeRelease": "/opt/openreel/releases/20260827T064256Z-cdqi2-cp81-reference-transmission",
+    "service": "active",
+    "nRestarts": 0,
+    "diskUsedPercent": 43,
+    "remoteHashes": {
+      "src/ark.js": "f13d5a3aaa2d47a190b8da3d9147a94688a5bdedd6c8d653231951675ad8be73",
+      "src/commercial-job-lifecycle.js": "ef2f1a9c9cdd71978f70f565d179ec29f17403c0c33b324efe96d46929a5fbaf"
+    }
+  },
+  "acceptedLocalCp83Hashes": {
+    "src/ark.js": "403618016b493b9aea9350d4b05de25d413dfedf69aa608fba288d582b198818",
+    "src/commercial-job-lifecycle.js": "793ebf648ce0cd976c7eb240973d07a46d591420486dcd43e58ad076c0ef9e7a"
+  },
+  "requiredConfirmation": "Authorize the bounded cp83 Beijing production process-control sequence: backup, materialize the reviewed release, activate/restart, verify readiness and restart persistence, rehearse rollback to the independent cp72 anchor, then reactivate cp83.",
+  "safety": {
+    "providerCalls": 0,
+    "paidJobs": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "processControlActions": 0
+  },
+  "projectCompletion": "in_progress"
+}

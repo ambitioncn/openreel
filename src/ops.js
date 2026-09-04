@@ -23,14 +23,33 @@ export function correlationId(value) {
 
 export function createMetrics() {
   const counts = new Map();
+  const publishing = new Map();
+  const funnels = new Map();
+  const feedback = new Map();
+  const generation = new Map();
   let active = 0;
   return {
     begin() { active += 1; },
-    end(status) { active = Math.max(0, active - 1); const group = `${Math.floor(Number(status) / 100)}xx`; counts.set(group, (counts.get(group) || 0) + 1); },
+    end(status, durationMs = 0) { active = Math.max(0, active - 1); const group = `${Math.floor(Number(status) / 100)}xx`; const entry = counts.get(group) || { count: 0, durationMs: 0 }; entry.count += 1; entry.durationMs += Math.max(0, Number(durationMs) || 0); counts.set(group, entry); },
+    publishing(action, outcome) { const key = `${action}:${outcome}`; publishing.set(key, (publishing.get(key) || 0) + 1); },
+    funnel(stage, outcome = "success") { const key = `${stage}:${outcome}`; funnels.set(key, (funnels.get(key) || 0) + 1); },
+    feedback(category, rating) { const key = `${category}:${rating}`; feedback.set(key, (feedback.get(key) || 0) + 1); },
+    generation(provider, outcome, { latencyMs = 0, costMicros = 0, fallback = false } = {}) {
+      const key = `${provider}:${outcome}:${fallback ? "fallback" : "primary"}`, entry = generation.get(key) || { count: 0, latencyMs: 0, costMicros: 0 };
+      entry.count += 1; entry.latencyMs += Math.max(0, Number(latencyMs) || 0); entry.costMicros += Math.max(0, Number(costMicros) || 0); generation.set(key, entry);
+    },
     render(ready) {
       const lines = ["# TYPE openreel_http_requests_total counter"];
-      for (const group of ["2xx", "3xx", "4xx", "5xx"]) lines.push(`openreel_http_requests_total{status_class="${group}"} ${counts.get(group) || 0}`);
+      for (const group of ["2xx", "3xx", "4xx", "5xx"]) { const entry = counts.get(group) || { count: 0, durationMs: 0 }; lines.push(`openreel_http_requests_total{status_class="${group}"} ${entry.count}`); lines.push(`openreel_http_request_duration_milliseconds_sum{response_class="${group}"} ${entry.durationMs}`); }
       lines.push("# TYPE openreel_http_requests_active gauge", `openreel_http_requests_active ${active}`, "# TYPE openreel_ready gauge", `openreel_ready ${ready ? 1 : 0}`);
+      lines.push("# TYPE openreel_publishing_operations_total counter");
+      for (const [key, count] of [...publishing].sort()) { const [action, outcome] = key.split(":"); lines.push(`openreel_publishing_operations_total{action="${action}",outcome="${outcome}"} ${count}`); }
+      lines.push("# TYPE openreel_product_funnel_total counter");
+      for (const [key, count] of [...funnels].sort()) { const [stage, outcome] = key.split(":"); lines.push(`openreel_product_funnel_total{stage="${stage}",outcome="${outcome}"} ${count}`); }
+      lines.push("# TYPE openreel_product_feedback_total counter");
+      for (const [key, count] of [...feedback].sort()) { const [category, rating] = key.split(":"); lines.push(`openreel_product_feedback_total{category="${category}",rating="${rating}"} ${count}`); }
+      lines.push("# TYPE openreel_generation_operations_total counter");
+      for (const [key, entry] of [...generation].sort()) { const [provider, outcome, route] = key.split(":"); const labels = `provider="${provider}",outcome="${outcome}",route="${route}"`; lines.push(`openreel_generation_operations_total{${labels}} ${entry.count}`, `openreel_generation_latency_milliseconds_sum{${labels}} ${entry.latencyMs}`, `openreel_generation_cost_micros_total{${labels}} ${entry.costMicros}`); }
       return `${lines.join("\n")}\n`;
     }
   };

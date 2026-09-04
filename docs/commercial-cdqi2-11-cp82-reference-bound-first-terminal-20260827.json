@@ -1,0 +1,55 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp82-reference-bound-first-terminal/v1",
+  "capturedAt": "2026-08-27T06:54:00Z",
+  "necessity": "Exercise the cp81 production reference-byte transmission repair exactly once against a materially changed reference-bound three-beat candidate path.",
+  "preflight": {
+    "release": "/opt/openreel/releases/20260827T064256Z-cdqi2-cp81-reference-transmission",
+    "processCwdMatched": true,
+    "service": "active",
+    "nRestarts": 0,
+    "dependencies": { "database": "ok", "assets": "ok" },
+    "quoteCny": 46.4,
+    "perActionLimitCny": 100,
+    "directorReady": true,
+    "policySafetyAccepted": true,
+    "candidateMode": "fresh",
+    "commercialJobs": 0,
+    "providerCalls": 0
+  },
+  "execution": {
+    "projectId": "86d4b0e4-0219-482e-96de-6d49913ee4ff",
+    "jobId": "bec968aa-09fe-4437-b139-812556817e54",
+    "jobs": 1,
+    "executeCalls": 1,
+    "attempts": 1,
+    "terminal": { "status": "failed", "stage": "videos", "shotIndex": 0, "code": "ARK_PROVIDER_ERROR" },
+    "releaseEligible": false,
+    "referenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+    "referenceBytesBound": true,
+    "settledUnits": 459,
+    "settledCny": 0.33048,
+    "reservedUnits": 0,
+    "reconciliationConsistent": true,
+    "authorizationStatusAfterRun": "stopped"
+  },
+  "diagnosis": {
+    "observed": "The reference-conditioned Seedream image stage completed and settled 459 units. The immediately following shot-0 Seedance request retained a first-frame image item but terminated with the sanitized ARK_PROVIDER_ERROR before producing video bytes.",
+    "certainty": "The durable safe diagnostic does not retain enough upstream detail to distinguish provider validation, transport, or transient service failure.",
+    "retryDecision": "No retry or fallback was attempted because the first-terminal and zero-blind-retry contract is authoritative."
+  },
+  "postflight": {
+    "service": "active",
+    "nRestarts": 0,
+    "dependencies": { "database": "ok", "assets": "ok" },
+    "focusedTests": { "passed": 82, "failed": 0 }
+  },
+  "safety": {
+    "automaticRetries": 0,
+    "fallbacks": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0
+  },
+  "status": "immutable_release_ineligible",
+  "projectCompletion": "in_progress"
+}

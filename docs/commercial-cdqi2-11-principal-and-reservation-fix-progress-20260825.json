@@ -1,0 +1,59 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-principal-and-reservation-fix-progress/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "qualified_not_deployed",
+  "resolvedGateOutcome": "Approved one necessary zero-blind-retry ordinary-account attempt after repairing the billing principal condition; no secret content retained.",
+  "rootCauses": [
+    {
+      "failure": "INVALID_API_KEY",
+      "cause": "The production commercial HTTP route omitted kind=account from the signed-in billing principal.",
+      "fix": "The route now passes {kind: account, accountId}; a regression covers the signed-in commercial route."
+    },
+    {
+      "failure": "BUDGET_EXHAUSTED",
+      "cause": "The quality evaluator embedded video bytes in a text request while Ark reserved from serialized base64 size instead of the confirmed evaluation ceiling.",
+      "fix": "Ark accepts a validated reservation maximum no greater than the model ceiling; the commercial evaluator converts and passes its confirmed per-call CNY maximum."
+    }
+  ],
+  "boundedProductionAttempt": {
+    "jobId": "7c93088f-0316-4700-9485-cadd824e516f",
+    "candidateFingerprint": "a17bb4fdb8142e88d23023e751d86f7bc620095fb4aac8071f8b0e507a980bdf",
+    "status": "failed_closed",
+    "stage": "quality",
+    "attempts": 1,
+    "retryable": false,
+    "errorCode": "BUDGET_EXHAUSTED",
+    "quotedCny": 16.2,
+    "actualGenerationLedgerUsd": 0.8854,
+    "reservedAfterTerminalUsd": 0,
+    "evaluationProviderCalls": 0,
+    "blindRetries": 0,
+    "publicationCalls": 0
+  },
+  "productionBackup": {
+    "path": "/var/backups/openreel/2026-08-25T075638Z",
+    "manifestVerification": "passed"
+  },
+  "newCandidate": {
+    "fingerprint": "21288b86dbbfc356ec1a67db9ac552d63ed47a37999bd9244b05f23af96ef956",
+    "artifactCount": 106,
+    "targetedTests": {"passed": 43, "failed": 0},
+    "fullTests": {"passed": 558, "failed": 0},
+    "qualificationChecks": {"passed": 6, "failed": 0},
+    "frozen": true,
+    "deployed": false
+  },
+  "currentProduction": {
+    "release": "/opt/openreel/releases/20260825T065400Z-principal-fix",
+    "candidateFingerprint": "a17bb4fdb8142e88d23023e751d86f7bc620095fb4aac8071f8b0e507a980bdf",
+    "service": "active/running",
+    "restarts": 0
+  },
+  "remaining": [
+    "Obtain the separately required production process-control confirmation, deploy exact candidate 21288b86, and verify readiness, restart persistence and rollback anchor.",
+    "Only after deployment, justify and execute at most one further ordinary-account acceptance job under the standing CNY 100 per-action limit with zero blind retry.",
+    "Accept T11 only with retained ordinary-account pass/reject and no-publication evidence, then complete the T12 terminal evidence audit."
+  ],
+  "projectCompletion": "in_progress"
+}

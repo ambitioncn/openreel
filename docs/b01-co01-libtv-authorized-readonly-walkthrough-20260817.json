@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "capturedAt": "2026-08-17T05:08:00Z",
+  "scope": "Owner-authorized LibTV authenticated team, balance, quota and usage read-only walkthrough",
+  "authorization": {
+    "allowed": ["reuse the retained authenticated browser session", "inspect team, balance, quota and usage surfaces read-only"],
+    "forbidden": ["payment or recharge", "subscription change", "account mutation", "team creation", "verification-code send unless the retained browser session is invalid"]
+  },
+  "observations": {
+    "browserSessionAuthenticated": true,
+    "verificationCodeRequested": false,
+    "homepageStableEntries": ["points store", "membership center"],
+    "teamEntryVisible": false,
+    "teamScopeVisible": false,
+    "pointsStoreReached": true,
+    "pointsStoreContentClasses": ["membership eligibility constraints", "fixed point-product amounts", "point validity periods", "first-purchase bonus tiers", "purchase and recharge choices"],
+    "personalBalanceVisible": false,
+    "personalQuotaVisible": false,
+    "personalUsageLedgerVisible": false,
+    "cliSessionAuthenticated": false,
+    "cliReadOnlyResult": "account info and account list returned 401; no CLI reauthentication attempted"
+  },
+  "safety": {
+    "libtvWrites": 0,
+    "payments": 0,
+    "recharges": 0,
+    "subscriptionChanges": 0,
+    "accountChanges": 0,
+    "teamCreations": 0,
+    "otpRequests": 0,
+    "mediaGenerations": 0
+  },
+  "conclusion": {
+    "status": "partial_external_surface_unavailable",
+    "proved": [
+      "the retained controlled browser session remained authenticated",
+      "the stable points-store surface exposes product quota, validity, membership and pricing terms",
+      "no stable team scope or personal balance/quota/usage ledger was exposed through the authorized navigation",
+      "the CLI credential is independent from the retained browser session and was expired"
+    ],
+    "notProved": ["team membership, roles, invitations or collaboration behavior", "the owner's current personal balance or remaining quota", "the owner's detailed usage or transaction ledger"]
+  },
+  "privacy": "Phone number, account identifiers, tokens, web identifiers, balances and transaction identifiers are intentionally omitted.",
+  "nextBoundary": "A stable authenticated LibTV team scope or documented read-only personal ledger navigation/API is required; do not create a team, guess an endpoint or reauthenticate without a new exact gate."
+}

@@ -1,0 +1,74 @@
+{
+  "schema": "openreel-commercial-quality-evidence-invalid-diagnosis/v1",
+  "capturedAt": "2026-08-25T11:03:00Z",
+  "mode": "zero-paid-read-only",
+  "jobId": "e4c66ca5-192b-4faa-acf9-465fe25654f6",
+  "projectId": "ed8dbbbc-ebc1-45bc-aeb2-20b615323253",
+  "terminal": {
+    "status": "failed",
+    "stage": "quality",
+    "code": "COMMERCIAL_QUALITY_EVIDENCE_INVALID",
+    "releaseEligible": false
+  },
+  "firstMismatch": {
+    "boundary": "ark-commercial-perceptual-evaluator.parseScores",
+    "shotId": "936e1ac1-99a1-4498-ba8f-6d2c7bed3f0d",
+    "arkJobId": "7fc91a61-c62a-4598-94c7-1586ae8764dd",
+    "idempotencyKey": "ed8dbbbc-ebc1-45bc-aeb2-20b615323253:2:quality:shot:936e1ac1-99a1-4498-ba8f-6d2c7bed3f0d",
+    "expected": {
+      "topLevelKeys": ["observed", "scores"],
+      "scoreDimensions": ["intent", "beat", "composition", "visual_identity_consistency", "performance_naturalness"],
+      "scoreRange": [0, 1],
+      "observedType": "non-empty string"
+    },
+    "actual": {
+      "arkStatus": "succeeded",
+      "model": "seed-2.1-turbo",
+      "capability": "text",
+      "contentCharacters": 16,
+      "contentHex": "7B2273636F726573223A7B220A20097D",
+      "jsonValid": false,
+      "safeRendering": "{\"scores\":{\"\\n \\t}",
+      "resultKeys": ["content"],
+      "providerTaskIdPresent": false,
+      "rawProviderResponsePresent": false,
+      "diagnosticPresent": false
+    },
+    "finding": "The first shot evaluator response is truncated invalid JSON. It cannot satisfy the strict observed+scores envelope and therefore fails inside parseScores before the commercial quality inspector can validate the eight-dimension policies, byte bindings, thresholds, or rejection rules. No later shot or final quality call exists for this job."
+  },
+  "usage": {
+    "inputTokens": 6964,
+    "outputTokens": 7,
+    "costMicros": 44,
+    "currency": "USD",
+    "unitScale": 10000,
+    "costUsd": 0.0044,
+    "pricingVersion": "volcengine-2026-08-06-usd-7.20-markup-1.5"
+  },
+  "byteBindings": [
+    {"role":"shot","shotIndex":0,"assetId":"dee50d91-ff5e-4f6d-83cd-4f82387c2dae","byteLength":2076517,"sha256":"99ea360bc0a373e4a14692cf721c76f30fe28363b7ca6756446f5373dcefbf8b"},
+    {"role":"shot","shotIndex":1,"assetId":"e15d7b0b-bd05-4086-88de-a853c92a0268","byteLength":4082331,"sha256":"f694433478866342c01d7f51e3977f0199a4c6f92440f07ec394eb8f034c4631"},
+    {"role":"shot","shotIndex":2,"assetId":"540dc874-ddf3-421a-a82b-7913bcd54ce0","byteLength":2825634,"sha256":"9d5bb8440b77e352e9df9f03c93943ab026d3c35490fd1887b9db3d7baf18a66"},
+    {"role":"render","shotIndex":null,"assetId":"34befa47-b243-4735-a855-2fcaf0805b52","byteLength":656887,"sha256":"23ebcbcad0b43bc6b5da7b3f36a56b0ee37b95674bbba0dbf2d8d032e5a29f80"}
+  ],
+  "contractDisposition": {
+    "perceptualSchema": "openreel-commercial-perceptual-evaluation/v2",
+    "threshold": 0.8,
+    "eightDimensions": ["intent", "beat", "composition", "visual_identity_consistency", "performance_naturalness", "story", "pacing", "continuity"],
+    "normalizedEnvelopeProduced": false,
+    "inspectorValidationReached": false,
+    "scoresAccepted": false,
+    "releaseEligible": false,
+    "failClosedCorrectly": true
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "retries": 0,
+    "newJobs": 0,
+    "productionChanges": 0,
+    "publications": 0,
+    "credentialChanges": 0
+  },
+  "nextAction": "Separately review a zero-paid code change that preserves the raw malformed-response diagnostic and classifies truncated model JSON without retry; do not replay this job."
+}

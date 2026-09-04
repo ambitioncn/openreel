@@ -1,0 +1,96 @@
+{
+  "schema": "openreel-cp320-two-shot-continuity-evidence/v1",
+  "status": "technical_e2e_passed_visual_acceptance_failed_cleanup_complete",
+  "authorizationCheckpoint": "cp319",
+  "scope": {
+    "environment": "beijing_isolated_private_staging",
+    "route": "direct_plan_v3",
+    "model": "seedance-2-fast",
+    "shotCount": 2,
+    "durationSecondsPerShot": 5,
+    "resolution": "480p",
+    "aspectRatio": "16:9",
+    "audio": false,
+    "maximumSubmissionsPerShot": 1,
+    "providerSubmissions": 2,
+    "automaticRetries": 0,
+    "maximumUnits": 13890,
+    "ownerCeilingCny": 60
+  },
+  "observed": {
+    "providerTerminalStates": ["succeeded", "succeeded"],
+    "assetBytes": [957298, 1139703],
+    "sha256": [
+      "939d589bac621ed85ce35767dfe620afcfd951b4ed37e758169fc47b9550c357",
+      "fe1a9ff0ed80bbf405429b0c314efe3bb37cf86ffc559963b94ebc9c84b2f22c"
+    ],
+    "videoTimelineClipCount": 2,
+    "spentUnits": 7808,
+    "reservedUnits": 0,
+    "billingReconciliationConsistent": true,
+    "media": {
+      "codec": "h264",
+      "profile": "High",
+      "pixelFormat": "yuv420p",
+      "width": 864,
+      "height": 496,
+      "framesPerSecond": 24,
+      "durationSecondsPerShot": 5.041667,
+      "fullDecode": "passed_for_both"
+    },
+    "browser": {
+      "authenticated": true,
+      "directAssetUrlPlaybackPassedForBoth": true,
+      "loadedBytes": [957298, 1139703],
+      "durationSeconds": [5.041667, 5.041667],
+      "mediaErrorCodes": [null, null]
+    }
+  },
+  "visualReview": {
+    "reviewer": "OpenClaw operator visual review",
+    "method": "five evenly sampled frames from each temporary retained output",
+    "scores": [
+      {
+        "shot": 1,
+        "identity": 4,
+        "scene": 4,
+        "referenceAdherence": 3,
+        "temporalCoherence": 4,
+        "artifactFreedom": 4,
+        "notes": "Establishes the orange robot, white circular chest light, white R7 rover, red desert and golden-hour palette; no actual reference asset was supplied."
+      },
+      {
+        "shot": 2,
+        "identity": 3,
+        "scene": 4,
+        "referenceAdherence": 3,
+        "temporalCoherence": 3,
+        "artifactFreedom": 4,
+        "notes": "The high-level subjects and scene remain recognizable, but robot head, limb and body geometry drift from shot 1; no actual reference asset was supplied."
+      }
+    ],
+    "accepted": false,
+    "blockingFindings": [
+      "identity and temporal-coherence scores do not meet the >=4 contract threshold for every shot",
+      "referenceAdherence cannot meet the contract threshold because this text-only mapping run supplied no retained reference asset",
+      "the authorization required temporary media cleanup, so this run cannot satisfy the contract's retained-byte artifact requirement"
+    ]
+  },
+  "cleanup": {
+    "isolatedPortClosed": true,
+    "remoteMediaRemoved": true,
+    "localMediaAndFramesRemoved": true,
+    "temporaryBrowserCredentialsRemoved": true,
+    "temporaryCodeAndDependencyLinkRemoved": true,
+    "sshTunnelClosed": true,
+    "productionServiceActive": true,
+    "productionChanged": false,
+    "credentialConfigurationChanged": false
+  },
+  "interpretation": [
+    "Two-shot paid inference, durable OpenReel ingestion, billing, timeline and authenticated browser playback passed within the exact owner gate.",
+    "This is useful negative continuity evidence: repeated text descriptors alone did not meet OpenReel's C-01 five-dimension threshold.",
+    "C-01 remains unmet; a future exact gate must authorize reference-conditioned multi-shot generation and contract-compatible retained review artifacts if that acceptance target is to be closed."
+  ],
+  "projectCompletion": "in_progress"
+}

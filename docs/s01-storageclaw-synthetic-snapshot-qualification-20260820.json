@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "capturedAt": "2026-08-20T02:46:00Z",
+  "scope": "Owner-authorized synthetic-only encrypted storage qualification on storageclaw; no production data was used",
+  "target": {
+    "sshPrincipal": "openreel@100.124.133.8",
+    "host": "storageclaw",
+    "dataset": "tank/openreel",
+    "mountpoint": "/tank/openreel",
+    "ownership": "openreel:openreel",
+    "mode": "0750",
+    "compression": "lz4",
+    "atime": "off",
+    "available": "25.3T"
+  },
+  "leastPrivilege": {
+    "datasetReadWriteTraverse": true,
+    "tankBackupsReadWriteTraverse": false,
+    "tankOpenclawReadWriteTraverse": false,
+    "sudo": false,
+    "zfsDelegatedPermissions": [],
+    "snapshotCreateDenied": true,
+    "snapshotDestroyDenied": true
+  },
+  "retention": {
+    "engine": "Sanoid",
+    "timerEnabled": true,
+    "recursiveFrom": "tank",
+    "autosnap": true,
+    "autoprune": true,
+    "hourly": 24,
+    "daily": 30,
+    "weekly": 8,
+    "monthly": 12,
+    "yearly": 0,
+    "observedGeneration": "autosnap_2026-08-20_02:45:00_hourly"
+  },
+  "syntheticDrill": {
+    "generation": "synthetic-drill-20260820T0244Z",
+    "plaintextLength": 1048576,
+    "plaintextSha256": "0ed50b09d212288e5572fa17c770c7233233d0d0c3c7d04248c7deeef3e271dd",
+    "cipher": "AES-256-CBC/PBKDF2-SHA256",
+    "pbkdf2Iterations": 200000,
+    "ciphertextLength": 1048608,
+    "ciphertextSha256": "ea0fc2325a228d3b6699698a1e0607eed4197bbbe200cef25389e75305d18b09",
+    "writeAndReadbackPassed": true,
+    "decryptionLengthAndHashPassed": true,
+    "liveTamperDetected": true,
+    "liveGenerationDeletedByWriter": true,
+    "snapshotSurvivedLiveTamperAndDeletion": true,
+    "snapshotCiphertextHashMatched": true,
+    "isolatedRestoreDecryptionHashMatched": true,
+    "writerCouldDestroyRetainedSnapshot": false,
+    "liveAndRestoreScratchCleaned": true,
+    "retainedSnapshotLeftToPolicy": true
+  },
+  "classification": {
+    "offsiteCopyVerified": true,
+    "writerProofAntiDeleteEquivalentVerified": true,
+    "rootMutable": true,
+    "s01StorageCriterionPassed": true
+  },
+  "residualRisks": [
+    "The retained ZFS snapshots are mutable by the storage root administrator and no holds were observed; the proven boundary is backup-writer versus retention-administrator separation, not protection from a compromised storage root.",
+    "Only synthetic data was exercised. Any production transfer remains separately prohibited pending explicit authorization and a production encryption-key procedure."
+  ],
+  "safety": {
+    "productionDataUploaded": false,
+    "productionDataAccessed": false,
+    "credentialsLogged": false,
+    "productionConfigurationChanged": false,
+    "serviceControlPerformed": false
+  },
+  "projectCompletion": "accepted"
+}

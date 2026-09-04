@@ -1,0 +1,69 @@
+{
+  "schema": "openreel-e01-single-video-execution-evidence/v1",
+  "status": "failed_cleanup_complete",
+  "authorization": "amendment-v2-via-amendment-v3-route",
+  "scope": {
+    "environment": "isolated_private_staging",
+    "model": "seedance-2-fast",
+    "input": {
+      "kind": "text_to_video",
+      "durationSeconds": 5,
+      "resolution": "480p",
+      "ratio": "16:9",
+      "generateAudio": false
+    },
+    "maximumSubmissions": 1,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "maximumUnits": 6945,
+    "currency": "USD"
+  },
+  "route": {
+    "authorizedIdentity": "nick@159.198.66.164",
+    "alternateUsersAttempted": false,
+    "sshCredentialMutated": false
+  },
+  "preflight": {
+    "credentialReferencePresentAndNonempty": true,
+    "credentialValueReadOrRetained": false,
+    "seedanceModelMappingPresentAndNonempty": true,
+    "paidInferenceInitiallyEnabled": false,
+    "retryLimit": 0,
+    "stagingReady": true
+  },
+  "observed": {
+    "terminalStatus": "failed",
+    "sanitizedErrorCode": "ARK_PROVIDER_ERROR",
+    "openreelHttpStatus": 502,
+    "sanitizedUpstreamStatus": 404,
+    "providerSubmissions": 1,
+    "spentUnits": 0,
+    "reservedUnitsAfterCleanup": 0,
+    "reservationStatus": "failed",
+    "usageStatus": "failed"
+  },
+  "cleanup": {
+    "paidInferenceEnabled": false,
+    "credentialDropInPresent": false,
+    "openReservations": 0,
+    "activeTemporaryKeys": 0,
+    "activeTemporarySubscriptions": 0,
+    "activeTemporaryApplications": 0,
+    "temporaryRunnerRemoved": true,
+    "stagingReady": true
+  },
+  "retention": {
+    "credentialValues": false,
+    "providerTaskIds": false,
+    "providerOutputUrls": false,
+    "accountIdentifiers": false,
+    "humanInput": false
+  },
+  "limitations": [
+    "The provider returned a sanitized upstream 404, so no video asset, continuity scoring, browser E2E or timeline acceptance was produced.",
+    "The amendment-v2 one-call authorization is consumed; no retry or additional provider submission is authorized.",
+    "This bounded result does not close E-01 or the project."
+  ],
+  "nextProviderSubmissionAuthorized": false,
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "milestone": "OCP-07",
+  "status": "accepted_local",
+  "platform": "instagram_reels",
+  "official_boundary": {
+    "api": "Meta Graph API content publishing for Instagram professional accounts",
+    "account_eligibility": "BUSINESS or CREATOR/MEDIA_CREATOR account returned by the bound account capability query",
+    "minimum_scope_profile": ["instagram_basic", "instagram_content_publish", "pages_show_list"],
+    "live_actions_executed": false
+  },
+  "implemented": [
+    "professional account capability and identity discovery",
+    "tenant-scoped expiring HTTPS media delivery boundary",
+    "Reels media container creation with explicit caption and feed preference",
+    "container processing, completion, error and expiration reconciliation",
+    "publication only after FINISHED status with remote media identity retention",
+    "auth, quota, transient, policy, permanent and ambiguous-result normalization"
+  ],
+  "verification": [{
+    "command": "node --test test/publishing-instagram.test.js test/publishing-lifecycle.test.js test/publishing-oauth.test.js test/publishing-preflight.test.js",
+    "result": "passed: 27 tests, 0 failed"
+  }],
+  "deferred_live_gates": [
+    "Owner approval for a named Meta developer app and Instagram content-publishing permission action",
+    "Owner approval before adding or changing that app's credentials",
+    "Owner approval before authorizing a named professional Instagram account",
+    "Separate owner approval naming the account, MP4 and reviewed metadata before any real publication"
+  ],
+  "limitations": [
+    "No real account, credential, Graph API request, upload or external publication was used in local qualification",
+    "Production must issue least-lived tenant-bound media URLs whose expiry covers Meta fetch and processing",
+    "Current Graph API version and account-specific limits must be re-qualified against the approved app before live acceptance"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp63-production-deployment/v1",
+  "capturedAt": "2026-08-25T19:43:25Z",
+  "authorization": "consumed_cp62_deployment_attestation_and_standing_openreel_production_authorization",
+  "candidate": {
+    "release": "/opt/openreel/releases/20260825T194012Z-cdqi2-cp63-project-version-compat",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T172100Z-cdqi2-cp60-redo-director-policy",
+    "sourceHashes": {
+      "src/commercial-provider-orchestrator.js": "4a5d9b2800924b9e66e17027c93ea4f6aa4eb6d4d79bf73bff6dbc0130659877",
+      "test/commercial-provider-orchestrator.test.js": "44719f18791e8dde5fde0cebf7eb401c5aa75eb97936ee1fd27e17daa6543c25"
+    },
+    "localAndProductionHashesMatch": true
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-25T194012Z-cdqi2-cp63",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T194012Z-cdqi2-cp63-isolated-restore",
+    "database": "ok",
+    "assets": 164,
+    "publishing": "ok"
+  },
+  "verification": {
+    "localFocused": "35 passed, 0 failed",
+    "localFull": "578 passed, 0 failed",
+    "remoteFocusedBeforeActivation": "35 passed, 0 failed",
+    "remoteFullBeforeActivation": "56 passed, 0 failed",
+    "remoteFocusedAfterActivation": "35 passed, 0 failed",
+    "remoteFullAfterActivation": "56 passed, 0 failed",
+    "live": "ok",
+    "ready": "database and assets ok",
+    "service": "active/running; NRestarts=0",
+    "processCwd": "/opt/openreel/releases/20260825T194012Z-cdqi2-cp63-project-version-compat",
+    "rollbackRehearsal": "candidate activated, cp60 rollback anchor reactivated healthy, candidate reactivated healthy"
+  },
+  "behavior": {
+    "compatibility": "preserved redo assets may retain an older aggregate projectVersion after later non-semantic project mutations",
+    "failClosedBoundaries": "exact projectId, storyVersion, storyboardVersion, requested asset id and preserved shot identity remain required",
+    "immutableCandidate": "the source failed job and preserved asset were not mutated"
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "redoQuotes": 0,
+    "redoJobs": 0,
+    "executeCalls": 0,
+    "publicationCalls": 0,
+    "credentialChanges": 0
+  },
+  "notes": [
+    "The first backup command stopped before creating a backup because the production env file was not shell-sourceable; the corrected path-only parse did not load or reveal credentials.",
+    "Direct public-IP health requests returned HTTP 400 at the front door; loopback live and readiness checks passed through every activation and rollback transition."
+  ],
+  "status": "deployed_ready_for_acceptance",
+  "projectCompletion": "in_progress"
+}

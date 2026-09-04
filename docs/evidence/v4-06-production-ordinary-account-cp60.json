@@ -1,0 +1,125 @@
+{
+  "schema": "openreel-v4-04-v4-06-production-cp56/v1",
+  "createdAt": "2026-08-23T19:36:19.529Z",
+  "authorization": {
+    "sourceGate": "cp59",
+    "combinedCeilingCny": 10,
+    "modelRetries": 0,
+    "publication": false,
+    "externalSend": false
+  },
+  "account": {
+    "ordinary": true,
+    "emailDomain": "openreel.invalid",
+    "projectCount": 1
+  },
+  "agent": {
+    "status": "not_run_product_only"
+  },
+  "product": {
+    "requestedUrl": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+    "source": {
+      "mode": "fetched_model",
+      "requestedUrl": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+      "finalUrl": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+      "redirects": [],
+      "contentType": "text/html",
+      "byteLength": 9279,
+      "sha256": "a6e572bec156bf80ff3149b89b6d218cdcf8866ccc26ccf69a5431db8e142c6a",
+      "fetchedAt": "2026-08-23T19:36:15.030Z"
+    },
+    "model": {
+      "provider": "ark",
+      "model": "seed-2.1-turbo",
+      "jobId": "06e6bcc9-9143-4990-820e-f4299d8700b7",
+      "status": "succeeded",
+      "usage": {
+        "costMicros": 13,
+        "currency": "USD",
+        "unitScale": 10000,
+        "inputTokens": 827,
+        "outputTokens": 248
+      },
+      "promptSha256": "7cf2b1ccd49912a9de2ad84d9e09118c365a16a39a5fdb5eadeee96880c71596",
+      "outputSha256": "3f40106f90f8346d08a7098d83a619c04a8818f65db5a78e464daaf187809730"
+    },
+    "facts": [
+      {
+        "field": "feature",
+        "value": "Silverstein's humorous and creative verse can amuse the dowdiest of readers",
+        "evidenceIds": [
+          "model-ev-2"
+        ]
+      },
+      {
+        "field": "feature",
+        "value": "Lemon-faced adults and fidgety kids sit still and read these rhythmic words and laugh and smile and love that Silverstein",
+        "evidenceIds": [
+          "model-ev-3"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "model-ev-1",
+        "field": "model.evidenceQuotes",
+        "quote": "This now-classic collection of poetry and drawings from Shel Silverstein celebrates its 20th anniversary with this special edition.",
+        "source": {
+          "finalUrl": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+          "sha256": "a6e572bec156bf80ff3149b89b6d218cdcf8866ccc26ccf69a5431db8e142c6a",
+          "fetchedAt": "2026-08-23T19:36:15.030Z"
+        }
+      },
+      {
+        "id": "model-ev-2",
+        "field": "model.evidenceQuotes",
+        "quote": "Silverstein's humorous and creative verse can amuse the dowdiest of readers.",
+        "source": {
+          "finalUrl": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+          "sha256": "a6e572bec156bf80ff3149b89b6d218cdcf8866ccc26ccf69a5431db8e142c6a",
+          "fetchedAt": "2026-08-23T19:36:15.030Z"
+        }
+      },
+      {
+        "id": "model-ev-3",
+        "field": "model.evidenceQuotes",
+        "quote": "Lemon-faced adults and fidgety kids sit still and read these rhythmic words and laugh and smile and love that Silverstein.",
+        "source": {
+          "finalUrl": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+          "sha256": "a6e572bec156bf80ff3149b89b6d218cdcf8866ccc26ccf69a5431db8e142c6a",
+          "fetchedAt": "2026-08-23T19:36:15.030Z"
+        }
+      }
+    ],
+    "creativeContext": {
+      "productName": null,
+      "summary": null,
+      "valuePropositions": [
+        "Silverstein's humorous and creative verse can amuse the dowdiest of readers",
+        "Lemon-faced adults and fidgety kids sit still and read these rhythmic words and laugh and smile and love that Silverstein"
+      ],
+      "audience": null,
+      "unsupportedFields": [
+        "price",
+        "availability",
+        "comparativeClaims"
+      ],
+      "instruction": "Use only model claims linked to fetched evidenceIds; human review remains required."
+    }
+  },
+  "browserCalls": {
+    "agentPrepare": 0,
+    "agentExecute": 0,
+    "agentProgress": 0,
+    "productUnderstand": 1
+  },
+  "safety": {
+    "retries": 0,
+    "deployments": 1,
+    "serviceRestarts": 1,
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "historyCleanup": 0
+  }
+}

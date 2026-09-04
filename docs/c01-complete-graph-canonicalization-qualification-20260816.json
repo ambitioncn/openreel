@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "C-01",
+  "scope": "credential-free complete continuity evidence graph canonicalization",
+  "controls": [
+    "canonicalize every record key across the complete normalized evaluation graph before fingerprinting while preserving ordered arrays",
+    "require schema fields to be own properties of plain records rather than inherited prototype values",
+    "stabilize fingerprints across outer-record, score-dimension and entity-attribute insertion order"
+  ],
+  "verification": {
+    "focused": "node --test test/continuity-evaluation.test.js: 15 passed, 0 failed",
+    "fullSuite": "npm test: 226 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 233 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "real-provider origin of evaluated evidence",
+    "retained real-media multi-shot outputs",
+    "human visual acceptance",
+    "provider execution",
+    "deployment or production readiness"
+  ]
+}

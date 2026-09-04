@@ -1,0 +1,73 @@
+{
+  "schema": "openreel-e01-seedance2-execution-evidence/v1",
+  "status": "failed_cleanup_complete",
+  "authorizationCheckpoint": "cp80",
+  "scope": {
+    "environment": "isolated_private_staging",
+    "modelAlias": "seedance-2",
+    "input": {
+      "kind": "text_to_video",
+      "durationSeconds": 4,
+      "resolution": "480p",
+      "ratio": "16:9",
+      "generateAudio": false
+    },
+    "maximumSubmissions": 1,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "maximumUnits": 138889,
+    "currency": "USD",
+    "unitScale": 10000
+  },
+  "route": {
+    "authorizedIdentity": "nick@159.198.66.164",
+    "alternateUsersAttempted": false,
+    "sshCredentialMutated": false
+  },
+  "preflight": {
+    "stagingReady": true,
+    "existingApiKeyReferencePresent": true,
+    "existingBaseUrlReferencePresent": true,
+    "existingSeedance2ModelReferencePresent": true,
+    "credentialValueReadOrRetained": false,
+    "paidInferenceInitiallyEnabled": false,
+    "openReservations": 0,
+    "auditedModelReservationCeilingUnits": 138889,
+    "pricingVersion": "volcengine-2026-08-06-usd-7.20-markup-1.5"
+  },
+  "observed": {
+    "terminalStatus": "failed",
+    "sanitizedErrorCode": "ARK_PROVIDER_ERROR",
+    "openreelHttpStatus": 502,
+    "sanitizedUpstreamStatus": 503,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "spentUnits": 0,
+    "reservationStatus": "failed",
+    "usageStatus": "failed"
+  },
+  "cleanup": {
+    "paidInferenceEnabled": false,
+    "credentialDropInPresent": false,
+    "openReservations": 0,
+    "activeTemporaryKeys": 0,
+    "activeTemporarySubscriptions": 0,
+    "activeTemporaryApplications": 0,
+    "temporaryRunnersRemoved": true,
+    "stagingReady": true
+  },
+  "retention": {
+    "credentialValues": false,
+    "providerTaskIds": false,
+    "providerOutputUrls": false,
+    "accountIdentifiers": false,
+    "humanInputSecrets": false
+  },
+  "limitations": [
+    "The provider returned a sanitized upstream 503, so no video asset or real-media browser/timeline acceptance evidence was produced.",
+    "The cp80 one-call authorization is consumed; no retry or additional provider submission is authorized.",
+    "This bounded result does not close E-01 or the project."
+  ],
+  "nextProviderSubmissionAuthorized": false,
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "milestone": "CO-01",
+  "capturedAt": "2026-08-15T16:00:00.000Z",
+  "scope": "credential-free local collaboration evidence validation",
+  "result": "passed",
+  "claims": {
+    "tenantAndMembershipScopeValidated": true,
+    "revokedInviteRequired": true,
+    "presenceTtlValidatedSeconds": 30,
+    "staleWriteRejectedAndWinnerPreserved": true,
+    "durableDocumentAndEphemeralPresenceRestartBoundaryValidated": true,
+    "externalIntegrationsConnected": false,
+    "productionReady": false
+  },
+  "verification": {
+    "focusedTests": { "passed": 3, "failed": 0 },
+    "fullSuite": { "passed": 178, "failed": 0 },
+    "highSeverityDependencyFindings": 0,
+    "secretScan": "passed across 156 files",
+    "diffCheck": "passed"
+  },
+  "externalActions": [],
+  "limitations": [
+    "This evidence validates the local polling and optimistic-version contract; it does not claim distributed real-time transport or automatic merge behavior.",
+    "No LibTV team mutation, email delivery, external identity verification, or account recovery action occurred.",
+    "An authenticated LibTV team walkthrough remains separately gated."
+  ]
+}

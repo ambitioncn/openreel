@@ -1,0 +1,54 @@
+{
+  "schema": "openreel-e01-beijing-qwen-single-call-qualification/v1",
+  "date": "2026-08-17",
+  "authorization": "cp278 bounded real-model acceptance",
+  "scope": "one isolated loopback-only Beijing staging Qwen TTS generation",
+  "result": {
+    "status": "passed",
+    "providerCalls": 1,
+    "retries": 0,
+    "jobState": "succeeded",
+    "assetCount": 1,
+    "timelineAudioClipCount": 1,
+    "downloadStatus": 200,
+    "byteLength": 253484,
+    "sha256": "6ef317e14a67293502a4fe199972a243e30e2247fa2a2fd4092e628fdb0d6ffa",
+    "durationSeconds": 5.28,
+    "sampleRate": 24000,
+    "channels": 1,
+    "audioFormat": "pcm",
+    "bitsPerSample": 16
+  },
+  "cost": {
+    "ceilingCny": 30,
+    "estimatedCny": 0,
+    "basis": "owner-operated Tailnet model; no paid-provider or billing endpoint used"
+  },
+  "evidence": [
+    "scripts/qwen-tts-beijing-staging-single-call.mjs",
+    "scripts/qwen-tts-cp278-browser-recovery-e2e.mjs",
+    "docs/evidence/cp278-beijing-qwen-one-call/result.json",
+    "docs/evidence/cp278-beijing-qwen-one-call/qwen-result.wav",
+    "docs/evidence/cp278-beijing-qwen-one-call/browser-recovery.json",
+    "docs/evidence/cp278-beijing-qwen-one-call/browser-recovery.png"
+  ],
+  "safety": {
+    "productionServiceChanges": 0,
+    "deployments": 0,
+    "credentialChanges": 0,
+    "publicWrites": 0,
+    "temporaryStagingRemoved": true,
+    "mainServiceStayedActiveAndReady": true
+  },
+  "browserRecovery": {
+    "status": "passed",
+    "providerCalls": 0,
+    "sourceSha256Matched": true,
+    "downloadStatus": 200,
+    "downloadByteLength": 253484,
+    "playbackMetadataLoaded": true,
+    "playbackDurationSeconds": 5.28,
+    "screenshot": "docs/evidence/cp278-beijing-qwen-one-call/browser-recovery.png"
+  },
+  "boundary": "This proves the owner-selected Qwen voice route in isolated Beijing staging through OpenReel HTTP execution, durable result reconciliation, timeline insertion and asset download, followed by zero-call Chromium download and playback-metadata recovery of the hash-matched retained real media. It does not prove a same-session browser generation action, music, SFX, lip-sync or video, and does not authorize another model call."
+}

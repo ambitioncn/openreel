@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T16:59:52Z",
+  "scope": "local-only backup restore validation",
+  "result": "passed",
+  "claims": [
+    "Restored asset entities require bounded non-empty relative storage keys.",
+    "Asset storage keys must be unique.",
+    "Database asset storage keys must exactly match the staged backup asset file set before atomic promotion.",
+    "A manifest-rehashed database/file relationship drift fixture is rejected and leaves no final restore destination or staging residue."
+  ],
+  "verification": {
+    "opsTest": { "command": "node --test test/ops.test.js", "passed": 16, "failed": 0 },
+    "fullTest": { "command": "npm test", "passed": 184, "failed": 0 },
+    "dependencyAudit": { "command": "npm audit --omit=dev --audit-level=high", "vulnerabilities": 0 },
+    "secretScan": { "command": "npm run scan:secrets", "status": "passed", "files": 161 },
+    "diffCheck": { "command": "git diff --check", "status": "passed" }
+  },
+  "externalActions": [],
+  "notClaimed": [
+    "external backup copy or off-host retention",
+    "staging or production restore",
+    "signing or activation",
+    "independent review",
+    "provider calls or credential access"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "openreel-qualification/v1",
+  "project": "openreel-one-click-publishing",
+  "milestone": "OCP-11",
+  "status": "accepted",
+  "scope": "Desktop/mobile publishing E2E, publishing security boundary and adjacent product regression qualification",
+  "verified": [
+    "Chromium desktop 1440x900 and mobile 390x844 exercise preflight, reload recovery, targeted retry, cancellation and unknown-remote reconciliation",
+    "The browser qualification keeps final publication disabled and observes zero provider and publication calls",
+    "Publishing contract tests cover all four adapters, OAuth, tenant isolation, validation, idempotency, retry, cancel, restart recovery and redacted audit history",
+    "Publishing callback admission rejects non-HTTPS, loopback, private, link-local and DNS-rebinding targets before use",
+    "Publishing webhook ingress verifies scoped HMAC envelopes, timestamp tolerance and event-id replay, with isolated rate limits and Retry-After evidence",
+    "Desktop and touch browser fixtures explicitly prove four-destination validation success, duplicate-click suppression, and recovery of two published plus one failed plus one unknown-remote destination",
+    "The complete repository suite preserves beginner workbench, commercial-v2, identity, CSRF, tenant and upload boundaries",
+    "The repository secret scan reports no credential-shaped leakage"
+  ],
+  "verification": [
+    {"command":"node --test test/publishing-webhook.test.js","result":"passed: 2 tests, 0 failed"},
+    {"command":"npm test","result":"passed: 421 tests, 0 failed"},
+    {"command":"npm run scan:secrets","result":"passed: 539 files"},
+    {"command":"npm run smoke:publishing-browser","result":"passed: Chromium desktop and mobile; providerCalls=0; publicationCalls=0"}
+  ],
+  "remaining_local_acceptance": [],
+  "deferred_live_acceptance": ["Integrate ingress only for platforms whose official grants expose webhook delivery, after owner-approved app configuration"],
+  "safety": {"external_calls":false,"oauth_grants":0,"credential_mutations":0,"uploads":0,"publications":0,"production_mutations":0,"claim_live_publication":false},
+  "project_completion": "in_progress",
+  "next_item": "OCP-12"
+}

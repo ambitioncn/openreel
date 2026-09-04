@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-15",
+  "scope": "local-only backup manifest and isolated restore qualification",
+  "backlogItem": "S-01",
+  "result": "passed",
+  "claims": [
+    "Backup manifests require the exact version-1 top-level and per-file fields.",
+    "Malformed timestamps, duplicate paths, malformed byte counts and digests, and missing core database/platform entries fail closed.",
+    "Manifest rejection occurs before the isolated restore destination is created.",
+    "The restored database is still checked with SQLite PRAGMA quick_check after copying into the isolated destination."
+  ],
+  "verification": [
+    { "command": "node --test test/ops.test.js", "result": "11 passed, 0 failed" },
+    { "command": "npm test", "result": "158 passed, 0 failed" },
+    { "command": "npm audit --omit=dev --audit-level=high", "result": "0 vulnerabilities" },
+    { "command": "npm run scan:secrets", "result": "passed, 138 files" }
+  ],
+  "externalActions": [],
+  "limitations": [
+    "This evidence does not perform off-host retention, staging restore, production rollback, signing, upload, deployment, or activation.",
+    "A crash or filesystem error during the copy phase can still leave an incomplete isolated destination; atomic restore promotion remains future local hardening work."
+  ]
+}

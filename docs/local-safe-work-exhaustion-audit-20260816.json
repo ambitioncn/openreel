@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 3,
+  "project": "openreel-libtv-parity",
+  "reviewedAt": "2026-08-18",
+  "amendmentVersion": 5,
+  "controlPlane": {
+    "backlog": "docs/libtv-parity-backlog.json",
+    "terminalContract": "docs/project-completion-contract.md",
+    "acceptanceLedger": "docs/project-acceptance-ledger.json"
+  },
+  "conclusion": "all authority-free local acceptance work currently recorded by the authoritative backlog is exhausted; every required non-accepted item now has only external evidence, independent human review, deployment/process control or another explicitly gated action remaining",
+  "requiredNonAccepted": [
+    {"id":"M-01","nextBoundary":"separately authorized real-provider verification or a future authenticated-baseline refresh"},
+    {"id":"A-01","nextBoundary":"separately authorized real music, SFX or lip-sync evidence"},
+    {"id":"T-01","nextBoundary":"authenticated format/quality comparison and remaining real-media graphical-browser evidence"},
+    {"id":"CO-01","nextBoundary":"authenticated LibTV team walkthrough"},
+    {"id":"B-01","nextBoundary":"controllable authenticated LibTV usage evidence or staging payment-provider evidence"},
+    {"id":"S-01","nextBoundary":"independent review, monitored chaos, signing/off-host retention or production rollback evidence"},
+    {"id":"E-01","nextBoundary":"remaining provider modalities, authenticated comparison or staging acceptance under an exact gate"},
+    {"id":"E-02","nextBoundary":"production deployment and process-control authorization"}
+  ],
+  "optionalHumanGated": [
+    {"id":"P-01","nextBoundary":"public ecosystem publishing approval"}
+  ],
+  "latestGatedOutcome": {
+    "checkpoint": "cp334",
+    "result": "terminal_failure_insufficient_balance",
+    "verification": "exactly one request, zero retries/fallback/charge/media/publication; focused governance 5/5 and full suite 311/311",
+    "effect": "the cp333 authorization is consumed, successful music output remains unproven, and the next step is an owner product/payment priority decision"
+  },
+  "recommendedNextGate": {
+    "packet": "docs/openreel-next-gated-boundary-choice-cp335.json",
+    "scope": "owner chooses one next gated boundary; the packet itself authorizes no execution",
+    "choices": ["fund_or_subscribe_minimax", "review_alternate_music_route", "prioritize_other_backlog_boundary"]
+  },
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "openreel-a01-beijing-dns-readonly-diagnosis/v1",
+  "recordedAt": "2026-08-16T05:05:00Z",
+  "target": "Beijing default development and staging host",
+  "outcome": {
+    "status": "host_dns_unavailable",
+    "providerHostnameResolution": "EAI_AGAIN",
+    "controlHostnameResolution": "timeout",
+    "systemdResolvedActive": true,
+    "uplinkDnsReachability": "no response from either configured Alibaba Cloud resolver",
+    "applicationServiceActive": true,
+    "nginxActive": true,
+    "loopbackReadinessHttp": 200
+  },
+  "evidence": [
+    "The same Provider hostname resolved from the local control host but not from Beijing.",
+    "Beijing Node lookup and system resolver lookup failed for the Provider hostname; a common control hostname also timed out.",
+    "The resolver had two Alibaba Cloud uplink DNS addresses configured, while both showed no ICMP response during the bounded read-only check.",
+    "Resolver logs repeatedly alternated degraded UDP and TCP feature sets, consistent with an unavailable upstream path.",
+    "OpenReel, Nginx and loopback readiness remained healthy throughout the read-only diagnosis."
+  ],
+  "safety": {
+    "providerCalls": 0,
+    "credentialReads": 0,
+    "configurationChanges": 0,
+    "serviceRestarts": 0,
+    "deploymentChanges": 0,
+    "publicActions": 0
+  },
+  "nextGate": {
+    "id": "BEIJING-DNS-RESOLVER-ONE-RESTART",
+    "requestedAuthority": "Restart systemd-resolved exactly once on the Beijing host, then perform read-only resolution and service-health checks.",
+    "excluded": [
+      "DNS configuration changes",
+      "Tailscale changes",
+      "Provider calls",
+      "credential changes",
+      "OpenReel or Nginx restart",
+      "production traffic changes"
+    ],
+    "stopCondition": "If DNS remains unavailable after the one restart, stop and report without fallback mutation."
+  }
+}

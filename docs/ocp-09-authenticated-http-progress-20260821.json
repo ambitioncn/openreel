@@ -1,0 +1,23 @@
+{
+  "schema": "openreel-qualification/v1",
+  "milestone": "OCP-09",
+  "status": "in_progress",
+  "scope": "authenticated publishing batch HTTP boundary",
+  "implemented": [
+    "versioned create/get/validate/confirm/advance/retry/cancel/reconcile routes",
+    "production session and CSRF boundary inherited from the existing server",
+    "account-bound personal tenant principal",
+    "fail-closed PUBLISHING_UNAVAILABLE response when no orchestrator is injected"
+  ],
+  "verification": [
+    { "command": "node --test test/http.test.js test/publishing-orchestration.test.js", "result": "32 passed, 0 failed" },
+    { "command": "npm test", "result": "416 passed, 0 failed" },
+    { "command": "npm run scan:secrets", "result": "528 files scanned, passed" }
+  ],
+  "external_actions": [],
+  "remaining": [
+    "production composition root for owner-approved provider configurations",
+    "account-aware responsive browser UI and desktop/mobile E2E",
+    "OCP-10 history/audit, OCP-11 security regression, OCP-12 deployment qualification"
+  ]
+}

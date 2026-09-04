@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "backlogItem": "A-01",
+  "capturedAt": "2026-08-16",
+  "scope": "credential-free local Qwen TTS persistence-boundary qualification",
+  "result": "passed",
+  "claims": [
+    "The durable audio asset derives inputCharacters from the reviewed persisted prompt.",
+    "A caller-supplied inputCharacters value that drifts from the persisted prompt fails closed before asset, timeline, or export mutation.",
+    "The accepted usage value is preserved in the tenant-scoped asset manifest."
+  ],
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 10/10 passed",
+    "npm test: 239/239 passed",
+    "npm run scan:secrets: passed across 263 files",
+    "git diff --check: passed"
+  ],
+  "externalActions": {
+    "otpReplay": false,
+    "tailnetRequest": false,
+    "providerCall": false,
+    "realSynthesis": false,
+    "deployment": false,
+    "credentialChange": false,
+    "publicAction": false
+  },
+  "limitations": [
+    "This qualification uses a synthetic local WAV and does not establish real Qwen voice quality or latency.",
+    "Real synthesis, retained-media browser E2E, and deployment remain separately gated."
+  ]
+}

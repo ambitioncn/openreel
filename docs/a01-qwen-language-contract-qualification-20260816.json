@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "backlog_id": "A-01",
+  "qualified_at": "2026-08-16T13:08:27Z",
+  "scope": "local contract admission and read-only service discovery",
+  "live_contract": {
+    "source": "GET http://100.124.97.3:8004/health and GET /openapi.json",
+    "health": "ok",
+    "model": "qwen3-tts-12hz-1.7b-customvoice",
+    "languages": [
+      "auto",
+      "chinese",
+      "english",
+      "french",
+      "german",
+      "italian",
+      "japanese",
+      "korean",
+      "portuguese",
+      "russian",
+      "spanish"
+    ]
+  },
+  "implementation": {
+    "result": "OpenReel admits only exact canonical language values from the reviewed live contract before transport invocation",
+    "known_bad_value": "zh",
+    "provider_calls": 0
+  },
+  "verification": {
+    "targeted": "47/47 passed",
+    "full_suite": "274/274 passed",
+    "secret_scan": "passed; 329 files scanned",
+    "diff_check": "passed"
+  },
+  "external_actions": []
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-18",
+  "milestone": "A-01-MUSIC-REAL-MEDIA",
+  "authorizationGate": "cp333",
+  "providerModel": "minimax-portal/music-2.6-free",
+  "result": "failed_insufficient_balance",
+  "sanitizedProviderCode": 1008,
+  "providerRequests": 1,
+  "retries": 0,
+  "fallbackRequests": 0,
+  "chargeCny": 0,
+  "mediaCreated": 0,
+  "mediaRetained": 0,
+  "published": false,
+  "credentialReads": 0,
+  "credentialWrites": 0,
+  "serviceChanges": 0,
+  "deployments": 0,
+  "verification": [
+    "the configured MiniMax CN free-model route received exactly one generation submission",
+    "the first terminal provider response rejected the request for insufficient balance",
+    "the zero-retry stop condition was honored and no alternate provider or model was used",
+    "the requested evidence filename does not exist in the OpenClaw workspaces after terminal failure"
+  ],
+  "boundary": "This proves that the configured external route was reached and rejected the request before media generation. It does not prove successful credential acceptance, free entitlement, music output or playback. Any balance purchase, subscription, credential change or another provider request requires a new exact human gate."
+}

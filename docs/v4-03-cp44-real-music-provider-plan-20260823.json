@@ -1,0 +1,66 @@
+{
+  "schema": "openreel-v4-real-music-plan/v1",
+  "checkpoint": "cp44",
+  "status": "local_boundary_implemented_real_call_and_production_not_authorized",
+  "provider": {
+    "legalRoute": "Volcengine SeedAudio",
+    "providerId": "volcengine-seedaudio",
+    "model": "seed-audio-1.0",
+    "capability": "text-to-music",
+    "credentialReference": "OPENREEL_SEEDAUDIO_API_KEY",
+    "credentialRead": false,
+    "priorEvidence": "A prior separately authorized private five-second call retained an 81,729-byte MP3; that consumed authorization is not reused."
+  },
+  "callPlan": {
+    "durationSeconds": 5,
+    "maximumCalls": 1,
+    "automaticRetries": 0,
+    "maximumCostCny": 10,
+    "precondition": "An exact immutable CNY quote for this request must be returned before transport execution; unknown, zero, foreign-currency or above-ceiling pricing fails closed.",
+    "idempotency": "The commercial job key derives a stable :music provider key.",
+    "transportStatus": "Not wired to production. The local service accepts only an injected server-side quote function and transport after explicit enablement."
+  },
+  "assetAndBinding": {
+    "acceptedMimeTypes": ["audio/mpeg", "audio/wav"],
+    "maximumBytes": 26214400,
+    "signatureValidation": true,
+    "metadata": ["provider", "model", "providerJobId", "quote", "trusted usage", "calls", "retries"],
+    "revisionIdentity": ["projectId", "projectVersion", "storyVersion", "storyboardVersion"],
+    "productionStage": "music",
+    "renderProvenance": "Generated music and reviewed captions are included with provider image/video/voice ids in render.metadata.sourceArtifacts."
+  },
+  "mixing": {
+    "entry": "composeReviewedCommercialMedia",
+    "policy": "speech-first mix with music gain and ducking from the reviewed composition plan",
+    "ordering": "Music must succeed and be retained before compose; no uploaded tone or placeholder fallback is permitted."
+  },
+  "failureAndRollback": {
+    "quoteFailure": "No provider call and no new asset.",
+    "providerFailure": "One failed call maximum, retryable=false, sanitized error, no fallback and no compose.",
+    "mediaValidationFailure": "Reject returned bytes; do not retain or compose.",
+    "revisionDrift": "Artifact sink or composition rejects stale identity.",
+    "rollback": "Existing assets, timeline and prior render remain unchanged because composition starts only after successful music retention; production deployment rollback is a later separately reviewed action."
+  },
+  "acceptancePlan": [
+    "Review exact official endpoint/resource id and account-visible price/quote mechanism without exposing credentials.",
+    "Wire the disabled service into server quote, durable job and browser UI behind explicit real-music selection and confirmation.",
+    "Run local negative and recovery tests with zero network calls.",
+    "Request separate approval for one private five-second SeedAudio call, maximum CNY 10, zero retries.",
+    "Only after retained real MP3/WAV inspection, request deployment approval and then a separately bounded final ordinary-account production acceptance.",
+    "Final evidence must show audible generated music, provider/model/job/usage, revision identity, full render sourceArtifacts, mix parameters, Chinese captions and playable MP4."
+  ],
+  "safety": {
+    "providerCalls": 0,
+    "spendCny": 0,
+    "deployments": 0,
+    "serviceRestarts": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "syntheticToneFinalEvidenceAllowed": false
+  },
+  "verification": {
+    "targeted": "28/28 passed",
+    "fullSuite": "483/483 passed",
+    "releaseManifest": "86/86 verified with tamper rejection"
+  }
+}

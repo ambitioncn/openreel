@@ -1,0 +1,49 @@
+{
+  "schema": "openreel-commercial-cdqi2-cp56-production-deployment/v1",
+  "capturedAt": "2026-08-25T16:23:00Z",
+  "authorization": "consumed_cp55_deployment_attestation",
+  "candidate": {
+    "release": "/opt/openreel/releases/20260825T162200Z-cdqi2-cp56-redo-version-binding",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T153500Z-cdqi2-cp53-terminal-cost-redo-merge",
+    "sourceHashes": {
+      "src/workbench-commercial.js": "fbad63c7c97adbe6f9d6fa699c73c30d31c3b27bfaa1ccd866efc44811832773",
+      "test/workbench-commercial.test.js": "16e2a4ec6dd399b84bff0eb4722ded37de9ebb4f8f1d9844e5310cd1a9795574"
+    },
+    "localAndProductionHashesMatch": true
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-25T162037Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T162037Z-isolated-restore",
+    "database": "ok",
+    "assets": 164,
+    "publishing": "ok"
+  },
+  "verification": {
+    "localFocused": "28/28 passed",
+    "remoteFocusedBeforeActivation": "28/28 passed",
+    "remoteFocusedAfterActivation": "28/28 passed",
+    "live": { "status": "ok" },
+    "ready": { "status": "ready", "database": "ok", "assets": "ok" },
+    "service": { "activeState": "active", "subState": "running", "nRestarts": 0 },
+    "processCwd": "/opt/openreel/releases/20260825T162200Z-cdqi2-cp56-redo-version-binding",
+    "stateMetadata": "openreel:openreel 0640",
+    "providerMarkersDuringDeploymentWindow": 0,
+    "commercialExecutionMarkersDuringDeploymentWindow": 0,
+    "publicReadyProbe": "404; internal service readiness is authoritative for this deployment and passed"
+  },
+  "behavior": {
+    "redoBinding": "immutable story and storyboard versions remain mandatory; artifact-only project-version advance is permitted and the successor quote binds the current project version",
+    "storyOrStoryboardDrift": "fails closed with VERSION_CONFLICT",
+    "historicalCandidateMutation": false
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "redoQuotes": 0,
+    "redoJobs": 0,
+    "publicationCalls": 0,
+    "credentialChanges": 0
+  },
+  "status": "deployed_ready_for_acceptance",
+  "projectCompletion": "in_progress"
+}

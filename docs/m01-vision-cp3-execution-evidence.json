@@ -1,0 +1,56 @@
+{
+  "schema": "openreel-m01-vision-execution-evidence/v1",
+  "authorizationGate": "cp2",
+  "status": "terminal_failure_cleanup_complete",
+  "scope": {
+    "environment": "Beijing isolated private staging",
+    "model": "embedding-vision",
+    "authorizedModes": ["image-to-text", "video-to-text"],
+    "maximumSubmissions": 2,
+    "automaticRetries": 0,
+    "maximumReservedUnits": 5556,
+    "ownerCeilingCny": 4
+  },
+  "observed": {
+    "providerSubmissions": 1,
+    "completedMode": null,
+    "failedMode": "image-to-text",
+    "videoToTextSubmitted": false,
+    "automaticRetries": 0,
+    "sanitizedErrorCode": "ARK_PROVIDER_ERROR",
+    "openreelHttpStatus": 502,
+    "sanitizedUpstreamStatus": 400,
+    "authorizationConsumed": true
+  },
+  "cleanup": {
+    "isolatedPort4373Open": false,
+    "temporaryFilesRemaining": 0,
+    "isolatedProcessesRemaining": 0,
+    "productionService": "active",
+    "productionReadiness": "ready",
+    "productionPaidInferenceEnabled": false,
+    "productionRetryLimit": 0
+  },
+  "retention": {
+    "credentialValues": false,
+    "providerRequestIdentifiers": false,
+    "providerResponseBodies": false,
+    "fixtureBytes": false,
+    "humanInput": false
+  },
+  "limitations": [
+    "The first authorized image-to-text submission reached the Provider but was rejected with a sanitized upstream HTTP 400.",
+    "The stop-on-first-failure rule prevented the video-to-text submission.",
+    "The consumed cp2 authority grants no retry and does not close the M-01 vision gap.",
+    "A new call must not be requested until the exact official input contract is diagnosed read-only."
+  ],
+  "negativeEvidence": {
+    "secondSubmission": false,
+    "retries": 0,
+    "credentialChanges": 0,
+    "productionChanges": 0,
+    "deployments": 0,
+    "publications": 0
+  },
+  "projectCompletion": "in_progress"
+}

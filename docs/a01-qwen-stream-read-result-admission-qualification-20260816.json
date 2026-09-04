@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "milestone": "A-01",
+  "qualification": "qwen_stream_read_result_admission",
+  "date": "2026-08-16",
+  "scope": "credential-free local synthetic response admission",
+  "result": "passed",
+  "behavior": {
+    "accepted_read_result_contract": "own enumerable data properties done:boolean and value when done=false",
+    "accessor_fields_read": false,
+    "unknown_hidden_and_symbol_fields_rejected": true,
+    "malformed_results_rejected_before_chunk_admission": true,
+    "reader_lock_released_on_rejection": true,
+    "stable_error_code": "QWEN_TTS_RESULT_INVALID",
+    "safe_diagnostic": "streamReadResultInvalid"
+  },
+  "verification": [
+    {
+      "command": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js",
+      "result": "passed 46/46"
+    },
+    {
+      "command": "npm test",
+      "result": "passed 273/273"
+    },
+    {
+      "command": "node --test test/project-governance.test.js",
+      "result": "passed 3/3"
+    },
+    {
+      "command": "npm run scan:secrets",
+      "result": "passed; 309 files scanned"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "external_actions": [],
+  "provider_calls": 0,
+  "retained_media": 0,
+  "remaining": "A precise owner gate is still required for real Qwen synthesis and retained-media graphical-browser E2E."
+}

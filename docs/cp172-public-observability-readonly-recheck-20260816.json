@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "checked_at": "2026-08-16T01:59:43Z",
+  "target": "Beijing Aliyun OpenReel staging listener",
+  "scope": "read_only",
+  "public_http": {
+    "/": 200,
+    "/health/ready": 200,
+    "/metrics": 200
+  },
+  "remote": {
+    "current_release": "/opt/openreel/releases/20260816T020000Z-cp170",
+    "service_state": "active",
+    "loopback_health_ready": 200,
+    "loopback_metrics": 200,
+    "nginx_listener": 4173,
+    "nginx_behavior": "single catch-all location proxies every path to 127.0.0.1:4273"
+  },
+  "finding": "The cp171 public observability exposure remains present; no configuration change was made.",
+  "authorization": "No cp171 successor authorization was present, so the reverse-proxy change remains gated."
+}

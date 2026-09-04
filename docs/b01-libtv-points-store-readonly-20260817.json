@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "capturedAt": "2026-08-17T00:16:30Z",
+  "scope": "Authenticated LibTV points-store discovery, read-only",
+  "authorization": "Existing authenticated owner session; no purchase, recharge, subscription, team, provider, deployment, credential or publication write authorized",
+  "observations": {
+    "sessionValid": true,
+    "stableEntryDiscovered": "points store button",
+    "surfaceOpenedWithoutRouteGuessing": true,
+    "pageUrlChanged": false,
+    "commercialModelEvidence": [
+      "general-purpose and model-specific point products",
+      "membership-tier eligibility constraints",
+      "weekly purchase limits on selected products",
+      "product-specific point expiry periods",
+      "fixed point packages and a custom recharge entry",
+      "displayed savings relative to custom recharge",
+      "first-purchase bonus tiers of 50% for general points and 70% for selected model-specific points",
+      "a premium fixed bundle advertising 500,000 model-specific points with a two-year validity period"
+    ],
+    "stableInteractiveControls": [
+      "general points tab",
+      "general fixed-package product cards",
+      "model-specific fixed-package product cards"
+    ],
+    "stableMembershipCenterControlDiscovered": false,
+    "personalBalanceCaptured": false,
+    "transactionIdentifierCaptured": false,
+    "purchaseOrRechargeAttempted": false,
+    "paymentOrSubscriptionMutationAttempted": false
+  },
+  "evidenceBoundary": [
+    "The controlled Chromium profile remained authenticated before discovery.",
+    "The points-store surface was opened only through the exact visible button; no route was guessed and no undocumented API was invoked.",
+    "The run stopped at product discovery and did not activate any purchase, recharge or subscription control.",
+    "A structural DOM pass confirmed product cards as interactive controls but did not establish Membership Center as a stable independent control, so no membership route was guessed."
+  ],
+  "remaining": [
+    "Discover a stable read-only personal balance, quota, invoice or usage-ledger surface without exposing sensitive account identifiers.",
+    "Keep purchase, recharge, subscription, payment-method and team mutations behind a new exact human gate."
+  ]
+}

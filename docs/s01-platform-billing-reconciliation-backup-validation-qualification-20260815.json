@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "qualificationId": "S-01-platform-billing-reconciliation-backup-validation-20260815",
+  "createdAt": "2026-08-15T17:49:19Z",
+  "scope": "credential-free local backup and isolated-restore platform billing reconciliation validation",
+  "implementation": [
+    "scripts/backup.mjs validates non-negative safe-integer billing amounts",
+    "subscription reservedMicros must equal open reservation totals",
+    "subscription spentMicros must equal settled usage less refunds",
+    "usage cost cannot exceed its reservation, refunds cannot exceed settled cost, and ledger statuses must reconcile",
+    "recorded spend plus reservations cannot exceed the subscription hard limit"
+  ],
+  "negativeCoverage": [
+    "aggregate reservation drift",
+    "hard-limit overrun",
+    "refund amount greater than settled usage"
+  ],
+  "verification": {
+    "targeted": "node --test test/ops.test.js: 21 passed, 0 failed",
+    "fullSuite": "npm test: 189 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "npm run scan:secrets: passed across 169 files"
+  },
+  "externalActions": [],
+  "claims": {
+    "backupOrRestoreExecutedExternally": false,
+    "deploymentChanged": false,
+    "providerCalled": false,
+    "credentialsReadOrChanged": false
+  }
+}

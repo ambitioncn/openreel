@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "S-01",
+  "capturedAt": "2026-08-15T18:13:55.000Z",
+  "scope": "credential-free local backup and isolated-restore validation",
+  "claim": "Platform snapshots fail closed before atomic promotion when an API-key application has an unsupported status, a dangling subscription, an approved or stopped status without a subscription, a pending or rejected status with a subscription, or cross-account subscription ownership.",
+  "evidence": [
+    "scripts/backup.mjs",
+    "test/ops.test.js"
+  ],
+  "verification": {
+    "focused": "node --test test/ops.test.js: 21 passed, 0 failed",
+    "fullSuite": "npm test: 189 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "npm run scan:secrets: passed across 172 files"
+  },
+  "externalActions": [],
+  "limitations": [
+    "No external backup, off-host retention, signing, staging mutation, restore activation or production rollback occurred.",
+    "This local relationship check does not satisfy the independent-review or externally gated S-01 evidence requirements."
+  ]
+}

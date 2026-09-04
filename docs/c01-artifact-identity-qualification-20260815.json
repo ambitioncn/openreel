@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "C-01",
+  "scope": "credential-free continuity review artifact identity qualification",
+  "controls": [
+    "require canonical lowercase artifact kind identifiers",
+    "require canonical relative artifact paths without traversal, absolute paths, repeated separators or backslashes",
+    "reject duplicate artifact paths before evidence fingerprinting",
+    "retain lowercase SHA-256 syntax validation"
+  ],
+  "verification": {
+    "focused": "node --test test/continuity-evaluation.test.js: 5 passed, 0 failed",
+    "fullSuite": "npm test: 216 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 226 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "artifact byte existence or digest verification against storage",
+    "retained real-media outputs",
+    "human visual acceptance",
+    "provider execution",
+    "deployment or production readiness"
+  ]
+}

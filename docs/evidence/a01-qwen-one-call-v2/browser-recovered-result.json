@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "status": "passed",
+  "providerCalls": 0,
+  "jobState": "succeeded",
+  "assetCount": 1,
+  "timelineAudioClipCount": 1,
+  "download": {
+    "status": 200,
+    "contentType": "audio/wav",
+    "byteLength": 165164
+  },
+  "playback": {
+    "loaded": true,
+    "duration": 3.44
+  },
+  "screenshot": "browser-recovered-result.png"
+}

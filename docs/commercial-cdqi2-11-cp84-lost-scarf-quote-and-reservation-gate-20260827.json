@@ -1,0 +1,53 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp84-lost-scarf-quote-and-reservation-gate/v1",
+  "capturedAt": "2026-08-27T23:59:00Z",
+  "backlogItem": "CDQI2-11",
+  "lineage": {
+    "acceptedPredecessorCheckpoint": "2026-08-27T23-46-56-128Z_routed-task-loop-engineering-loop-openreel-comme/cp3",
+    "candidatePlan": "commercial-cdqi2-11-cp84-lost-scarf-candidate-plan-20260827.json",
+    "projectCompletion": "in_progress"
+  },
+  "necessity": "Materialize one fresh quote for the accepted lost-scarf causal candidate and execute only if every bounded precondition passes.",
+  "antiBlindRetry": {
+    "cp82SemanticRequestFingerprint": "a59032f9006ed2159e4927ecf80193b9039a77d55664d0a13d5f11ccdee54785",
+    "lostScarfRequestFingerprint": "2c6a439d0b9a53d37cd7bdc6ff2925105e38f86fb50c5cf7c916f4041986f3b2",
+    "different": true,
+    "materialDifference": "cp82 unfolded and presented blue cloth; this candidate notices, catches, and returns a falling blue scarf with a relieved interpersonal payoff and 4/5/4 pacing."
+  },
+  "quote": {
+    "projectId": "9883f1c8-5707-4a9a-bbac-f0e2512a88f4",
+    "quoteId": "4fd8e438-3cd2-49b0-b86f-631f98936b4c",
+    "currency": "CNY",
+    "estimatedCny": 46.4,
+    "perActionLimitCny": 100,
+    "withinLimit": true,
+    "policySafetyAccepted": true,
+    "directorReady": true,
+    "directorShotCount": 3,
+    "candidateMode": "fresh",
+    "sourceJobId": null,
+    "inheritedShotIds": [],
+    "inheritedAssetIds": [],
+    "referenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8"
+  },
+  "reservationPreflight": {
+    "method": "read-only aggregate of the active production platform ledger",
+    "openReservationCount": 5,
+    "recordedReservedUnits": 34725,
+    "reconciliationMatches": true,
+    "passed": false
+  },
+  "execution": {
+    "decision": "stopped_before_key_job_or_provider",
+    "reason": "The explicit no-outstanding-reservation precondition failed.",
+    "keyApplications": 0,
+    "commercialJobs": 0,
+    "executeCalls": 0,
+    "providerCalls": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0
+  },
+  "nextSafeAction": "Resolve or otherwise account for the five outstanding production reservations under separately verified authority, then perform a fresh read-only reservation check before any execution."
+}

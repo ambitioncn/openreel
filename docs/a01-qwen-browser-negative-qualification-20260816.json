@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "capturedAt": "2026-08-16",
+  "status": "passed",
+  "scope": "isolated graphical-browser preparation and no-execution path",
+  "evidence": {
+    "command": "npm run smoke:qwen-browser-negative",
+    "browser": "Chromium",
+    "isolatedLoopback": true,
+    "qwenModelVisible": true,
+    "queuedJobs": 1,
+    "retainedAudioAssets": 0,
+    "providerCalls": 0,
+    "clientAuthorityFields": 0
+  },
+  "regression": {
+    "npmTest": "235/235 passed",
+    "secretScan": "255 files passed"
+  },
+  "externalActions": [],
+  "nonClaims": [
+    "No Tailnet Qwen endpoint was contacted",
+    "No voice or real-media artifact was generated",
+    "No deployment or service configuration was changed",
+    "This does not satisfy the retained real-media browser E2E gate"
+  ]
+}

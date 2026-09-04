@@ -1,0 +1,28 @@
+{
+  "schema": "openreel-local-qualification/v1",
+  "item": "A-01",
+  "scope": "local-only Qwen WAV byte-verified reconciliation",
+  "changes": [
+    "share one strict WAV inspector between provider response admission and durable canvas reconciliation",
+    "recompute duration, sample rate and channel count from retained bytes at the persistence boundary",
+    "reject malformed bytes and caller-supplied duration or format metadata that disagrees with the retained WAV"
+  ],
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 10/10 passed",
+    "full": "npm test: 239/239 passed",
+    "secretScan": "npm run scan:secrets passed",
+    "diff": "git diff --check passed"
+  },
+  "negativeCases": [
+    "non-WAV bytes with plausible metadata",
+    "duration metadata that differs from the retained frame count",
+    "sample-rate metadata that differs from the retained format chunk"
+  ],
+  "externalActions": [],
+  "claimsExcluded": [
+    "real Qwen synthesis",
+    "retained external media",
+    "graphical-browser real-media E2E",
+    "deployment or production readiness"
+  ]
+}

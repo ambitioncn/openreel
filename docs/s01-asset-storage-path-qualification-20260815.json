@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "project": "openreel-libtv-parity",
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T20:25:18.699Z",
+  "scope": "local-only asset storage path admission hardening",
+  "change": {
+    "implementation": "scripts/backup.mjs uses one canonical POSIX-relative path predicate for database asset storage keys and manifest entries",
+    "boundary": "backup creation and restore reject absolute, backslash, empty, dot-segment and control-character asset paths before atomic promotion",
+    "negativeFixture": "a synthetic SQLite asset record and matching local file whose storage key contains an embedded newline"
+  },
+  "verification": {
+    "opsTest": {
+      "command": "node --test test/ops.test.js",
+      "passed": 23,
+      "failed": 0
+    },
+    "fullSuite": {
+      "command": "npm test",
+      "passed": 191,
+      "failed": 0
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "highSeverityFindings": 0
+    },
+    "secretScan": {
+      "command": "npm run scan:secrets",
+      "status": "passed",
+      "filesScanned": 193
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  },
+  "externalActions": [],
+  "limitations": [
+    "Canonical storage paths prevent path-transport ambiguity but do not authenticate backup contents.",
+    "Independent review, off-host retention, staging drills and production rollback remain separately gated."
+  ]
+}

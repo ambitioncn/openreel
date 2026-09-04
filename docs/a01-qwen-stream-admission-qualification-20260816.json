@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "qualification": "A-01 Qwen TTS streaming response admission",
+  "capturedAt": "2026-08-16T06:08:00.000Z",
+  "scope": "credential-free local negative qualification",
+  "result": "passed",
+  "controls": {
+    "acceptedMediaTypes": ["audio/wav", "audio/x-wav"],
+    "maximumAudioBytes": 20971520,
+    "declaredLengthValidated": true,
+    "streamLimitEnforced": true,
+    "overLimitStreamCanceled": true,
+    "wavSignatureValidated": true
+  },
+  "verification": [
+    "node --test test/qwen-tts.test.js: 4/4 passed",
+    "npm test: 236/236 passed",
+    "npm run scan:secrets: passed across 256 files"
+  ],
+  "externalActions": {
+    "tailnetRequests": 0,
+    "providerCalls": 0,
+    "audioGenerated": 0,
+    "retainedMedia": 0,
+    "deployments": 0,
+    "credentialChanges": 0
+  },
+  "limitations": [
+    "This qualification validates response admission using synthetic local streams only.",
+    "It does not establish real Qwen availability, voice quality, timeline playback, or graphical-browser retained-media behavior."
+  ]
+}

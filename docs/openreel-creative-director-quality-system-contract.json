@@ -1,0 +1,37 @@
+{
+  "schema": "openreel-project-terminal-contract/v1",
+  "projectId": "openreel-creative-director-quality-system",
+  "status": "accepted",
+  "completionRule": "Only every required terminal acceptance passing may be called project complete or Loop complete; a milestone is phase completion only.",
+  "correctedPriorClaim": {
+    "taskId": "2026-08-24T06-49-06-366Z_routed-task-loop-loop-engineering",
+    "acceptedAs": "phase_increment",
+    "scope": ["src/creative-director.js", "test/creative-director.test.js"],
+    "claim": "director quality-gate domain prototype",
+    "projectComplete": false
+  },
+  "invariants": [
+    "Generation success and work qualification are separate durable states.",
+    "A severe technical defect hard-fails qualification and cannot be averaged away.",
+    "Shot and final-film gates fail closed when required evidence is absent, malformed, stale, or incomplete.",
+    "Rework is locally scoped where safe and is bounded by explicit retry and CNY budgets; no blind retry is permitted.",
+    "Paid model use requires necessity, per-action cost evidence, existing credentials, and a maximum of CNY 100 per action.",
+    "No external publication, destructive operation, credential disclosure, or scope expansion is implied."
+  ],
+  "requiredTerminalAcceptance": [
+    {"id":"T01","area":"unified_director_core","criteria":"One director-owned versioned decision model governs intent, evidence, rejection, rework, and release eligibility across all supported types."},
+    {"id":"T02","area":"staged_workflow","criteria":"Creative, script, visual bible, dynamic storyboard, formal generation, post-production, and automatic QC are explicit durable stages with reviewed inputs and fail-closed transitions."},
+    {"id":"T03","area":"continuity","criteria":"Character, scene, prop, style, and camera state have versioned identities and shot-to-shot continuity evidence."},
+    {"id":"T04","area":"quality_gates","criteria":"Every shot and final film has technical and creative gates; severe technical errors hard-fail and missing evidence rejects."},
+    {"id":"T05","area":"bounded_rework","criteria":"Rejected evidence produces scoped rework directives with persisted retry count, estimated/actual cost, budget ceiling, and terminal exhaustion."},
+    {"id":"T06","area":"type_strategies","criteria":"Comedy, talking-head, advertisement, narrative, and tutorial strategies are implemented and tested behind the unified director contract."},
+    {"id":"T07","area":"fixed_evaluation_set","criteria":"A versioned fixture covers 9:16/16:9/1:1, 15/30/60 seconds, live-action/animation/product/mixed-media, and monologue/dialogue/silent/music-beat modes with declared coverage."},
+    {"id":"T08","area":"feedback_learning","criteria":"Structured user feedback is attributable to project, revision, stage, strategy and evidence; proposed learning changes are versioned, evaluated, and never silently self-promoted."},
+    {"id":"T09","area":"product_integration","criteria":"HTTP, durable persistence, UI, and the real OpenReel workflow expose the same state machine, evidence, gates, and rework decisions."},
+    {"id":"T10","area":"local_regression","criteria":"Targeted, full local, negative, security, and deterministic fixed-set regression suites pass with retained evidence."},
+    {"id":"T11","area":"production_candidate","criteria":"An immutable production candidate passes migration, backup/restore, rollback, observability, reliability, tenant, billing, and browser acceptance."},
+    {"id":"T12","area":"beijing_deployment","criteria":"The reviewed candidate is deployed and accepted on root@123.57.67.213 using the standing OpenReel boundary, without publishing externally."}
+  ],
+  "environments": {"development":"Beijing Aliyun root@123.57.67.213 unless a local isolated test is safer", "test":"Beijing Aliyun root@123.57.67.213 plus local regression", "deployment":"Beijing Aliyun root@123.57.67.213"},
+  "terminalState": {"accepted": true, "acceptedAt": "2026-08-24T10:22:22Z", "evidence": ["reviews/cp1.json through reviews/cp15.json", "docs/evidence/cdqs-16-terminal-audit.json", "checkpoints/cp17.json"]}
+}

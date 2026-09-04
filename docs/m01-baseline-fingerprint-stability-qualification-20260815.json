@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "M-01",
+  "scope": "credential-free authenticated capability-baseline fingerprint stability qualification",
+  "controls": [
+    "derive the baseline fingerprint from a fixed top-level field order",
+    "sort count keys before hashing",
+    "sort set-like required mode and control lists before hashing",
+    "preserve comparison and reference presentation order while making semantically equivalent evidence hash identically"
+  ],
+  "verification": {
+    "focused": "node --test test/capability-baseline.test.js: 7 passed, 0 failed",
+    "fullSuite": "npm test: 212 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 220 files"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "configured-provider support",
+    "real multimodal output",
+    "refreshed authenticated LibTV evidence",
+    "deployment or production readiness"
+  ]
+}

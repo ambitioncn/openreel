@@ -4,7 +4,12 @@
   "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
-  "bin": { "openreel": "bin/openreel.mjs" },
+  "bin": {
+    "openreel": "bin/openreel.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.58.2"
+  },
   "scripts": {
     "dev": "node server.mjs",
     "test": "node --test",
@@ -23,9 +28,27 @@
     "scan:secrets": "node scripts/scan-secrets.mjs",
     "qualify:reliability": "node scripts/qualify-reliability.mjs",
     "qualify:release-artifacts": "node scripts/qualify-release-artifacts.mjs",
+    "qualify:director-fixed-set": "node scripts/qualify-director-fixed-set.mjs",
+    "qualify:director-candidate": "node scripts/qualify-director-production-candidate.mjs",
+    "plan:h3-primitives": "node scripts/plan-h3-primitive-qualification.mjs",
+    "plan:h3-commercial-qualification": "node scripts/plan-h3-commercial-qualification.mjs",
+    "run:h3-commercial-qualification-batch": "node scripts/run-h3-commercial-qualification-batch.mjs",
     "rehearse:deployment": "node scripts/rehearse-deployment.mjs",
+    "qualify:publishing-operations": "node scripts/qualify-publishing-operations.mjs",
+    "rehearse:publishing-rollback": "node scripts/rehearse-publishing-rollback.mjs",
+    "release:manifest": "node scripts/build-release-manifest.mjs",
+    "release:verify": "node scripts/verify-release-manifest.mjs",
     "smoke:production-e2e": "node scripts/production-e2e.mjs",
+    "smoke:workbench-browser": "node scripts/workbench-browser-e2e.mjs",
+    "smoke:publishing-browser": "node scripts/publishing-browser-e2e.mjs",
+    "smoke:staging-tenant-isolation": "node scripts/staging-tenant-isolation-e2e.mjs",
     "smoke:live": "node scripts/live-smoke.mjs",
+    "smoke:qwen-browser-negative": "node scripts/qwen-tts-browser-negative-e2e.mjs",
+    "smoke:t01-real-video-browser-download": "node scripts/t01-real-video-browser-download-e2e.mjs",
+    "e01:phase-one": "node scripts/e01-phase-one-runner.mjs",
     "check": "npm test"
+  },
+  "dependencies": {
+    "undici": "7.29.0"
   }
 }

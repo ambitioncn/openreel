@@ -1,0 +1,58 @@
+{
+  "schema": "openreel-production-resilience-drill/v1",
+  "observedAt": "2026-08-19T22:19:53Z",
+  "authorization": "Consumed owner authorization for bounded OpenReel production chaos, off-host encrypted retention, actual rollback and reactivation; no authority was extended to another project, a new storage provider or unbounded provider spend.",
+  "production": {
+    "host": "Beijing OpenReel production",
+    "currentRelease": "/opt/openreel/releases/20260819T145133Z-5aac1cf10fbb",
+    "rollbackRelease": "/opt/openreel/releases/20260816T020000Z-cp170",
+    "service": "openreel.service",
+    "loopback": "127.0.0.1:4273",
+    "public": "123.57.67.213:4173"
+  },
+  "applicationBackup": {
+    "path": "/var/backups/openreel/loop-final-20260819T221708Z/package",
+    "manifestSha256": "7a9410a66846e8c4a3856583c1ee222313c98eaf40fb82dbb27e67a2a6f0b044",
+    "members": 21,
+    "assets": 19,
+    "bytes": 5908765,
+    "beijingVerification": "passed: exact file set and hashes, SQLite quick_check and OpenReel semantic validation; isolated restore removed after verification"
+  },
+  "offHostCopy": {
+    "host": "Phoenix existing recovery host",
+    "path": "/var/backups/openreel/loop-final-20260819T221708Z/package.tar.enc",
+    "encryption": "AES-256-CBC with PBKDF2-SHA256, 200000 iterations, random salt and a separately retained 256-bit key",
+    "ciphertextBytes": 5949472,
+    "ciphertextReadback": "passed: SHA-256 matched the transferred digest before restore and again after the production drill",
+    "isolatedRestore": "passed: decrypted into a fresh root-only directory; manifest SHA-256 matched Beijing; 21 files, 19 assets, SQLite and OpenReel semantic validation passed",
+    "plaintextCleanup": "passed: decrypted source and restore directories removed; root-only ciphertext retained",
+    "classification": "independent encrypted recovery copy on mutable ext4; not Object Lock, WORM or accepted immutable retention"
+  },
+  "monitoredChaos": {
+    "fault": "one intentional openreel.service stop",
+    "observation": "loopback live probe failed while stopped as expected",
+    "recovery": "service started and both live and ready returned success before continuing",
+    "automaticRecoveryBoundary": "a failure trap would atomically restore the current release, restart the service and wait for readiness"
+  },
+  "actualRollback": {
+    "action": "stopped the service, atomically repointed /opt/openreel/current to the retained cp170 release, started it and required live plus ready",
+    "rollbackResult": "passed: previous release became ready against the verified compatible state set",
+    "reactivation": "stopped the service, atomically restored the frozen current release, started it and required live plus ready",
+    "reactivationResult": "passed: current release active and ready",
+    "postconditions": [
+      "current symlink resolves to the frozen 20260819 release",
+      "loopback live and ready pass",
+      "public live passes while public ready and metrics remain 404",
+      "no warning-or-higher OpenReel journal entries in the drill window",
+      "the Beijing application backup still restores",
+      "the Phoenix ciphertext digest still matches"
+    ]
+  },
+  "providerCalls": 0,
+  "spend": 0,
+  "residualGates": [
+    "A mandatory Object Lock/WORM target is still absent. Creating a new provider, credential, residency policy or retention policy requires a new exact gate.",
+    "The phrase remaining provider modalities has no exact model set or aggregate spend ceiling in the consumed authorization; no provider request was made under an inferred unlimited budget."
+  ],
+  "verdict": "monitored_chaos_actual_rollback_and_encrypted_cross_region_restore_passed_object_lock_and_exact_provider_budget_remain"
+}

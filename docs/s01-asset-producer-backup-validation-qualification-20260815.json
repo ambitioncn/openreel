@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "project": "openreel-libtv-parity",
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T21:02:00.000Z",
+  "scope": "local-only asset producer relationship validation",
+  "change": {
+    "implementation": "scripts/backup.mjs requires every present asset nodeId and jobId to resolve to producer records in the same project and session, and requires a referenced job to identify the same node when nodeId is present",
+    "boundary": "backup creation and restore reject dangling or cross-scope asset producer provenance before atomic promotion",
+    "negativeFixture": "a synthetic reference asset whose nodeId points to a nonexistent database entity"
+  },
+  "verification": {
+    "opsTest": { "command": "node --test test/ops.test.js", "passed": 26, "failed": 0 },
+    "fullSuite": { "command": "npm test", "passed": 194, "failed": 0 },
+    "dependencyAudit": { "command": "npm audit --omit=dev --audit-level=high", "highSeverityFindings": 0 },
+    "secretScan": { "command": "npm run scan:secrets", "status": "passed", "filesScanned": 196 },
+    "diffCheck": { "command": "git diff --check", "status": "passed" }
+  },
+  "externalActions": [],
+  "limitations": [
+    "This increment validates asset producer provenance but does not yet validate every relationship among all database entity kinds.",
+    "Independent review, off-host retention, staging drills and production rollback remain separately gated."
+  ]
+}

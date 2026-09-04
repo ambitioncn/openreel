@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "qualifiedAt": "2026-08-16",
+  "scope": "credential-free local Qwen TTS response-status admission",
+  "behavior": {
+    "acceptedStatus": 200,
+    "rejectedStatuses": [204, 206],
+    "bodyReadOnRejectedStatus": false
+  },
+  "evidence": [
+    "src/qwen-tts.js requires an exact HTTP 200 before inspecting response headers or reading audio bytes",
+    "test/qwen-tts.test.js verifies 204 and 206 fail as QWEN_TTS_PROVIDER_ERROR with the upstream status and leave the body unread"
+  ],
+  "externalActions": {
+    "tailnetRequests": 0,
+    "providerCalls": 0,
+    "deployments": 0,
+    "credentialChanges": 0
+  },
+  "limitations": [
+    "Real Qwen service compatibility remains unverified pending a precise generation authorization",
+    "This qualification does not replace retained real-media timeline and graphical-browser E2E"
+  ]
+}

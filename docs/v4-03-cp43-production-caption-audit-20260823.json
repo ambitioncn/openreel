@@ -1,0 +1,63 @@
+{
+  "schema": "openreel-v4-progress-evidence/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp43",
+  "status": "production_chain_succeeded_chinese_caption_acceptance_failed",
+  "authorizedRun": {
+    "attempts": 1,
+    "retries": 0,
+    "freshOrdinaryAccount": true,
+    "target": "https://openreel.duobiai.cn:4173",
+    "initialPrompt": "美女在海滩跳舞",
+    "quoteCny": 16,
+    "commercialJobId": "224427f2-cbd2-46a4-bd10-d287e4aa7a97",
+    "projectId": "c9fb7b66-c05f-406f-ae8a-9bed749bde47",
+    "models": {
+      "text": "seed-2.1-pro",
+      "image": "seedream-5-lite",
+      "video": "seedance-2-fast",
+      "audio": "qwen-tts-tailnet"
+    }
+  },
+  "render": {
+    "path": "runtime/cp43-production-evidence/final.mp4",
+    "bytes": 195935,
+    "sha256": "b09cd76d6910c65849aadf8e72fe1f5eb5a9dc601c9ca70ab243b249421b1dd2",
+    "durationSeconds": 5.083333,
+    "video": "h264 640x360",
+    "audio": "aac mono 24000Hz",
+    "browserPlayback": true
+  },
+  "binding": {
+    "storyVersion": 2,
+    "storyboardVersion": 2,
+    "timelineVersion": 3,
+    "everyProviderAssetMatchesCurrentRevision": true,
+    "finalSnapshotProjectVersion": 10,
+    "renderIdentityProjectVersion": 6,
+    "finding": "Story, storyboard and timeline evidence align, but the evidence packet exposes a project-version drift that must be resolved or contractually explained before terminal acceptance."
+  },
+  "visualAudit": {
+    "frame": "runtime/cp43-production-evidence/frame-2s.png",
+    "captionBurnedIn": true,
+    "captionReadable": true,
+    "captionLanguage": "English",
+    "captionRightEdgeClipped": true,
+    "accepted": false,
+    "reason": "The approved gate required a real Chinese caption card. The runner incorrectly used storyboard shot.prompt, which is an English visual-generation prompt, instead of the Chinese script line."
+  },
+  "localRepair": {
+    "file": "scripts/v4-production-ordinary-account-e2e.mjs",
+    "change": "Caption cards now use the matching story scene summary and fail closed unless it contains Chinese text.",
+    "verification": "node --check passed; no provider call, deployment or restart was performed for this repair."
+  },
+  "regression": {
+    "tests": "477/477 passed",
+    "providerRetries": 0,
+    "deployments": 0,
+    "serviceRestarts": 0,
+    "publications": 0,
+    "externalSends": 0
+  },
+  "projectCompletion": "in_progress"
+}

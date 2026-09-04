@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "qualifiedAt": "2026-08-15T17:00:00.000Z",
+  "milestone": "S-01",
+  "scope": "credential-free local backup and restore platform-state validation",
+  "claims": {
+    "createRejectsMalformedJson": true,
+    "createRejectsNonObjectJson": true,
+    "restoreRejectsIntegrityValidButSemanticallyInvalidPlatformState": true,
+    "failureLeavesFinalDestinationAbsent": true,
+    "failureCleansRestoreStaging": true,
+    "externalCopy": false,
+    "restoreActivated": false,
+    "productionReady": false
+  },
+  "verification": [
+    "node --test test/ops.test.js: 14 passed, 0 failed",
+    "npm test: 182 passed, 0 failed",
+    "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "npm run scan:secrets: passed across 158 files",
+    "git diff --check: passed"
+  ],
+  "limits": [
+    "Validation establishes only that platform state is a JSON object; domain-schema migration remains the application's responsibility.",
+    "No staging or production restore, off-host retention, signing, deployment, provider call, credential read or external write occurred."
+  ]
+}

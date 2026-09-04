@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "checkpoint": "cp283",
+  "scope": "one owner-authorized Beijing isolated-staging Seedance Fast request",
+  "route": {
+    "preference": "standard",
+    "credential_environment": "OPENREEL_VOLCENGINE_API_KEY",
+    "direct_route_removed_from_isolated_environment": true,
+    "explicit_model_overrides_removed": true
+  },
+  "request": {
+    "model": "seedance-2-fast",
+    "duration_seconds": 5,
+    "resolution": "480p",
+    "aspect_ratio": "16:9",
+    "audio": false,
+    "submissions": 1,
+    "retries": 0,
+    "hard_limit_units": 6945,
+    "hard_limit_currency": "USD",
+    "owner_cost_ceiling_cny": 30
+  },
+  "result": {
+    "status": "failed",
+    "openreel_code": "ARK_PROVIDER_ERROR",
+    "openreel_http_status": 502,
+    "sanitized_upstream_status": 503,
+    "asset_created": false,
+    "timeline_clip_created": false,
+    "browser_playback_available": false
+  },
+  "cleanup": {
+    "isolated_port_closed": true,
+    "temporary_roots_remaining": 0,
+    "temporary_runner_files_remaining": 0,
+    "production_service_active": true,
+    "production_paid_inference_enabled": false,
+    "production_readiness": "ready"
+  },
+  "safety": {
+    "second_submission": false,
+    "production_configuration_changed": false,
+    "credential_changed_or_recorded": false,
+    "public_write": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "milestone": "M-01",
+  "qualifiedAt": "2026-08-17T12:46:00Z",
+  "scope": "credential-free model catalog field-level drift observability",
+  "result": "passed",
+  "claims": [
+    "Changed models identify kind, adapterId, and each canonical schema field that drifted.",
+    "Schema field names are emitted in deterministic code-unit order.",
+    "Field-level drift reports remain deeply immutable and fail closed without provider execution."
+  ],
+  "verification": {
+    "targeted": "node --test test/model-catalog.test.js: 13/13 passed",
+    "full": "npm test: 300/300 passed"
+  },
+  "externalActions": {
+    "providerCalls": 0,
+    "credentialReads": 0,
+    "deployments": 0,
+    "writes": 0
+  }
+}

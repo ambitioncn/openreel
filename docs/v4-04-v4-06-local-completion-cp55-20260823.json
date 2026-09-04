@@ -1,0 +1,33 @@
+{
+  "schema": "openreel-v4-local-completion/v1",
+  "checkpoint": "cp55",
+  "scope": ["V4-04", "V4-06"],
+  "status": "local_complete_production_evidence_pending",
+  "implemented": {
+    "V4-04": [
+      "Authenticated Agent prepare and execute share the browser planning, quote, confirmation, commercial lifecycle, revision and cost boundaries.",
+      "Every Agent execute now requires and validates its durable preparation idempotency key before commercial confirmation, including idempotent replay.",
+      "Preparation, linked execution and aggregate stage progress remain owner/project scoped and durable across restart."
+    ],
+    "V4-06": [
+      "Server-side HTTPS retrieval pins a twice-validated public DNS answer while preserving TLS hostname validation and repeats validation for every redirect.",
+      "Only fixed OpenReel Accept and User-Agent headers are sent; browser cookies, authorization and credentials are never forwarded.",
+      "MIME, declared/streamed byte, redirect and timeout limits fail closed, and executable HTML content is excluded from extracted text.",
+      "The understanding service requires a configured real text model and idempotency key, validates strict JSON and exact fetched quotes, and retains fetch hash/time plus model job/usage/prompt/output hashes."
+    ]
+  },
+  "verification": {
+    "focused": "node --test test/workbench-commercial.test.js test/product-url.test.js test/product-understanding.test.js test/http.test.js: 56/56 passed",
+    "full": "npm test: 487/487 passed",
+    "syntax": "node --check server.mjs passed",
+    "diff": "git diff --check passed"
+  },
+  "externalActions": [],
+  "paidProviderCalls": false,
+  "remaining": {
+    "V4-04": ["Authenticated Beijing production Agent prepare/execute/progress evidence"],
+    "V4-06": ["Beijing production browser fetch evidence", "One bounded real understanding-model evidence record"],
+    "gate": "A fresh explicit combined gate is required before deployment, restart or paid production acceptance."
+  },
+  "projectCompletion": "in_progress"
+}

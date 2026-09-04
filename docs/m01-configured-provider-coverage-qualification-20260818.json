@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "milestone": "M-01",
+  "capturedAt": "2026-08-18T23:00:00Z",
+  "scope": "credential-free configured catalog count and control observability",
+  "implementation": {
+    "endpoint": "GET /api/v1/model-catalog/coverage",
+    "configuredFields": [
+      "modelCount",
+      "counts",
+      "adapterIds",
+      "adapterModelCounts",
+      "modes",
+      "modeModelCounts",
+      "modeModelIds",
+      "controls",
+      "controlModelCounts",
+      "controlModelIds"
+    ],
+    "properties": [
+      "derived only from the integrity-verified effective catalog",
+      "deterministic code-unit ordering",
+      "deeply immutable",
+      "does not expose provider model references, endpoints, credentials or account identifiers",
+      "does not execute Provider calls"
+    ]
+  },
+  "beijingReadOnlyInventory": {
+    "service": "active",
+    "readiness": "ready",
+    "paidInference": false,
+    "automaticRetries": 0,
+    "nonEmptyConfiguredModelReferences": 14,
+    "standardRouteReferences": 7,
+    "directRouteReferences": 7,
+    "interpretation": "The 14 environment references represent two route variants for seven named model families; they must not be reported as 14 independent effective models. Exact effective count/control coverage must come from the integrity-verified runtime catalog after route selection."
+  },
+  "verification": {
+    "targeted": "node --test test/capability-baseline.test.js test/http.test.js",
+    "targetedResult": "32 passed, 0 failed",
+    "externalProviderCalls": 0,
+    "credentialValuesReadOrWritten": 0,
+    "productionChanges": 0,
+    "deployments": 0,
+    "publications": 0
+  },
+  "productDecision": "docs/m01-curated-catalog-product-decision-20260818.json",
+  "conclusion": "Configured count/control inventory is explicit and attributable instead of being inferred from gap totals or environment-reference counts. The owner selected capability/control parity with a smaller curated executable catalog, so exact numerical catalog parity is not required. OpenReel discloses seven named configured model families versus 58 observed LibTV catalog entries (a non-like-for-like minimum variance of 51 entries) and does not add duplicate Provider models solely to close that number. Any future Provider call, production configuration, paid validation, deployment or publication remains separately gated."
+}

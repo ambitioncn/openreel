@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "milestone": "A-01",
+  "qualifiedAt": "2026-08-16T08:54:04Z",
+  "scope": "local shared audio specification normalization",
+  "result": "pass",
+  "controls": {
+    "plainRecordRequired": true,
+    "ownEnumerableDataFieldsRequired": true,
+    "hiddenSymbolAccessorFieldsRejected": true,
+    "accessorReads": 0,
+    "voiceMaximumUnicodeCodePoints": 64,
+    "providerCalls": 0,
+    "tailnetRequests": 0
+  },
+  "evidence": ["src/audio-spec.js", "test/audio-spec.test.js"],
+  "verification": [
+    "node --test test/audio-spec.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js test/qwen-tts.test.js: 31/31 pass",
+    "npm test: 256/256 pass",
+    "npm run scan:secrets: 291 files pass",
+    "git diff --check: pass"
+  ],
+  "externalActions": []
+}

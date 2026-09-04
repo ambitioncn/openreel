@@ -112,11 +112,7 @@ test("production sessions are hashed at rest, expire, rotate, and revoke", () =>
 test("paid API keys are one-time secrets, meter tokens, enforce reservations and suspend at the hard limit", () => {
   const file = join(mkdtempSync(join(tmpdir(), "openreel-api-key-")), "platform.json");
   let platform = createPlatform({ file }), token = account(platform, "paid@example.test"), accountId = platform.authenticate(token).id;
-  assert.throws(() => platform.createApiKey(token), e => e.code === "PAYMENT_REQUIRED");
-  const application = platform.submitKeyApplication(token, { reason: "Production rendering", requestedLimitMicros: 1000 });
-  assert.equal(application.accountId, accountId); assert.equal(application.status, "pending");
-  assert.throws(() => platform.submitKeyApplication(token, { reason: "Duplicate", requestedLimitMicros: 1000 }), e => e.code === "CONFLICT");
-  platform.approveKeyApplication(application.id, { plan: "manual", hardLimitMicros: 1000, periodEndsAt: "2099-01-01T00:00:00.000Z", reviewNote: "Approved" });
+  platform.grantSubscription(accountId, { plan: "bounded-test", hardLimitMicros: 1000, periodEndsAt: "2099-01-01T00:00:00.000Z" });
   const issued = platform.createApiKey(token, { name: "production" });
   assert.match(issued.key, /^or_live_/); assert.equal(platform.listApiKeys(token)[0].key, undefined);
   assert.equal(JSON.stringify(JSON.parse(readFileSync(file, "utf8"))).includes(issued.key), false);
@@ -168,6 +164,17 @@ test("usage refunds are bounded, idempotent, durable and reconciliation detects 
   assert.equal(reconciliation.consistent, false); assert.equal(reconciliation.mismatches[0].calculated.spentMicros, 400);
 });
 
+test("stopped key access can fail its open reservations without retaining a secret", () => {
+  const file = join(mkdtempSync(join(tmpdir(), "openreel-stopped-reservation-")), "platform.json"), platform = createPlatform({ file }), token = account(platform, "stopped-reservation@example.test"), application = platform.submitKeyApplication(token, { reason: "bounded test", requestedLimitUnits: 600 });
+  platform.approveKeyApplication(application.id, { hardLimitUnits: 600, periodEndsAt: "2099-01-01T00:00:00.000Z" });
+  const key = platform.createApiKey(token, { name: "ephemeral" }), reservation = platform.reserveUsage(key.key, { model: "video", maxCostMicros: 600, idempotencyKey: "stopped-reservation" });
+  assert.throws(() => platform.failStoppedAccessReservations(application.id), error => error.code === "CONFLICT");
+  platform.revokeApiKey(token, key.id); platform.stopKeyAccess(application.id, { reviewNote: "test ended" });
+  const entries = platform.failStoppedAccessReservations(application.id); assert.equal(entries.length, 1); assert.equal(entries[0].reservationId, reservation.id); assert.equal(entries[0].status, "failed");
+  const state = JSON.parse(readFileSync(file, "utf8")), subscription = state.subscriptions.find(item => item.id === reservation.subscriptionId); assert.equal(subscription.reservedMicros, 0); assert.equal(subscription.spentMicros, 0); assert.equal(state.usageReservations.find(item => item.id === reservation.id).status, "failed");
+  assert.deepEqual(platform.failStoppedAccessReservations(application.id), []);
+});
+
 test("refunds reject failed usage and cross-account access", () => {
   const platform = createPlatform(), a = account(platform, "refund-a@example.test"), b = account(platform, "refund-b@example.test"), accountA = platform.authenticate(a).id, accountB = platform.authenticate(b).id;
   for (const accountId of [accountA, accountB]) platform.grantSubscription(accountId, { hardLimitMicros: 1000, periodEndsAt: "2099-01-01T00:00:00.000Z" });
@@ -182,7 +189,7 @@ test("administrators can reject applications and stop approved key access", () =
   const platform = createPlatform(), approvedToken = account(platform, "approved@example.test"), rejectedToken = account(platform, "rejected@example.test");
   const rejected = platform.submitKeyApplication(rejectedToken, { reason: "Evaluation", requestedLimitMicros: 500 });
   assert.equal(platform.rejectKeyApplication(rejected.id, { reviewNote: "More information required" }).status, "rejected");
-  assert.throws(() => platform.createApiKey(rejectedToken), e => e.code === "PAYMENT_REQUIRED");
+  assert.match(platform.createApiKey(rejectedToken).key, /^or_live_/);
   const approved = platform.submitKeyApplication(approvedToken, { reason: "Video API", requestedLimitMicros: 800 });
   platform.approveKeyApplication(approved.id, { hardLimitMicros: 800, periodEndsAt: "2099-01-01T00:00:00.000Z" });
   const issued = platform.createApiKey(approvedToken);

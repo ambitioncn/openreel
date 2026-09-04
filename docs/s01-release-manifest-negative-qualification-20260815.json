@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-15",
+  "scope": "local-only release artifact integrity qualification",
+  "result": "passed",
+  "implementation": {
+    "files": [
+      "scripts/qualify-release-artifacts.mjs",
+      "test/ops.test.js"
+    ],
+    "controls": [
+      "manifest generation rejects symbolic links",
+      "manifest verification rejects symbolic links",
+      "manifest verification rejects missing or reordered artifacts",
+      "manifest verification rejects path escape",
+      "manifest verification rejects byte and digest drift",
+      "canonical payload is deterministic across object key insertion order",
+      "manifest schema rejects extra fields, invalid byte counts and malformed digests"
+    ]
+  },
+  "verification": [
+    { "command": "node --test test/ops.test.js", "result": "9 passed, 0 failed" },
+    { "command": "npm run qualify:release-artifacts", "result": "10 artifacts verified; tamper rejected; externalCalls=false; deploymentActivated=false" },
+    { "command": "npm test", "result": "156 passed, 0 failed" },
+    { "command": "npm run scan:secrets", "result": "passed across 137 files" },
+    { "command": "npm run scan:dependencies", "result": "0 vulnerabilities" }
+  ],
+  "boundaries": {
+    "independentReviewPerformed": false,
+    "signingPerformed": false,
+    "externalCalls": false,
+    "deploymentActivated": false,
+    "productionChanged": false
+  }
+}

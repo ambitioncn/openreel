@@ -1,0 +1,41 @@
+{
+  "schema": "openreel-e01-diagnostic-execution-evidence/v1",
+  "status": "stopped_fail_closed",
+  "scope": {
+    "environment": "isolated_private_staging",
+    "model": "seedream-5-lite",
+    "size": "2560x1440",
+    "maximumSubmissions": 1,
+    "automaticRetries": 0,
+    "maximumUnits": 2778,
+    "currency": "USD"
+  },
+  "observed": {
+    "providerSubmissions": 1,
+    "terminalStatus": "failed",
+    "failureCode": "ARK_PROVIDER_ERROR",
+    "applicationHttpStatus": 502,
+    "upstreamHttpStatus": 503,
+    "spentUnits": 0,
+    "reservedUnits": 0,
+    "reservationStatus": "failed",
+    "usageStatus": "failed",
+    "usageCostUnits": 0,
+    "temporaryKeyStatus": "revoked",
+    "temporarySubscriptionStatus": "stopped"
+  },
+  "cleanup": {
+    "paidInferenceEnabled": false,
+    "credentialDropInPresent": false,
+    "stagingReady": true,
+    "productionReady": true
+  },
+  "retention": {
+    "credentialValues": false,
+    "providerTaskIds": false,
+    "providerOutputUrls": false,
+    "accountIdentifiers": false,
+    "otpValues": false
+  },
+  "nextProviderSubmissionAuthorized": false
+}

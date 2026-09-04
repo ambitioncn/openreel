@@ -1,0 +1,50 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp62-bounded-redo-historical-asset-gap/v1",
+  "capturedAt": "2026-08-25T19:26:20Z",
+  "authorization": "consumed_cp61_fresh_bounded_subscription_and_single_redo_attestation",
+  "scope": "fresh short-lived subscription plus one cp51 failed-shot redo; CNY <=100; zero retry; one job; first-terminal stop; full ledger audit; no publication",
+  "execution": {
+    "quoteCny": 31.3,
+    "subscriptionApplications": 1,
+    "subscriptionsActivated": 1,
+    "redoJobs": 1,
+    "executeCalls": 1,
+    "retries": 0,
+    "terminalJobId": "52d4bb9a-2924-45a4-b929-f308df605d7f",
+    "terminalStatus": "failed",
+    "terminalStage": "prepare",
+    "terminalCode": "COMMERCIAL_REDO_ASSET_INVALID",
+    "providerCalls": 0,
+    "spentCny": 0,
+    "reservedUnitsAfter": 0,
+    "reconciliationConsistent": true,
+    "publications": 0,
+    "scopedSessionRevoked": true
+  },
+  "preservation": {
+    "redoShotIds": [
+      "c918c4a5-4408-44f8-91d0-d922f847bbe4",
+      "1ac218db-e947-465a-b1ba-62a14dfbc4df"
+    ],
+    "preservedShotId": "9780fbb5-bbf6-4d01-b0e2-23567b15890f",
+    "preservedAssetId": "27fa685d-df5a-4440-bfc9-f0f2e0dc1519",
+    "preservedAssetIdentity": {
+      "projectVersion": 7,
+      "storyVersion": 1,
+      "storyboardVersion": 1
+    },
+    "currentQuoteBinding": {
+      "projectVersion": 15,
+      "storyVersion": 1,
+      "storyboardVersion": 1
+    }
+  },
+  "diagnosis": "The preserved byte-backed video is in the same project and remains bound to the same story, storyboard and shot. Its project version is historical because later asset retention advanced the aggregate project version. The orchestrator incorrectly required exact projectVersion equality for preserved redo assets and rejected before any Provider call.",
+  "localFix": {
+    "behavior": "Preserved redo assets continue to require exact project, story, storyboard and shot identity, while allowing aggregate projectVersion drift caused by later project-local asset operations.",
+    "focusedTests": "35 passed, 0 failed",
+    "fullTests": "578 passed, 0 failed",
+    "deployed": false
+  },
+  "projectCompletion": "in_progress"
+}

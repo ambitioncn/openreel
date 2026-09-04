@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "M-01",
+  "qualifiedAt": "2026-08-15T00:00:00Z",
+  "scope": "credential-free local model catalog schema qualification",
+  "changes": [
+    "reject non-object model schemas and unknown schema fields",
+    "reject blank source revisions, blank aspect/resolution entries, non-positive or non-finite durations, and non-boolean audio flags",
+    "reject blank or duplicate mode/control/aspect/resolution values after whitespace normalization",
+    "reject duplicate duration values",
+    "normalize all string-list capability values before computing the deterministic catalog fingerprint",
+    "normalize the source revision before computing the deterministic catalog fingerprint",
+    "deep-freeze nested catalog and provider-mapping report structures so callers cannot create content drift without a new fingerprint",
+    "rebuild and verify the catalog fingerprint, model count, and kind counts before a provider-mapping audit can report valid"
+  ],
+  "verification": {
+    "focused": "8 passed, 0 failed",
+    "fullSuite": "163 passed, 0 failed",
+    "dependencyAudit": "0 vulnerabilities",
+    "secretScan": "passed across 142 files",
+    "diffCheck": "passed"
+  },
+  "externalActions": {
+    "providerCalls": 0,
+    "credentialReadsOrChanges": 0,
+    "deployments": 0,
+    "externalWrites": 0
+  },
+  "boundary": "This evidence qualifies only local catalog input handling. It does not claim configured-provider support, real outputs, or current LibTV parity."
+}

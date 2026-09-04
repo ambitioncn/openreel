@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "M-01",
+  "qualifiedAt": "2026-08-15T00:00:00Z",
+  "scope": "credential-free local authenticated capability-baseline admission",
+  "changes": [
+    "require a non-empty evidence source and evidence reference",
+    "require a canonical real YYYY-MM-DD capture date and positive integer expiry window",
+    "require unique non-empty mode and control names plus non-empty count keys with non-negative integer values",
+    "reject invalid comparison clocks and clocks that precede the baseline capture date"
+  ],
+  "verification": {
+    "focused": "5 passed, 0 failed",
+    "fullSuite": "210 passed, 0 failed",
+    "dependencyAudit": "0 vulnerabilities",
+    "secretScan": "passed across 217 files",
+    "diffCheck": "passed"
+  },
+  "externalActions": {
+    "providerCalls": 0,
+    "credentialReadsOrChanges": 0,
+    "otpRequestsOrSubmissions": 0,
+    "deployments": 0,
+    "externalWrites": 0
+  },
+  "boundary": "This evidence qualifies only local admission of an already retained authenticated comparison baseline. It does not refresh LibTV evidence, prove configured-provider support, execute a provider call, or close M-01."
+}

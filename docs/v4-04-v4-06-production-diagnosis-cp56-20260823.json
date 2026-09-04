@@ -1,0 +1,52 @@
+{
+  "schema": "openreel-v4-04-v4-06-production-diagnosis/v1",
+  "checkpoint": "cp56",
+  "authorization": {
+    "sourceGate": "cp55",
+    "combinedCeilingCny": 30,
+    "zeroRetries": true,
+    "privateEvidenceOnly": true
+  },
+  "deployment": {
+    "backup": "/var/backups/openreel/2026-08-23T180139Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-23T180139Z-cp56-isolated-restore",
+    "database": "ok",
+    "assets": 85,
+    "release": "/opt/openreel/releases/20260823T180300Z-cp56-agent-binding",
+    "deployedServerSha256": "e212cac3bec4b68e37c3a846892a931cad68402b1de28b4424c9998752e6a418",
+    "serviceRestarts": 1,
+    "rollbackUsed": false,
+    "readiness": "ready",
+    "tlsLiveness": "ok",
+    "nRestarts": 0
+  },
+  "v4_04": {
+    "ordinaryAccount": true,
+    "attempts": 1,
+    "providerRequests": 0,
+    "result": "failed_before_provider",
+    "safeError": "401 INVALID_API_KEY",
+    "diagnosis": "The Agent route constructed an account principal without the required kind discriminator.",
+    "localRepair": "Use {kind: account, accountId} consistently with workbench planning and product understanding.",
+    "localVerification": "Agent focused tests 13/13 and full suite 487/487 pass."
+  },
+  "v4_06": {
+    "ordinaryAccount": true,
+    "browserHttpsFetch": true,
+    "modelRequests": 1,
+    "retries": 0,
+    "result": "rejected_invalid_model_contract",
+    "safeError": "502 PRODUCT_MODEL_OUTPUT_INVALID",
+    "failClosed": true,
+    "acceptedEvidenceProduced": false
+  },
+  "safety": {
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "historyCleanup": 0,
+    "derperChanges": 0,
+    "ports80Or443Changes": 0
+  },
+  "projectCompletion": "in_progress"
+}

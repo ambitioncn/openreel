@@ -1,0 +1,34 @@
+{
+  "schema": "openreel-s01-local-qualification/v1",
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T22:15:00.000Z",
+  "scope": "platform team authorization backup admission",
+  "controls": [
+    "team names must be non-empty",
+    "team versions must be positive safe integers",
+    "team creation timestamps must be canonical UTC ISO-8601 milliseconds",
+    "team membership must be non-empty and reference unique existing accounts",
+    "team roles must be owner, admin, editor, or viewer",
+    "every team must retain at least one owner"
+  ],
+  "negativeFixtures": [
+    "empty team name",
+    "zero team version",
+    "non-canonical team creation timestamp",
+    "empty membership",
+    "invalid member role",
+    "ownerless team"
+  ],
+  "verification": {
+    "targeted": "node --test test/ops.test.js: 35 passed, 0 failed",
+    "full": "npm test: 203 passed, 0 failed",
+    "dependencies": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secrets": "npm run scan:secrets: passed across 206 files",
+    "diff": "git diff --check: passed"
+  },
+  "externalActions": [],
+  "limitations": [
+    "No identity-provider call, external backup, staging mutation, deployment, signing, or activation was performed.",
+    "Independent review and external reliability evidence remain separately gated."
+  ]
+}

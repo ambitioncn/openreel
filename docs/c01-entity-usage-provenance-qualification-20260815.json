@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "C-01",
+  "scope": "credential-free continuity entity-usage and provenance qualification",
+  "controls": [
+    "require each ordered output to carry an array of schema-strict continuity entity snapshots",
+    "validate unique entity ids, admitted entity kinds, positive versions, non-empty attributes and locked attributes that exist in the snapshot",
+    "validate unique ordered reference asset ids and one aligned provenance record per reference",
+    "require canonical UTC date-time syntax for evaluation and reference creation times"
+  ],
+  "verification": {
+    "focused": "node --test test/continuity-evaluation.test.js: 4 passed, 0 failed",
+    "fullSuite": "npm test: 215 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 225 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "retained real-media outputs",
+    "human visual acceptance",
+    "provider execution",
+    "deployment or production readiness"
+  ]
+}

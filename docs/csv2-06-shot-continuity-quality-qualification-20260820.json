@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "project": "openreel-short-video-commercial-v2",
+  "backlog_item": "CSV2-06",
+  "status": "accepted",
+  "scope": "Consistency-aware shot prompts and deterministic per-shot quality decisions",
+  "implementation": [
+    "Canonical locked product, character and scene attributes are injected into every bounded prompt.",
+    "Shots after the first explicitly preserve subject geometry, appearance, lighting and screen direction from the prior shot.",
+    "Deterministic probes check vertical frame shape, duration tolerance, motion, black/frozen frames and reference similarity.",
+    "Quality decisions are explainable and limited to accept, retry_shot or degrade; severe reference drift fails closed to degradation."
+  ],
+  "verification": [
+    {"command":"node --test test/commercial-shot-quality.test.js test/commercial-provider-orchestrator.test.js test/continuity-evaluation.test.js","result":"25 passed, 0 failed"},
+    {"command":"npm test","result":"362 passed, 0 failed"}
+  ],
+  "provider_calls": 0,
+  "blockers": [],
+  "residual_risks": [
+    "Probe production and automatic local-redo workflow wiring remain part of later orchestration and UX milestones.",
+    "Caption safe zones, audio mix, final timing and composition quality remain CSV2-07.",
+    "A real paid full-film MP4 and Beijing production rollback acceptance remain mandatory CSV2-10 terminal evidence."
+  ]
+}

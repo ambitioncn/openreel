@@ -1,0 +1,33 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp77-three-beat-candidate-plan/v1",
+  "capturedAt": "2026-08-27T06:02:21Z",
+  "sourceEvidence": [
+    "commercial-cdqi2-11-cp73-fresh-candidate-rejection-20260827.json",
+    "commercial-cdqi2-11-cp76-all-shot-redo-rejection-20260827.json"
+  ],
+  "diagnosis": {
+    "rejectedApproach": "Another single-shot replay or prompt-only all-shot redo",
+    "reason": "The two immutable one-shot candidates repeatedly failed beat and story, and cp76 additionally failed intent and pacing; repeating that structure would be a blind retry.",
+    "materialChange": "A fresh three-shot establish-action-payoff candidate with explicit causal progression and continuity locks."
+  },
+  "candidateContract": {
+    "mode": "fresh",
+    "sourceJobId": null,
+    "inheritedShotIds": [],
+    "inheritedAssetIds": [],
+    "shotCount": 3,
+    "beats": ["establish performer, object, and goal", "show deliberate unfolding action and state change", "show completed presentation and natural payoff"],
+    "continuityLocks": ["same fictional adult performer", "identical plain blue wardrobe", "same unbranded blue cloth", "same neutral controlled studio", "matching medium framing", "soft neutral light"],
+    "requiredDimensions": ["intent", "beat", "composition", "visual_identity_consistency", "performance_naturalness", "story", "pacing", "continuity"],
+    "threshold": 0.8,
+    "decisionPolicy": "all required checks must pass; no averaging"
+  },
+  "executionGate": {
+    "default": "disabled",
+    "requiredEnvironment": "OPENREEL_CP77_CONFIRM_EXECUTE=cp76-reviewed-cp77-quoted",
+    "preconditions": ["cp77 checkpoint accepted", "fresh production quote recorded", "quote total <= CNY 100", "no outstanding reservation", "exactly one job and one execute", "zero retry and fallback", "stop at first terminal result", "retain byte and settlement evidence", "no publication"]
+  },
+  "activityThisCheckpoint": {"providerCalls": 0, "paidJobs": 0, "paidCny": 0, "retries": 0, "fallbacks": 0, "publications": 0},
+  "status": "prepared_not_executed",
+  "projectCompletion": "in_progress"
+}

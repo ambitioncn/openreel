@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "qualifiedAt": "2026-08-15T22:30:00.000Z",
+  "scope": "local synthetic backup and restore admission",
+  "controls": [
+    "Collaborative documents use their persisted teamId/documentId composite identity rather than a nonexistent generic id field.",
+    "Document identity is non-empty and unique within its team.",
+    "Version is positive, content is present, and updatedAt is canonical UTC ISO-8601 with milliseconds.",
+    "updatedBy references a current member of the owning team.",
+    "Tenant and team ownership remain consistent."
+  ],
+  "negativeCases": [
+    "empty document identity",
+    "duplicate team/document identity",
+    "zero version",
+    "missing content",
+    "non-canonical timestamp",
+    "writer outside the team"
+  ],
+  "verification": {
+    "targeted": "node --test test/ops.test.js",
+    "targetedResult": "36 passed, 0 failed",
+    "fullSuite": "npm test",
+    "fullSuiteResult": "204 passed, 0 failed"
+  },
+  "externalActions": [],
+  "limitations": [
+    "This does not exercise live collaborative transport, identity-provider recovery, authenticated LibTV team behavior, deployment, or external backup retention."
+  ]
+}

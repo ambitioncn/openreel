@@ -1,0 +1,56 @@
+{
+  "schema": "openreel-e01-historical-config-diagnostic-evidence/v1",
+  "status": "succeeded_cleanup_complete",
+  "scope": {
+    "environment": "isolated_private_staging",
+    "credentialSource": "/etc/openreel/openreel.env existing legacy key reference",
+    "model": "seedream-5-lite",
+    "modelMapping": "existing legacy OPENREEL_VOLCENGINE_SEEDREAM5_LITE_MODEL reference",
+    "size": "2560x1440",
+    "maximumSubmissions": 1,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "maximumUnits": 2778,
+    "currency": "USD"
+  },
+  "preflight": {
+    "credentialReferencePresentAndNonempty": true,
+    "credentialValueReadOrRetained": false,
+    "legacyModelMappingPresentAndShapeValid": true,
+    "historicalProductionSucceededJobsForLogicalModel": 8,
+    "stagingInheritedLegacyEnvironment": true,
+    "stagingReady": true,
+    "productionReady": true
+  },
+  "observed": {
+    "terminalStatus": "succeeded",
+    "resultShape": ["size", "url"],
+    "spentUnits": 459,
+    "spentUsd": 0.0459,
+    "reservedUnits": 0,
+    "reservationStatus": "settled",
+    "usageStatus": "settled",
+    "temporaryKeyStatus": "revoked",
+    "temporarySubscriptionStatus": "stopped",
+    "reconciliationConsistent": true
+  },
+  "cleanup": {
+    "paidInferenceEnabled": false,
+    "automaticRetries": 0,
+    "stagingReady": true,
+    "productionReady": true
+  },
+  "retention": {
+    "credentialValues": false,
+    "providerTaskIds": false,
+    "providerOutputUrls": false,
+    "accountIdentifiers": false,
+    "otpValues": false
+  },
+  "limitations": [
+    "This proves one legacy-configuration Seedream image submission, not the remaining modality matrix or browser E2E.",
+    "It does not authorize another provider submission, audio execution, production deployment, public publishing, credential changes or remaining matrix calls."
+  ],
+  "nextProviderSubmissionAuthorized": false,
+  "projectCompletion": "in_progress"
+}

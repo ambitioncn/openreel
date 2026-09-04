@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "qualificationId": "S-01-project-index-backup-validation-20260815",
+  "capturedAt": "2026-08-15T21:11:32.902Z",
+  "scope": "credential-free local synthetic backup creation and restore admission",
+  "result": "passed",
+  "controls": [
+    "project sessionIds exactly match same-project session entities",
+    "project nodeIds exactly match same-project node entities",
+    "project edgeIds exactly match same-project edge entities",
+    "project groupIds exactly match same-project group entities",
+    "project assetIds exactly match same-project asset entities",
+    "missing, duplicate, empty, dangling and extra project index identities fail before atomic promotion"
+  ],
+  "verification": {
+    "opsTests": { "passed": 29, "failed": 0 },
+    "fullSuite": { "passed": 197, "failed": 0 },
+    "highSeverityDependencyFindings": 0,
+    "secretScan": "passed across 199 files",
+    "diffCheck": "passed"
+  },
+  "externalActions": {
+    "otp": 0,
+    "providerCalls": 0,
+    "deployments": 0,
+    "credentialChanges": 0,
+    "publications": 0
+  },
+  "limitations": [
+    "Synthetic local fixtures do not qualify off-host retention, signing, staging restore or production rollback.",
+    "S-01 remains in progress pending independent review and separately authorized external reliability evidence."
+  ]
+}

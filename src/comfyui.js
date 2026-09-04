@@ -5,6 +5,7 @@ const BASE_URL = "http://100.66.206.27:8188";
 const MODEL = "minimax-h3-fl2va-q5-turbo-v4";
 const WORKFLOW = "MiniMax-H3-Q5-Turbo-960x544-5s.json";
 const VIDEO_MIMES = new Set(["video/mp4", "video/webm"]);
+const IMAGE_MIMES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 function ownData(env, name) {
   const descriptor = Object.getOwnPropertyDescriptor(env, name);
@@ -38,6 +39,16 @@ function promptFrom(input) {
   return requiredText(text, "input.content text");
 }
 
+function firstFrameFrom(input) {
+  const parts = Array.isArray(input?.content) ? input.content : [];
+  const images = parts.filter(part => part?.type === "image_url");
+  if (images.length > 1) throw new DomainError("COMFYUI_INPUT_INVALID", "MiniMax H3 accepts at most one first-frame reference", 400);
+  if (!images.length) return null;
+  const url = images[0]?.image_url?.url;
+  if (typeof url !== "string" || (!url.startsWith("data:image/") && !url.startsWith("https://"))) throw new DomainError("COMFYUI_INPUT_INVALID", "first-frame reference must be an image data URL or HTTPS URL", 400);
+  return url;
+}
+
 function verifyWorkflow(workflow, config) {
   const expected = [
     ["1", "UnetLoaderGGUF", "unet_name", config.baseModel],
@@ -64,7 +75,7 @@ export function loadComfyUiConfig(env = process.env) {
   const enabled = exactBoolean(env, "OPENREEL_MODELCLAW_COMFYUI_ENABLED");
   const supplied = ownData(env, "OPENREEL_MODELCLAW_COMFYUI_BASE_URL");
   if (supplied !== undefined && supplied !== BASE_URL) throw new DomainError("COMFYUI_CONFIG_INVALID", `OPENREEL_MODELCLAW_COMFYUI_BASE_URL must exactly match ${BASE_URL}`, 503);
-  return Object.freeze({ enabled, baseUrl: BASE_URL, model: MODEL, workflow: WORKFLOW, baseModel: "MiniMax-H3-FL2VA-Pruned-Q5_K_M.gguf", lora: "minimax_h3_turbo_v4_step600_ema.safetensors", width: 960, height: 544, duration: 5, audio: true, maxAssetBytes: 200 * 1024 * 1024 });
+  return Object.freeze({ enabled, baseUrl: BASE_URL, model: MODEL, workflow: WORKFLOW, baseModel: "MiniMax-H3-FL2VA-Pruned-Q5_K_M.gguf", lora: "minimax_h3_turbo_v4_step600_ema.safetensors", width: 960, height: 544, duration: 5, audio: true, maxAssetBytes: 200 * 1024 * 1024, maxReferenceBytes: 20 * 1024 * 1024 });
 }
 
 export function createComfyUiService({ config = loadComfyUiConfig(), platform, fetchImpl = fetch, now = () => new Date().toISOString(), id = randomUUID } = {}) {
@@ -73,20 +84,39 @@ export function createComfyUiService({ config = loadComfyUiConfig(), platform, f
   const jobs = new Map(), idempotency = new Map();
   const request = async (path, options = {}) => {
     let response;
-    try { response = await fetchImpl(`${config.baseUrl}${path}`, { ...options, signal: AbortSignal.timeout(30_000) }); }
+    const { absoluteUrl, ...fetchOptions } = options;
+    try { response = await fetchImpl(absoluteUrl || `${config.baseUrl}${path}`, { ...fetchOptions, signal: AbortSignal.timeout(30_000) }); }
     catch { throw new DomainError("COMFYUI_UNAVAILABLE", "ModelClaw ComfyUI is unavailable", 503); }
     if (!response.ok) throw new DomainError("COMFYUI_PROVIDER_ERROR", "ModelClaw ComfyUI request failed", 502, { upstreamStatus: response.status });
     return response;
   };
-  const models = () => [{ name: MODEL, capability: "video", provider: "modelclaw-comfyui", currency: "CNY", unitScale: 1_000_000, maxCostMicros: 0, costed: false, pricingVersion: "tailnet-local-compute/v1", schema: { modes: ["text-to-video"], resolutions: ["960x544"], durations: [5], audio: true, maxReferences: 0 } }];
+  const models = () => [{ name: MODEL, capability: "video", provider: "modelclaw-comfyui", currency: "CNY", unitScale: 1_000_000, maxCostMicros: 0, costed: false, pricingVersion: "tailnet-local-compute/v1", schema: { modes: ["text-to-video", "image-to-video"], resolutions: ["960x544"], durations: [5], audio: true, maxReferences: 1, referenceRoles: ["first_frame"] } }];
   const submit = async (credential, input = {}) => {
     const ownerHash = principalHash(platform, credential), model = requiredText(input.model, "model", 200), capability = requiredText(input.capability, "capability", 20), idempotencyKey = requiredText(input.idempotencyKey, "idempotencyKey", 500);
     if (model !== MODEL || capability !== "video") throw new DomainError("COMFYUI_MODEL_UNAVAILABLE", "requested ModelClaw model/capability is unavailable", 400);
     const replay = idempotency.get(`${ownerHash}:${idempotencyKey}`);
     if (replay) return publicJob(jobs.get(replay));
-    if (input.input?.content?.some?.(part => part?.type !== "text")) throw new DomainError("COMFYUI_INPUT_INVALID", "this reviewed workflow currently supports text-to-video only", 400);
-    const prompt = promptFrom(input.input), workflowResponse = await request(`/api/userdata/workflows%2F${encodeURIComponent(config.workflow)}`), workflow = verifyWorkflow(await workflowResponse.json(), config);
+    if (input.input?.content?.some?.(part => !["text", "image_url"].includes(part?.type))) throw new DomainError("COMFYUI_INPUT_INVALID", "MiniMax H3 accepts text and one first-frame image", 400);
+    const prompt = promptFrom(input.input), firstFrame = firstFrameFrom(input.input), workflowResponse = await request(`/api/userdata/workflows%2F${encodeURIComponent(config.workflow)}`), workflow = verifyWorkflow(await workflowResponse.json(), config);
     workflow["6"].inputs.prompt = prompt;
+    if (firstFrame) {
+      let mimeType, bytes;
+      if (firstFrame.startsWith("data:")) {
+        const match = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(firstFrame);
+        if (!match) throw new DomainError("COMFYUI_INPUT_INVALID", "first-frame data URL is invalid", 400);
+        mimeType = match[1]; bytes = Buffer.from(match[2], "base64");
+      } else {
+        const source = await request("", { absoluteUrl: firstFrame });
+        mimeType = String(source.headers.get("content-type") || "").split(";", 1)[0].toLowerCase(); bytes = Buffer.from(await source.arrayBuffer());
+      }
+      if (!IMAGE_MIMES.has(mimeType) || !bytes.length || bytes.length > config.maxReferenceBytes) throw new DomainError("COMFYUI_INPUT_INVALID", "first-frame image failed MIME or size validation", 400);
+      const filename = `openreel-${ownerHash}-${createHash("sha256").update(bytes).digest("hex").slice(0, 16)}.${mimeType === "image/jpeg" ? "jpg" : mimeType.split("/")[1]}`;
+      const form = new FormData(); form.set("image", new Blob([bytes], { type: mimeType }), filename); form.set("overwrite", "true");
+      const upload = await request("/upload/image", { method: "POST", body: form }), uploaded = await upload.json();
+      const uploadedName = requiredText(uploaded?.name || filename, "ComfyUI uploaded image name", 500);
+      workflow["16"] = { class_type: "LoadImage", inputs: { image: uploadedName } };
+      workflow["6"].inputs.first_frame = ["16", 0];
+    }
     workflow["7"].inputs.noise_seed = Number.parseInt(createHash("sha256").update(idempotencyKey).digest("hex").slice(0, 12), 16);
     const response = await request("/prompt", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ prompt: workflow, client_id: `openreel-${ownerHash}` }) });
     const payload = await response.json(), promptId = requiredText(payload?.prompt_id, "ComfyUI prompt_id", 200), createdAt = now(), jobId = `comfyui:${ownerHash}:${id()}`;
@@ -102,7 +132,8 @@ export function createComfyUiService({ config = loadComfyUiConfig(), platform, f
     const status = history.status?.status_str;
     if (status === "error") { job.status = "failed"; job.error = { code: "COMFYUI_TASK_FAILED", message: "ModelClaw generation failed" }; }
     else {
-      const output = history.outputs?.["15"]?.videos?.[0];
+      const saveVideoOutput = history.outputs?.["15"];
+      const output = saveVideoOutput?.videos?.[0] || saveVideoOutput?.images?.find?.(item => typeof item?.filename === "string" && /\.(?:mp4|webm)$/i.test(item.filename));
       if (output?.filename) { job.status = "succeeded"; job.output = { filename: output.filename, subfolder: output.subfolder || "", type: output.type || "output" }; job.result = { filename: output.filename }; job.usage = { inputTokens: 0, outputTokens: 0, costMicros: 0, currency: "CNY", unitScale: 1_000_000, pricingVersion: "tailnet-local-compute/v1" }; }
     }
     job.updatedAt = now(); return publicJob(job);

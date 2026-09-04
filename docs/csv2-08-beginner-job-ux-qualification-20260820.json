@@ -1,0 +1,18 @@
+{
+  "schema": "openreel-csv2-qualification/v1",
+  "backlog_item": "CSV2-08",
+  "status": "accepted_local",
+  "evidence": {
+    "progress": "Six bounded stages map durable commercial jobs to beginner-readable completion state.",
+    "failure": "Known and unknown errors map to actionable copy without returning provider diagnostics.",
+    "cost": "Reserved estimates and settled actual CNY amounts are visibly distinct.",
+    "local_redo": "Only failed shots enter a redo plan; successful shots are preserved and no paid action starts before confirmation."
+  },
+  "verification": [
+    "node --test test/commercial-job-ux.test.js: 3 passed, 0 failed",
+    "npm test: 369 passed, 0 failed"
+  ],
+  "external_actions": [],
+  "project_completion": "in_progress",
+  "remaining": ["CSV2-09", "CSV2-10"]
+}

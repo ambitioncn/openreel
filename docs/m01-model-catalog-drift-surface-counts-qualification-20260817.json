@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "scope": "credential-free model catalog drift surface counts",
+  "change": "The immutable aggregate driftCounts summary now includes distinct affected kind and adapter counts, derived from the same verified catalog comparison as the detailed drift mappings.",
+  "semantics": {
+    "affectedKinds": "number of distinct previous/current model kinds represented by structural model drift",
+    "affectedAdapters": "number of distinct previous/current adapter identifiers represented by structural model drift",
+    "sourceRevisionOnly": "source-revision-only drift reports zero affected kinds and adapters",
+    "unchanged": "identical verified catalogs report zero affected kinds and adapters"
+  },
+  "safety": {
+    "executedProviderCalls": false,
+    "credentialsAccessedOrChanged": false,
+    "otpUsed": false,
+    "deploymentChanged": false,
+    "externalWrite": false
+  },
+  "verification": [
+    {
+      "command": "node --test test/model-catalog.test.js",
+      "result": "14/14 passed"
+    },
+    {
+      "command": "npm test",
+      "result": "301/301 passed"
+    }
+  ],
+  "status": "qualified_local_increment",
+  "projectCompletion": "in_progress"
+}

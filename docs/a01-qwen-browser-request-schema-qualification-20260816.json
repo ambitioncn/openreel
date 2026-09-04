@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "backlog_id": "A-01",
+  "scope": "local Qwen TTS browser preparation request schema",
+  "result": "pass",
+  "claims": [
+    "Browser preparation accepts only a plain own-property request record.",
+    "Node and idempotency identifiers must be non-empty primitive strings and are normalized before submission.",
+    "Optional language and instruction controls must be non-empty primitive strings when present.",
+    "Unknown fields, including client-supplied execution authority, fail before HTTP submission."
+  ],
+  "verification": [
+    "node --test test/qwen-tts-ui.test.js test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 29/29 passed",
+    "npm test: 256/256 passed",
+    "npm run scan:secrets: 286 files passed"
+  ],
+  "external_actions": [],
+  "limitations": [
+    "No Tailnet or Provider request was made.",
+    "Real synthesis and retained-media graphical-browser evidence remain gated."
+  ]
+}

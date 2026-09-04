@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "qualification": "model_catalog_review_lane_counts",
+  "status": "passed",
+  "scope": "credential_free_local",
+  "result": {
+    "counted_review_lanes": [
+      "metadata",
+      "inventory",
+      "taxonomy",
+      "routing",
+      "capabilities"
+    ],
+    "inventory_count_semantics": "added_plus_removed_models",
+    "structural_count_semantics": "distinct_changed_models_per_lane",
+    "fail_closed_on_drift": true,
+    "deeply_immutable": true,
+    "executed_provider_calls": false
+  },
+  "verification": [
+    "node --test test/model-catalog.test.js: 15/15 passed",
+    "npm test: 302/302 passed",
+    "npm run scan:secrets: 390 files passed",
+    "git diff --check: passed"
+  ],
+  "external_actions": [],
+  "notes": "Each review lane now carries a deterministic affected-item count. Source metadata is binary, inventory counts additions plus removals, and taxonomy, routing, and capability lanes count distinct structurally changed models."
+}

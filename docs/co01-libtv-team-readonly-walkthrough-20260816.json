@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "milestone": "CO-01",
+  "capturedAt": "2026-08-16T13:44:00Z",
+  "evidenceClass": "authenticated-observed",
+  "scope": "LibTV owner-session team and collaboration read-only walkthrough",
+  "authorization": {
+    "readOnly": true,
+    "allowed": [
+      "validate the existing owner session",
+      "list available account scopes",
+      "list personal workspaces and root canvases"
+    ],
+    "forbidden": [
+      "send or replay an OTP",
+      "invite or remove members",
+      "switch, create or modify a team",
+      "create or modify a project",
+      "generate media",
+      "pay or change credentials"
+    ]
+  },
+  "observations": {
+    "sessionValid": true,
+    "availableAccountCount": 1,
+    "activeAccountScope": "personal-owner",
+    "teamScopeAvailable": false,
+    "teamIdPresent": false,
+    "personalWorkspaceCount": 3,
+    "personalRootCanvasCount": 0
+  },
+  "conclusion": {
+    "status": "external_state_unavailable",
+    "proved": [
+      "the retained owner session was valid at capture time",
+      "the account-switching surface returned only one personal owner scope",
+      "no authenticated team scope was available for a collaboration walkthrough"
+    ],
+    "notProved": [
+      "team invitation or membership lifecycle",
+      "team roles and revocation behavior",
+      "concurrent presence or editing",
+      "team project permissions",
+      "production identity or email integration"
+    ],
+    "nextBoundary": "A real LibTV team scope with at least two authorized identities is required before authenticated collaboration behavior can be observed."
+  },
+  "safety": {
+    "otpRequests": 0,
+    "writes": 0,
+    "mediaGenerations": 0,
+    "payments": 0,
+    "credentialChanges": 0
+  },
+  "privacy": "Account, user, workspace and project identifiers are intentionally omitted."
+}

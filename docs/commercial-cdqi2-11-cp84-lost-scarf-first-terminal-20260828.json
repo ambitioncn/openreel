@@ -1,0 +1,98 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp84-lost-scarf-first-terminal/v1",
+  "capturedAt": "2026-08-28T00:19:00Z",
+  "backlogItem": "CDQI2-11",
+  "lineage": {
+    "acceptedPredecessorCheckpoint": "2026-08-27T23-46-56-128Z_routed-task-loop-engineering-loop-openreel-comme/cp3",
+    "blockedCheckpoint": "2026-08-27T23-59-38-753Z_routed-task-loop-openreel-cdqi2-2026-08-27t23-46/cp1",
+    "candidatePlan": "commercial-cdqi2-11-cp84-lost-scarf-candidate-plan-20260827.json",
+    "requestFingerprint": "2c6a439d0b9a53d37cd7bdc6ff2925105e38f86fb50c5cf7c916f4041986f3b2",
+    "cp82RequestFingerprint": "a59032f9006ed2159e4927ecf80193b9039a77d55664d0a13d5f11ccdee54785",
+    "projectCompletion": "in_progress"
+  },
+  "historicalReservationReconciliation": {
+    "humanInput": "Consumed authority allowed read-only ownership and terminal audit, followed only by safe reconciliation of evidence-confirmed terminal historical reservations.",
+    "backup": {
+      "path": "/var/backups/openreel/20260828T0015Z-cdqi2-cp2-reservation-reconcile",
+      "platformSha256": "744dfaa5fc781e5b863a9efceea7c950f4b6dff7ca0b0bfc3f1024d6d70d8914",
+      "databaseSha256": "ff0f1e74f74e8dfb14158ef220ecae5e6ae1b945675383ad4d2325364bf63030",
+      "commercialJobsSha256": "198e70e9a75d3945a4c65ee1d3c37065ecc632a8f9fcb92dd4a3b50423cc3c19"
+    },
+    "initialOpenReservations": 5,
+    "result": "All five historical reservations reached evidence-backed settlement or failure. No in-flight reservation was canceled.",
+    "settledUnitsThisReconciliation": 30250,
+    "providerSubmissions": 0,
+    "retries": 0,
+    "finalOpenReservations": 0,
+    "reconciliationConsistent": true
+  },
+  "executionPreflight": {
+    "quoteCny": 46.4,
+    "perActionLimitCny": 100,
+    "policySafetyAccepted": true,
+    "directorReady": true,
+    "referenceSha256": "2ac5f9b7e6b22f73ec3d167960a5eb08f5dd22f4d2b68e0577e3a4d0b344a6f8",
+    "candidateMode": "fresh",
+    "openReservations": 0
+  },
+  "execution": {
+    "projectId": "c9f9a3d7-120f-4bd8-bff6-f220e818702a",
+    "jobId": "1625753f-12ce-4e35-ae1a-9eb7a056d3ad",
+    "jobs": 1,
+    "executeCalls": 1,
+    "attempts": 1,
+    "terminal": {
+      "status": "failed",
+      "stage": "videos",
+      "shotIndex": 1,
+      "code": "ARK_PROVIDER_ERROR",
+      "providerCategory": "http",
+      "upstreamStatus": 400,
+      "providerCode": "InputImageSensitiveContentDetected.PrivacyInformation"
+    },
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0
+  },
+  "terminalQuality": {
+    "status": "unqualified_incomplete_fail_closed",
+    "releaseEligible": false,
+    "reason": "Shot 1 failed before the complete three-shot render and final perceptual evaluation existed; no partial score can qualify the candidate.",
+    "retainedShot0": {
+      "assetId": "9c6ef601-b258-437b-aef7-27b3ff0f621b",
+      "byteLength": 1737354,
+      "sha256": "a5ed7b303c295db95e3f27d372479dfc26e28cec4f73674f2c1cbb5e305cf701",
+      "codec": "h264",
+      "width": 720,
+      "height": 1280,
+      "fps": 24,
+      "durationSeconds": 4.041667,
+      "fullDecode": "passed"
+    }
+  },
+  "settlement": {
+    "currency": "USD",
+    "unitScale": 10000,
+    "spentUnits": 7648,
+    "spentCnyAt7_2": 5.50656,
+    "reservedUnits": 0,
+    "reconciliationConsistent": true,
+    "entries": [
+      { "model": "seedream-5-lite", "status": "settled", "costUnits": 459 },
+      { "model": "seedance-2-fast", "status": "settled", "costUnits": 6730 },
+      { "model": "seedream-5-lite", "status": "settled", "costUnits": 459 },
+      { "model": "seedance-2-fast", "status": "failed", "costUnits": 0 }
+    ]
+  },
+  "safety": {
+    "automaticRetries": 0,
+    "fallbacks": 0,
+    "historicalReplays": 0,
+    "publications": 0,
+    "credentialChanges": 0,
+    "serviceAfterRun": "active_ready",
+    "serviceRestarts": 0
+  },
+  "status": "immutable_release_ineligible",
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "openreel-v4-production-music-wiring-deployment/v1",
+  "checkpoint": "cp47",
+  "authorization": {
+    "sourceGate": "cp46",
+    "musicAcceptedForNextStage": true,
+    "deploymentAuthorized": true,
+    "restartScope": "openreel.service only",
+    "newPaidModelCallsAuthorized": false,
+    "finalFilmAuthorized": false,
+    "publicationAuthorized": false,
+    "externalSendAuthorized": false
+  },
+  "release": {
+    "active": "/opt/openreel/releases/20260823T081500Z-cp47b-music-wiring",
+    "previous": "/opt/openreel/releases/20260823T031500Z-cp42-render-png",
+    "archive": ".artifacts/cp47-release/openreel-20260823T081500Z-cp47b-music-wiring.tgz",
+    "archiveSha256": "7e8a60781c34b6f570361ec14223f1dd598089e8c4d548b2c165677b45f0da6f",
+    "manifestArtifacts": 86,
+    "productionDependency": "undici@7.29.0",
+    "musicProviderEnabled": false
+  },
+  "backup": {
+    "path": "/var/backups/openreel/20260823T081500Z-cp47-predeploy",
+    "publishingSourceSnapshot": "/var/backups/openreel/20260823T081500Z-cp47-publishing-source",
+    "isolatedVerification": "/var/backups/openreel/20260823T081500Z-cp47-verify",
+    "manifestSha256": "4d3114e02c54c37e851a9569fbab806089a9e7c58ad2c9b074f9053b9b03f9a7",
+    "files": 81,
+    "assets": 72,
+    "database": "ok",
+    "publishing": "ok"
+  },
+  "deploymentHistory": {
+    "firstCandidate": "/opt/openreel/releases/20260823T081500Z-cp47-music-wiring",
+    "firstCandidateResult": "failed before readiness because the archive omitted locked production dependency undici",
+    "automaticRollbackResult": "cp42 restored and service active",
+    "strategyChange": "added npm ci --omit=dev --ignore-scripts to the immutable stage and required an undici module-load check before activation",
+    "correctedCandidateResult": "activated and ready"
+  },
+  "verification": {
+    "service": "active",
+    "nRestarts": 0,
+    "readiness": {"status":"ready","database":"ok","assets":"ok"},
+    "tlsLiveness": {"status":"ok"},
+    "musicUiPresent": true,
+    "musicServiceDefaultDisabled": true,
+    "reviewedFileHashesMatchLocal": true,
+    "newProviderCalls": 0,
+    "finalFilmRuns": 0
+  },
+  "remaining": [
+    "No production music generation has been enabled; the approved cp46 audio remains retained evidence for the separately authorized final stage.",
+    "Final ordinary-account model-chain acceptance remains separately gated.",
+    "V4-04 Agent and V4-06 product-understanding terminal production evidence remain open."
+  ]
+}

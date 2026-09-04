@@ -1,0 +1,52 @@
+{
+  "schema": "openreel-commercial-director-quote-gate-deployment/v1",
+  "capturedAt": "2026-08-25T14:25:00Z",
+  "authorization": "consumed_cp49_zero_paid_fix_and_beijing_deployment_attestation",
+  "candidate": {
+    "release": "/opt/openreel/releases/20260825T142500Z-cdqi2-cp50-director-quote-gate",
+    "sourceHashes": {
+      "src/workbench-commercial.js": "d68c1fde154430b2a250a48a8c0d5b1c4d54169f66fb1229da6f8ed971618c31",
+      "src/commercial-job-lifecycle.js": "5fd52a5bfb520f77e7ce6db28223d3b716779661037ecc3584004287895aed35",
+      "test/workbench-commercial.test.js": "1d231c2eb5442657316bdb991fd73a7bacd95b960682e03f744a029f1216e843",
+      "test/commercial-job-lifecycle.test.js": "24f50a1bf995672eeec5e79774ab2512157ed77eed48092b7323149d01bc41f3"
+    },
+    "localAndProductionHashesMatch": true
+  },
+  "behavior": {
+    "incompleteDirectorQuote": "409 COMMERCIAL_DIRECTOR_BINDING_REQUIRED before estimation, quote persistence or job creation",
+    "createdJobCostStatus": "quoted",
+    "executionFailureCostStatus": "unsettled",
+    "falseReservationClaimRemoved": true
+  },
+  "verification": {
+    "localFocused": "28/28 passed",
+    "localFull": "576/576 passed",
+    "remoteBeforeActivation": "26/26 passed",
+    "remoteAfterActivation": "26/26 passed",
+    "live": { "status": "ok" },
+    "ready": { "status": "ready", "database": "ok", "assets": "ok" },
+    "service": { "activeState": "active", "subState": "running", "nRestarts": 0 },
+    "processCwd": "/opt/openreel/releases/20260825T142500Z-cdqi2-cp50-director-quote-gate"
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-25T142014Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T142014Z-isolated-restore",
+    "database": "ok",
+    "assets": 155,
+    "publishing": "ok"
+  },
+  "rollback": {
+    "release": "/opt/openreel/releases/20260825T133400Z-cdqi2-cp48-runtime-preflight",
+    "workbenchHash": "7babc2b71e826227f5a7745139ce0f925b4bb02fda96d347be7adfe9ff2d4543",
+    "lifecycleHash": "0c9d8c61ac019045216fcb86cd4b0a22413fb7c600b22f5fb536d7ce38672f64",
+    "restoredAfterSymlinkCopyDiagnosis": true
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "commercialJobs": 0,
+    "publicationCalls": 0,
+    "credentialChanges": 0
+  },
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "qualification": "qwen-tts-environment-enabled-state",
+  "date": "2026-08-16",
+  "result": "passed",
+  "behavior": {
+    "accepted": ["variable absent", "false", "true"],
+    "rejected": ["empty", "case drift", "numeric strings", "whitespace drift", "non-string injected values"],
+    "failureCode": "QWEN_TTS_CONFIG_INVALID",
+    "networkCalls": 0
+  },
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 25/25 passed",
+    "npm test: 254/254 passed",
+    "npm run scan:secrets: 283 files passed",
+    "git diff --check: passed"
+  ],
+  "boundaries": [
+    "No Tailnet or Provider request was made.",
+    "No real synthesis, deployment, service restart, credential change or external write occurred.",
+    "This local negative-path evidence does not satisfy the retained real-media A-01 acceptance item."
+  ]
+}

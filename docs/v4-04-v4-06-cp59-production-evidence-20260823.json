@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "checkpoint": "cp59",
+  "createdAt": "2026-08-23T19:20:00Z",
+  "authorization": {
+    "sourceGate": "cp58",
+    "combinedCeilingCny": 30,
+    "modelRetries": 0,
+    "privateEvidenceOnly": true
+  },
+  "deployment": {
+    "release": "/opt/openreel/releases/20260824T033000Z-cp59-product-json-contract",
+    "backup": "/var/backups/openreel/2026-08-23T191505Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-23T191505Z-cp59-isolated-restore",
+    "changedFiles": ["src/product-understanding.js"],
+    "restartCommands": 1,
+    "active": true,
+    "nRestarts": 0,
+    "tlsLiveness": "200 after startup window"
+  },
+  "agentAcceptance": {
+    "status": "accepted",
+    "ordinaryAccount": true,
+    "prompt": "美女在海滩跳舞",
+    "binding": {"projectVersion": 4, "storyVersion": 1, "storyboardVersion": 1},
+    "jobStatus": "succeeded",
+    "jobStage": "quality",
+    "jobAttempts": 1,
+    "providerModels": ["seedream-5-lite", "seedance-2-fast", "qwen-tts-tailnet"],
+    "render": {
+      "mimeType": "video/mp4",
+      "durationSeconds": 5,
+      "playable": true,
+      "hasAudio": true,
+      "sha256": "25cc3718f1ad2ca18d486177753b2cc0f5f95c1b12e97e94934a4170be7578e4",
+      "sourceTimelineVersion": 3,
+      "identity": {"projectVersion": 4, "storyVersion": 1, "storyboardVersion": 1, "origin": "fresh"}
+    }
+  },
+  "productAcceptance": {
+    "status": "in_progress",
+    "ordinaryAccount": true,
+    "requests": 1,
+    "retries": 0,
+    "jsonContractReached": true,
+    "result": "fail_closed",
+    "errorCode": "PRODUCT_MODEL_EVIDENCE_INVALID",
+    "diagnosis": "The model returned valid JSON and fetched quotes, but at least one paraphrased claim was not a direct substring of an evidence quote.",
+    "localRepair": "Retain only claims directly bound to fetched quotes, reject unsupported quotes, and fail closed when no directly supported claim remains."
+  },
+  "verification": {
+    "focusedTests": "62/62 passed",
+    "fullTests": "490/490 passed",
+    "diffCheck": "passed"
+  },
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "openreel-e01-cp288-direct-single-video-evidence/v1",
+  "status": "failed_cleanup_complete",
+  "authorizationCheckpoint": "cp287",
+  "scope": {
+    "environment": "beijing_isolated_private_staging",
+    "route": "direct_plan_v3",
+    "model": "seedance-2-fast",
+    "input": { "kind": "text_to_video", "durationSeconds": 5, "resolution": "480p", "ratio": "16:9", "generateAudio": false },
+    "maximumSubmissions": 1,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "maximumUnits": 6945,
+    "maximumProviderCostUsd": 0.6945,
+    "ownerCeilingCny": 30
+  },
+  "preflight": {
+    "defaultHost": "root@123.57.67.213",
+    "isolatedLoopbackPort": 4373,
+    "isolatedCodeDatabaseAndAssets": true,
+    "directCredentialReferencePresent": true,
+    "directSeedanceFastMappingPresent": true,
+    "submitAndPollEndpoint": "https://ark.cn-beijing.volces.com/api/plan/v3/contents/generations/tasks",
+    "credentialValueRetained": false,
+    "paidInferenceInitiallyEnabled": false,
+    "productionServiceChanged": false,
+    "budgetEnforcedBeforeSubmission": true
+  },
+  "observed": {
+    "terminalStatus": "failed",
+    "sanitizedErrorCode": "ERR_ASSERTION",
+    "interpretation": "The provider submission was accepted far enough to enter asynchronous polling, but the resulting OpenReel job did not reach succeeded state.",
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "secondSubmission": false,
+    "videoAssetPersisted": false,
+    "timelineClipPersisted": false,
+    "browserPlaybackVerified": false,
+    "locallyObservedProviderCost": null
+  },
+  "cleanup": {
+    "isolatedProcessStopped": true,
+    "isolatedPortClosed": true,
+    "isolatedStateRemoved": true,
+    "temporaryCodeAndRunnerRemoved": true,
+    "productionServiceActive": true,
+    "productionPaidInferenceEnabled": false
+  },
+  "retention": { "credentialValues": false, "providerTaskIds": false, "providerOutputUrls": false, "accountIdentifiers": false, "humanInputSecrets": false },
+  "limitations": [
+    "The runner retained only a sanitized assertion failure after the asynchronous job entered a non-success terminal state; it did not retain a provider-private task identifier or diagnostic payload.",
+    "No generated video bytes exist, so asset-library, timeline and graphical-browser playback acceptance could not run.",
+    "The exact cp287 one-call authorization is consumed; no retry or second paid request is authorized.",
+    "The local ledger was isolated and removed during mandatory cleanup, so final provider-side billing is not locally observed; the pre-submission hard ceiling was USD 0.6945, below the owner CNY 30 ceiling."
+  ],
+  "nextProviderSubmissionAuthorized": false,
+  "projectCompletion": "in_progress"
+}

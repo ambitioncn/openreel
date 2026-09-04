@@ -1,0 +1,22 @@
+{
+  "schema": "openreel-v4-06-progress/v1",
+  "status": "local_complete_production_evidence_pending",
+  "project_completion": "in_progress",
+  "implemented": [
+    "The server-side HTTPS fetcher retains per-hop scheme, hostname, DNS stability, redirect, MIME, byte and timeout enforcement and sends only fixed OpenReel headers to target sites.",
+    "Product understanding now requires a configured real Ark text model and idempotency key; missing models and unsuccessful jobs fail closed.",
+    "Model output uses a strict JSON contract and every accepted claim links to an exact quote present in fetched content.",
+    "Responses retain fetch URL/hash/time plus model, job, usage, prompt hash and output hash provenance.",
+    "Browser URL intake calls the authenticated server understanding route before planning and passes only grounded creative context and provenance onward.",
+    "The former browser claim that product URLs were not fetched was removed."
+  ],
+  "verification": [
+    "Focused V4-04/V4-06 URL, understanding, HTTP and Agent contract tests: 56/56 passed at cp55",
+    "Complete repository suite: 487/487 passed at cp55"
+  ],
+  "external_actions": [],
+  "remaining": [
+    "Beijing production ordinary-account browser route evidence.",
+    "One real understanding-model job with trusted cost/output provenance under the authorized CNY 100 per-action ceiling."
+  ]
+}

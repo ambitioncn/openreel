@@ -1,0 +1,62 @@
+{
+  "schema": "openreel-v4-07-production-ordinary-account-attempt/v1",
+  "checkpoint": "cp51",
+  "capturedAt": "2026-08-23T17:12:30.000Z",
+  "authorization": {
+    "sourceGate": "cp50",
+    "ordinaryAccountRunsAuthorized": 1,
+    "ordinaryAccountRunsConsumed": 1,
+    "totalMaximumCny": 30,
+    "modelRetries": 0,
+    "publicationAuthorized": false,
+    "externalSendAuthorized": false,
+    "deploymentOrRestartAuthorized": false
+  },
+  "attempt": {
+    "status": "failed_before_commercial_provider_contact",
+    "initialPrompt": "美女在海滩跳舞",
+    "freshOrdinaryAccount": true,
+    "credentialRetained": false,
+    "distinctProjectCreated": true,
+    "projectId": "91005e8f-72fb-4289-b218-2bbfb07ebe19",
+    "projectVersion": 6,
+    "storyVersion": 2,
+    "storyboardVersion": 2,
+    "shotCount": 1,
+    "commercialJobId": "693962b1-1fdf-4e06-9941-95ebc63bd5ba",
+    "commercialJobStage": "prepare",
+    "commercialJobAttempts": 1,
+    "commercialJobRetryable": false,
+    "failureCode": "COMMERCIAL_PRODUCTION_ASSET_INVALID",
+    "failureCause": "The browser refresh triggered by the reviewed music upload rebuilt the caption multi-select and cleared the already selected caption asset before quote creation.",
+    "commercialQuoteCny": 16,
+    "seedreamCalls": 0,
+    "seedanceCalls": 0,
+    "ttsCalls": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "finalMp4Created": false
+  },
+  "planning": {
+    "model": "seed-2.1-pro",
+    "status": "settled",
+    "inputTokens": 369,
+    "outputTokens": 163,
+    "costUsd": 0.0015,
+    "costCnyAtReviewedRate": 0.0108,
+    "reservationReleased": true
+  },
+  "diagnosis": {
+    "newEvidence": "The cp50 reservation fix advanced production planning from the prior HTTP 402 boundary to a settled real text result and a distinct revision-bound project. The commercial job then failed locally in prepare with an empty captionAssetIds array.",
+    "strategyChange": "Do not retry the consumed paid run. Preserve caption and music selections across production-asset refresh, prove the fix locally, and require a new exact deployment/restart/run authorization before another production attempt.",
+    "sameFailedApproachRepeated": false
+  },
+  "verification": {
+    "focusedTests": "19/19 passed",
+    "fullSuite": "486/486 passed",
+    "syntax": "src/app.js passed node --check",
+    "diffCheck": "src/app.js and test/workbench-commercial.test.js passed git diff --check",
+    "productionReservationState": "spent 15 USD micros; reserved 0",
+    "secretsRetained": false
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp68-compose-cost-production-deployment/v1",
+  "capturedAt": "2026-08-26T05:02:30Z",
+  "authorization": "consumed_cp67_fix_and_deploy_attestation",
+  "scope": "zero-paid compose VERSION_CONFLICT and failed-terminal cost projection fix deployment",
+  "release": "/opt/openreel/releases/20260826T052000Z-cdqi2-cp68-compose-cost",
+  "rollbackAnchor": "/opt/openreel/releases/20260825T194012Z-cdqi2-cp63-project-version-compat",
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-26T045737Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-26T045737Z-cp68-isolated-restore",
+    "database": "ok",
+    "assets": 173,
+    "publishing": "ok"
+  },
+  "verification": {
+    "localFocused": "48 passed, 0 failed",
+    "localFull": "581 passed, 0 failed",
+    "remoteCandidateFocused": "48 passed, 0 failed",
+    "remoteCandidateFull": "59 passed, 0 failed",
+    "hashParity": true,
+    "rollbackRehearsal": "cp68 candidate healthy, cp63 rollback anchor healthy, cp68 candidate healthy after reactivation",
+    "finalReadiness": {"live": "ok", "database": "ok", "assets": "ok"},
+    "service": "active/running; NRestarts=0",
+    "processCwd": "/opt/openreel/releases/20260826T052000Z-cdqi2-cp68-compose-cost"
+  },
+  "deploymentCorrection": {
+    "issue": "The first candidate copy preserved /opt/openreel/current as a symlink and uploads followed it into cp66, so cp66 lost immutable rollback status.",
+    "impact": "No commercial job, provider call, publication or credential action occurred; readiness remained healthy.",
+    "resolution": "Materialized cp68 as a real directory, verified hashes and tests, and selected the unaffected cp63 release as rollback anchor.",
+    "retiredRollbackAnchor": "/opt/openreel/releases/20260826T034500Z-cdqi2-cp66-qwen-diagnostic"
+  },
+  "safety": {
+    "providerCalls": 0,
+    "commercialJobRuns": 0,
+    "paidActions": 0,
+    "retries": 0,
+    "publicationCalls": 0,
+    "externalSends": 0,
+    "credentialChanges": 0
+  },
+  "status": "deployed_ready_for_acceptance",
+  "projectCompletion": "in_progress"
+}

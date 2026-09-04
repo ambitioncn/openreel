@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "scope": "credential-free model catalog adapter drift counts",
+  "change": "Verified catalog comparisons expose deterministic per-adapter counts for additions, removals and changed models before and after adapter migration, alongside the existing adapter-to-model identifier mapping.",
+  "semantics": {
+    "added": "number of current-catalog models introduced on the adapter",
+    "removed": "number of previous-catalog models removed from the adapter",
+    "changedBefore": "number of changed models classified by their previous adapter",
+    "changedAfter": "number of changed models classified by their current adapter",
+    "migration": "one adapter migration contributes to changedBefore on the old adapter and changedAfter on the new adapter",
+    "empty": "unchanged and source-revision-only reports expose an empty driftByAdapter object"
+  },
+  "safety": {
+    "executedProviderCalls": false,
+    "credentialsAccessedOrChanged": false,
+    "otpUsed": false,
+    "deploymentChanged": false,
+    "externalWrite": false
+  },
+  "verification": [
+    {
+      "command": "node --test test/model-catalog.test.js",
+      "result": "14/14 passed"
+    },
+    {
+      "command": "npm test",
+      "result": "301/301 passed"
+    }
+  ],
+  "status": "qualified_local_increment",
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "checkpoint": "cp177",
+  "amendmentVersion": 4,
+  "capturedAt": "2026-08-16T02:51:19Z",
+  "controlPlane": {
+    "backlog": "docs/libtv-parity-backlog.json",
+    "terminalContract": "docs/project-completion-contract.md v3.0",
+    "acceptanceLedger": "docs/project-acceptance-ledger.json"
+  },
+  "reconciliation": {
+    "priorAudit": "docs/local-safe-work-exhaustion-audit-20260816.json",
+    "priorRecommendedGateOutcome": "completed by cp170, cp173 and cp175",
+    "acceptedItems": ["R-01", "R-02", "G-01", "X-01"],
+    "inProgressItems": ["M-01", "C-01", "A-01", "T-01", "CO-01", "B-01", "S-01"],
+    "humanGatedItems": ["E-01", "E-02", "P-01"],
+    "projectCompletion": "in_progress"
+  },
+  "safeWorkAssessment": {
+    "conclusion": "The authoritative remaining clauses require real-provider, authenticated external-product, payment, sustained staging/process-control, independent review/signing, or production evidence. Additional credential-free micro-tests would not change an acceptance clause and are not counted as project progress.",
+    "noLongerRemaining": [
+      "deterministic no-provider Beijing staging deployment and rollback rehearsal",
+      "public readiness and metrics restriction",
+      "zero-provider graphical Chromium E2E"
+    ],
+    "stillRemaining": [
+      "real-provider multimodal and retained media evidence",
+      "real audio generation, timeline synchronization and browser export evidence",
+      "authenticated LibTV team and billing walkthrough evidence",
+      "sustained staging reliability, independent review, signing and off-host retention",
+      "production launch and rollback evidence"
+    ]
+  },
+  "recommendedNextGate": {
+    "id": "A-01-PRIVATE-STAGING-TTS-TWO-CALL",
+    "sourcePacket": "docs/a01-audio-authorization-packet.json",
+    "requestedInputs": [
+      "confirm private staging target (recommended existing Beijing loopback target reached through SSH: root@123.57.67.213 and http://127.0.0.1:4273)",
+      "provide the non-secret restricted credential source reference",
+      "provide the exact provider endpoint host and resource id",
+      "explicitly approve the packet statement, stop conditions and cleanup authority"
+    ],
+    "maximumCalls": 2,
+    "maximumCharactersPerCall": 500,
+    "maximumAggregateCharacters": 1000,
+    "maximumSpend": {"currency": "CNY", "amount": 0.5},
+    "automaticRetries": 0,
+    "allowed": [
+      "two seed-tts-2.0 calls described by the prepared packet",
+      "private-staging timeline alignment and graphical-browser AAC/MP4 download verification",
+      "retention of redacted media metadata and human-review artifacts",
+      "cleanup only within the packet boundary"
+    ],
+    "forbidden": [
+      "production traffic or deployment",
+      "credential creation, change, disclosure or copying into artifacts",
+      "subscription, public publishing or LibTV writes",
+      "automatic retry or any third provider call",
+      "reuse of any consumed video-provider authorization"
+    ]
+  },
+  "verification": [
+    "authoritative backlog has 4 accepted, 7 in-progress and 3 human-gated items",
+    "project acceptance ledger unmet list remains M-01, C-01, A-01, T-01, CO-01, B-01, S-01, E-01 and E-02",
+    "prepared A-01 packet remains authorized=false and executionAuthorized=false with all exact human-input fields unresolved",
+    "no external write, provider call, OTP replay, deployment, package install or credential action occurred"
+  ]
+}

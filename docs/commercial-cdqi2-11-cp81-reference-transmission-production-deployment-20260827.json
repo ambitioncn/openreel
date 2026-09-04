@@ -1,0 +1,42 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp81-reference-transmission-production-deployment/v1",
+  "capturedAt": "2026-08-27T06:46:00Z",
+  "authorization": "accepted_cp80_and_standing_openreel_production_authorization",
+  "release": "/opt/openreel/releases/20260827T064256Z-cdqi2-cp81-reference-transmission",
+  "rollbackAnchor": "/opt/openreel/releases/20260827T0215Z-cdqi2-cp72-fresh-candidate",
+  "backup": {
+    "path": "/var/backups/openreel/20260827T064256Z-cp81",
+    "isolatedRestore": "/var/backups/openreel/20260827T064256Z-cp81-isolated-restore",
+    "database": "ok",
+    "assets": 198,
+    "publishing": "ok"
+  },
+  "verification": {
+    "focusedTests": { "passed": 81, "failed": 0 },
+    "sourceHashesMatchLocal": true,
+    "activation": "healthy",
+    "rollback": "healthy",
+    "reactivation": "healthy",
+    "currentAndProcessCwdMatch": true,
+    "service": "active/running",
+    "nRestarts": 0,
+    "live": "ok",
+    "ready": { "database": "ok", "assets": "ok" }
+  },
+  "incident": {
+    "summary": "The first candidate copy preserved the current symlink instead of materializing a directory; subsequent file transfer followed it and changed the cp75 directory.",
+    "containment": "No provider or paid action occurred. The cp81 path was materialized as a real directory, cp72 was selected as the independent rollback anchor, and actual candidate/rollback/candidate process cwd checks passed.",
+    "residual": "cp75 must no longer be treated as a trustworthy immutable rollback anchor."
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidJobs": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0,
+    "externalSends": 0
+  },
+  "status": "deployed_zero_paid",
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "date": "2026-08-16",
+  "scope": "credential-free durable IEEE-float canvas reconciliation",
+  "acceptance": {
+    "matchingFact": "accepted and persisted with byte-verified IEEE-float/32-bit metadata and a one-second audio timeline clip",
+    "mismatchedFact": "rejected before mutation; job remains queued; asset and export asset counts remain zero"
+  },
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js",
+    "targetedResult": "15/15 passed",
+    "externalCalls": 0,
+    "retainedExternalMedia": 0
+  },
+  "boundary": "Synthetic WAV bytes only. No OTP replay, Tailnet request, real synthesis, Provider call, deployment, service change, credential change or publication occurred."
+}

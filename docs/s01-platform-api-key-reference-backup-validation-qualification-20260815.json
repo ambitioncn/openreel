@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "qualificationId": "S-01-platform-api-key-reference-backup-validation-20260815",
+  "createdAt": "2026-08-15T18:05:56Z",
+  "scope": "credential-free local backup and isolated-restore platform API-key reference validation",
+  "implementation": [
+    "scripts/backup.mjs requires every non-null usage reservation API-key reference to resolve to a persisted API key",
+    "scripts/backup.mjs applies the same fail-closed reference rule to usage-ledger API-key references",
+    "existing ownership checks continue to require the resolved API key, reservation and usage entry to share account and subscription scope",
+    "validation runs during backup creation and isolated restore before atomic promotion"
+  ],
+  "negativeCoverage": [
+    "usage reservation referencing a missing API key"
+  ],
+  "verification": {
+    "targeted": "node --test test/ops.test.js: 21 passed, 0 failed",
+    "fullSuite": "npm test: 189 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "npm run scan:secrets: passed across 171 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": [],
+  "claims": {
+    "backupOrRestoreExecutedExternally": false,
+    "deploymentChanged": false,
+    "providerCalled": false,
+    "credentialsReadOrChanged": false,
+    "otpReplayed": false
+  }
+}

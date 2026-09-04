@@ -1,0 +1,17 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-single-ordinary-account-attempt/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "failed_closed",
+  "candidateFingerprint": "e43d20e1269adf82e819acd07a7457b7a8de404afc632907e606778ffe45fb85",
+  "projectId": "92c1d3e2-3a65-4d2a-be4b-e1f3f40d3267",
+  "jobId": "1f43547d-61bd-412f-85bc-6788ceb10443",
+  "quoteCny": 46.4,
+  "failure": { "stage": "videos", "shotIndex": 0, "durationSeconds": 4, "attempts": 1, "code": "COMMERCIAL_PROVIDER_FAILED", "retryable": true },
+  "settlement": { "imageUsd": 0.0459, "videoUsd": 0, "evaluationCalls": 0, "reservedUsd": 0 },
+  "actualByteEvidence": { "videoAssets": 0, "imageAssets": 1, "imageByteLength": 327545, "imageSha256": "f80614fe3b80fd0eb7ab5e5dbbf9653339dfca207ab886644bb272ca875fe95a" },
+  "eightDimensionQualification": { "reached": false, "scores": null, "releaseEligible": false },
+  "safety": { "newJobs": 1, "executeCalls": 1, "automaticRetries": 0, "fallbacks": 0, "secondJobs": 0, "historicalReplays": 0, "publications": 0, "credentialChanges": 0 },
+  "projectCompletion": "in_progress",
+  "nextAction": "Accept this bounded fail-closed attempt, then perform a separate read-only diagnosis before considering any further paid action."
+}

@@ -1,0 +1,53 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-candidate-deployment/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "deployed_acceptance_pending",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "candidate": {
+    "manifestFingerprint": "10c3e11eda72b89752fdcef84cda0767f342da103b3773c90c5c600b7ceb9526",
+    "artifactCount": 107,
+    "archiveSha256": "4435c18e8373515ad120c537258038912ef93cb7ca57d1ae9b778827fdc282b3",
+    "release": "/opt/openreel/releases/20260825T111452Z-cdqi2-10c3e11e",
+    "preActivationRemoteManifestVerification": "passed",
+    "postActivationRemoteManifestVerification": "passed",
+    "dependencySource": "The rollback anchor had the identical package-lock SHA-256 f65fc5a288d7a9c76df83d165db08d09f01f2c427d7896acfa0d563d7addfdc0; its installed node_modules was copied without network access after the first activation failed closed on missing undici. All 107 immutable manifest artifacts remained unchanged and reverified."
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-25T111452Z",
+    "isolatedRestore": "/var/backups/openreel/2026-08-25T111452Z-cp36-isolated-restore",
+    "database": "ok",
+    "assets": 144,
+    "publishing": "ok"
+  },
+  "activation": {
+    "activeRelease": "/opt/openreel/releases/20260825T111452Z-cdqi2-10c3e11e",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T103500Z-cdqi2-cp31-b8245071",
+    "automaticRollbackExercise": "passed after the dependency-free archive could not import undici",
+    "candidateReactivation": "passed after exact-lock dependency reuse",
+    "service": "active",
+    "subState": "running",
+    "nRestarts": 0,
+    "processCwdMatchesRelease": true,
+    "readiness": {
+      "status": "ready",
+      "database": "ok",
+      "assets": "ok"
+    }
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "newCommercialJobs": 0,
+    "blindProviderRetries": 0,
+    "publicationCalls": 0,
+    "externalMessages": 0,
+    "credentialChanges": 0,
+    "scopeExpansion": false
+  },
+  "remaining": [
+    "Run one separately justified paid Beijing production ordinary-account quality pass against this exact candidate without replaying failed job e4c66ca5-192b-4faa-acf9-465fe25654f6.",
+    "Close the outstanding commercial projected-cost settlement defect and complete the T12 terminal evidence-ledger audit only after T11 is accepted."
+  ],
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "openreel-commercial-first-shot-video-readonly-diagnosis/v1",
+  "capturedAt": "2026-08-25T10:20:00Z",
+  "scope": "Read-only diagnosis of commercial job 1f43547d-61bd-412f-85bc-6788ceb10443. No retry, new job, generation, paid inference, production mutation, publication, credential change, or external message.",
+  "durableState": {
+    "commercial": { "status": "failed", "stage": "videos", "shotIndex": 0, "attempts": 1, "errorCode": "COMMERCIAL_PROVIDER_FAILED" },
+    "ark": { "jobId": "d2eb1062-6401-40b6-b5e8-b7fcc060fc37", "version": 55, "status": "failed", "providerTaskCreated": true, "providerTaskId": "cgt-20260825174607-8hhxt", "errorCode": "ARK_TASK_FAILED", "usageCostMicros": 0, "createdAt": "2026-08-25T09:46:07.144Z", "updatedAt": "2026-08-25T09:48:03.667Z" },
+    "billing": { "imageCostMicros": 459, "videoCostMicros": 0, "openReservationAfterTerminal": false }
+  },
+  "actualRequest": {
+    "model": "seedance-2-fast",
+    "durationSeconds": 4,
+    "ratio": "9:16",
+    "generateAudio": false,
+    "contentTypes": ["text", "image_url"],
+    "firstFrame": { "mimeType": "image/jpeg", "width": 2848, "height": 1600, "byteLength": 327545, "sha256": "f80614fe3b80fd0eb7ab5e5dbbf9653339dfca207ab886644bb272ca875fe95a", "host": "ark-acg-cn-beijing.tos-cn-beijing.volces.com" },
+    "localReferenceCount": 1,
+    "wireContractNote": "reference_asset_ids is retained in local providerInput but the volcengine-content-generation providerRequest serializer sends only content, generate_audio, resolution, ratio, duration and watermark. It was not part of the provider wire body."
+  },
+  "providerObservation": {
+    "submit": "accepted and returned a provider task id",
+    "polling": "the durable row advanced to version 55 over about 116 seconds before terminal failure",
+    "oneReadOnlyTerminalLookup": { "httpStatus": 404, "providerCode": "ResourceNotFound", "requestIdPresent": true },
+    "journal": "The service journal records the commercial execute request and normal HTTP activity but no provider terminal body.",
+    "diagnosticLoss": "providerResponse maps asynchronous poll responses to status/usage/result and discards response.error; the later durable failure stores only ARK_TASK_FAILED. The expired provider task can no longer recover the discarded terminal error."
+  },
+  "historicalComparison": {
+    "sameRouteSuccesses": "Multiple seedance-2-fast jobs succeeded with the same content types, first-frame host, 9:16 ratio and generate_audio=false.",
+    "durationEvidence": { "4Seconds": "at least one durable success exists", "5Seconds": "multiple recent durable successes exist" },
+    "imageShapeEvidence": "A recent 5-second job succeeded from a 2848x1600 first frame, exactly matching the failed job's first-frame dimensions; portrait, square and landscape first frames have also succeeded.",
+    "referenceEvidence": "Recent successful local records also contained one reference_asset_id, but this field is not serialized to the provider video request.",
+    "onlyProvenDifference": "This task reached an asynchronous provider terminal failure; no retained evidence identifies a deterministic request-field difference that caused it."
+  },
+  "rootCause": {
+    "classification": "provider_async_task_execution_failure_with_terminal_diagnostic_loss",
+    "boundaryConfidence": "high",
+    "leafCauseConfidence": "insufficient_evidence",
+    "finding": "OpenReel successfully created the provider task, polled it, failed closed, and settled the video reservation at zero. The failure was not local admission, synchronous provider rejection, missing task creation, host outage, service restart, account reservation, or polling timeout. A more specific provider-side content, safety, capacity, or execution cause cannot be established because the terminal response error was discarded and the provider resource has expired.",
+    "notSupportedByEvidence": ["unsupported 4-second duration", "first-frame aspect-ratio mismatch", "reference_asset_ids on the wire", "credential or route outage", "billing exhaustion", "OpenReel service failure"]
+  },
+  "changedStrategy": [
+    "Before another paid acceptance action, preserve sanitized asynchronous poll error fields and request-id hash in the durable Ark job, using the existing provider-error redaction policy.",
+    "Add a zero-paid regression proving a failed asynchronous poll retains safe provider code, parameter, message, upstream status and request-id hash while secrets and URLs remain excluded.",
+    "Do not replay job 1f43547d-61bd-412f-85bc-6788ceb10443 or its provider task.",
+    "Only after the observability fix is qualified and deployed may a separately authorized, newly created T11 job be considered. Keep automatic Ark retries at zero and stop after its first terminal result.",
+    "Do not change duration or image geometry as a claimed root-cause fix; current production evidence disproves those deterministic explanations."
+  ],
+  "productionHealth": { "service": "active", "nRestarts": 0 },
+  "status": "diagnosed_project_in_progress"
+}

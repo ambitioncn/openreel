@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "decisionDate": "2026-08-19",
+  "itemId": "CO-01",
+  "status": "out_of_scope",
+  "disposition": "canceled_by_owner",
+  "decision": "Cancel team functionality and do not create or integrate with a LibTV team space.",
+  "acceptanceImpact": {
+    "required": false,
+    "removedFromProjectCompletionGate": true,
+    "accepted": false,
+    "historicalEvidenceDisposition": "retained_read_only"
+  },
+  "dependencyImpact": {
+    "removedFrom": [
+      "S-01.dependsOn",
+      "E-01.dependsOn"
+    ],
+    "otherBacklogItemsChanged": false
+  },
+  "actionsNotTaken": [
+    "team_creation",
+    "team_space_integration",
+    "member_invitation",
+    "external_permission_change",
+    "external_message",
+    "paid_action",
+    "deployment",
+    "publication"
+  ],
+  "historicalEvidence": [
+    "docs/co01-collaboration-evidence-qualification-20260815.json",
+    "docs/co01-libtv-team-readonly-walkthrough-20260816.json",
+    "docs/b01-co01-libtv-authorized-readonly-walkthrough-20260817.json",
+    "docs/b01-co01-libtv-cli-reauth-readonly-20260817.json",
+    "docs/co01-current-session-readonly-recheck-20260819.json"
+  ],
+  "note": "Cancellation is a product-scope decision, not an acceptance result. The project remains ongoing and all other required backlog gates remain unchanged."
+}

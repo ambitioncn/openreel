@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "checkpoint": "cp57",
+  "createdAt": "2026-08-23T18:27:13Z",
+  "scope": "V4-04 Agent principal repair and V4-06 deterministic product-model output normalization",
+  "localChanges": {
+    "agentPrincipal": "The cp56 local account principal kind repair remains present and covered by the focused Agent regression tests.",
+    "productModelOutput": "Accept only a complete JSON object or one complete json/untagged Markdown fence, with a 100000-character input ceiling; prose, multiple fences, malformed JSON, invalid contracts and claims without fetched evidence fail closed."
+  },
+  "verification": [
+    {
+      "command": "node --check src/product-understanding.js && node --test test/product-understanding.test.js test/workbench-commercial.test.js && git diff --check",
+      "result": "22/22 focused tests passed; syntax and diff checks passed"
+    },
+    {
+      "command": "npm test",
+      "result": "489/489 passed; fail 0, cancelled 0, skipped 0, todo 0"
+    }
+  ],
+  "productionPreflight": {
+    "result": "blocked_wrong_environment",
+    "observations": [
+      "systemctl reports openreel.service inactive/dead with no FragmentPath",
+      "/etc/systemd/system/openreel.service is absent",
+      "/opt/openreel is absent",
+      "/var/backups/openreel is absent"
+    ]
+  },
+  "externalActions": {
+    "backupCreated": false,
+    "deploymentPerformed": false,
+    "serviceRestarted": false,
+    "providerCalls": 0,
+    "paidCostCny": 0
+  },
+  "projectCompletion": "in_progress"
+}

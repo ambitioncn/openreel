@@ -1,0 +1,152 @@
+{
+  "version": 1,
+  "project": "openreel-one-click-publishing",
+  "milestone": "OCP-01",
+  "observed_at": "2026-08-20T00:00:00Z",
+  "status": "accepted_local_baseline",
+  "boundary": "Read-only official-document research and local source inspection. No developer app, credential, OAuth grant, account capability or live publishing action was performed.",
+  "baseline": {
+    "input_contract": {
+      "source": "src/workbench-final.js",
+      "publishingDraft": {"title_max_chars": 80, "copy_max_chars": 1000},
+      "finalPreview": "Selects only the latest tenant snapshot asset with role=render and mimeType=video/mp4; canExport requires timeline clips."
+    },
+    "asset_contract": {
+      "source": "src/core.js and server.mjs",
+      "controls": [
+        "Asset manifest/content access authorizes the actor against the project.",
+        "Rendered assets carry sha256 and inputDigest metadata and are durable across restart.",
+        "HTTP asset responses use bounded stored bytes and nosniff where applicable."
+      ],
+      "gap_for_OCP_03": "The existing final preview identifies an MP4 but does not yet perform platform-specific codec, dimension, duration, frame/audio or metadata validation."
+    },
+    "identity_and_tenant_contract": {
+      "source": "server.mjs, src/core.js and src/platform.js",
+      "controls": [
+        "Protected API calls authenticate an account and authorize project membership.",
+        "Cookie-authenticated mutations require a matching CSRF token.",
+        "Sessions rotate, expire and revoke; API keys are stored as hashes rather than reusable plaintext.",
+        "Project asset lookup rejects cross-project and cross-tenant access."
+      ],
+      "preserve": true
+    },
+    "durability_contract": {
+      "source": "src/commercial-job-lifecycle.js and existing tests",
+      "reusable_patterns": ["owner-scoped jobs", "stable idempotency key", "bounded retry", "queued cancellation", "restart recovery", "atomic file persistence"],
+      "gap_for_OCP_04": "Commercial job states are too coarse for remote upload, processing, publish and unknown-result reconciliation and must not be reused without the publishing-specific state contract."
+    },
+    "regression_invariants": [
+      "Beginner workbench remains the signed-in default and final preview/export remains available.",
+      "Advanced canvas and commercial-v2 generation remain reachable and unchanged.",
+      "Identity, tenant membership, CSRF, asset ownership, upload limits, credits and provider gates remain enforced.",
+      "Publishing code must consume an existing asset; it must not alter generation or charge inference credits."
+    ]
+  },
+  "platforms": [
+    {
+      "id": "tiktok",
+      "official_flow": "Query current creator info, initialize Direct Post, transfer bytes or use an ownership-verified URL, then reconcile publish_id via status polling/webhook.",
+      "minimum_scope": ["video.publish"],
+      "eligibility_and_review": [
+        "The user grants video.publish.",
+        "Unaudited clients are restricted to private visibility; audit is required to lift that restriction.",
+        "The product must meet Content Sharing Guidelines; an internal-only uploader for accounts managed by the developer/team is explicitly listed as unacceptable."
+      ],
+      "dynamic_capabilities": ["creator nickname", "privacy_level_options", "comment/duet/stitch availability", "max_video_post_duration_sec", "posting eligibility"],
+      "limits_and_semantics": [
+        "creator_info is documented at 20 requests/minute per user token.",
+        "publish init is documented at 6 requests/minute per user token.",
+        "Posting and active-creator caps apply and may vary by account/client.",
+        "User must edit preset title/hashtags and expressly consent before transfer; processing can take minutes."
+      ],
+      "live_gate": "Named TikTok developer app audit/scope approval, named account OAuth and named-asset Direct Post each require owner confirmation."
+    },
+    {
+      "id": "douyin",
+      "official_flow": "Upload MP4 with /video/upload/ or documented multipart flow, obtain video_id, create with /video/create/, then query authorized video/status data where approved.",
+      "minimum_scope": ["video.create"],
+      "eligibility_and_review": [
+        "video.create is documented as default-off, requiring management-console application and user authorization.",
+        "Additional delete, data, list, POI and other scopes are not required for basic creation and must not be requested unless a separately accepted feature needs them."
+      ],
+      "limits_and_semantics": [
+        "Official upload documentation recommends MP4/WebM and states duration up to 15 minutes.",
+        "Single upload is documented up to 128 MB; above 128 MB requires multipart and the documented total maximum is 4 GB.",
+        "Content undergoes the same review logic as first-party uploads; watermark/logo policy can reduce distribution or cause removal/account action."
+      ],
+      "live_gate": "Named Douyin developer app video.create approval, named account OAuth and named-asset creation each require owner confirmation."
+    },
+    {
+      "id": "instagram_reels",
+      "official_flow": "For an eligible Instagram professional account, create a REELS media container, transfer or expose the video through the documented upload mode, poll status_code, call media_publish, then retain the returned media id.",
+      "minimum_scope": {
+        "instagram_login": ["instagram_business_basic", "instagram_business_content_publish"],
+        "facebook_login": ["instagram_basic", "instagram_content_publish", "pages_read_engagement"]
+      },
+      "eligibility_and_review": [
+        "Content Publishing supports Instagram professional accounts, not consumer accounts.",
+        "The Facebook Login path requires the connected Page/account relationship; extra ads scopes are conditional on the documented Business Manager role case and are not default scopes."
+      ],
+      "limits_and_semantics": [
+        "The official guide exposes media, media_publish, status_code and content_publishing_limit operations.",
+        "The current official guide documents 100 API-published posts per moving 24-hour period.",
+        "URL transfer requires media reachable by Meta; resumable video upload is available only on the documented Facebook Login for Business path."
+      ],
+      "live_gate": "Named Meta app advanced access/review where required, named professional account OAuth and named-asset media_publish each require owner confirmation."
+    },
+    {
+      "id": "youtube_shorts",
+      "official_flow": "Upload through YouTube Data API videos.insert, preferably with the resumable upload protocol, then reconcile the returned video resource and processing/status fields.",
+      "minimum_scope": ["https://www.googleapis.com/auth/youtube.upload"],
+      "eligibility_and_review": [
+        "There is no separate Shorts publishing endpoint; qualifying uploaded videos are classified by YouTube product rules.",
+        "Videos uploaded by API projects created after 28 July 2020 that have not passed audit are restricted to private viewing until the project passes audit."
+      ],
+      "limits_and_semantics": [
+        "videos.insert requires OAuth authorization and consumes API quota; quota exhaustion must be treated as a non-blind-retry condition.",
+        "Resumable upload is the required recovery design for interrupted transfers.",
+        "The UI must collect and preserve required child-directed/audience declarations and selected privacy rather than infer them silently."
+      ],
+      "live_gate": "Named Google Cloud project/API audit or quota approval, named channel OAuth and named-asset videos.insert each require owner confirmation."
+    }
+  ],
+  "normalized_capability_contract": {
+    "required_fields": ["account_id", "display_name", "can_publish", "privacy_options", "max_duration_seconds", "max_bytes", "accepted_media", "rate_or_quota_state", "review_mode", "observed_at"],
+    "rules": [
+      "Account-derived values override static documentation when they are more restrictive.",
+      "Missing, expired or contradictory capability data fails closed before upload.",
+      "Static limits are versioned evidence, never an authorization to publish.",
+      "The user sees the destination identity, selected privacy and any platform-specific adaptation before final confirmation."
+    ]
+  },
+  "threat_model": [
+    {"threat":"OAuth login CSRF, callback injection or code replay","controls":["cryptographically random single-use expiring state", "PKCE where supported", "exact allowlisted redirect URI", "bind state to tenant, actor, platform and intended return path", "consume before token exchange"]},
+    {"threat":"Credential theft from browser, logs, database or backups","controls":["server-only exchange", "envelope encryption with separated key material", "no token in API response", "structured redaction", "restricted backup and restore paths", "rotation/version metadata"]},
+    {"threat":"Cross-tenant account or asset publication (IDOR)","controls":["derive actor from authenticated session", "authorize project and account ownership server-side", "bind asset digest and account to intent", "opaque identifiers do not grant access"]},
+    {"threat":"Duplicate or unintended external publication","controls":["explicit final consent", "stable tenant-platform-account-asset-metadata idempotency digest", "database uniqueness", "single-flight worker lease", "remote reconciliation before retry", "unknown_remote state"]},
+    {"threat":"Malicious or drifting media/metadata","controls":["byte fingerprint", "server-side media probe", "platform/account capability validation", "bounded text normalization", "no silent privacy or audience change"]},
+    {"threat":"SSRF through pull-from-URL or callbacks","controls":["prefer direct upload", "only issue signed bounded asset URLs to allowlisted official origins", "block private/loopback/link-local/rebinding", "verify redirect chain", "limit bytes, time and MIME"]},
+    {"threat":"Forged or replayed webhook","controls":["platform signature verification", "timestamp tolerance", "event-id replay store", "bind remote id to tenant intent", "polling reconciliation remains authoritative when signatures are unavailable"]},
+    {"threat":"Retry storms, quota abuse or worker crash","controls":["classified bounded exponential retry", "honor Retry-After", "per-account/platform rate limiter", "durable transition log", "lease expiry and restart reconciliation"]},
+    {"threat":"Audit tampering or secret leakage","controls":["append-only normalized transition records", "actor and immutable intent/asset fingerprints", "redacted remote diagnostics", "restricted administrative access", "backup/restore integrity check"]}
+  ],
+  "official_sources": [
+    {"platform":"tiktok","url":"https://developers.tiktok.com/doc/content-posting-api-reference-direct-post","retrieved_at":"2026-08-20","supports":["video.publish","init/transfer","publish_id","audit/private restriction","errors and rate limit"]},
+    {"platform":"tiktok","url":"https://developers.tiktok.com/doc/content-posting-api-reference-query-creator-info","retrieved_at":"2026-08-20","supports":["dynamic creator capabilities","duration","20 rpm"]},
+    {"platform":"tiktok","url":"https://developers.tiktok.com/doc/content-sharing-guidelines","retrieved_at":"2026-08-20","supports":["required consent and UX","status reconciliation","intended-use and cap constraints"]},
+    {"platform":"douyin","url":"https://open.douyin.com/platform/resource/docs/openapi/video-management/douyin/create/upload","retrieved_at":"2026-08-20","supports":["video.create","upload and multipart thresholds","media constraints"]},
+    {"platform":"douyin","url":"https://open.douyin.com/platform/resource/docs/openapi/video-management/douyin/create/create-video","retrieved_at":"2026-08-20","supports":["create endpoint and item_id"]},
+    {"platform":"douyin","url":"https://open.douyin.com/platform/resource/docs/accession-guide/type-and-permission","retrieved_at":"2026-08-20","supports":["default-off permission application","minimum versus optional scopes"]},
+    {"platform":"instagram_reels","url":"https://developers.facebook.com/documentation/instagram-platform/content-publishing","retrieved_at":"2026-08-20","supports":["professional account eligibility","permissions by login path","container/status/publish flow","publishing limit"]},
+    {"platform":"youtube_shorts","url":"https://developers.google.com/youtube/v3/docs/videos/insert","retrieved_at":"2026-08-20","supports":["videos.insert","youtube.upload","audit/private restriction","quota"]},
+    {"platform":"youtube_shorts","url":"https://developers.google.com/youtube/v3/guides/using_resumable_upload_protocol","retrieved_at":"2026-08-20","supports":["resumable upload recovery"]}
+  ],
+  "deferred_human_gates": [
+    "Per-platform developer application or publishing-scope application/approval",
+    "Per-platform named real-account OAuth authorization",
+    "Any platform credential addition, replacement or rotation",
+    "Per-platform named MP4 live publication",
+    "Production deployment or configuration mutation"
+  ],
+  "next_item": "OCP-02"
+}

@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T17:06:32Z",
+  "scope": "local-only backup creation snapshot validation",
+  "result": "passed",
+  "claims": [
+    "Backup creation validates the final staged SQLite snapshot before creating the manifest or atomically promoting the backup.",
+    "The final snapshot asset storage keys must exactly match the staged asset file set.",
+    "An invalid asset relationship is rejected with no visible backup destination and no staging residue."
+  ],
+  "verification": {
+    "opsTest": {
+      "command": "node --test test/ops.test.js",
+      "passed": 17,
+      "failed": 0
+    },
+    "fullTest": {
+      "command": "npm test",
+      "passed": 185,
+      "failed": 0
+    },
+    "dependencyAudit": {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "vulnerabilities": 0
+    },
+    "secretScan": {
+      "command": "npm run scan:secrets",
+      "status": "passed",
+      "files": 161
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "status": "passed"
+    }
+  },
+  "externalActions": [],
+  "notClaimed": [
+    "external backup copy or off-host retention",
+    "staging or production backup/restore",
+    "signing or activation",
+    "independent review",
+    "provider calls or credential access"
+  ]
+}

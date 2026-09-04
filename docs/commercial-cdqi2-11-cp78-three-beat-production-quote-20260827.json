@@ -1,0 +1,48 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp78-three-beat-production-quote/v1",
+  "capturedAt": "2026-08-27T06:22:00Z",
+  "sourceCheckpoint": "cp77",
+  "sourceAccepted": true,
+  "necessity": "Price and structurally validate the materially revised three-beat candidate before any separately auditable paid action.",
+  "production": {
+    "host": "root@123.57.67.213",
+    "release": "/opt/openreel/releases/20260827T0545Z-cdqi2-cp75-all-shot-redo",
+    "live": "ok",
+    "ready": { "database": "ok", "assets": "ok" },
+    "service": "active/running; NRestarts=0"
+  },
+  "quote": {
+    "id": "62f8a93c-1b73-4569-b921-73fdbf3c87b0",
+    "projectId": "2b071d78-a926-4ab0-9c48-be042105ae58",
+    "currency": "CNY",
+    "estimatedCny": 46.4,
+    "generationEstimatedCny": 46,
+    "evaluationEstimatedCny": 0.4,
+    "perActionLimitCny": 100,
+    "evaluationCalls": 4,
+    "maximumEvaluationCostCnyPerCall": 0.1
+  },
+  "contract": {
+    "mode": "fresh",
+    "sourceJobId": null,
+    "inheritedShotIds": [],
+    "inheritedAssetIds": [],
+    "shotCount": 3,
+    "directorReady": true,
+    "policySafetyAccepted": true,
+    "requiredDimensions": ["intent", "beat", "composition", "visual_identity_consistency", "performance_naturalness", "story", "pacing", "continuity"]
+  },
+  "safety": {
+    "keyApplications": 0,
+    "commercialJobs": 0,
+    "executeCalls": 0,
+    "providerCalls": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0,
+    "externalSends": 0
+  },
+  "status": "quoted_not_executed",
+  "projectCompletion": "in_progress"
+}

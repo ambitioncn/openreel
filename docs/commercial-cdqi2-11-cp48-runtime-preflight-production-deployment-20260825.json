@@ -1,0 +1,41 @@
+{
+  "schema": "openreel-commercial-runtime-preflight-production-deployment/v1",
+  "capturedAt": "2026-08-25T13:34:00Z",
+  "authorization": "consumed_cp47_deployment_attestation",
+  "candidate": {
+    "manifest": "commercial-cdqi2-11-cp47-runtime-preflight-candidate-20260825.json",
+    "release": "/opt/openreel/releases/20260825T133400Z-cdqi2-cp48-runtime-preflight",
+    "allFiveFrozenFileHashesMatched": true
+  },
+  "backup": {
+    "path": "/var/backups/openreel/20260825T133200Z-cp48-runtime-preflight",
+    "manifestSha256": "f7c0522ae837017d4a07de7b6dae20636593edbb6200bae4b8ea12340ee7b96f",
+    "isolatedRestore": "/var/backups/openreel/20260825T133200Z-cp48-runtime-preflight-isolated-restore",
+    "database": "ok",
+    "assets": 155,
+    "publishing": "ok"
+  },
+  "activation": {
+    "activeRelease": "/opt/openreel/releases/20260825T133400Z-cdqi2-cp48-runtime-preflight",
+    "processCwdMatchesRelease": true,
+    "rollbackAnchor": "/opt/openreel/releases/20260825T131500Z-cdqi2-cp46-preflight",
+    "remoteFocusedTestsBeforeActivation": "23/23 passed",
+    "remoteFocusedTestsAfterActivation": "23/23 passed",
+    "live": {"status":"ok"},
+    "ready": {"status":"ready","database":"ok","assets":"ok"},
+    "service": {"activeState":"active","subState":"running","nRestarts":0},
+    "automaticRollback": "armed for activation verification failure; not triggered"
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "commercialJobs": 0,
+    "providerRetries": 0,
+    "jobRetriesOrReplays": 0,
+    "videoGenerations": 0,
+    "publicationCalls": 0,
+    "credentialChanges": 0
+  },
+  "status": "deployment_ready_for_acceptance_t11_pending",
+  "projectCompletion": "in_progress"
+}

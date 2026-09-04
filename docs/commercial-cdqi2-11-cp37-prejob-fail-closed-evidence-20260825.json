@@ -1,0 +1,57 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-prejob-fail-closed-evidence/v1",
+  "capturedAt": "2026-08-25T11:27:30Z",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "failed_closed_before_commercial_quote_or_job",
+  "candidateFingerprint": "10c3e11eda72b89752fdcef84cda0767f342da103b3773c90c5c600b7ceb9526",
+  "necessity": "T11 requires one fresh ordinary-account production acceptance job on the exact deployed candidate; this authorized attempt stopped at the first failed precondition.",
+  "productionPreflight": {
+    "activeRelease": "/opt/openreel/releases/20260825T111452Z-cdqi2-10c3e11e",
+    "service": "active",
+    "nRestarts": 0
+  },
+  "attempt": {
+    "freshOrdinaryAccount": true,
+    "accountCredentialRetained": false,
+    "projectId": "80c60915-d929-4dc8-8fdf-9da28dbd5778",
+    "projectName": "美女在海滩跳舞",
+    "storyVersion": 2,
+    "storyboardVersion": 2,
+    "shotCount": 1,
+    "firstShotSummary": "Let the ocean breeze set the rhythm.",
+    "failure": "The production planning result did not provide the runner-required real Chinese shot caption, so the runner stopped before asset binding, commercial quote, job creation or execute."
+  },
+  "paidAction": {
+    "stage": "planning",
+    "provider": "Volcengine Ark",
+    "model": "seed-2.1-pro",
+    "providerCalls": 1,
+    "inputTokens": 370,
+    "outputTokens": 166,
+    "costUsd": 0.0015,
+    "costCnyAt7_2": 0.0108,
+    "reservationStatus": "settled",
+    "reservedMicrosAfterStop": 0,
+    "withinCny100Limit": true
+  },
+  "commercial": {
+    "quotes": 0,
+    "jobsCreated": 0,
+    "executeCalls": 0,
+    "qualityCalls": 0,
+    "actualVideoBytes": 0,
+    "eightDimensionScores": null,
+    "releaseEligible": false
+  },
+  "safety": {
+    "automaticRetries": 0,
+    "fallbacks": 0,
+    "secondAccounts": 0,
+    "secondJobs": 0,
+    "historicalReplays": 0,
+    "publications": 0,
+    "credentialChanges": 0
+  },
+  "decision": "Stop without retry. T11 remains in progress; any new ordinary-account acceptance action requires a fresh explicit gate after review of the pre-job planning-language failure."
+}

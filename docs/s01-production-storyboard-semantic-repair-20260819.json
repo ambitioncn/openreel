@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "milestone": "S01-PRODUCTION-STORYBOARD-SEMANTIC-REPAIR",
+  "capturedAt": "2026-08-19",
+  "status": "completed",
+  "evidenceBasis": "owner-attested completed evidence consumed by loop gate; this synchronization did not repeat production inspection or mutation",
+  "repair": {
+    "recordsUpdated": 5,
+    "fieldsAdded": {
+      "continuityEntityIds": [],
+      "continuityEntityUsages": []
+    },
+    "missingRecordsBefore": 5,
+    "missingRecordsAfter": 0
+  },
+  "verification": [
+    "pre-repair cold backup retained",
+    "SQLite quick_check passed",
+    "semantic online backup passed",
+    "isolated restore passed",
+    "service health passed",
+    "public health passed"
+  ],
+  "constraints": {
+    "productionActionRepeatedByThisSync": false,
+    "projectCompletionClaimed": false
+  },
+  "supersedes": [
+    "prior cp2 semantic-diagnosis blocker"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "milestone": "CO-01",
+  "capturedAt": "2026-08-19T01:50:00Z",
+  "evidenceClass": "authenticated-observed",
+  "scope": "Owner-authorized current LibTV session read-only inspection of team collaboration, member-role and account-lifecycle surfaces",
+  "authorization": {
+    "allowed": [
+      "reuse the existing LibTV login session",
+      "inspect team collaboration, member roles and account lifecycle read-only"
+    ],
+    "forbidden": [
+      "invite or remove a member",
+      "modify a role or permission",
+      "send a message",
+      "create or switch a team",
+      "request an OTP or alter credentials",
+      "generate media or incur a charge"
+    ]
+  },
+  "observations": {
+    "sessionAuthenticated": true,
+    "accountsCount": 1,
+    "activeAccountsCount": 1,
+    "activeScope": "personal-owner",
+    "teamIdPresent": false,
+    "teamScopeAvailable": false,
+    "teamMembersObservable": false,
+    "teamRolesObservable": false,
+    "accountLifecycleCommandSurface": [
+      "login",
+      "logout",
+      "account info",
+      "account list",
+      "account use"
+    ],
+    "lifecycleMutationExecuted": false
+  },
+  "verification": [
+    {
+      "command": "libtv --help; libtv account --help",
+      "result": "documented account lifecycle commands observed without executing login, logout or account switching"
+    },
+    {
+      "command": "libtv account info; libtv account list",
+      "result": "both read-only commands exited 0; redacted structural projection confirmed one active personal owner account and no team identifier or team scope"
+    }
+  ],
+  "conclusion": {
+    "status": "external_team_state_unavailable",
+    "proved": [
+      "the retained LibTV session is currently authenticated",
+      "the current user has one active personal owner scope",
+      "the documented CLI exposes account login, logout, inspection, listing and switching lifecycle entry points"
+    ],
+    "notProved": [
+      "team membership enumeration",
+      "member roles or permission boundaries",
+      "invitation, revocation or account removal lifecycle",
+      "concurrent collaboration behavior"
+    ],
+    "acceptanceImpact": "CO-01 remains human-gated because no team scope or member/role object exists in the authorized current account state."
+  },
+  "safety": {
+    "otpRequests": 0,
+    "accountSwitches": 0,
+    "teamWrites": 0,
+    "memberInvites": 0,
+    "permissionChanges": 0,
+    "messagesSent": 0,
+    "mediaGenerations": 0,
+    "payments": 0,
+    "credentialChanges": 0
+  },
+  "privacy": "Phone number, account names, identifiers, UUIDs, tokens and raw CLI responses were not retained."
+}

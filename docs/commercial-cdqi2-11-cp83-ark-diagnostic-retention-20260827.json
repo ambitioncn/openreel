@@ -1,0 +1,31 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp83-ark-diagnostic-retention/v1",
+  "capturedAt": "2026-08-27T07:04:00Z",
+  "sourceCheckpoint": "cp82",
+  "necessity": "The cp82 first-terminal video failure retained only ARK_PROVIDER_ERROR, which was insufficient to distinguish provider validation, transport, authentication, or transient service behavior without a blind paid retry.",
+  "change": {
+    "arkJob": "Persist only the already-sanitized DomainError details on synchronous submit and poll failures so idempotent replay and restart retain the diagnostic.",
+    "commercialJob": "Retain a bounded Ark diagnostic containing provider, category, optional upstream HTTP status, safe provider code/parameter, and a one-way request-id fingerprint.",
+    "redaction": "Provider messages, response bodies, URLs, credentials, tokens, and arbitrary fields are not persisted in the commercial job diagnostic."
+  },
+  "sourceHashes": {
+    "src/ark.js": "403618016b493b9aea9350d4b05de25d413dfedf69aa608fba288d582b198818",
+    "src/commercial-job-lifecycle.js": "793ebf648ce0cd976c7eb240973d07a46d591420486dcd43e58ad076c0ef9e7a",
+    "test/commercial-job-lifecycle.test.js": "ed19e7296dbab81119728506b4d8866c95218dab7ff96c4fb7e77e44cc0bdaac"
+  },
+  "verification": {
+    "focused": { "command": "node --test test/ark.test.js test/commercial-provider-orchestrator.test.js test/commercial-job-lifecycle.test.js test/workbench-commercial.test.js test/commercial-zero-paid-matrix.test.js", "passed": 95, "failed": 0 },
+    "full": { "command": "npm test", "passed": 587, "failed": 0 },
+    "productionReadOnly": { "release": "/opt/openreel/releases/20260827T064256Z-cdqi2-cp81-reference-transmission", "service": "active", "nRestarts": 0, "diskUsedPercent": 43 },
+    "loopDoctor": { "ok": true, "failCount": 0, "warnCount": 5 },
+    "paidProviderCalls": 0
+  },
+  "deployment": {
+    "status": "not_activated",
+    "reason": "Activating a release requires separately confirmed process control under the workspace operating rules.",
+    "rollbackAnchor": "/opt/openreel/releases/20260827T0215Z-cdqi2-cp72-fresh-candidate"
+  },
+  "safety": { "paidJobs": 0, "paidCny": 0, "retries": 0, "fallbacks": 0, "publications": 0, "externalSends": 0, "credentialChanges": 0, "processControlActions": 0 },
+  "status": "local_verified_awaiting_process_control_confirmation",
+  "projectCompletion": "in_progress"
+}

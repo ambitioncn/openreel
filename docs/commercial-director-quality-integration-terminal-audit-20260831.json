@@ -1,0 +1,29 @@
+{
+  "schema": "openreel-commercial-director-quality-integration-terminal-audit/v1",
+  "recordedAt": "2026-08-31T17:05:00Z",
+  "projectId": "openreel-commercial-director-quality-integration",
+  "status": "accepted",
+  "candidate": {
+    "productionRelease": "/opt/openreel/releases/20260831T2105Z-h3-minimal-story-v6",
+    "rollbackAnchor": "/opt/openreel/releases/20260831T2045Z-h3-frozen-first-frame",
+    "acceptanceJobId": "e12daa6b-26f8-4585-8d56-5f89d97ac6d4",
+    "renderSha256": "cec5615a5431d6c0018a130b593bc03551ebdd0d576fb279717b4933930f602f"
+  },
+  "terminal": [
+    {"id":"T01","status":"accepted","evidence":["commercial-director-quality-integration-backlog.json#CDQI2-01"]},
+    {"id":"T02","status":"accepted","evidence":["commercial-director-quality-integration-backlog.json#CDQI2-01","commercial-director-quality-integration-backlog.json#CDQI2-02"]},
+    {"id":"T03","status":"accepted","evidence":["commercial-director-quality-integration-backlog.json#CDQI2-03","../../runtime/loops/agent-tasks/tasks/2026-08-31T10-43-08-382Z_routed-task-loop-engineering-openreel-comfyui-mi/checkpoints/cp19.json"]},
+    {"id":"T04","status":"accepted","evidence":["commercial-director-quality-integration-backlog.json#CDQI2-04"]},
+    {"id":"T05","status":"accepted","evidence":["commercial-director-quality-integration-backlog.json#CDQI2-05"]},
+    {"id":"T06","status":"accepted","evidence":["commercial-director-quality-integration-backlog.json#CDQI2-06"]},
+    {"id":"T07","status":"accepted","evidence":["commercial-director-quality-integration-backlog.json#CDQI2-07"]},
+    {"id":"T08","status":"accepted","evidence":["commercial-director-quality-integration-backlog.json#CDQI2-08","../../runtime/loops/agent-tasks/tasks/2026-08-31T10-43-08-382Z_routed-task-loop-engineering-openreel-comfyui-mi/checkpoints/cp18.json"]},
+    {"id":"T09","status":"accepted","evidence":["commercial-director-quality-integration-backlog.json#CDQI2-09","../../runtime/loops/agent-tasks/tasks/2026-08-31T10-43-08-382Z_routed-task-loop-engineering-openreel-comfyui-mi/checkpoints/cp19.json"]},
+    {"id":"T10","status":"accepted","evidence":["commercial-director-quality-integration-backlog.json#CDQI2-10","../../runtime/loops/agent-tasks/tasks/2026-08-31T10-43-08-382Z_routed-task-loop-engineering-openreel-comfyui-mi/checkpoints/cp18.json"]},
+    {"id":"T11","status":"accepted","evidence":["../../runtime/loops/agent-tasks/tasks/2026-08-31T10-43-08-382Z_routed-task-loop-engineering-openreel-comfyui-mi/checkpoints/cp18.json","../../runtime/loops/agent-tasks/tasks/2026-08-31T10-43-08-382Z_routed-task-loop-engineering-openreel-comfyui-mi/checkpoints/cp19.json"],"finding":"Reviewed release active in Beijing, rollback anchor retained, readiness passed, and a fresh ordinary-account result was releaseEligible with zero retry and no publication."},
+    {"id":"T12","status":"accepted","evidence":["commercial-director-quality-integration-terminal-audit-20260831.json"],"finding":"T01-T12 have retained evidence, no phase-as-project overclaim, and no external publication."}
+  ],
+  "productionRecheck": {"target":"root@123.57.67.213","currentRelease":"/opt/openreel/releases/20260831T2105Z-h3-minimal-story-v6","service":"active","nRestarts":0,"httpsStatus":200},
+  "safety": {"providerCallsThisAudit":0,"productionMutationsThisAudit":0,"externalPublications":0,"credentialChanges":0},
+  "scopeBoundary": "This accepts only the commercial-director-quality-integration subproject. Broader OpenReel v4 remains ready for the owner's final human acceptance review."
+}

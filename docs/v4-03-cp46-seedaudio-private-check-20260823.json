@@ -1,0 +1,58 @@
+{
+  "schema": "openreel-v4-seedaudio-private-check/v1",
+  "checkpoint": "cp46",
+  "authorization": {
+    "sourceGate": "cp45",
+    "maximumCalls": 1,
+    "automaticRetries": 0,
+    "durationSeconds": 5,
+    "expectedCostCny": 0,
+    "maximumCostCny": 10,
+    "deploymentAuthorized": false,
+    "restartAuthorized": false,
+    "finalFilmAcceptanceAuthorized": false,
+    "consumed": true
+  },
+  "execution": {
+    "provider": "volcengine-seedaudio",
+    "model": "seed-audio-1.0",
+    "contract": "POST /api/v3/tts/create with X-Api-Key, text_prompt and duration",
+    "httpStatus": 200,
+    "calls": 1,
+    "retries": 0,
+    "requestedDurationSeconds": 5,
+    "providerDurationSeconds": 5,
+    "providerOriginalDurationSeconds": 5,
+    "rawProviderResponseRetained": false,
+    "credentialValueRecorded": false
+  },
+  "retainedArtifact": {
+    "path": "runtime/cp46-seedaudio-private/music.wav",
+    "permissions": "0600",
+    "mimeType": "audio/wav",
+    "codec": "pcm_s16le",
+    "sampleRate": 40000,
+    "channels": 2,
+    "durationSeconds": 5,
+    "bytes": 800044,
+    "sha256": "73c1cc30bf06796607a8792ae34fede312b488d9dfb2b457368d41a12705f66f",
+    "meanVolumeDb": -14.1,
+    "maxVolumeDb": -0.3
+  },
+  "verification": {
+    "downloadHashMatchesProviderEvidence": true,
+    "signatureValid": true,
+    "ffprobeDecodable": true,
+    "nonSilent": true,
+    "placeholderOrTestToneFallbackUsed": false,
+    "fullSuite": "485/485 passed"
+  },
+  "scope": {
+    "deployments": 0,
+    "restarts": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "additionalProviderCalls": 0
+  },
+  "nextGate": "Review the retained real music. Deployment/restart and a final ordinary-account full-film acceptance require separate exact approval."
+}

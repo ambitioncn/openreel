@@ -1,0 +1,34 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-production-evidence/v1",
+  "capturedAt": "2026-08-25T12:54:00.000Z",
+  "terminalCriterion": "T11",
+  "candidateFingerprint": "5638f170a0a8976a1ca956f6552986478f3b5119efc8d15747fa94ed59f5b5f4",
+  "jobId": "04c0ea87-77ca-4cdb-b7e7-470614cb32d9",
+  "result": "failed_closed",
+  "failure": {
+    "stage": "videos",
+    "shotIndex": 0,
+    "providerCode": "OutputVideoSensitiveContentDetected.PolicyViolation",
+    "releaseEligible": false
+  },
+  "evidence": {
+    "actualImageBytes": 408406,
+    "actualImageSha256": "4f3f05f5129f51f3216d07733d7994a138ea01915b6c3ee3ff317f556699529d",
+    "videoBytes": 0,
+    "renderBytes": 0,
+    "evaluationCalls": 0,
+    "finishReasons": 0,
+    "eightDimensionScores": null,
+    "reservedMicros": 0,
+    "spentUsd": 0.0459
+  },
+  "safety": {
+    "accounts": 1,
+    "commercialJobs": 1,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0,
+    "credentialChanges": 0
+  },
+  "decision": "T11 remains in progress. The immutable candidate remains deployed and healthy, but this ordinary-account job cannot qualify it because the provider rejected the first video output before perceptual evaluation."
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "openreel-local-qualification/v1",
+  "createdAt": "2026-08-15T22:25:00.000Z",
+  "backlogItem": "S-01",
+  "scope": "Persisted Automation run backup admission and replay binding",
+  "result": "passed",
+  "controls": [
+    "tenant-scoped idempotency keys are non-empty and unique",
+    "automation plans bind to an existing workflow in the same tenant",
+    "plan schema, intent, ordered nodes and estimated cost reproduce the imported workflow",
+    "status, cost and creation time use canonical lifecycle values",
+    "successful runs carry no failure and failed runs identify a planned node with zero cost"
+  ],
+  "verification": [
+    "node --test test/ops.test.js: 38 passed, 0 failed",
+    "npm test: 206 passed, 0 failed",
+    "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "npm run scan:secrets: passed across 211 files",
+    "JSON parse and git diff whitespace checks passed"
+  ],
+  "boundaries": {
+    "fixtures": "local synthetic data only",
+    "providerCalls": 0,
+    "externalWrites": 0,
+    "credentialsRead": false,
+    "deployment": false
+  }
+}

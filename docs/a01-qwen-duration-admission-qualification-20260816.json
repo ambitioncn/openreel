@@ -1,0 +1,20 @@
+{
+  "schema": "openreel.local-qualification/v1",
+  "milestone": "A-01",
+  "qualifiedAt": "2026-08-16T07:20:26.984Z",
+  "subject": "Qwen WAV provider-result duration admission",
+  "boundary": {
+    "maximumSeconds": 600,
+    "enforcedAt": "client result admission before durable canvas reconciliation",
+    "externalCalls": 0,
+    "realMedia": false
+  },
+  "cases": [
+    { "durationSeconds": 600, "expected": "accepted" },
+    { "durationSeconds": 601, "expected": "QWEN_TTS_RESULT_INVALID" }
+  ],
+  "limitations": [
+    "Synthetic local PCM WAV evidence only",
+    "A real Qwen synthesis and retained-media browser E2E remain separately gated"
+  ]
+}

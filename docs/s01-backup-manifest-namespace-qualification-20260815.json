@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "S-01",
+  "capturedAt": "2026-08-15",
+  "scope": "credential-free local backup manifest admission",
+  "claim": "Restore admission accepts only the two restored core files and asset files under the assets namespace, preventing verified manifest content from being silently omitted during promotion.",
+  "negativeChecks": [
+    "a digest-valid and file-set-complete metadata.json entry is rejected as an unrestored top-level namespace",
+    "the rejection occurs before restore destination or staging promotion",
+    "canonical order, path, core-file, byte-count and digest checks remain enforced"
+  ],
+  "verification": {
+    "focused": "node --test test/ops.test.js: 22 passed, 0 failed",
+    "fullSuite": "npm test: 190 passed, 0 failed",
+    "dependencies": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "npm run scan:secrets: passed across 191 files",
+    "diff": "git diff --check: passed"
+  },
+  "externalActions": [],
+  "limitations": [
+    "This validates restore namespace completeness but does not cryptographically authenticate the manifest.",
+    "No off-host copy, retention action, restore activation or production operation occurred."
+  ]
+}

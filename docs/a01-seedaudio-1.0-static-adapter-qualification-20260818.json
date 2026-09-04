@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "scope": "A-01 SeedAudio 1.0 local static adapter",
+  "authorization": "cp338 consumed owner input",
+  "implementation": {
+    "adapterId": "seedaudio-1.0",
+    "defaultEnabled": false,
+    "executable": false,
+    "executionDisabled": true,
+    "requiresHumanGate": true,
+    "credentialReadOrWrite": false,
+    "providerCalls": 0,
+    "spend": 0,
+    "productionChange": false,
+    "deployment": false,
+    "serviceRestart": false,
+    "publication": false
+  },
+  "acceptance": [
+    "Static descriptor identifies SeedAudio 1.0 and exposes only the locally reviewed text-to-audio preparation surface.",
+    "Construction fails closed if enablement is requested.",
+    "Execution always fails with SEEDEDAUDIO_EXECUTION_DISABLED before any injected transport can run.",
+    "Canonical request validation rejects unknown authority or credential fields."
+  ],
+  "verification": {
+    "targeted": "4/4 passed",
+    "fullSuite": "317/317 passed",
+    "secretScan": "421 files passed"
+  },
+  "remainingGate": "Any real SeedAudio request requires a new exact single-call authorization."
+}

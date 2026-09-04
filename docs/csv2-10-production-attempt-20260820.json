@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "project": "openreel-short-video-commercial-v2",
+  "backlog_item": "CSV2-10",
+  "status": "blocked",
+  "production": {
+    "host": "Beijing Aliyun OpenReel production",
+    "release": "/opt/openreel/releases/20260820T203900Z-commercial-v2",
+    "previous_release": "/opt/openreel/releases/20260820T175214Z-short-video-workbench",
+    "backup": "/var/backups/openreel/csv2-20260820T203700Z/predeploy",
+    "backup_manifest_sha256": "73c3153103fbbe84fa8f6045db5fcccd85fb4929104663c9d480c99785e14ff9",
+    "backup_files": 25,
+    "isolated_restore": "passed",
+    "deployment_health": "passed",
+    "actual_rollback": "passed",
+    "reactivation": "passed",
+    "active_release_after_drill": "/opt/openreel/releases/20260820T203900Z-commercial-v2",
+    "service_active": true,
+    "service_restarts": 0,
+    "https_proxy_root": 200,
+    "public_ready": 404,
+    "public_metrics": 404,
+    "warning_logs": 0
+  },
+  "real_provider_attempt": {
+    "authorization": "standing OpenReel authorization dated 2026-08-19; each independent paid action capped at CNY 100",
+    "route": "Volcengine Ark direct plan v3",
+    "automatic_retries": 0,
+    "maximum_submissions": 2,
+    "maximum_ledger_units": 9723,
+    "planned_models": ["seedream-5-lite", "seedance-2-fast"],
+    "result": "stopped_fail_closed_on_first_image_action",
+    "safe_error": {"code": "ARK_PROVIDER_ERROR", "http_status": 502},
+    "video_submitted": false,
+    "playable_full_film_created": false,
+    "temporary_allowance_and_key_stopped": true,
+    "isolated_process_and_state_cleaned": true,
+    "production_service_unchanged_by_provider_attempt": true
+  },
+  "local_verification": [
+    "npm test: 369 passed, 0 failed",
+    "npm run scan:secrets: passed",
+    "npm run scan:dependencies: 0 vulnerabilities",
+    "Beijing release tests: 50 passed, 0 failed, 1 intentionally skipped"
+  ],
+  "blockers": [
+    "The real Ark Seedream image action failed at the provider boundary before the video stage. A successful paid image-to-video-to-audio playable MP4 does not yet exist; retrying or substituting another paid image model without evidence would violate the fail-closed no-blind-retry policy."
+  ],
+  "project_completion": "in_progress"
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-fixed-candidate-qualification/v1",
+  "backlogItem": "CDQI2-11",
+  "terminalCriterion": "T11",
+  "status": "qualified_not_deployed",
+  "supersedesForNextDeployment": "4ce7e3b5218a7fd816812d6d49174d58b7a73217681a202fb37dfd185295f068",
+  "candidate": {
+    "manifestEvidence": "docs/evidence/cdqs-14-production-candidate.json",
+    "manifestAlgorithm": "sha256",
+    "manifestFingerprint": "102ff46ffd751348fedebc910daa7ba5edf3a2b78d6e06bdb9624057765356f8",
+    "artifactCount": 106,
+    "frozen": true,
+    "includesProductionShotBindingFix": true
+  },
+  "qualification": {
+    "fixedSet": "qualified",
+    "reliability": "passed",
+    "backupRestoreSecurityTenant": "passed",
+    "rollbackRehearsal": "passed",
+    "browserWorkflow": "passed",
+    "securityTenantBillingRegression": "passed",
+    "fullRegression": {
+      "command": "npm test",
+      "tests": 557,
+      "passed": 557,
+      "failed": 0
+    }
+  },
+  "boundaries": {
+    "providerCalls": 0,
+    "paidCalls": 0,
+    "deploymentActivated": false,
+    "productionMutated": false,
+    "publicationAttempted": false,
+    "externalMessages": 0,
+    "projectCompletionClaimed": false
+  },
+  "nextAction": "Create and verify a fresh production backup, transfer and verify this exact candidate, retain the current release as rollback anchor, then activate under the standing OpenReel production authorization before any paid ordinary-account acceptance action."
+}

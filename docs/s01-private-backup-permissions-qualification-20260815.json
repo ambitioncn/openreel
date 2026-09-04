@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T19:12:00.000Z",
+  "scope": "credential-free local backup confidentiality boundary",
+  "result": "pass",
+  "claims": {
+    "backupDirectoriesMode": "0700",
+    "backupFilesMode": "0600",
+    "sourceModeInheritancePrevented": true,
+    "atomicPromotionRetained": true,
+    "externalCopyPerformed": false,
+    "offHostRetentionPerformed": false,
+    "signingPerformed": false,
+    "activationPerformed": false
+  },
+  "verification": [
+    "node --test test/ops.test.js: 22 passed, 0 failed",
+    "npm test: 190 passed, 0 failed",
+    "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "npm run scan:secrets: passed across 180 files",
+    "git diff --check: passed"
+  ],
+  "evidence": [
+    "scripts/backup.mjs",
+    "test/ops.test.js"
+  ],
+  "limitations": [
+    "This local permission qualification does not establish encryption at rest, off-host durability, signing, staging operation, independent review, or production recovery.",
+    "External retention, signing, staging mutation, and production actions remain separately human-gated."
+  ]
+}

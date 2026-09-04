@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "authorization": "A-01-QWEN-ONE-CALL-V1",
+  "status": "terminal_failure",
+  "provider_requests": 1,
+  "retries": 0,
+  "paid_spend": 0,
+  "result": {
+    "openreel_code": "QWEN_TTS_PROVIDER_ERROR",
+    "openreel_status": 502,
+    "upstream_status": 500,
+    "retained_audio_assets": 0,
+    "retained_wav": false
+  },
+  "read_only_diagnosis": {
+    "health": "ok",
+    "model": "qwen3-tts-12hz-1.7b-customvoice",
+    "cause": "The authorized language value zh is not accepted by the live model; its advertised canonical value is chinese.",
+    "contract_drift": "OpenReel and the authorization packet used zh while the live service advertises chinese.",
+    "service_mutation": false
+  },
+  "browser": {
+    "isolated_loopback": true,
+    "graphical_browser": "chromium",
+    "queued_job_prepared": true,
+    "execution_submitted_through_openreel": true,
+    "playback_or_download_verified": false
+  },
+  "external_actions": {
+    "deployments": 0,
+    "credential_changes": 0,
+    "public_writes": 0,
+    "libtv_writes": 0
+  },
+  "authorization_consumed": true,
+  "next_gate": "A new exact authorization is required for a corrected one-call request using language=chinese."
+}

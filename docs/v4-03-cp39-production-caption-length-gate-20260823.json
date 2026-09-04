@@ -1,0 +1,79 @@
+{
+  "schema": "openreel-v4-progress-evidence/v1",
+  "milestone": "V4-03",
+  "checkpoint": "cp39",
+  "status": "production_media_generated_composition_planning_failed_local_repair_ready",
+  "productionAcceptance": {
+    "freshOrdinaryAccount": true,
+    "initialPrompt": "美女在海滩跳舞",
+    "requestedDurationSeconds": 5,
+    "attempts": 1,
+    "commercialJobId": "e85a79c0-fca3-4c20-9c13-3d9ccbe8ebcd",
+    "quoteCny": 16,
+    "result": "failed_at_compose_planning",
+    "errorCode": "COMMERCIAL_COMPOSITION_INVALID",
+    "retryable": false,
+    "mp4Produced": false
+  },
+  "retainedProductionAssets": {
+    "binding": {
+      "projectId": "e0d754b8-baa6-4356-988b-55a7d4d515a1",
+      "projectVersion": 6,
+      "storyVersion": 2,
+      "storyboardVersion": 2,
+      "timelineVersionAfterRetention": 3
+    },
+    "image": {
+      "model": "seedream-5-lite",
+      "providerJobId": "b63b6345-8c38-4ca9-b4b0-8b7297dd4fbd",
+      "bytes": 508725,
+      "status": "succeeded"
+    },
+    "video": {
+      "model": "seedance-2-fast",
+      "providerJobId": "c0b90bc6-6b3f-493e-b6a7-1f5a60b289ed",
+      "bytes": 5069933,
+      "status": "succeeded"
+    },
+    "voice": {
+      "model": "qwen-tts-tailnet",
+      "bytes": 172844,
+      "status": "succeeded"
+    },
+    "caption": {
+      "exactStoryboardPrompt": true,
+      "reviewed": true,
+      "bytes": 70
+    },
+    "music": {
+      "sourceDeclared": true,
+      "responsibilityConfirmed": true,
+      "bytes": 16044
+    },
+    "render": null
+  },
+  "diagnosis": "The repaired runner uploaded the exact reviewed storyboard prompt, but the composition planner still rejected captions longer than 80 characters. The observed production prompt was longer than 80 characters, so planning failed before ffmpeg composition.",
+  "localRepair": {
+    "file": "src/commercial-composition-quality.js",
+    "change": "Align the composition caption limit with the existing 2000-character reviewed storyboard prompt contract.",
+    "regressionTest": "test/commercial-composition-quality.test.js accepts the exact observed long-form prompt without truncation.",
+    "providerCallsAfterRepair": 0,
+    "deployed": false
+  },
+  "verification": {
+    "focusedTests": "19/19 passed",
+    "fullSuite": "475/475 passed",
+    "releaseArtifacts": "85/85 verified with tamper rejection; externalCalls=false; deploymentActivated=false"
+  },
+  "safety": {
+    "acceptanceRetries": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "deployments": 0,
+    "restarts": 0,
+    "portsChanged": false,
+    "derperTouched": false
+  },
+  "projectCompletion": "in_progress"
+}

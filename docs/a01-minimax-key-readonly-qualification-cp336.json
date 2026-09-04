@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-18",
+  "milestone": "A-01-MUSIC-REAL-MEDIA",
+  "scope": "Owner-selected read-only MiniMax music route qualification after local key update",
+  "observations": {
+    "officialModelContract": "music-2.6-free is documented for API Key users at 0 CNY per song and RPM 3",
+    "officialPaidModelContract": "music-2.6 is limited to Token Plan or paid users and is priced at 1 CNY per song",
+    "credentialModes": "Token Plan subscription keys and pay-as-you-go API keys are distinct and not interchangeable",
+    "authenticatedModelsListHttpStatus": 200,
+    "authenticatedModelsListCount": 8,
+    "authenticatedModelsListContainsMiniMaxM27": true,
+    "authenticatedModelsListMusicModels": []
+  },
+  "sources": [
+    "https://platform.minimaxi.com/docs/api-reference/music-generation",
+    "https://platform.minimaxi.com/docs/guides/pricing-paygo",
+    "https://platform.minimaxi.com/docs/token-plan/intro",
+    "https://platform.minimaxi.com/docs/api-reference/models/openai/list-models"
+  ],
+  "negativeEvidence": {
+    "musicGenerationCalls": 0,
+    "retries": 0,
+    "chargesCny": 0,
+    "purchases": 0,
+    "subscriptionChanges": 0,
+    "credentialWrites": 0,
+    "mediaCreated": 0,
+    "deployments": 0,
+    "publications": 0
+  },
+  "conclusion": "The updated key authenticates successfully against the documented read-only OpenAI-compatible model-list endpoint and exposes MiniMax-M2.7. That endpoint lists text models only and exposes neither music entitlement nor account balance, quota or subscription state. The prior music-2.6-free terminal code 1008 belongs to the superseded key state and must not be replayed as current-key evidence. A fresh music generation request remains necessary to prove current music entitlement and output.",
+  "budgetBoundary": "The cp333 single-call authorization was consumed at cp334. The key update and this read-only qualification do not renew it. No further music request is authorized until the owner grants a new exact one-request, zero-retry, zero-CNY gate.",
+  "privacy": "No credential value, account identifier, balance or token was recorded."
+}

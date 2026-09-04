@@ -1,0 +1,48 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp72-fresh-candidate-production-deployment/v1",
+  "capturedAt": "2026-08-27T01:57:00Z",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "scope": "Deploy the cp71 explicit fresh-candidate quote and durable job lineage contract to Beijing production; zero paid execution",
+  "release": "/opt/openreel/releases/20260827T0215Z-cdqi2-cp72-fresh-candidate",
+  "rollbackAnchor": "/opt/openreel/releases/20260826T0707Z-quality-idempotency-v3",
+  "backup": {
+    "path": "/var/backups/openreel/20260827T0215Z-cp72",
+    "isolatedRestore": "/var/backups/openreel/20260827T0215Z-cp72-isolated-restore",
+    "database": "ok",
+    "assets": 179,
+    "publishing": "ok"
+  },
+  "sourceHashes": {
+    "src/workbench-commercial.js": "f9a97cd00a05b9e63518e14f65f0694889d2cd8ab16ee8f415706312a9ebbeb8",
+    "test/workbench-commercial.test.js": "81091a0053a967125f59a1d212a80202ccb2e1e59d6844653caa34c12def9abc"
+  },
+  "verification": {
+    "localFocused": "49 passed, 0 failed",
+    "localFull": "583 passed, 0 failed",
+    "remoteCandidateFocused": "49 passed, 0 failed",
+    "sourceHashParity": true,
+    "rollbackRehearsal": "cp72 healthy, cp70 healthy after actual rollback, cp72 healthy after reactivation",
+    "finalReadiness": {"live": "ok", "database": "ok", "assets": "ok"},
+    "service": "active/running; NRestarts=0",
+    "processCwd": "/opt/openreel/releases/20260827T0215Z-cdqi2-cp72-fresh-candidate"
+  },
+  "behavior": {
+    "initialCandidate": "fresh",
+    "forbiddenInheritance": ["sourceJobId", "redo", "preservedShotIds", "preservedAssetIds"],
+    "durableLineage": "Quote and confirmed job record fresh=true with null source job and empty inherited shot/asset lists",
+    "boundedRedo": "Existing separately quoted redo route remains unchanged"
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidJobs": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "postDeployUsageEntries": 0
+  },
+  "status": "deployed_ready_for_acceptance",
+  "projectCompletion": "in_progress"
+}

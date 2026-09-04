@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-16T05:53:57Z",
+  "backlogItem": "A-01",
+  "scope": "local-only Qwen WAV structural admission",
+  "implementation": [
+    "RIFF declared size must equal the retained byte length minus the eight-byte RIFF prefix",
+    "all chunks must have complete headers, bounded payloads and valid odd-byte padding",
+    "exactly one fmt chunk of at least 16 bytes and one non-empty data chunk are required"
+  ],
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js: 6/6 passed",
+    "fullSuite": "npm test: 238/238 passed",
+    "secretScan": "npm run scan:secrets: passed across 258 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "negativeCases": [
+    "incorrect RIFF declared size",
+    "missing data chunk",
+    "chunk payload extending beyond retained bytes"
+  ],
+  "externalActions": [],
+  "providerCalls": 0,
+  "realMediaGenerated": false,
+  "projectComplete": false
+}

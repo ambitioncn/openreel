@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-15T21:18:00Z",
+  "scope": "local qualification and read-only deployment baseline",
+  "externalWrites": false,
+  "providerCalls": 0,
+  "otpActions": 0,
+  "local": {
+    "tests": {"command": "npm test", "passed": 196, "failed": 0},
+    "secretScan": {"command": "npm run scan:secrets", "status": "passed", "files": 199},
+    "dependencyAudit": {"command": "npm run scan:dependencies", "highSeverityFindings": 0},
+    "reliability": {
+      "command": "npm run qualify:reliability",
+      "status": "passed",
+      "concurrentRequests": 200,
+      "successfulRequests": 200,
+      "readinessFailureStatus": 503,
+      "readinessRecoveredStatus": 200,
+      "externalCalls": false
+    }
+  },
+  "aliyun": {
+    "target": "root@123.57.67.213:/opt/openreel/current",
+    "mode": "read-only",
+    "service": "openreel.service",
+    "active": true,
+    "enabled": true,
+    "loopbackPort": 4273,
+    "listenerCount": 1,
+    "loopbackHttpStatus": 200,
+    "releaseTarget": "/opt/openreel/releases/20260815T0245-beijing-ip",
+    "stateArtifactsPresent": ["openreel.sqlite", "assets", "platform.json", "smoke-artifacts"]
+  },
+  "interpretation": "This evidence advances S-01 local qualification and establishes a deployment baseline only. It does not authorize deployment, process control, provider calls, production changes, payment actions, publication, or project completion."
+}

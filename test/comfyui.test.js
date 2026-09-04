@@ -50,12 +50,55 @@ test("ModelClaw service submits the pinned workflow, polls, and downloads the vi
   assert.equal(calls.filter(call => call.url.endsWith("/prompt")).length, 1);
 });
 
-test("ModelClaw fails closed on workflow drift and non-text references", async () => {
+test("ModelClaw recognizes SaveVideo MP4 metadata returned in ComfyUI images", async () => {
+  const platform = { authenticateApiKey: () => ({ account: { id: "owner" } }) };
+  const fetchImpl = async (url) => {
+    if (url.includes("/api/userdata/")) return response(workflow);
+    if (url.endsWith("/prompt")) return response({ prompt_id: "prompt-save-video" });
+    if (url.includes("/history/")) return response({
+      "prompt-save-video": {
+        status: { status_str: "success", completed: true },
+        outputs: { "15": { images: [{ filename: "result.mp4", subfolder: "video", type: "output" }], animated: [true] } },
+      },
+    });
+    if (url.includes("/view?")) return response(new Uint8Array([0, 0, 0, 24, 102, 116, 121, 112]), { headers: { "content-type": "video/mp4" } });
+    throw new Error(`unexpected ${url}`);
+  };
+  const service = createComfyUiService({ config: loadComfyUiConfig({ OPENREEL_MODELCLAW_COMFYUI_ENABLED: "true" }), platform, fetchImpl, id: () => "job-save-video" });
+  const submitted = await service.submit("key", { model: "minimax-h3-fl2va-q5-turbo-v4", capability: "video", input: { prompt: "A cinematic product reveal" }, idempotencyKey: "save-video" });
+  assert.equal((await service.poll("key", submitted.id)).status, "succeeded");
+  assert.equal((await service.download("key", submitted.id)).mimeType, "video/mp4");
+});
+
+test("ModelClaw uploads and wires one first-frame reference", async () => {
+  const platform = { authenticateApiKey: () => ({ account: { id: "owner" } }) }, image = Buffer.from("image-bytes");
+  const fetchImpl = async (url, options = {}) => {
+    if (url.includes("/api/userdata/")) return response(workflow);
+    if (url.endsWith("/upload/image")) {
+      assert.equal(options.method, "POST"); assert.ok(options.body instanceof FormData);
+      return response({ name: "uploaded.png", subfolder: "", type: "input" });
+    }
+    if (url.endsWith("/prompt")) {
+      const submitted = JSON.parse(options.body).prompt;
+      assert.deepEqual(submitted["6"].inputs.first_frame, ["16", 0]);
+      assert.deepEqual(submitted["16"], { class_type: "LoadImage", inputs: { image: "uploaded.png" } });
+      return response({ prompt_id: "prompt-image" });
+    }
+    throw new Error(`unexpected ${url}`);
+  };
+  const service = createComfyUiService({ config: loadComfyUiConfig({ OPENREEL_MODELCLAW_COMFYUI_ENABLED: "true" }), platform, fetchImpl, id: () => "job-image" });
+  const submitted = await service.submit("key", { model: "minimax-h3-fl2va-q5-turbo-v4", capability: "video", input: { content: [{ type: "text", text: "Animate this frame" }, { type: "image_url", role: "first_frame", image_url: { url: `data:image/png;base64,${image.toString("base64")}` } }] }, idempotencyKey: "image" });
+  assert.equal(submitted.status, "running");
+  assert.deepEqual(service.models()[0].schema.modes, ["text-to-video", "image-to-video"]);
+  assert.equal(service.models()[0].schema.maxReferences, 1);
+});
+
+test("ModelClaw fails closed on workflow drift and unsupported references", async () => {
   const platform = { authenticateApiKey: () => ({ account: { id: "owner" } }) };
   const drift = structuredClone(workflow); drift["1"].inputs.unet_name = "other.gguf";
   const service = createComfyUiService({ config: loadComfyUiConfig({ OPENREEL_MODELCLAW_COMFYUI_ENABLED: "true" }), platform, fetchImpl: async () => response(drift) });
   await assert.rejects(() => service.submit("key", { model: "minimax-h3-fl2va-q5-turbo-v4", capability: "video", input: { prompt: "x" }, idempotencyKey: "a" }), error => error.code === "COMFYUI_WORKFLOW_DRIFT");
-  await assert.rejects(() => service.submit("key", { model: "minimax-h3-fl2va-q5-turbo-v4", capability: "video", input: { content: [{ type: "text", text: "x" }, { type: "image_url", image_url: { url: "x" } }] }, idempotencyKey: "b" }), error => error.code === "COMFYUI_INPUT_INVALID");
+  await assert.rejects(() => service.submit("key", { model: "minimax-h3-fl2va-q5-turbo-v4", capability: "video", input: { content: [{ type: "text", text: "x" }, { type: "image_url", image_url: { url: "http://unsafe.example/image.png" } }] }, idempotencyKey: "b" }), error => error.code === "COMFYUI_INPUT_INVALID");
 });
 
 test("inference router exposes and routes ModelClaw without an Ark service", async () => {

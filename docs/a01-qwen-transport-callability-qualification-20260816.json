@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "capturedAt": "2026-08-16",
+  "scope": "local synthetic Qwen TTS transport-construction boundary",
+  "claim": "The Qwen TTS client rejects non-callable injected transports during construction, before authorization, synthesis, or network execution.",
+  "implementation": [
+    "src/qwen-tts.js validates fetchImpl as a function before returning an enabled client",
+    "test/qwen-tts.test.js covers null, boolean, numeric, string, record and array transports"
+  ],
+  "verification": {
+    "focused": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js: 35/35 passed",
+    "full": "npm test: 262/262 passed",
+    "governance": "node --test test/project-governance.test.js: 3/3 passed",
+    "secretScan": "npm run scan:secrets: passed; 298 files scanned",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": {
+    "tailnetQwenRequests": 0,
+    "providerCalls": 0,
+    "otpReplays": 0,
+    "deployments": 0,
+    "serviceRestarts": 0,
+    "credentialChanges": 0,
+    "publicActions": 0
+  },
+  "limitations": [
+    "This qualification does not establish successful real Qwen synthesis or retained-media browser behavior.",
+    "A real synthesis remains behind a precise human authorization."
+  ]
+}

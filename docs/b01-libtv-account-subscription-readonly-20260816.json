@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "capturedAt": "2026-08-16T13:54:26Z",
+  "scope": "Authenticated LibTV owner-account billing surface, read-only",
+  "authorization": "Consumed cp248 gate; no purchase, recharge, subscription change, media generation, payment-method change, OTP, or other mutation",
+  "observations": {
+    "sessionValid": true,
+    "accountScopes": 1,
+    "activeScope": "personal-owner",
+    "teamScopePresent": false,
+    "membership": {
+      "label": "standard VIP recurring monthly",
+      "level": 3,
+      "effective": true
+    },
+    "detailedBalanceVisibleViaCli": false,
+    "detailedUsageVisibleViaCli": false,
+    "paymentMutationAttempted": false
+  },
+  "evidenceBoundary": [
+    "Durable evidence intentionally omits account IDs, user UUIDs, tokens, web IDs, phone numbers, balances, transaction identifiers, and expiring data.",
+    "The read-only CLI account surface establishes current membership status, but does not expose detailed balance, quota, invoices, transaction history, or usage ledger.",
+    "No SMS challenge was sent because the retained owner session remained valid."
+  ],
+  "remaining": [
+    "Capture authenticated detailed balance, quota and usage UX/API evidence through a controllable read-only surface.",
+    "Keep all payment, recharge, purchase, subscription-change and payment-method actions behind a new exact human gate."
+  ]
+}

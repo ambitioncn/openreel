@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "milestone": "S-01",
+  "qualifiedAt": "2026-08-15T17:34:46Z",
+  "scope": "local-only platform tenant identity validation",
+  "result": "passed",
+  "claims": [
+    "Every stored team has a non-empty tenantId that is unique across the platform snapshot.",
+    "Team membership is an array, resolves to stored accounts and contains each account at most once per team.",
+    "Ambiguous tenant ownership and duplicate membership fail closed before backup or restore promotion."
+  ],
+  "verification": {
+    "opsTest": { "command": "node --test test/ops.test.js", "passed": 20, "failed": 0 },
+    "fullTest": { "command": "npm test", "passed": 188, "failed": 0 },
+    "dependencyAudit": { "command": "npm audit --omit=dev --audit-level=high", "vulnerabilities": 0 },
+    "secretScan": { "command": "npm run scan:secrets", "status": "passed", "files": 167 },
+    "diffCheck": { "command": "git diff --check", "status": "passed" }
+  },
+  "externalActions": [],
+  "notClaimed": [
+    "complete business-rule validation of every platform field",
+    "staging or production backup/restore",
+    "external backup copy or off-host retention",
+    "signing or activation",
+    "independent review"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "openreel-commercial-real-evaluation-evidence/v1",
+  "taskId": "2026-08-25T02-55-58-120Z_routed-task-loop-engineering-loop-openreel-comme",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "necessity": "After strict actual-person pass evidence was retained, CDQI2-09 still required strict real-provider rejection evidence for both new dimensions. Existing retained non-person video bytes avoided any new media-generation charge.",
+  "route": {"environment":"Beijing Aliyun private production provider route","provider":"volcengine-ark","model":"seed-2.1-turbo"},
+  "limits": {"maximumSubmissions":1,"providerSubmissions":1,"automaticRetries":0,"fallbacks":0,"maximumCostCny":0.1,"ownerPerActionLimitCny":100},
+  "asset": {"source":"runtime/t01-real-video-browser/representative-multishot.mp4","mimeType":"video/mp4","byteLength":378927,"sha256":"8cfd36a52965e4ad6a2fc1af58c0946be046ca5f2fb0765e9ada12f6555c7a6a"},
+  "response": {
+    "httpStatus": 200,
+    "scores": {"intent":0,"beat":0,"composition":0,"visual_identity_consistency":0,"performance_naturalness":0},
+    "observed": "No person is visible in the supplied video frames, only abstract colored bars, geometric shapes, and a timer overlay; identity and performance cannot be established from the visible bytes.",
+    "usage": {"inputTokens":2571,"outputTokens":78,"totalTokens":2649},
+    "calculatedCostCny": 0.008883,
+    "pricingBasis": "CNY 3 per million input tokens plus CNY 15 per million output tokens"
+  },
+  "newDimensionOutcomes": {"visual_identity_consistency":"rejected","performance_naturalness":"rejected"},
+  "contractResult": "strict_parseable_new_dimension_rejection_evidence",
+  "publicationCalls": 0,
+  "status": "accepted"
+}

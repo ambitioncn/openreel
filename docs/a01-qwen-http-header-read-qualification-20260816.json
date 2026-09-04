@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "backlogItem": "A-01",
+  "qualification": "qwen-http-header-read-boundary",
+  "date": "2026-08-16",
+  "result": "passed",
+  "claims": [
+    "Qwen response header getter failures become stable QWEN_TTS_RESULT_INVALID errors before audio body access.",
+    "Header values that fail during string conversion are rejected through the same boundary.",
+    "Only headerReadFailed=true is retained; private getter and conversion exception text is not exposed."
+  ],
+  "verification": {
+    "focused": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js test/qwen-tts-ui.test.js: 40/40 passed",
+    "full": "npm test: 267/267 passed",
+    "governance": "node --test test/project-governance.test.js: 3/3 passed",
+    "secrets": "npm run scan:secrets: passed; 303 files scanned",
+    "diff": "git diff --check: passed"
+  },
+  "externalActions": {
+    "tailnetRequests": 0,
+    "providerCalls": 0,
+    "deployments": 0,
+    "serviceRestarts": 0,
+    "credentialChanges": 0
+  },
+  "remaining": "A successful real Qwen synthesis and retained-media graphical-browser E2E remain gated by a new precise authorization."
+}

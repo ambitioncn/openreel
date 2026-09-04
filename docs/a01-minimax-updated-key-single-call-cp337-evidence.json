@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-18",
+  "milestone": "A-01-MUSIC-REAL-MEDIA",
+  "authorizationGate": "cp336",
+  "providerModel": "music-2.6-free",
+  "result": "failed_insufficient_balance_or_entitlement",
+  "httpStatus": 200,
+  "sanitizedProviderCode": 1008,
+  "providerRequests": 1,
+  "retries": 0,
+  "fallbackRequests": 0,
+  "chargeCny": 0,
+  "purchaseOrSubscription": false,
+  "mediaCreated": 0,
+  "mediaRetained": 0,
+  "published": false,
+  "credentialWrites": 0,
+  "serviceChanges": 0,
+  "deployments": 0,
+  "responseShape": {
+    "tracePresent": true,
+    "providerMessagePresent": true,
+    "audioUrlPresent": false,
+    "audioHexPresent": false
+  },
+  "verification": [
+    "the updated key reached exactly one music-2.6-free generation request",
+    "the first terminal provider response returned sanitized business code 1008 without audio",
+    "the zero-retry and no-fallback stop conditions were honored",
+    "no nonzero price, purchase, subscription, media, deployment or publication occurred"
+  ],
+  "boundary": "This cp336 authorization is consumed. The updated key can authenticate to MiniMax text/model-list surfaces but still did not produce music. Further progress requires an owner payment/entitlement decision or a separately reviewed alternate route; this evidence grants no retry."
+}

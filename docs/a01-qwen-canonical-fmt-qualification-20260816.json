@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "qualification": "qwen-canonical-wav-format-chunk",
+  "date": "2026-08-16",
+  "result": "passed",
+  "scope": "credential-free local synthetic WAV admission",
+  "claims": [
+    "Qwen WAV admission accepts the canonical 16-byte WAVEFORMAT layout",
+    "Qwen WAV admission accepts the 18-byte WAVEFORMATEX layout only when cbSize is zero",
+    "Truncated, undeclared, nonzero, and uninterpreted format extensions fail closed"
+  ],
+  "verification": [
+    "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js: 11/11 passed",
+    "npm test: 240/240 passed",
+    "npm run scan:secrets: passed across 266 files",
+    "git diff --check: passed"
+  ],
+  "externalActions": {
+    "otpReplay": false,
+    "tailnetRequest": false,
+    "providerCall": false,
+    "deployment": false,
+    "credentialChange": false,
+    "publicAction": false
+  },
+  "limitations": [
+    "No real Qwen output was generated or retained",
+    "WAVE_FORMAT_EXTENSIBLE and codec-specific extensions remain unsupported"
+  ]
+}

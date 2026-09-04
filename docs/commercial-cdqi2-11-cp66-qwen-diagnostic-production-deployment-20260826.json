@@ -1,0 +1,47 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp66-qwen-diagnostic-production-deployment/v1",
+  "capturedAt": "2026-08-26T03:46:00Z",
+  "authorization": "consumed_cp65_deployment_attestation_and_standing_openreel_production_authorization",
+  "candidate": {
+    "release": "/opt/openreel/releases/20260826T034500Z-cdqi2-cp66-qwen-diagnostic",
+    "rollbackAnchor": "/opt/openreel/releases/20260825T194012Z-cdqi2-cp63-project-version-compat",
+    "sourceHashes": {
+      "src/commercial-job-lifecycle.js": "d196047a03e25341ed09e7bed8513aa636cddb66e89d76f5cebfc06226bec068",
+      "test/commercial-job-lifecycle.test.js": "126801627d039f97b05251da0d49612870b709aae69847cbeb06e2cb1fdc5825"
+    },
+    "localAndProductionHashesMatch": true
+  },
+  "backup": {
+    "path": "/var/backups/openreel/2026-08-26T042500Z-cdqi2-cp66",
+    "isolatedRestore": "/var/backups/openreel/2026-08-26T042500Z-cdqi2-cp66-isolated-restore",
+    "manifestFiles": 176,
+    "database": "ok",
+    "assets": 168,
+    "publishing": "ok"
+  },
+  "verification": {
+    "localFocused": "12 passed, 0 failed",
+    "localFull": "579 passed, 0 failed",
+    "remoteCandidateFocused": "11 passed, 0 failed",
+    "remoteCandidateFull": "57 passed, 0 failed",
+    "live": "ok",
+    "ready": "database and assets ok",
+    "service": "active/running; NRestarts=0",
+    "processCwd": "/opt/openreel/releases/20260826T034500Z-cdqi2-cp66-qwen-diagnostic",
+    "rollbackRehearsal": "candidate activated healthy, cp63 rollback anchor reactivated healthy, candidate reactivated healthy"
+  },
+  "behavior": {
+    "diagnosticPersistence": "Qwen commercial voice failures retain only provider identity, HTTP-or-transport category, bounded integer HTTP status and allow-pattern transport cause code",
+    "excludedData": "raw messages, response bodies, URLs, tokens, credentials and arbitrary cause strings are not persisted"
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidJobs": 0,
+    "paidRetries": 0,
+    "publicationCalls": 0,
+    "externalSends": 0,
+    "credentialChanges": 0
+  },
+  "status": "deployed_ready_for_acceptance",
+  "projectCompletion": "in_progress"
+}

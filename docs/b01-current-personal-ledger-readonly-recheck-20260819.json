@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "capturedAt": "2026-08-19",
+  "scope": "Owner-authorized authenticated read-only inspection of the current LibTV personal account balance, quota and usage surfaces",
+  "authorizationBoundary": {
+    "existingSessionOnly": true,
+    "currentPersonalAccountOnly": true,
+    "retainRedactedStructuralFactsOnly": true,
+    "forbidden": [
+      "purchase",
+      "subscription",
+      "payment",
+      "content_generation",
+      "account_switch",
+      "external_message",
+      "credential_change"
+    ]
+  },
+  "observations": {
+    "sessionAuthenticated": true,
+    "accountQuerySucceeded": true,
+    "accountScopesCount": 1,
+    "activePersonalScopePresent": true,
+    "documentedCliFieldAvailability": {
+      "membership": true,
+      "balance": false,
+      "quota": false,
+      "usage": false,
+      "detailedLedger": false
+    },
+    "browserInteractiveCandidateCount": 2,
+    "browserCandidateCategories": {
+      "points": 2,
+      "balance": 0,
+      "quotaOrPlan": 0,
+      "usage": 0,
+      "billing": 0,
+      "rechargeOrSubscription": 0
+    },
+    "stableReadOnlyDetailedSurfaceDiscovered": false,
+    "mutationsPerformed": false
+  },
+  "privacy": {
+    "rawCliResponsesRetained": false,
+    "rawBrowserResponseRetained": false,
+    "accountIdentifiersRetained": false,
+    "personalAmountsRetained": false,
+    "transactionIdentifiersRetained": false,
+    "credentialsReadOrRetained": false
+  },
+  "conclusion": "The authorized current-state check confirms a valid personal session and membership structure but no controllable detailed balance, quota, usage, invoice or ledger surface. This is fresh negative external-state evidence and does not accept B-01.",
+  "remaining": [
+    "A stable documented LibTV detailed personal-ledger surface if one becomes available",
+    "A separately authorized bounded staging payment-provider exercise"
+  ]
+}

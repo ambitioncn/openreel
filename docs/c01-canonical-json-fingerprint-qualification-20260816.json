@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "C-01",
+  "scope": "credential-free canonical continuity evidence fingerprinting",
+  "controls": [
+    "canonicalize nested generation-parameter and reference-provenance JSON object keys before fingerprinting",
+    "reject undefined, non-finite numbers, typed objects and circular references that JSON would omit or silently normalize",
+    "preserve equivalent fingerprints across caller object insertion order"
+  ],
+  "verification": {
+    "focused": "node --test test/continuity-evaluation.test.js: 13 passed, 0 failed",
+    "fullSuite": "npm test: 224 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 232 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "real-provider origin of evaluated evidence",
+    "retained real-media multi-shot outputs",
+    "human visual acceptance",
+    "provider execution",
+    "deployment or production readiness"
+  ]
+}

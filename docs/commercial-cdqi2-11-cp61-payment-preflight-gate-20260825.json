@@ -1,0 +1,38 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp61-payment-preflight-gate/v1",
+  "capturedAt": "2026-08-25T19:14:43Z",
+  "authorization": "consumed_cp60_single_successor_redo_attestation",
+  "scope": "one cp51 failed-shot successor redo; CNY <=100; zero retry; first-terminal stop; no publication",
+  "outcome": {
+    "status": "stopped_before_redo_creation",
+    "code": "PAYMENT_REQUIRED",
+    "httpStatus": 402,
+    "boundary": "read-only billing usage baseline after quote and before subscription application or redo creation"
+  },
+  "commercialActivity": {
+    "quotesRead": 1,
+    "subscriptionApplicationsCreated": 0,
+    "subscriptionsActivated": 0,
+    "redoJobsCreated": 0,
+    "executeCalls": 0,
+    "providerCalls": 0,
+    "retries": 0,
+    "spentCny": 0,
+    "publications": 0
+  },
+  "productionReadback": {
+    "latestSubscriptionStatus": "active",
+    "latestSubscriptionPeriodEndsAt": "2026-08-25T17:41:08.927Z",
+    "latestSubscriptionSpentUnits": 26734,
+    "latestSubscriptionReservedUnits": 0,
+    "scopedSessionRevoked": true
+  },
+  "safety": {
+    "blindRetryPerformed": false,
+    "secondJobCreated": false,
+    "historicalFailedJobReplayed": false,
+    "publicationAttempted": false,
+    "credentialChanged": false
+  },
+  "interpretation": "The stored subscription record reports active but its period ended before this attempt. The authenticated billing endpoint therefore failed closed with 402 before the bounded application could be created. A new attempt would be a separately authorized paid action and is not performed in this checkpoint."
+}

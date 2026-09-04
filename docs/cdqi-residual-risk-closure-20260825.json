@@ -1,0 +1,63 @@
+{
+  "schema": "openreel-cdqi-residual-risk-closure/v1",
+  "projectId": "openreel-commercial-director-quality-integration",
+  "closedAt": "2026-08-25T02:42:14Z",
+  "candidate": {
+    "release": "/opt/openreel/releases/20260824T165100Z-cdqi-5c505634",
+    "manifestSha256": "5c50563431b1f5f24bffd1f45460e9f7e29a208e1bfdc02204f4650461a944e9"
+  },
+  "closures": [
+    {
+      "risk": "The Beijing host had no installed openreel-backup.service.",
+      "status": "closed",
+      "resolution": "Installed the reviewed service and timer from the accepted immutable release, enabled the persistent daily timer, ran a real backup, and verified it into a fresh isolated restore directory.",
+      "evidence": {
+        "timerEnabled": true,
+        "timerActive": true,
+        "serviceResult": "success",
+        "backup": "/var/backups/openreel/2026-08-25T024211Z",
+        "backupOwnerMode": "openreel:openreel 0700",
+        "restore": {
+          "database": "ok",
+          "assets": 103,
+          "publishing": "ok"
+        },
+        "nextScheduledRun": "2026-08-26T00:11:58+08:00"
+      },
+      "incident": "The first service run failed closed because a historical reconcile-backup directory was mixed into the live publishing-state root. It was moved intact to /var/backups/openreel/publishing-state-reconcile-backup-20260821T1441Z before retry; no data was deleted."
+    },
+    {
+      "risk": "Commercial evaluation uses a stricter CNY 0.10 per-call ceiling than the Ark route global maximum.",
+      "status": "accepted_operational_constraint",
+      "resolution": "The production configuration and runtime use the same reviewed CNY 0.10 ceiling. This is a deliberate fail-closed budget control rather than unresolved exposure; costs above the confirmed ceiling are rejected.",
+      "evidence": {
+        "productionModel": "seed-2.1-turbo",
+        "productionMaximumCnyPerCall": 0.1,
+        "targetedRegression": "23/23 passed",
+        "realQualificationCombinedCostCny": 0.02016,
+        "blindRetries": 0
+      }
+    },
+    {
+      "risk": "The shared OpenReel worktree contains pre-existing owner changes.",
+      "status": "contained",
+      "resolution": "The deployed bytes remain isolated from the shared worktree by the accepted immutable 105-artifact release manifest. Current production resolves to that reviewed release and passed a fresh readiness check; no owner change was cleaned, overwritten, or folded into this risk closure.",
+      "evidence": {
+        "productionRelease": "/opt/openreel/releases/20260824T165100Z-cdqi-5c505634",
+        "manifestArtifactCount": 105,
+        "manifestTamperCheck": "passed in terminal acceptance",
+        "productionService": "active",
+        "readiness": {
+          "status": "ready",
+          "database": "ok",
+          "assets": "ok"
+        }
+      }
+    }
+  ],
+  "remainingBlockingRisks": [],
+  "remainingNonBlockingRisks": [],
+  "externalPublication": false,
+  "providerCalls": 0,
+  "paidCalls": 0
+}

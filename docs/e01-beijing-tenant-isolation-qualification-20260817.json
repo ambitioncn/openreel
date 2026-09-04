@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "recordedAt": "2026-08-17T05:39:38Z",
+  "scope": "owner-authorized isolated Beijing staging tenant-isolation acceptance",
+  "target": {
+    "host": "123.57.67.213",
+    "applicationRoot": "/opt/openreel/current",
+    "network": "temporary loopback-only process on a random high port",
+    "state": "temporary isolated SQLite, asset and platform paths"
+  },
+  "result": {
+    "status": "passed",
+    "tenantsCreated": 2,
+    "crossTenantProjectReadStatus": 403,
+    "crossTenantProjectWriteStatus": 403,
+    "crossTenantCollaborativeDocumentReadStatus": 403,
+    "crossTenantCollaborativeDocumentWriteStatus": 403,
+    "ownerDataUnchanged": true,
+    "providerCalls": 0,
+    "paidInference": false
+  },
+  "cleanup": {
+    "temporaryDirectoriesRemaining": 0,
+    "testProcessesRemaining": 0,
+    "testAccountsTeamsProjectsDocumentsRemaining": 0,
+    "method": "the complete isolated state root was recursively removed after the temporary process stopped"
+  },
+  "postcondition": {
+    "mainService": "active",
+    "readiness": {
+      "status": "ready",
+      "database": "ok",
+      "assets": "ok"
+    }
+  },
+  "replay": "npm run smoke:staging-tenant-isolation",
+  "boundaries": [
+    "No production state or traffic was used or modified.",
+    "No provider, paid model, payment, account configuration or credential configuration was invoked or changed.",
+    "This evidence qualifies the E-01 tenant-isolation acceptance dimension only; it does not qualify remaining real-provider media or production deployment gates."
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "openreel-v4-07-text-timeout-and-tls-blocker/v1",
+  "authorization": "consumed cp23 approval",
+  "implementation": {
+    "environmentVariable": "OPENREEL_ARK_TEXT_SUBMIT_TIMEOUT_MS",
+    "defaultMs": 30000,
+    "acceptedRangeMs": [30000, 120000],
+    "productionCandidateMs": 120000,
+    "scope": "text submit only; image submit and all other operation timeouts remain unchanged"
+  },
+  "verification": {
+    "arkTests": "38/38 passed",
+    "fullTests": "460/460 passed",
+    "releaseManifest": "84/84 verified with tamper rejection",
+    "dependencyAudit": "zero vulnerabilities",
+    "coreBackup": "/var/backups/openreel/2026-08-22T123254Z-v4-timeout-core",
+    "isolatedRestore": "/var/backups/openreel/2026-08-22T123254Z-v4-timeout-core-verify",
+    "restoredAssets": 25
+  },
+  "production": {
+    "candidate": "/opt/openreel/releases/20260822T1233Z-v4-text-timeout",
+    "candidateLocalReadiness": "passed",
+    "activation": "rolled_back",
+    "activeRelease": "/opt/openreel/releases/20260822T1225Z-v4-planning-seed-pro",
+    "activeReadiness": "ready",
+    "activeRestartCount": 0,
+    "paidProviderCalls": 0,
+    "settledCostCny": 0
+  },
+  "blocker": {
+    "symptom": "Every public TLS handshake for openreel.duobiai.cn returns TLS alert internal error before HTTP",
+    "diagnosis": "TCP 443 is owned by derper PID 61537 rather than nginx; nginx configuration and certificate/key validation pass, but OpenReel traffic cannot reach nginx",
+    "boundary": "Changing, restarting or rerouting derper is outside the cp23 OpenReel restart approval and remains process-control gated"
+  },
+  "projectCompletion": "in_progress"
+}

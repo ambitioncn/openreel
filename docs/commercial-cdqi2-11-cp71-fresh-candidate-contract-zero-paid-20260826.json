@@ -1,0 +1,24 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp71-fresh-candidate-contract/v1",
+  "status": "zero_paid_preflight_complete",
+  "authorization": "consumed_cp70_fresh_complete_candidate_attestation",
+  "change": {
+    "candidateLineage": "Every initial quote and confirmed job now persists mode=fresh, sourceJobId=null, and empty inherited shot/asset ids.",
+    "failClosed": "Initial quote rejects sourceJobId, redo, preservedShotIds, or preservedAssetIds instead of implicitly accepting prior-job inheritance.",
+    "scope": "No change to the separately quoted bounded redo route."
+  },
+  "verification": {
+    "targeted": "49 passed, 0 failed",
+    "full": "583 passed, 0 failed",
+    "loopDoctor": "ok=true, failCount=0",
+    "providerCalls": 0,
+    "paidJobs": 0,
+    "retries": 0,
+    "publications": 0
+  },
+  "production": {
+    "deploymentPerformed": false,
+    "reason": "This checkpoint establishes and locally verifies the missing fresh-candidate contract; production deployment and read-only quote preflight remain the next zero-paid step before any provider-backed execution."
+  },
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "backlogItems": ["A-01", "S-01"],
+  "date": "2026-08-16",
+  "scope": "credential-free RIFF parser work-amplification boundary",
+  "implementation": "src/wav.js rejects a WAV after 1,024 total RIFF chunks, including fmt and data",
+  "positiveEvidence": "a canonical WAV with 1,022 zero-length JUNK chunks plus fmt and data (1,024 total) remained accepted",
+  "negativeEvidence": "the equivalent WAV with 1,023 JUNK chunks (1,025 total) was rejected as QWEN_TTS_RESULT_INVALID",
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js",
+    "targetedResult": "16/16 passed",
+    "externalCalls": 0,
+    "retainedExternalMedia": 0
+  },
+  "boundary": "No OTP replay, Tailnet request, real synthesis, Provider call, deployment, service change, credential change or publication occurred."
+}

@@ -1,0 +1,59 @@
+{
+  "schema": "openreel-m01-vision-execution-evidence/v2",
+  "authorizationGate": "corrected-v2-once",
+  "status": "success_cleanup_complete",
+  "scope": {
+    "environment": "Beijing isolated private staging",
+    "model": "embedding-vision",
+    "requestContract": {
+      "encoding_format": "float",
+      "image_url": { "url": "private bounded fixture URL" },
+      "video_url": { "url": "private bounded fixture URL" }
+    },
+    "maximumSubmissions": 2,
+    "automaticRetries": 0,
+    "maximumReservedUnits": 5556,
+    "ownerCeilingCny": 4
+  },
+  "observed": {
+    "providerSubmissions": 2,
+    "completedModes": ["image-to-text", "video-to-text"],
+    "imageSucceededBeforeVideoSubmission": true,
+    "automaticRetries": 0,
+    "spentUnits": 2,
+    "reservedUnitsAfterRun": 0,
+    "billingReconciliationConsistent": true,
+    "authorizationConsumed": true
+  },
+  "cleanup": {
+    "isolatedPort4373Open": false,
+    "temporaryFilesRemaining": 0,
+    "isolatedProcessesRemaining": 0,
+    "productionService": "active",
+    "productionPort4273Open": true,
+    "productionCodeChanged": false,
+    "productionPaidInferenceEnabled": false,
+    "productionRetryLimit": 0
+  },
+  "retention": {
+    "credentialValues": false,
+    "providerRequestIdentifiers": false,
+    "providerResponseBodies": false,
+    "fixtureBytes": false,
+    "humanInput": false
+  },
+  "limitations": [
+    "This closes the bounded M-01 image-to-text and video-to-text evidence gap only.",
+    "Configured-provider count and remaining LibTV control parity gaps are not closed by these two successful calls.",
+    "The corrected-v2-once authorization is consumed and grants no replay or retry authority."
+  ],
+  "negativeEvidence": {
+    "submissionsBeyondAuthorizedMaximum": 0,
+    "retries": 0,
+    "credentialChanges": 0,
+    "productionChanges": 0,
+    "deployments": 0,
+    "publications": 0
+  },
+  "projectCompletion": "in_progress"
+}

@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "project": "openreel-one-click-publishing",
+  "milestone": "OCP-04",
+  "status": "accepted_local_implementation",
+  "implementation": ["src/publishing-lifecycle.js", "test/publishing-lifecycle.test.js"],
+  "verified_contract": [
+    "The persisted contract implements queued, validating, awaiting_confirmation, uploading, processing, publishing, published, failed, cancelling, cancelled and unknown_remote states with an explicit legal transition table.",
+    "Every update uses an expected version compare-and-swap; the atomic file store fsyncs a temporary record, renames it and fsyncs the parent directory.",
+    "A SHA-256 identity binds tenant, platform, account, asset digest and immutable intent key; upload and publish derive stable stage keys from it.",
+    "Failure normalization distinguishes transient, permanent, auth, quota, policy and ambiguous unknown-remote outcomes.",
+    "Transient retries are bounded, jittered and Retry-After aware; ambiguous upload, publish or cancel outcomes are never blindly repeated.",
+    "Cancellation, manual retry, restart enumeration and explicit remote reconciliation are deterministic and append actor/timestamp transition history.",
+    "Injected response loss at upload and publish boundaries proves reconciliation can recover without duplicate remote calls."
+  ],
+  "verification": [
+    {"command":"node --test test/publishing-lifecycle.test.js","result":"9 passed, 0 failed"},
+    {"command":"npm test","result":"392 passed, 0 failed"},
+    {"command":"npm run scan:secrets","result":"passed, 511 files scanned"}
+  ],
+  "external_actions": {"capability_calls":0,"uploads":0,"publications":0,"credential_reads":0,"credential_writes":0},
+  "boundary": "This is a durable platform-neutral lifecycle and adapter contract. OCP-05 through OCP-08 must supply official platform adapters and their precise reconciliation semantics before any owner-gated live action.",
+  "next_item": "OCP-05"
+}

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "project": "openreel-libtv-parity",
+  "milestone": "A-01-MUSIC-REAL-MEDIA",
+  "status": "consumed_terminal_failure",
+  "createdAt": "2026-08-18",
+  "request": {
+    "providerModel": "minimax-portal/music-2.6-free",
+    "mode": "generate",
+    "prompt": "Gentle cinematic ambient instrumental for a quiet sunrise scene, warm piano, soft strings, no vocals.",
+    "instrumental": true,
+    "lyrics": null,
+    "format": "mp3",
+    "providerRequests": 1,
+    "maxRetries": 0,
+    "costCeilingCny": 0,
+    "private": true
+  },
+  "allowed": [
+    "submit exactly one request using the already configured MiniMax CN portal route and existing authentication reference",
+    "poll only the task created by that single request until its first terminal result",
+    "retain at most one returned MP3 in local private evidence",
+    "record sanitized provider status, output byte count, MIME type and local playback/probe evidence"
+  ],
+  "forbidden": [
+    "read, copy, output or change any credential",
+    "retry or fall back to another provider or model",
+    "submit any other music, image, video, speech or model request",
+    "incur any charge",
+    "deploy, restart services, change production state or publish the output"
+  ],
+  "stopConditions": [
+    "any nonzero price, quota purchase or subscription requirement",
+    "authentication or authorization rejection",
+    "first terminal success or failure",
+    "any unexpected provider/model route or fallback"
+  ],
+  "authorizationPhrase": "授权 MiniMax 中国区 music-2.6-free 单次音乐验证：1 次请求、零重试、费用上限 0 元、不公开发布。",
+  "outcomeEvidence": "docs/a01-minimax-cn-single-call-cp334-evidence.json",
+  "boundary": "This authorization was consumed by one terminal failed request. It grants no retry, purchase, subscription, credential change, fallback, deployment or publication authority."
+}

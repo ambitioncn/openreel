@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "milestoneId": "M-01",
+  "qualification": "model_catalog_drift",
+  "status": "passed",
+  "scope": "credential-free local catalog comparison",
+  "behavior": {
+    "integrityRequired": true,
+    "addedModelsObservable": true,
+    "removedModelsObservable": true,
+    "changedModelsObservable": true,
+    "driftStatus": "review_required",
+    "driftFailsClosed": true,
+    "unchangedStatus": "unchanged",
+    "reportsDeeplyImmutable": true,
+    "executedProviderCalls": false
+  },
+  "verification": {
+    "targeted": "11/11 passed",
+    "fullSuite": "298/298 passed"
+  },
+  "externalActions": {
+    "providerCalls": 0,
+    "credentialReads": 0,
+    "deployments": 0,
+    "productionChanges": 0
+  }
+}

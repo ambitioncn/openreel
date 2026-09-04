@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "C-01",
+  "scope": "credential-free non-empty continuity artifact verification",
+  "controls": [
+    "inspect the already opened read-only artifact descriptor before hashing",
+    "reject a zero-byte retained artifact even when its declared SHA-256 matches the empty payload",
+    "retain descriptor identity, stable-state, streamed-byte-count and digest checks for non-empty artifacts"
+  ],
+  "verification": {
+    "focused": "node --test test/continuity-evaluation.test.js: 10 passed, 0 failed",
+    "fullSuite": "npm test: 221 passed, 0 failed",
+    "dependencyAudit": "npm audit --omit=dev --audit-level=high: 0 vulnerabilities",
+    "secretScan": "node scripts/scan-secrets.mjs: passed across 230 files",
+    "diffCheck": "git diff --check: passed"
+  },
+  "externalActions": false,
+  "providerCalls": 0,
+  "claimsExcluded": [
+    "semantic completeness of a non-empty artifact",
+    "real-provider origin of verified bytes",
+    "retained real-media multi-shot outputs",
+    "human visual acceptance",
+    "provider execution",
+    "deployment or production readiness"
+  ]
+}

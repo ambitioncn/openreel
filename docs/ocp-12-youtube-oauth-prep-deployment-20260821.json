@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "milestone": "OCP-12-YOUTUBE-OAUTH-PREP",
+  "captured_at": "2026-08-21T02:53:00Z",
+  "status": "deployed_and_qualified",
+  "implementation": [
+    "Authenticated and CSRF-protected YouTube OAuth begin, callback and disconnect HTTP routes",
+    "Exact youtube.upload minimum scope with PKCE and single-use state",
+    "Google token exchange, refresh, revocation and single-channel identity discovery",
+    "AES-256-GCM token envelopes with atomic OAuth snapshot persistence",
+    "Unavailable-by-default production configuration requiring a complete five-value tuple",
+    "Release qualification expanded from 10 to 23 publishing-critical artifacts"
+  ],
+  "production": {
+    "host": "123.57.67.213",
+    "release": "/opt/openreel/releases/20260821T025105Z-youtube-oauth-prep",
+    "previous_release": "/opt/openreel/releases/20260820T233000Z-commercial-v2-hybrid",
+    "backup": "/var/backups/openreel/ocp12-youtube-predeploy-20260821T025105Z/state",
+    "isolated_restore": "/var/tmp/openreel-ocp12-restore-20260821T025105Z",
+    "actual_rollback": "passed",
+    "reactivation": "passed",
+    "service_active": true,
+    "service_restarts": 0,
+    "loopback_root": 200,
+    "loopback_ready": 200,
+    "public_root": 200,
+    "public_ready": 404,
+    "anonymous_oauth_callback": 401
+  },
+  "youtube": {
+    "callback": "https://openreel.duobiai.cn:4173/api/v1/publishing/oauth/youtube_shorts/callback",
+    "minimum_scope": "https://www.googleapis.com/auth/youtube.upload",
+    "oauth_configured": false,
+    "credentials_changed": false,
+    "oauth_consent": false,
+    "upload": false,
+    "publication": false
+  },
+  "verification": {
+    "local_tests": "427 passed, 0 failed",
+    "focused_tests": "38 passed, 0 failed",
+    "dependency_audit": "0 vulnerabilities",
+    "secret_scan": "passed locally: 546 files",
+    "release_manifest": "23 artifacts verified; tamper rejected",
+    "publishing_operations": "four-platform isolated recovery passed; externalActions=0",
+    "publishing_rollback": "six-file state and release rollback passed; providerCalls=0"
+  },
+  "known_limits": [
+    "The production batch orchestrator is still unavailable because durable runtime construction and tenant asset loading are not wired into the production entry point.",
+    "The deployed OAuth path remains unavailable until an owner-authorized Google project/client credential tuple and separate publishing master key are configured.",
+    "The production backup currently contains pre-publishing state only; the strict six-file publishing bundle becomes mandatory when publishing runtime is activated.",
+    "Remote secret scan depends on .git and could not run inside the immutable release; the same source snapshot passed before packaging."
+  ],
+  "external_actions": 0
+}

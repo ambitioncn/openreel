@@ -1,0 +1,51 @@
+{
+  "schema": "openreel-e01-seedance2-preflight-evidence/v1",
+  "status": "stopped_before_submission",
+  "authorizationCheckpoint": "cp79",
+  "scope": {
+    "environment": "isolated_private_staging",
+    "modelAlias": "seedance-2",
+    "forbiddenModelAlias": "seedance-2-fast",
+    "input": {
+      "kind": "text_to_video",
+      "durationSeconds": 4,
+      "resolution": "480p",
+      "ratio": "16:9",
+      "generateAudio": false
+    },
+    "maximumSubmissions": 1,
+    "automaticRetries": 0,
+    "authorizedMaximumUnits": 6945,
+    "currency": "USD",
+    "unitScale": 10000
+  },
+  "preflight": {
+    "exactSshRouteAvailable": true,
+    "stagingReady": true,
+    "existingApiKeyReferencePresent": true,
+    "existingBaseUrlReferencePresent": true,
+    "existingSeedance2ModelReferencePresent": true,
+    "credentialValueReadOrRetained": false,
+    "paidInferenceEnabled": false,
+    "openReservations": 0,
+    "auditedModelReservationCeilingUnits": 138889,
+    "withinAuthorizedBudget": false
+  },
+  "observed": {
+    "providerSubmissions": 0,
+    "automaticRetries": 0,
+    "spentUnits": 0,
+    "reservedUnitsCreated": 0,
+    "serviceChanges": 0
+  },
+  "stopReason": "The audited seedance-2 reservation ceiling is USD 13.8889, which exceeds the authorized USD 0.6945 ceiling. The human gate explicitly required stopping before submission when budget evidence is inconsistent.",
+  "retention": {
+    "credentialValues": false,
+    "providerTaskIds": false,
+    "providerOutputUrls": false,
+    "accountIdentifiers": false,
+    "humanInputSecrets": false
+  },
+  "nextProviderSubmissionAuthorized": false,
+  "projectCompletion": "in_progress"
+}

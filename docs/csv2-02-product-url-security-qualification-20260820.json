@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "project": "openreel-short-video-commercial-v2",
+  "backlog_item": "CSV2-02",
+  "status": "accepted",
+  "implementation": ["src/product-url.js", "server.mjs", "test/product-url.test.js", "test/http.test.js"],
+  "route": "POST /api/v1/product-url/extract",
+  "controls": {
+    "target": ["HTTPS only", "no credentials", "port 443 only", "no IP literals", "no localhost or .local names"],
+    "dns": ["resolve twice per hop", "stable address set required", "private, loopback, link-local, carrier-grade NAT, benchmark and multicast ranges blocked", "resolved address pinned to TLS request"],
+    "redirects": ["every target revalidated", "relative redirects normalized", "maximum 3 redirects", "redirect response stream released"],
+    "resources": ["8 second total timeout", "1 MiB declared and streamed byte limit", "text/html or application/xhtml+xml only"],
+    "output": ["raw HTML not returned", "title limited to 300 characters", "description limited to 1000 characters", "plain text limited to 20000 characters", "source URL, final URL, redirect chain, MIME, byte count, SHA-256 and fetch time recorded"]
+  },
+  "verification": [
+    {"command": "node --test test/product-url.test.js test/http.test.js", "result": "30 passed, 0 failed"},
+    {"command": "npm test", "result": "341 passed, 0 failed"}
+  ],
+  "negative_coverage": ["HTTP scheme", "URL credentials", "non-443 port", "IP literal", "localhost", "private DNS", "DNS rebinding", "private redirect", "wrong MIME", "declared oversize", "streamed oversize"],
+  "provider_calls": 0,
+  "blockers": [],
+  "residual_risks": ["CSV2-03 must add semantic product understanding, evidence confidence and graceful fallback; CSV2-02 returns only bounded deterministic extraction.", "Live-site compatibility and production browser UX remain later acceptance items."]
+}

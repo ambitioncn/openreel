@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "capturedAt": "2026-08-16",
+  "scope": "credential-free local synthetic qualification",
+  "claim": "Qwen TTS stream reader acquisition and contract drift fail closed with a stable, sanitized domain error before audio bytes are read.",
+  "implementation": [
+    "src/qwen-tts.js validates getReader invocation and the always-required read and releaseLock methods before entering the stream loop; cancel remains a best-effort oversized-body cleanup operation",
+    "test/qwen-tts.test.js covers thrown acquisition, null, empty and incomplete reader results"
+  ],
+  "verification": [
+    "targeted Qwen tests passed 43/43",
+    "full test suite passed 270/270",
+    "project governance tests passed 3/3",
+    "secret scan passed across 307 files",
+    "JSON validation and git diff whitespace checks passed"
+  ],
+  "externalActions": [],
+  "limitations": [
+    "No Tailnet Qwen request or real synthesis was performed",
+    "Successful retained-media graphical-browser E2E remains human-gated"
+  ]
+}

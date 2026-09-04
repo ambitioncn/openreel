@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "scope": "Local manifest-scoped V4 release preflight; no production mutation, provider call, account use or external send",
+  "release_manifest": {
+    "schema": 1,
+    "algorithm": "sha256",
+    "artifact_count": 81,
+    "canonical_bytes": 10051,
+    "canonical_sha256": "cbef32dd8be2ff8039ec1c4132a44f94ea2805c5d63ff1cb23dab05c983b8326",
+    "coverage": "package metadata, server and browser entry points, every src JavaScript/CSS module, reverse-proxy and service definitions, backup, production E2E, deployment rehearsal and publishing rollback tooling"
+  },
+  "verification": [
+    {"command":"node --test test/ops.test.js","result":"passed 43/43, including complete src coverage, tamper rejection, symlink rejection and isolated deployment rehearsal"},
+    {"command":"npm run qualify:release-artifacts","result":"verified 81 artifacts; tamperRejected=true; externalCalls=false; deploymentActivated=false"},
+    {"command":"npm run scan:secrets","result":"passed 578 files"},
+    {"command":"npm audit --omit=dev --audit-level=high","result":"0 vulnerabilities"},
+    {"command":"npm test","result":"passed 455/455"}
+  ],
+  "rollback_inputs": {
+    "required_before_activation": [
+      "resolve and retain the current production release target",
+      "create and independently verify one coherent pre-switch state backup",
+      "copy only the 81 manifest artifacts into a new immutable release directory",
+      "verify the canonical manifest against that directory before switching",
+      "retain the previous release target and stop on any readiness or browser-smoke failure"
+    ],
+    "activation_boundary": "Switching /opt/openreel/current or restarting the service is process control and remains separately human-gated."
+  },
+  "diagnosis_change": "The prior production drift is now addressed by an explicit complete source-module manifest and omission regression test, rather than a dirty-worktree copy or another run against the old bundle.",
+  "project_completion": "in_progress"
+}

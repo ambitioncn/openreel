@@ -1,0 +1,55 @@
+{
+  "schema": "openreel-e01-cp281-single-video-evidence/v1",
+  "status": "failed_cleanup_complete",
+  "authorizationCheckpoint": "cp280",
+  "scope": {
+    "environment": "beijing_isolated_private_staging",
+    "model": "seedance-2-fast",
+    "input": { "kind": "text_to_video", "durationSeconds": 5, "resolution": "480p", "ratio": "16:9", "generateAudio": false },
+    "maximumSubmissions": 1,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "maximumUnits": 6945,
+    "maximumProviderCostCny": 5,
+    "ownerCeilingCny": 30
+  },
+  "preflight": {
+    "defaultHost": "root@123.57.67.213",
+    "isolatedLoopbackPort": 4373,
+    "isolatedDatabaseAndAssets": true,
+    "existingRestrictedCredentialReferencePresent": true,
+    "existingSeedanceFastMappingPresent": true,
+    "credentialValueRetained": false,
+    "paidInferenceInitiallyEnabled": false,
+    "productionServiceChanged": false,
+    "costWithinOwnerCeiling": true
+  },
+  "observed": {
+    "terminalStatus": "failed",
+    "sanitizedErrorCode": "ARK_PROVIDER_ERROR",
+    "openreelHttpStatus": 502,
+    "sanitizedUpstreamStatus": 503,
+    "providerSubmissions": 1,
+    "automaticRetries": 0,
+    "videoAssetPersisted": false,
+    "timelineClipPersisted": false,
+    "browserPlaybackVerified": false
+  },
+  "cleanup": {
+    "isolatedProcessStopped": true,
+    "isolatedPortClosed": true,
+    "isolatedStateRemoved": true,
+    "temporaryRunnerRemoved": true,
+    "productionServiceActive": true,
+    "productionPaidInferenceEnabled": false,
+    "productionRetryLimit": 0
+  },
+  "retention": { "credentialValues": false, "providerTaskIds": false, "providerOutputUrls": false, "accountIdentifiers": false, "humanInputSecrets": false },
+  "limitations": [
+    "The single authorized provider submission returned upstream 503, so no real video was available for asset-library, timeline, download or browser playback acceptance.",
+    "The cp280 one-call authorization is consumed; no retry or second paid request is authorized.",
+    "This is phase evidence only and does not close E-01 or the project."
+  ],
+  "nextProviderSubmissionAuthorized": false,
+  "projectCompletion": "in_progress"
+}

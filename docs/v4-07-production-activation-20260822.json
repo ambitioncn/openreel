@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "scope": "Authorized manifest-scoped Beijing V4 activation with automatic rollback; no account creation, provider call, paid action or publication",
+  "authorization": {
+    "gate": "cp19",
+    "outcome": "consumed approval applied",
+    "boundary": "activation, restart, readiness/browser smoke and automatic rollback only"
+  },
+  "backup": {
+    "path": "/var/backups/openreel/v4-pre-activation-20260822T040053Z",
+    "manifestSha256": "58d28a4bdaf35804e2ff2ebdd3731f8a4c8acf9dbab1cef4ecd44161ac5bb658",
+    "verification": "isolated restore passed; database ok; 25 assets; publishing state absent"
+  },
+  "diagnosisAndRecovery": [
+    {
+      "candidate": "/opt/openreel/releases/20260822T0402Z-v4-manifest",
+      "failure": "release allowlist omitted migrations/001-initial.sql and migrations/002-ark-jobs.sql",
+      "recovery": "automatic rollback to /opt/openreel/releases/20260821T2120Z-v4-text-planning; readiness 200"
+    },
+    {
+      "candidate": "/opt/openreel/releases/20260822T0406Z-v4-manifest-r2",
+      "failure": "production Agent film store defaulted to the read-only release .data directory",
+      "recovery": "automatic rollback to /opt/openreel/releases/20260821T2120Z-v4-text-planning; readiness 200"
+    }
+  ],
+  "fixes": [
+    "release allowlist now contains every runtime migration and the manifest verifier (84 artifacts)",
+    "production commercial-job and Agent-film fallback stores now live beside the configured durable database rather than inside the immutable release",
+    "regressions cover complete migration/verifier inclusion and the production Agent-film environment path"
+  ],
+  "activation": {
+    "release": "/opt/openreel/releases/20260822T0409Z-v4-manifest-r3",
+    "canonicalManifestSha256": "3c0e8cbec71b9e3071b5a9a759a10bf37ed23db81853acfae11596af9417fc8a",
+    "remoteManifestVerification": "passed 84/84",
+    "service": "active",
+    "restartCount": 0,
+    "loopbackReady": 200,
+    "publicRoot": 200,
+    "publicReadyBoundary": 404,
+    "indexSha256": "81af59d2bea6fd0da6e860048a222cb51f4ec471e22cd3f38f6ecdfc293f10bd",
+    "appSha256": "0334735ab9ce2c934f2c28f681c1cc682e3dd135e2399b636c4544c4ad2084bf",
+    "v4MarkerLines": 4,
+    "chromiumDomBytes": 25625
+  },
+  "verification": {
+    "focused": "52/52 passed",
+    "fullSuite": "456/456 passed",
+    "releaseQualification": "84 artifacts verified; tamper rejected",
+    "deploymentRehearsal": "passed",
+    "loopDoctor": "ok=true, failCount=0; five expected queue/evidence warnings"
+  },
+  "providerCalls": 0,
+  "spendCny": 0,
+  "projectCompletion": "in_progress",
+  "remaining": "Fresh ordinary-account Beijing production run from 美女在海滩跳舞 through real text/image/video/TTS/music/composition to a new playable revision-bound MP4 remains required."
+}

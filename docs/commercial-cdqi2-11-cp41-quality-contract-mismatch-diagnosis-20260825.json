@@ -1,0 +1,70 @@
+{
+  "schema": "openreel-commercial-quality-contract-mismatch-diagnosis/v1",
+  "capturedAt": "2026-08-25T12:31:00Z",
+  "mode": "zero-paid-read-only",
+  "jobId": "3fb6a9fd-2645-43cf-9cf5-a04c936acce0",
+  "projectId": "6efd9161-a3bb-4983-a85a-75545e9c6be3",
+  "terminal": {
+    "status": "failed",
+    "stage": "quality",
+    "code": "COMMERCIAL_QUALITY_EVIDENCE_INVALID",
+    "attempts": 1,
+    "releaseEligible": false
+  },
+  "firstMismatch": {
+    "boundary": "ark-commercial-perceptual-evaluator.parseScores",
+    "call": "quality:final",
+    "arkJobId": "f0cab42e-14a6-44bc-941d-e6a2b495b2ef",
+    "idempotencyKey": "6efd9161-a3bb-4983-a85a-75545e9c6be3:2:quality:final",
+    "expected": {
+      "topLevelKeys": ["observed", "scores"],
+      "scoreDimensions": ["story", "pacing", "continuity"],
+      "scoreRange": [0, 1],
+      "observedType": "non-empty string",
+      "observedMaximumCharacters": 1000
+    },
+    "actual": {
+      "arkStatus": "succeeded",
+      "model": "seed-2.1-turbo",
+      "finishReason": "stop",
+      "contentCharacters": 1689,
+      "jsonValid": true,
+      "topLevelKeys": ["observed", "scores"],
+      "scoreDimensions": ["continuity", "pacing", "story"],
+      "scoreTypes": {"story":"number","pacing":"number","continuity":"number"},
+      "scoreValues": {"story":0.35,"pacing":0.4,"continuity":0.2},
+      "observedType": "string",
+      "observedCharacters": 1620
+    },
+    "finding": "The three shot envelopes pass parseScores. The final envelope is valid JSON with exactly the required final dimensions and finite 0..1 scores, but its observed string is 1620 characters, exceeding the evaluator's 1000-character maximum. This is the first contract difference and throws before a normalized perceptual evaluation can be returned to commercial-quality-inspector.validateEvaluation."
+  },
+  "precedingShotEnvelopes": [
+    {"arkJobId":"80aff3a2-6b30-45fd-9fc6-9df794d0cfaf","finishReason":"stop","contentCharacters":912,"observedCharacters":776,"contractShapeValid":true},
+    {"arkJobId":"f485de22-a3e1-481a-8cf2-9a1fe2d0120b","finishReason":"stop","contentCharacters":1043,"observedCharacters":907,"contractShapeValid":true},
+    {"arkJobId":"7366f8b9-fbe6-479f-a555-0c4ff0097206","finishReason":"stop","contentCharacters":1016,"observedCharacters":882,"contractShapeValid":true}
+  ],
+  "byteEvidence": {
+    "files": 4,
+    "totalBytes": 9351219,
+    "allHashesMatchCp40": true
+  },
+  "contractDisposition": {
+    "eightDimensionsPresentAcrossPersistedEnvelopes": true,
+    "normalizedEnvelopeProduced": false,
+    "inspectorValidationReached": false,
+    "scoresAccepted": false,
+    "releaseEligible": false,
+    "failClosedCorrectly": true
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidActions": 0,
+    "retries": 0,
+    "replays": 0,
+    "newJobs": 0,
+    "productionChanges": 0,
+    "publications": 0,
+    "credentialChanges": 0
+  },
+  "nextAction": "Stop this diagnosis tick. Any code change requires a separately authorized zero-paid repair gate; never replay this job."
+}

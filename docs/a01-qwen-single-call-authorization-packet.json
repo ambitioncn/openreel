@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "status": "consumed_terminal_failure",
+  "milestones": ["A-01", "T-01", "E-01"],
+  "purpose": "Qualify one real Tailnet Qwen TTS result through an isolated OpenReel canvas, timeline and graphical-browser download path.",
+  "authorization_phrase": "授权执行 A-01-QWEN-ONE-CALL-V1",
+  "scope": {
+    "endpoint": "http://100.124.97.3:8004/v1/audio/speech",
+    "request_count": 1,
+    "retry_count": 0,
+    "input": "你好，这是 OpenReel 语音链路测试。",
+    "response_format": "wav",
+    "language": "zh",
+    "speaker": null,
+    "voice": null,
+    "instruct": null,
+    "instructions": null,
+    "timeout_ms": 60000,
+    "maximum_response_bytes": 20971520,
+    "maximum_duration_seconds": 600,
+    "paid_spend_authorized": false
+  },
+  "execution": {
+    "environment": "isolated local OpenReel state and loopback browser only",
+    "production_deployment": false,
+    "beijing_service_change": false,
+    "credential_change": false,
+    "public_access": false,
+    "browser_e2e": [
+      "prepare the reviewed Qwen voice job",
+      "execute the single server-authorized request",
+      "verify the returned WAV and durable asset",
+      "verify timeline placement and local graphical-browser playback/download"
+    ]
+  },
+  "retention": {
+    "retain_generated_wav": true,
+    "location": "isolated local task evidence only",
+    "retain_until": "project acceptance or explicit owner cleanup request",
+    "public_release": false
+  },
+  "stop_conditions": [
+    "stop after the first terminal response",
+    "stop before submission if the endpoint or request contract differs",
+    "stop before submission if any paid charge or credential change is required",
+    "do not retry a timeout, transport failure, invalid response or rejected request"
+  ],
+  "explicitly_not_authorized": [
+    "Seed TTS, SeedAudio or Volcengine TTS diagnosis or calls",
+    "additional Qwen requests",
+    "other provider or modality calls",
+    "Beijing or Phoenix deployment or service control",
+    "production configuration or traffic changes",
+    "credential creation, replacement or disclosure",
+    "LibTV team, subscription, payment or usage writes",
+    "public publishing"
+  ],
+  "expected_evidence": [
+    "sanitized request and terminal-result metadata",
+    "provider-call count and retry count",
+    "byte-verified WAV metadata and digest",
+    "isolated asset, timeline and export/download evidence",
+    "graphical-browser screenshots or trace without secrets",
+    "post-run confirmation that no unrelated external action occurred"
+  ]
+}

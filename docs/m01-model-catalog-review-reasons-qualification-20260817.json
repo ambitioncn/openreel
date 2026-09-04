@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "scope": "credential-free model catalog drift review reasons",
+  "behavior": {
+    "field": "reviewReasons",
+    "ordered_codes": [
+      "source_revision_changed",
+      "models_added",
+      "models_removed",
+      "models_changed"
+    ],
+    "unchanged_catalog": [],
+    "fail_closed": true,
+    "deeply_immutable": true,
+    "executed_provider_calls": false
+  },
+  "verification": {
+    "target": "node --test test/model-catalog.test.js",
+    "regression": "npm test",
+    "safety": "npm run scan:secrets",
+    "results_recorded_in": "runtime Loop checkpoint cp305"
+  },
+  "boundaries": {
+    "provider_requests": 0,
+    "credential_actions": 0,
+    "otp_actions": 0,
+    "deployments": 0,
+    "external_writes": 0
+  }
+}

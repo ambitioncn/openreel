@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-18",
+  "milestone": "A-01-MUSIC-REAL-MEDIA",
+  "scope": "zero-cost configuration-only route and authentication-reference qualification",
+  "result": "passed",
+  "effectiveRoute": {
+    "model": "minimax-portal/music-2.6-free",
+    "region": "CN",
+    "baseUrl": "https://api.minimaxi.com/anthropic/v1",
+    "authReferencePresent": true,
+    "authReferenceValueInspected": false
+  },
+  "verification": [
+    "openclaw config set dry-run validated the exact musicGenerationModel update",
+    "openclaw config set applied the exact primary model without a gateway restart",
+    "openclaw config validate passed",
+    "sanitized config shape audit confirmed the CN portal route, auth header mode and an existing credential reference",
+    "music_generate action=list reported minimax-portal configured and music-2.6-free available",
+    "openclaw health reported the gateway event loop healthy",
+    "project-governance focused suite passed 4/4 and the full OpenReel suite passed 310/310, including a regression that preserves this evidence as configuration-only and separately gated"
+  ],
+  "negativeEvidence": {
+    "providerGenerationCalls": 0,
+    "credentialReads": 0,
+    "credentialWrites": 0,
+    "paidCalls": 0,
+    "mediaCreated": 0,
+    "serviceRestarts": 0,
+    "deployments": 0
+  },
+  "boundary": "This proves local route selection, CN Base URL selection and authentication-reference configuration only. It does not prove that the external credential is accepted, does not prove music generation, and does not authorize a provider request, retry, credential change, deployment or publication."
+}

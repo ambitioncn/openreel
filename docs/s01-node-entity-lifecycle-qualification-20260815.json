@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "qualificationId": "S-01-node-entity-lifecycle-20260815",
+  "capturedAt": "2026-08-15T22:40:38.948Z",
+  "scope": "credential-free local synthetic SQLite backup creation and restore admission",
+  "result": "passed",
+  "controls": [
+    "node type is restricted to the supported canvas types",
+    "title is non-empty and content is a string",
+    "position coordinates are finite numbers",
+    "node status is restricted to the persisted generation lifecycle",
+    "resultVersion is a non-negative safe integer and version is positive",
+    "createdAt and updatedAt are canonical and chronologically ordered",
+    "invalid node state fails closed before atomic backup or restore promotion"
+  ],
+  "verification": {
+    "opsTests": { "passed": 40, "failed": 0 },
+    "fullSuite": { "passed": 208, "failed": 0 },
+    "highSeverityDependencyFindings": 0,
+    "secretScan": "passed across 213 files",
+    "diffCheck": "passed"
+  },
+  "externalActions": {
+    "otp": 0,
+    "providerCalls": 0,
+    "deployments": 0,
+    "credentialChanges": 0,
+    "publications": 0
+  },
+  "limitations": [
+    "Synthetic local fixtures do not qualify live provider execution or production recovery behavior.",
+    "S-01 remains in progress pending independent review and separately authorized external reliability evidence."
+  ]
+}

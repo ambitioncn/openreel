@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "backlogItem": "A-01",
+  "date": "2026-08-16",
+  "scope": "credential-free local IEEE-float WAV fact-chunk admission",
+  "implementation": [
+    "src/wav.js requires a single four-byte fact chunk after fmt and before data",
+    "IEEE-float fact sample frames must be non-zero and equal dataBytes divided by blockAlign",
+    "test/qwen-tts.test.js accepts matching evidence and rejects missing or mismatched evidence"
+  ],
+  "verification": {
+    "targeted": "node --test test/qwen-tts.test.js test/qwen-tts-canvas.test.js",
+    "targetedResult": "14/14 passed",
+    "externalCalls": 0,
+    "retainedExternalMedia": 0
+  },
+  "boundary": "No OTP replay, Tailnet request, real synthesis, Provider call, deployment, service change, credential change or publication was performed."
+}

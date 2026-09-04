@@ -1,0 +1,40 @@
+{
+  "schema": "openreel-v4-07-cp26-production-mp4-progress/v1",
+  "capturedAt": "2026-08-22T14:56:00Z",
+  "activeRelease": "/opt/openreel/releases/20260822T145300Z-v4-compose-timeline",
+  "diagnosisChange": "A retained production job proved planning and provider generation succeeded but composition failed because image source artifacts were incorrectly required to appear as timeline clips. The successor validates all source revision identities while requiring only video and audio sources in the timed timeline.",
+  "verification": {
+    "focusedTests": "14/14 passed",
+    "fullTests": "462/462 passed",
+    "releaseArtifacts": "84/84 verified; tamper rejected",
+    "service": "active; NRestarts=0; loopback and public 4173 ready"
+  },
+  "productionAcceptance": {
+    "prompt": "美女在海滩跳舞",
+    "freshOrdinaryAccount": true,
+    "distinctProject": true,
+    "planningModel": "seed-2.1-pro",
+    "quoteCny": 16,
+    "confirmed": true,
+    "shots": 1,
+    "imageModel": "seedream-5-lite",
+    "videoModel": "seedance-2-fast",
+    "audioModel": "qwen-tts-tailnet",
+    "mp4Bytes": 257435,
+    "mp4Sha256": "fecc2756a093a103eb49e316f54a4826edd61688504e3b60248188a94e8b84d4",
+    "durationSeconds": 5.083333,
+    "videoCodec": "h264",
+    "audioCodec": "aac",
+    "browserPlaybackSucceeded": true,
+    "revisionBindingSucceeded": true,
+    "serverErrors": []
+  },
+  "evidence": "docs/evidence/v4-07-production-ordinary-account-cp26.json",
+  "projectCompletion": "in_progress",
+  "remaining": [
+    "V4-03 caption burn-in, generated or reviewed licensed music, production audiovisual quality and trusted settlement",
+    "V4-03 paid version-safe per-shot redo",
+    "V4-04 Agent entry production evidence",
+    "V4-06 product URL production browser and real-model evidence"
+  ]
+}

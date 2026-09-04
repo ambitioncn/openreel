@@ -1,0 +1,25 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp74-all-shot-redo-zero-paid/v1",
+  "capturedAt": "2026-08-27T05:38:00Z",
+  "sourceCandidate": { "checkpoint": "cp73", "jobId": "c738be08-b8b3-4d5c-afec-91c0788e0fa6", "failedShotDimensions": ["beat"], "failedFinalDimensions": ["story"] },
+  "diagnosis": {
+    "renderDownload": "The result video downloaded and was retained. The later render download was rejected by the shared commercial release gate because cp73 was release-ineligible; this is expected fail-closed behavior, not an authentication or storage failure.",
+    "redoGap": "The existing merge contract required at least one preserved shot, making a bounded all-shot redo impossible for a one-shot candidate where every shot failed. Workbench planning already produced an empty preserved set correctly."
+  },
+  "implementation": {
+    "allShotRedo": "preservedShots may be empty only when selected redo shotIds exactly partition the entire composition storyboard",
+    "fullRequalification": "the regenerated shot is recomposed into a new complete render and both shot and final perceptual policies are evaluated again",
+    "failClosed": "partial coverage with an empty preserved set is rejected before any provider submission",
+    "runner": "rejected renders are no longer downloaded as ordinary evidence; their bytes remain durable while the release gate stays closed"
+  },
+  "verification": {
+    "focused": "45 passed, 0 failed",
+    "full": "585 passed, 0 failed",
+    "loopDoctor": { "ok": true, "failCount": 0 },
+    "providerCalls": 0,
+    "paidCny": 0
+  },
+  "deployment": "not_deployed",
+  "status": "local_candidate_ready_for_acceptance",
+  "projectCompletion": "in_progress"
+}

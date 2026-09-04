@@ -1,0 +1,52 @@
+{
+  "schema": "openreel-commercial-cdqi2-11-cp83-ark-diagnostic-production-deployment/v1",
+  "capturedAt": "2026-08-27T16:33:30Z",
+  "backlogItem": "CDQI2-11",
+  "sourceCheckpoint": "cp83",
+  "authorization": "standing_authorization_openreel_2026-08-19",
+  "target": "root@123.57.67.213",
+  "previousRelease": "/opt/openreel/releases/20260827T064256Z-cdqi2-cp81-reference-transmission",
+  "release": "/opt/openreel/releases/20260827T163258Z-cdqi2-cp83-ark-diagnostic",
+  "rollbackAnchor": "/opt/openreel/releases/20260827T0215Z-cdqi2-cp72-fresh-candidate",
+  "backup": {
+    "path": "/var/backups/openreel/20260827T163258Z-cp83",
+    "databaseIntegrity": "ok",
+    "assetsBefore": 201,
+    "assetsBackedUp": 201,
+    "platform": "backed_up",
+    "commercialJobs": "backed_up",
+    "publishing": "backed_up"
+  },
+  "releaseIntegrity": {
+    "src/ark.js": "403618016b493b9aea9350d4b05de25d413dfedf69aa608fba288d582b198818",
+    "src/commercial-job-lifecycle.js": "793ebf648ce0cd976c7eb240973d07a46d591420486dcd43e58ad076c0ef9e7a",
+    "matchesAcceptedCp83": true
+  },
+  "verification": {
+    "remoteFocusedTests": { "passed": 93, "failed": 0 },
+    "localFullTests": { "passed": 587, "failed": 0 },
+    "initialActivation": "healthy",
+    "actualRollbackToCp72": "healthy",
+    "cp83Reactivation": "healthy",
+    "currentAndProcessCwdMatch": true,
+    "service": "active/running",
+    "nRestarts": 0,
+    "live": "ok",
+    "ready": { "status": "ready", "database": "ok", "assets": "ok" },
+    "diskUsedPercent": 45
+  },
+  "safety": {
+    "providerCalls": 0,
+    "paidJobs": 0,
+    "paidCny": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "publications": 0,
+    "externalSends": 0,
+    "credentialChanges": 0,
+    "destructiveOutOfScopeActions": 0
+  },
+  "authorizationCorrection": "The prior cp83-cp99 process-control blocker was a misclassification: the bounded backup, deployment, restart, readiness verification and rollback rehearsal are expressly covered by the standing OpenReel production authorization.",
+  "projectCompletion": "in_progress",
+  "nextAction": "Accept this deployment checkpoint, then obtain a fresh zero-paid quote before considering exactly one bounded successor candidate."
+}

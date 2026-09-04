@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-15",
+  "scope": "local-only atomic backup creation",
+  "backlogItem": "S-01",
+  "result": "passed",
+  "claims": [
+    "Backup creation writes the database snapshot, referenced assets, platform state and manifest into a private same-parent staging directory.",
+    "A successful backup is promoted with a same-parent rename only after every referenced asset and manifest digest has been written.",
+    "A source or copy failure closes the SQLite source handle, removes the staging directory and leaves the final destination absent.",
+    "If the final destination appears during creation, promotion fails closed and removes only the staging directory created by that call."
+  ],
+  "verification": [
+    { "command": "node --test test/ops.test.js", "result": "13 passed, 0 failed" },
+    { "command": "npm test", "result": "181 passed, 0 failed" },
+    { "command": "npm audit --omit=dev --audit-level=high", "result": "0 vulnerabilities" },
+    { "command": "npm run scan:secrets", "result": "passed, 157 files" },
+    { "command": "git diff --check", "result": "passed" }
+  ],
+  "externalActions": [],
+  "limitations": [
+    "This is a local single-filesystem atomic-promotion claim; it does not establish off-host retention, staging backup operation, signing, deployment, production rollback or activation.",
+    "The final destination remains immutable once present; retention rotation and cleanup require a separately reviewed operator procedure."
+  ]
+}

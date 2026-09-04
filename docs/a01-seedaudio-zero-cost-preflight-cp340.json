@@ -1,0 +1,34 @@
+{
+  "schema": "openreel-a01-seedaudio-zero-cost-preflight/v1",
+  "capturedAt": "2026-08-18T09:27:59Z",
+  "scope": "read-only preflight for amendment-v7 single private SeedAudio 1.0 validation",
+  "authorization": {
+    "model": "seed-audio-1.0",
+    "maximumCalls": 1,
+    "automaticRetries": 0,
+    "maximumSpendCny": 0,
+    "deploymentAuthorized": false,
+    "publicationAuthorized": false,
+    "consumed": false
+  },
+  "observations": {
+    "dedicatedCredentialReferencePresent": true,
+    "credentialValueReadOrOutput": false,
+    "providerCalls": 0,
+    "providerRequestsSubmitted": 0,
+    "retries": 0,
+    "spendCny": 0,
+    "retainedMedia": 0,
+    "officialExactModelApiContractVerified": false,
+    "officialZeroPriceOrAccountFreeEntitlementVerified": false,
+    "localDescriptorMarksModelCosted": true
+  },
+  "evidence": [
+    "A sanitized read-only Beijing check confirmed that /etc/openreel/openreel.env is readable and OPENREEL_SEEDAUDIO_API_KEY is non-empty; no credential value or digest was emitted.",
+    "The local accepted static descriptor in src/seedaudio.js marks SeedAudio 1.0 as costed and execution-disabled.",
+    "A domain-restricted Tavily search of official volcengine.com material did not locate an exact seed-audio-1.0 API contract plus a CNY 0 price or account-visible free entitlement suitable for this call.",
+    "The pre-existing temporary integration's zero-price constants are implementation assumptions, not provider or account evidence, and were not used to authorize a request."
+  ],
+  "stopReason": "The exact zero-spend ceiling cannot be proven before submission. Amendment v7 requires stopping on any nonzero-price condition, so the executor failed closed before a provider request.",
+  "nextGate": "Provide official or account-visible evidence that this exact seed-audio-1.0 request is covered at CNY 0, together with the exact official API contract, or issue a new authorization with a positive explicit ceiling after price review."
+}

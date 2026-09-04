@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "milestone": "V4-03",
+  "checkpoint": "cp32",
+  "status": "local_boundary_complete",
+  "caption_boundary": {
+    "input": "one reviewed byte-backed PNG per planned caption and shot",
+    "binding": "project/story/storyboard identity plus exact shotId and captionText",
+    "render": "time-bounded ffmpeg overlay inside the composition output",
+    "fail_closed": ["missing bytes", "wrong MIME", "stale identity", "wrong shot", "caption text mismatch", "not reviewed"]
+  },
+  "music_boundary": {
+    "input": "reviewed byte-backed WAV or MP3",
+    "binding": "current project/story/storyboard identity",
+    "review": "reviewed status, commercial-use permission and non-empty evidence reference",
+    "render": "speech-first -3 dB voice and -18 dB looped music mix",
+    "fail_closed": ["missing bytes", "stale identity", "draft review", "missing commercial-use permission", "missing evidence"]
+  },
+  "verification": {"targeted":"20/20 passed", "full":"468/468 passed", "releaseArtifacts":"85 verified; tamper rejected", "providerCalls":0, "deploymentActivated":false}
+}

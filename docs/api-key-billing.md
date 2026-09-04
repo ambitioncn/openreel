@@ -21,6 +21,12 @@ Reservations and settlements require idempotency keys/IDs so retries do not char
 twice. Failed provider calls settle at zero cost. A settlement cannot exceed the
 reserved maximum.
 
+The separate local credit-product contract in `src/credit-products.js` represents
+evidenced general/model-specific point packages, membership eligibility, bonuses,
+validity and periodic purchase limits. It is quote-only: every result is
+non-executable, reports payment disconnected and requires a human gate. It does
+not create an order, grant points or alter this usage ledger.
+
 Local administrative refunds apply only to settled usage, require an idempotency
 key and audit reason, and cannot exceed the remaining settled amount. The billing
 status includes account-scoped refunds and a read-only reconciliation result that
@@ -75,6 +81,13 @@ Embedding Vision. Merely configuring those IDs does not authorize spend:
 `PAID_INFERENCE_GATED` before reservation or provider traffic until an operator
 approves a bounded verification budget and explicitly enables the switch.
 
+The verified mixed-route production contract and provider-neutral request examples
+are documented in `docs/model-provider-routing.md`. In particular, commercial
+short-video orchestration uses `OPENREEL_VOLCENGINE_ROUTE_PREFERENCE=hybrid`:
+Seedream, text and vision use the standard `/api/v3` mapping, while Seedance uses
+the direct `/api/plan/v3` mapping. Do not route Seedream through `/api/plan/v3` or
+replace this with a blanket `direct` preference.
+
 `ARK_ALLOWED_HOSTS` is a comma-separated allowlist for endpoints and result assets.
 The schema supports `text` (Doubao Seed planning), `vision` (Seed Vision), `image`
 (Seedream), `video` (Seedance), and `audio`. Audio is advertised only when an
@@ -115,3 +128,11 @@ hard-stop core is implemented without a payment provider. The optional Ark servi
 connects inference to trusted server-side `settleUsage`; it stays disabled until an
 operator supplies verified account endpoint mappings and credentials. Clients must
 never be allowed to submit their own token counts or prices.
+
+`src/billing-evidence.js` validates a read-only `GET /api/v1/billing/usage` snapshot
+before it is retained as local acceptance evidence. It checks account and
+subscription scope, recalculates reserved/settled/refunded/spent totals, requires a
+clean reconciliation result, rejects secret-bearing fields, and requires
+`paymentIntegration.connected=false`. Passing this validator demonstrates internal
+ledger consistency only; it does not connect a payment provider, verify an external
+invoice or authorize a refund, charge, subscription, or provider call.

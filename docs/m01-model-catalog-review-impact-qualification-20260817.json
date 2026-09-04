@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "milestone": "M-01",
+  "scope": "credential-free model catalog drift review impact",
+  "behavior": {
+    "metadataChanged": "true only when the verified source revision changes",
+    "modelSetChanged": "true when verified model identifiers are added or removed",
+    "modelStructureChanged": "true when a retained model changes kind, adapter or schema",
+    "affectedModelCount": "distinct added, removed or structurally changed model identifiers"
+  },
+  "invariants": [
+    "unchanged reports expose all false flags and zero affected models",
+    "source-revision-only drift does not claim model impact",
+    "review impact is derived from verified snapshots and deeply immutable",
+    "all observed drift remains review_required and failClosed"
+  ],
+  "external_actions": {
+    "provider_calls": 0,
+    "credential_reads_or_changes": 0,
+    "deployments": 0,
+    "publications": 0
+  },
+  "verification": {
+    "target": "node --test test/model-catalog.test.js",
+    "target_result": "15/15 passed"
+  }
+}

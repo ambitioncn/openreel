@@ -1,0 +1,39 @@
+{
+  "schema": "openreel-cdqs-16-terminal-audit/v1",
+  "projectId": "openreel-creative-director-quality-system",
+  "auditStatus": "accepted",
+  "terminalAcceptance": [
+    {"id":"T01","status":"accepted","evidence":["reviews/cp2.json","src/creative-director.js","test/creative-director.test.js"],"finding":"Unified versioned director ownership and the corrected prototype-as-phase classification are retained."},
+    {"id":"T02","status":"accepted","evidence":["reviews/cp3.json","src/director-workflow.js","test/director-workflow.test.js"],"finding":"Seven durable stages and fail-closed transitions are accepted."},
+    {"id":"T03","status":"accepted","evidence":["reviews/cp4.json","src/director-continuity.js","test/director-continuity.test.js"],"finding":"Character, scene, prop, style and camera continuity evidence is accepted."},
+    {"id":"T04","status":"accepted","evidence":["reviews/cp5.json","reviews/cp6.json","src/director-shot-quality.js","src/director-final-quality.js"],"finding":"Shot and final-film gates hard-fail severe errors and reject missing evidence."},
+    {"id":"T05","status":"accepted","evidence":["reviews/cp7.json","src/director-rework.js","test/director-rework.test.js"],"finding":"Scoped rework, persisted retry/cost ceilings and terminal exhaustion are accepted."},
+    {"id":"T06","status":"accepted","evidence":["reviews/cp1.json","reviews/cp9.json","src/creative-director.js","src/director-strategy-evaluation.js"],"finding":"All five strategy types are accepted behind the unified director contract."},
+    {"id":"T07","status":"accepted","evidence":["reviews/cp8.json","reviews/cp9.json","src/director-evaluation-set.js","docs/evidence/cdqs-13-fixed-set-qualification.json"],"finding":"The required aspect, duration, medium and audio-mode fixture coverage is accepted."},
+    {"id":"T08","status":"accepted","evidence":["reviews/cp10.json","src/director-feedback-learning.js","test/director-feedback-learning.test.js"],"finding":"Attributable feedback and offline-only learning promotion are accepted."},
+    {"id":"T09","status":"accepted","evidence":["reviews/cp11.json","reviews/cp12.json","src/director-system-store.js","src/director-runtime-ui.js"],"finding":"HTTP, persistence, UI and real workflow integration are accepted."},
+    {"id":"T10","status":"accepted","evidence":["reviews/cp13.json","docs/evidence/cdqs-13-fixed-set-qualification.json"],"finding":"Fixed-set, severe-error negative and 535-test full regression evidence passes."},
+    {"id":"T11","status":"accepted","evidence":["reviews/cp14.json","docs/evidence/cdqs-14-production-candidate.json"],"finding":"The immutable 103-artifact production candidate is accepted."},
+    {"id":"T12","status":"accepted","evidence":["reviews/cp15.json","docs/evidence/cdqs-15-beijing-deployment.json"],"finding":"The accepted deployment checkpoint, backup/restore, actual rollback, reactivation, exact candidate identity and current remote health evidence pass."}
+  ],
+  "invariants": {
+    "generationSeparatedFromQualification": "verified",
+    "severeErrorsFailClosed": "verified",
+    "missingEvidenceRejects": "verified",
+    "boundedReworkNoBlindRetry": "verified",
+    "paidCalls": 0,
+    "externalPublications": 0
+  },
+  "currentProductionObservation": {
+    "release": "/opt/openreel/releases/20260824T100200Z-cdqs15-a82162ac",
+    "processCwdMatches": true,
+    "activeState": "active",
+    "subState": "running",
+    "nRestarts": 0,
+    "readiness": {"status":"ready","database":"ok","assets":"ok"}
+  },
+  "terminalContractAccepted": true,
+  "projectCompletion": "accepted",
+  "acceptedAt": "2026-08-24T10:22:22Z",
+  "remainingCondition": null
+}

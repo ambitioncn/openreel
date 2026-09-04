@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "capturedAt": "2026-08-17",
+  "scope": "Owner-authorized official LibTV CLI reauthentication followed only by read-only personal account, balance, quota and usage inspection.",
+  "authentication": {
+    "method": "official two-step phone login",
+    "freshCodeRequested": true,
+    "freshCodeConsumedThroughOneTimeHumanGate": true,
+    "codeRetained": false,
+    "result": "authenticated"
+  },
+  "observations": {
+    "accountInfoAvailable": true,
+    "accountListAvailable": true,
+    "accountsCount": 1,
+    "activeScope": "personal owner account",
+    "teamScopeAvailable": false,
+    "effectiveMembershipVisible": true,
+    "personalBalanceVisible": false,
+    "remainingQuotaVisible": false,
+    "usageDetailVisible": false,
+    "documentedBillingUsageCreditOrPointsCommandAvailable": false
+  },
+  "commands": [
+    "official CLI account info",
+    "official CLI account list",
+    "official CLI top-level help"
+  ],
+  "boundaries": {
+    "modelCalls": 0,
+    "recharges": 0,
+    "subscriptionChanges": 0,
+    "accountChanges": 0,
+    "teamChanges": 0,
+    "undocumentedEndpointGuessing": false,
+    "providerOrMediaCalls": 0,
+    "deploymentOrServiceChanges": 0
+  },
+  "conclusion": "The authenticated official CLI confirms one active personal owner account, no team scope and an effective membership, but exposes no personal balance, remaining quota or detailed usage ledger through its documented account commands or top-level command surface. This is negative product-boundary evidence and does not close B-01 or CO-01."
+}

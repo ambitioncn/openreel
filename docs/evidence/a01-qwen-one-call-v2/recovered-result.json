@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "authorization": "A-01-QWEN-CHINESE-ONE-CALL-V2",
+  "status": "succeeded_recovered_from_durable_state",
+  "providerCalls": 1,
+  "retries": 0,
+  "recoveryExternalCalls": 0,
+  "result": {
+    "byteLength": 165164,
+    "sha256": "62b2e95655627b048836462655a23633e01be5b29d2d4e5a79d9e2c27d7039c3",
+    "mimeType": "audio/wav",
+    "durationSeconds": 3.44,
+    "sampleRate": 24000,
+    "channels": 1,
+    "audioFormat": "pcm",
+    "bitsPerSample": 16
+  },
+  "durable": {
+    "jobState": "succeeded",
+    "assetCount": 1,
+    "timelineAudioClipCount": 1
+  },
+  "note": "The provider and durable reconciliation succeeded. Evidence export resumed locally after the runner incorrectly expected HTTP 200 instead of the endpoint's HTTP 201 creation response."
+}

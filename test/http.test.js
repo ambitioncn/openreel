@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createOpenReelServer } from "../server.mjs";
 import { createMemoryStore, createPersistentStore } from "../src/core.js";
+import { createPlatform } from "../src/platform.js";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -40,6 +41,31 @@ test("HTTP errors have stable codes", async (t) => {
   const missing = await request(base, "/api/projects/missing");
   assert.equal(missing.status, 404);
   assert.equal(missing.body.error.code, "NOT_FOUND");
+});
+
+test("HTTP product URL extraction stays server-side and returns bounded provenance", async (t) => {
+  const productUrlFetcher = async input => ({ schema: "openreel-product-page/v1", source: { requestedUrl: input.url, finalUrl: input.url, redirects: [], contentType: "text/html", byteLength: 10, sha256: "a".repeat(64), fetchedAt: "2026-08-20T00:00:00.000Z" }, extracted: { title: "Item", description: "", text: "Item" } });
+  const server = createOpenReelServer(undefined, undefined, { productUrlFetcher });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`, result = await request(base, "/api/v1/product-url/extract", { method: "POST", body: JSON.stringify({ url: "https://shop.example/item" }) });
+  assert.equal(result.status, 201); assert.equal(result.body.extracted.title, "Item"); assert.equal(result.body.source.finalUrl, "https://shop.example/item");
+});
+
+test("HTTP product understanding exposes grounded facts without unsupported claims", async (t) => {
+  const productUrlFetcher = async input => ({ schema: "openreel-product-page/v1", source: { requestedUrl: input.url, finalUrl: input.url, redirects: [], contentType: "text/html", byteLength: 100, sha256: "a".repeat(64), fetchedAt: "2026-08-20T00:00:00.000Z" }, extracted: { title: "Pocket Light", description: "A compact rechargeable light for everyday carry.", text: "Pocket Light A compact rechargeable light for everyday carry." } });
+  const arkService = { models: () => [{ name: "seed-text", capability: "text" }], submit: async (principal, value) => ({ id: "product-model-1", model: value.model, status: "succeeded", result: { content: JSON.stringify({ name: "Pocket Light", summary: "A compact rechargeable light for everyday carry.", valuePropositions: [], audience: null, evidenceQuotes: ["Pocket Light", "A compact rechargeable light for everyday carry."] }) }, usage: { costMicros: 5, currency: "CNY", unitScale: 1_000_000 } }) };
+  const server = createOpenReelServer(undefined, undefined, { productUrlFetcher, arkService });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`, result = await request(base, "/api/v1/product-url/understand", { method: "POST", body: JSON.stringify({ url: "https://shop.example/item", idempotencyKey: "http-product-1" }) });
+  assert.equal(result.status, 201); assert.equal(result.body.status, "model_grounded"); assert.equal(result.body.creativeContext.productName, "Pocket Light"); assert.equal(result.body.creativeContext.audience, null); assert.equal(result.body.model.jobId, "product-model-1");
+});
+
+test("HTTP product understanding fails closed without a configured real model", async (t) => {
+  const productUrlFetcher = async input => ({ schema: "openreel-product-page/v1", source: { requestedUrl: input.url, finalUrl: input.url, redirects: [], contentType: "text/html", byteLength: 10, sha256: "a".repeat(64), fetchedAt: "2026-08-20T00:00:00.000Z" }, extracted: { title: "Item", description: "Description", text: "Item Description" } });
+  const server = createOpenReelServer(undefined, undefined, { productUrlFetcher });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
+  const result = await request(`http://127.0.0.1:${server.address().port}`, "/api/v1/product-url/understand", { method: "POST", body: JSON.stringify({ url: "https://shop.example/item", idempotencyKey: "missing-model" }) });
+  assert.equal(result.status, 503); assert.equal(result.body.error.code, "PRODUCT_MODEL_UNAVAILABLE");
 });
 
 test("HTTP retry is idempotent and preserves a traceable failed-job chain", async (t) => {
@@ -92,6 +118,11 @@ test("model catalog coverage exposes authenticated target gaps without claiming 
   assert.ok(coverage.body.countGaps.video > 0);
   assert.ok(!coverage.body.missingControls.includes("voice"));
   assert.ok(coverage.body.missingControls.includes("camera"));
+  assert.equal(coverage.body.configured.modelCount, catalog.body.modelCount);
+  assert.deepEqual(coverage.body.configured.counts, catalog.body.kinds);
+  assert.ok(Array.isArray(coverage.body.configured.adapterIds));
+  assert.equal(typeof coverage.body.configured.controlModelCounts.voice, "number");
+  assert.ok(coverage.body.configured.controlModelIds.voice.length > 0);
 });
 
 test("reference model catalog is complete but explicitly non-executable", async (t) => {
@@ -318,21 +349,19 @@ test("production HTTP binds project identity to session cookie and enforces CSRF
   assert.equal(project.members[0].userId, loginBody.account.id);
 });
 
-test("API key applications require user submission and administrator approval or stop", async (t) => {
+test("registration automatically grants a USD 200 trial and permits API key creation without an application", async (t) => {
   const adminKey = "administrator-secret-key-for-tests", server = createOpenReelServer(undefined, undefined, { production: true, secureCookies: false, adminToken: adminKey, rateLimit: { max: 1000 } });
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
   const base = `http://127.0.0.1:${server.address().port}`, email = "applicant@example.test", password = "applicant-pass-123";
   await fetch(`${base}/api/v1/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, password }) });
   const login = await fetch(`${base}/api/v1/auth/login`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, password }) }), loginBody = await login.json();
   const cookieHeader = login.headers.getSetCookie().map(x => x.split(";", 1)[0]).join("; "), userHeaders = { "content-type": "application/json", cookie: cookieHeader, "x-csrf-token": loginBody.csrfToken };
-  const submitted = await fetch(`${base}/api/v1/key-applications`, { method: "POST", headers: userHeaders, body: JSON.stringify({ reason: "Render customer videos", requestedLimitMicros: 1200 }) }), application = await submitted.json();
-  assert.equal(submitted.status, 201); assert.equal(application.status, "pending");
+  const status = await fetch(`${base}/api/v1/billing/usage`, { headers: userHeaders }), usage = await status.json();
+  assert.equal(status.status, 200); assert.equal(usage.subscription.plan, "trial"); assert.equal(usage.subscription.currency, "USD"); assert.equal(usage.subscription.unitScale, 10_000); assert.equal(usage.subscription.hardLimitMicros, 2_000_000);
   const forbidden = await fetch(`${base}/api/v1/admin/key-applications`); assert.equal(forbidden.status, 403);
-  const listed = await fetch(`${base}/api/v1/admin/key-applications?status=pending`, { headers: { "x-openreel-admin-key": adminKey } }); assert.equal((await listed.json())[0].id, application.id);
-  const approved = await fetch(`${base}/api/v1/admin/key-applications/${application.id}/approve`, { method: "POST", headers: { "content-type": "application/json", "x-openreel-admin-key": adminKey }, body: JSON.stringify({ hardLimitMicros: 1200, periodEndsAt: "2099-01-01T00:00:00.000Z", reviewNote: "Approved" }) }); assert.equal(approved.status, 201);
+  const listed = await fetch(`${base}/api/v1/admin/key-applications?status=pending`, { headers: { "x-openreel-admin-key": adminKey } }); assert.deepEqual(await listed.json(), []);
   const keyResponse = await fetch(`${base}/api/v1/api-keys`, { method: "POST", headers: userHeaders, body: JSON.stringify({ name: "primary" }) }), issued = await keyResponse.json(); assert.equal(keyResponse.status, 201); assert.match(issued.key, /^or_live_/);
-  const stopped = await fetch(`${base}/api/v1/admin/key-applications/${application.id}/stop`, { method: "POST", headers: { "content-type": "application/json", "x-openreel-admin-key": adminKey }, body: JSON.stringify({ reviewNote: "Operator stop" }) }); assert.equal(stopped.status, 201);
-  const keyStatus = await fetch(`${base}/api/v1/key/status`, { headers: { "x-openreel-api-key": issued.key } }); assert.equal(keyStatus.status, 401);
+  const keyStatus = await fetch(`${base}/api/v1/key/status`, { headers: { "x-openreel-api-key": issued.key } }); assert.equal(keyStatus.status, 200);
   const adminPage = await fetch(`${base}/admin.html`); assert.equal(adminPage.status, 200); assert.match(await adminPage.text(), /API access administration/);
   for (const path of ["/admin", "/admin/"]) { const alias = await fetch(`${base}${path}`); assert.equal(alias.status, 200); const html = await alias.text(); assert.match(html, /API access administration/); assert.match(html, /src="\/src\/admin\.js"/); assert.match(html, /href="\/src\/styles\.css"/); }
   for (const path of ["/favicon.ico", "/definitely-missing"]) { const missing = await fetch(`${base}${path}`); assert.equal(missing.status, 404); assert.equal((await missing.json()).error.code, "NOT_FOUND"); }
@@ -424,4 +453,60 @@ test("production job routes enforce project authorization for bearer identities"
     const denied = await call(path, outsider, method);
     assert.equal(denied.status, 403, `${method} ${path}`); assert.equal((await denied.json()).error.code, "FORBIDDEN");
   }
+});
+
+test("publishing batch HTTP boundary is unavailable by default and authenticated when injected", async (t) => {
+  const calls = [], publishingOrchestrator = new Proxy({}, { get: (_target, action) => (principal, batchIdOrInput, value) => { calls.push({ action, principal, batchIdOrInput, value }); return { id: typeof batchIdOrInput === "string" ? batchIdOrInput : "batch-1", action }; } });
+  const platform = createPlatform(), server = createOpenReelServer(undefined, platform, { production: true, rateLimit: { max: 100 }, publishingOrchestrator });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const anonymous = await fetch(`${base}/api/v1/publishing/batches/batch-1`); assert.equal(anonymous.status, 401);
+  await fetch(`${base}/api/v1/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: "publisher@example.test", password: "secure-pass-123" }) });
+  const login = await fetch(`${base}/api/v1/auth/login`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: "publisher@example.test", password: "secure-pass-123" }) }), token = decodeURIComponent(login.headers.getSetCookie().find(value => value.startsWith("openreel_session=")).split(";", 1)[0].split("=")[1]);
+  const call = (path, method = "GET", value) => fetch(`${base}${path}`, { method, headers: { authorization: `Bearer ${token}`, ...(value && { "content-type": "application/json" }) }, ...(value && { body: JSON.stringify(value) }) });
+  assert.equal((await call("/api/v1/publishing/batches", "POST", { intentKey: "reviewed" })).status, 201);
+  assert.equal((await call("/api/v1/publishing/batches")).status, 200);
+  assert.equal((await call("/api/v1/publishing/batches/batch-1")).status, 200);
+  assert.equal((await call("/api/v1/publishing/batches/export")).status, 200);
+  assert.equal((await call("/api/v1/publishing/batches/batch-1", "DELETE")).status, 200);
+  for (const [action, value] of [["validate", {}], ["confirm", { platform: "tiktok" }], ["advance", {}], ["retry", { platform: "douyin" }], ["cancel", {}], ["reconcile", { platform: "youtube_shorts" }]]) assert.equal((await call(`/api/v1/publishing/batches/batch-1/${action}`, "POST", value)).status, 201);
+  assert.equal(calls.length, 11); assert.ok(calls.every(call => call.principal.tenantId === call.principal.accountId));
+  assert.deepEqual(calls.map(call => call.action), ["create", "list", "get", "export", "remove", "validate", "confirm", "advance", "retry", "cancel", "reconcile"]);
+
+  const unavailable = createOpenReelServer(); await new Promise(resolve => unavailable.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => unavailable.close(resolve)));
+  const disabled = await fetch(`http://127.0.0.1:${unavailable.address().port}/api/v1/publishing/batches/x`); assert.equal(disabled.status, 503); assert.equal((await disabled.json()).error.code, "PUBLISHING_UNAVAILABLE");
+});
+
+test("publishing account view is authenticated, complete and strips credential-shaped fields", async (t) => {
+  const publishingAccounts = async principal => [{ platform: "tiktok", status: "connected", accountId: `acct-${principal.accountId}`, displayName: "Creator", canPublish: true, privacyOptions: ["PUBLIC", "FRIENDS"], audienceRequired: true, interactions: { comment: true, duet: false, stitch: true }, accessToken: "must-not-leak" }], server = createOpenReelServer(undefined, undefined, { publishingAccounts });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
+  const response = await fetch(`http://127.0.0.1:${server.address().port}/api/v1/publishing/accounts`), view = await response.json();
+  assert.equal(response.status, 200); assert.equal(view.platforms.length, 4); assert.equal(view.platforms[0].canPublish, true); assert.deepEqual(view.platforms[0].capabilities, { privacyOptions: ["PUBLIC", "FRIENDS"], audienceRequired: true, interactions: { comment: true, duet: false, stitch: true } }); assert.equal(view.platforms[1].status, "unbound"); assert.equal(view.platforms[1].capabilities, null); assert.doesNotMatch(JSON.stringify(view), /must-not-leak|accessToken/);
+});
+
+test("YouTube publishing OAuth HTTP boundary is authenticated and unavailable by default", async (t) => {
+  const platform = createPlatform(), server = createOpenReelServer(undefined, platform, { production: true, rateLimit: { max: 100 } });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  assert.equal((await fetch(`${base}/api/v1/publishing/oauth/youtube_shorts/callback?state=x&code=y`)).status, 401);
+  await fetch(`${base}/api/v1/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: "oauth-default@example.test", password: "secure-pass-123" }) });
+  const login = await fetch(`${base}/api/v1/auth/login`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: "oauth-default@example.test", password: "secure-pass-123" }) }), token = decodeURIComponent(login.headers.getSetCookie().find(value => value.startsWith("openreel_session=")).split(";", 1)[0].split("=")[1]);
+  const response = await fetch(`${base}/api/v1/publishing/oauth/youtube_shorts/begin`, { method: "POST", headers: { authorization: `Bearer ${token}`, "content-type": "application/json" }, body: "{}" });
+  assert.equal(response.status, 503); assert.equal((await response.json()).error.code, "PUBLISHING_OAUTH_UNAVAILABLE");
+});
+
+test("YouTube publishing OAuth HTTP boundary binds the principal and excludes tokens", async (t) => {
+  const calls = [], publishingOAuth = {
+    begin: input => { calls.push({ action: "begin", input }); return { authorizationUrl: "https://accounts.google.com/o/oauth2/v2/auth?safe=1" }; },
+    complete: input => { calls.push({ action: "complete", input }); return { binding: { id: "binding-1", platform: "youtube_shorts", displayName: "Channel" }, returnPath: "/" }; },
+    disconnect: input => { calls.push({ action: "disconnect", input }); return { binding: { id: input.bindingId, status: "disconnected" }, revocation: "succeeded" }; }
+  }, platform = createPlatform(), server = createOpenReelServer(undefined, platform, { production: true, rateLimit: { max: 100 }, publishingOAuth });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  await fetch(`${base}/api/v1/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: "oauth-injected@example.test", password: "secure-pass-123" }) });
+  const login = await fetch(`${base}/api/v1/auth/login`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: "oauth-injected@example.test", password: "secure-pass-123" }) }), token = decodeURIComponent(login.headers.getSetCookie().find(value => value.startsWith("openreel_session=")).split(";", 1)[0].split("=")[1]), headers = { authorization: `Bearer ${token}`, "content-type": "application/json" };
+  let response = await fetch(`${base}/api/v1/publishing/oauth/youtube_shorts/begin`, { method: "POST", headers, body: JSON.stringify({ returnPath: "/" }) }); assert.equal(response.status, 201);
+  response = await fetch(`${base}/api/v1/publishing/oauth/youtube_shorts/callback?state=state-1&code=code-1`, { headers, redirect: "manual" }); assert.equal(response.status, 303); assert.equal(response.headers.get("location"), "/"); assert.equal(await response.text(), "");
+  response = await fetch(`${base}/api/v1/publishing/accounts/binding-1`, { method: "DELETE", headers }); assert.equal(response.status, 200);
+  assert.equal(calls.length, 3); assert.equal(calls.every(call => call.input.tenantId === call.input.actorId), true);
 });

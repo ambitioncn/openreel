@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "milestone": "OCP-08",
+  "status": "accepted_local",
+  "platform": "youtube_shorts",
+  "official_boundary": {
+    "api": "YouTube Data API v3 channels.list, videos.insert resumable upload and videos.list",
+    "minimum_scope_profile": ["https://www.googleapis.com/auth/youtube.upload"],
+    "classification": "YouTube determines Shorts eligibility after ordinary video upload; there is no separate Shorts publishing endpoint",
+    "live_actions_executed": false
+  },
+  "implemented": [
+    "single bound-channel identity and capability discovery",
+    "title, description, privacy and required audience validation",
+    "tenant-scoped MP4 byte loading and official HTTPS resumable-session boundary",
+    "resumable session initialization and exact-byte transfer",
+    "processing, rejection, missing-video and completed-upload reconciliation",
+    "auth, quota, transient, policy, permanent and ambiguous-result normalization"
+  ],
+  "verification": [{
+    "command": "node --test test/publishing-youtube.test.js test/publishing-lifecycle.test.js test/publishing-oauth.test.js test/publishing-preflight.test.js",
+    "result": "passed: 27 tests, 0 failed"
+  }],
+  "deferred_live_gates": [
+    "Owner approval for a named Google Cloud project, enabled YouTube Data API and OAuth consent/scope action",
+    "Owner approval before adding or changing that application's credentials",
+    "Owner approval before authorizing a named YouTube channel",
+    "Separate owner approval naming the channel, MP4, title, description, privacy and audience before any real upload/publication"
+  ],
+  "limitations": [
+    "No real account, credential, API request, upload or external publication was used in local qualification",
+    "The approved project's current audit status, quota and channel-specific restrictions must be re-qualified before live acceptance",
+    "A lost upload response remains ambiguous and must be reconciled rather than repeated blindly"
+  ]
+}
