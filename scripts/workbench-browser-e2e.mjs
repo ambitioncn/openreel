@@ -32,6 +32,14 @@ async function exercise(browser, name, viewport) {
   page.on("response", response => { if (response.status() >= 500) failures.push(`http:${response.status()}:${new URL(response.url()).pathname}`); });
   await installLocalPlanningFixture(page);
   await page.goto(base, { waitUntil: "networkidle" });
+  assert.equal(await page.locator("html").getAttribute("lang"), "en", "English must be the default locale");
+  assert.deepEqual(await page.locator("[data-language-selector]").evaluateAll(selects => selects.map(select => select.value)), ["en", "en"], "language selectors must start in sync");
+  assert.equal(await page.locator('#short-video-flow [aria-label="Creation steps"]').count(), 1, "English guided flow lacks an accessible label");
+  await page.locator("[data-language-selector]").first().selectOption("zh-CN");
+  assert.equal(await page.locator("html").getAttribute("lang"), "zh-CN", "Simplified Chinese locale was not applied");
+  assert.deepEqual(await page.locator("[data-language-selector]").evaluateAll(selects => selects.map(select => select.value)), ["zh-CN", "zh-CN"], "language selectors did not stay in sync");
+  assert.equal(await page.locator('#short-video-flow [aria-label="创作步骤"]').count(), 1, "Chinese guided flow lacks an accessible label");
+  await page.locator("[data-language-selector]").first().selectOption("en");
   await page.click("#show-register");
   await page.fill("#register-email", `${name}-${Date.now()}@openreel.invalid`);
   await page.fill("#register-password", "bounded-browser-pass-123");
@@ -40,7 +48,7 @@ async function exercise(browser, name, viewport) {
   await page.waitForFunction(() => document.querySelector("#workflow-state")?.textContent?.startsWith("Ready:"));
   const initialProjectCount = await page.locator("#workbench-projects article").count();
   assert.ok(await page.locator("#workspace-shell").evaluate(element => element.classList.contains("workbench-mode")), "beginner workbench is not the default signed-in mode");
-  assert.equal(await page.locator('#short-video-flow [aria-label="创作步骤"]').count(), 1, "guided flow lacks an accessible label");
+  assert.equal(await page.locator('#short-video-flow [aria-label="Creation steps"]').count(), 1, "guided flow lacks an accessible label");
   await page.click("#start-short-video");
   await page.fill("#short-video-brief", "三步拍出清晰的咖啡教学短片");
   await page.selectOption("#short-video-type", "knowledge");
@@ -58,12 +66,12 @@ async function exercise(browser, name, viewport) {
   assert.equal(await page.locator("#workbench-projects article").count(), initialProjectCount + 1, "unconfirmed current-work write must not create or overwrite a work");
   await page.check("#creative-current-confirm");
   await page.click("#short-video-brief-form button[type=submit]");
-  await page.waitForFunction(() => document.querySelector("#short-video-state")?.textContent?.includes("已确认继续当前作品"));
+  await page.waitForFunction(() => document.querySelector("#short-video-state")?.textContent?.includes("Confirmed continuing the current project"));
   assert.equal(await page.locator("#workbench-projects article").count(), initialProjectCount + 1, "confirmed current-work write must retain explicit selected work");
   await page.fill("#short-video-script", `${name} 可编辑脚本正文`);
   await page.fill("#storyboard-shots article:first-child .shot-line", `${name} 第一镜台词`);
   await page.click("#save-script-storyboard");
-  await page.waitForFunction(expected => document.querySelector("#editor-state")?.textContent?.includes("已保存") && document.querySelector("#short-video-script")?.value === expected, `${name} 可编辑脚本正文`);
+  await page.waitForFunction(expected => document.querySelector("#editor-state")?.textContent?.includes("Saved") && document.querySelector("#short-video-script")?.value === expected, `${name} 可编辑脚本正文`);
   if (viewport.width <= 760) {
     const layout = await page.locator("#storyboard-shots article:first-child").evaluate(element => ({ columns: getComputedStyle(element).gridTemplateColumns.split(" ").length, overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth }));
     assert.equal(layout.columns, 1, "mobile storyboard editor must stack to one column");
@@ -72,12 +80,15 @@ async function exercise(browser, name, viewport) {
   await page.click("#advanced-canvas");
   assert.ok(await page.locator("#creator-workbench").isHidden(), "advanced canvas toggle did not leave the workbench");
   await page.click("#workbench-home");
+  await page.locator("[data-language-selector]").last().selectOption("zh-CN");
   await page.reload({ waitUntil: "networkidle" });
   await page.waitForSelector("#script-editor:not([hidden])");
+  assert.equal(await page.locator("html").getAttribute("lang"), "zh-CN", "locale preference did not persist across reload");
+  assert.deepEqual(await page.locator("[data-language-selector]").evaluateAll(selects => selects.map(select => select.value)), ["zh-CN", "zh-CN"], "persisted locale did not synchronize selectors");
   assert.equal(await page.locator("#short-video-script").inputValue(), `${name} 可编辑脚本正文`);
   assert.equal(failures.length, 0, failures.join("\n"));
   await page.close();
-  return { viewport: `${viewport.width}x${viewport.height}`, distinctWorkDefault: true, explicitCurrentWorkConfirmation: true, editableScript: true, editableStoryboard: true, persistenceReload: true, advancedCanvasReachable: true };
+  return { viewport: `${viewport.width}x${viewport.height}`, defaultEnglish: true, simplifiedChineseSwitch: true, localePersistenceReload: true, distinctWorkDefault: true, explicitCurrentWorkConfirmation: true, editableScript: true, editableStoryboard: true, persistenceReload: true, advancedCanvasReachable: true };
 }
 
 async function installLocalPlanningFixture(page) {

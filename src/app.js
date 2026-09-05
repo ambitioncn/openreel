@@ -1,3 +1,4 @@
+import { initializeI18n, localeCode } from "./i18n.js";
 import { NODE_TYPES } from "./model.js";
 import { TUTORIALS, tutorialById, tutorialProgress } from "./tutorials.js";
 import { activeStoryboardJob, retryableStoryboardJob, storyboardBatchView } from "./storyboard-batch-ui.js";
@@ -16,6 +17,7 @@ import { byteBackedIdentityReference, commercialDeclarations } from "./commercia
 const icons = { text: "T", image: "▧", video: "▶", audio: "♪", script: "≡" };
 let snapshot = { nodes: [], edges: [], groups: [] }, models = [], selected = [], selectedGraph = null, storyboardBatch = null, selectedWorkbenchAsset = null, commercialQuote = null, commercialJob = null, view = { x: 0, y: 0, scale: 1 }, projectId, sessionId, csrfToken = "", workspaceStarted = false;
 const $ = selector => document.querySelector(selector), viewport = $("#viewport"), canvas = $("#canvas"), nodeForm = $("#node-form"), graphForm = $("#graph-form");
+initializeI18n();
 
 function refreshWorkbenchModelRoute() {
   const preference = document.querySelector('input[name="workbench-quality"]:checked')?.value || "fast";
@@ -39,7 +41,7 @@ $("#cancel-new-project").onclick = () => { $("#new-project-form").hidden = true;
 function draftState(project) { if (project.status === "archived") return "已归档"; if (!project.story) return "空白草稿"; if (!project.storyboard?.shots?.length) return "脚本草稿"; return `${project.storyboard.shots.length} 镜 · 编辑中`; }
 async function refreshProjectShelf() {
   const projects = await api("/api/v1/projects"), details = await Promise.all(projects.map(project => api(`/api/v1/projects/${project.id}`)));
-  $("#workbench-projects").replaceChildren(...details.map(detail => { const project = detail.project, card = document.createElement("article"); card.classList.toggle("current", project.id === projectId); card.innerHTML = `<button class="project-open" type="button"><strong></strong><span></span><small></small></button><div><button class="project-rename" type="button">重命名</button><button class="project-archive" type="button"></button></div>`; card.querySelector("strong").textContent = project.name; card.querySelector("span").textContent = draftState({ ...project, story: detail.story, storyboard: detail.storyboard }); card.querySelector("small").textContent = `更新于 ${new Date(project.updatedAt).toLocaleString()}`; card.querySelector(".project-open").onclick = () => openProject(project.id); card.querySelector(".project-rename").onclick = () => renameWorkbenchProject(project); const archive = card.querySelector(".project-archive"); archive.textContent = project.status === "archived" ? "恢复" : "归档"; archive.onclick = () => setProjectStatus(project, project.status === "archived" ? "active" : "archived"); return card; }));
+  $("#workbench-projects").replaceChildren(...details.map(detail => { const project = detail.project, card = document.createElement("article"); card.classList.toggle("current", project.id === projectId); card.innerHTML = `<button class="project-open" type="button"><strong></strong><span></span><small></small></button><div><button class="project-rename" type="button">重命名</button><button class="project-archive" type="button"></button></div>`; card.querySelector("strong").textContent = project.name; card.querySelector("span").textContent = draftState({ ...project, story: detail.story, storyboard: detail.storyboard }); card.querySelector("small").textContent = `更新于 ${new Date(project.updatedAt).toLocaleString(localeCode())}`; card.querySelector(".project-open").onclick = () => openProject(project.id); card.querySelector(".project-rename").onclick = () => renameWorkbenchProject(project); const archive = card.querySelector(".project-archive"); archive.textContent = project.status === "archived" ? "恢复" : "归档"; archive.onclick = () => setProjectStatus(project, project.status === "archived" ? "active" : "archived"); return card; }));
   $("#project-shelf-state").textContent = details.length ? `共 ${details.length} 个作品` : "还没有作品，创建第一个空白草稿。";
 }
 async function renameWorkbenchProject(project) { const name = prompt("作品名称", project.name); if (!name?.trim()) return; await api(`/api/v1/projects/${project.id}`, json("PATCH", { name: name.trim(), version: project.version })); if (project.id === projectId) await refresh(); await refreshProjectShelf(); }

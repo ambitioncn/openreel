@@ -10,6 +10,7 @@
   <body>
     <main id="auth-shell" class="auth-shell">
       <section class="auth-card">
+        <label class="language-picker">Language<select data-language-selector aria-label="Language"><option value="en">English</option><option value="zh-CN">简体中文</option></select></label>
         <div class="auth-brand"><span class="mark">OR</span><div><h1>OpenReel</h1><p>Build stories, shots, media, and final reels in one visual workspace.</p></div></div>
         <div class="auth-tabs"><button id="show-login" class="active" type="button">Sign in</button><button id="show-register" type="button">Create account</button></div>
         <form id="login-form" class="auth-form">
@@ -28,7 +29,7 @@
     <main id="workspace-shell" class="app-shell" hidden>
       <header class="topbar">
         <div><span class="mark">OR</span><strong>OpenReel</strong><span id="project-name" class="crumb">/ Loading…</span></div>
-        <div class="project-actions"><button id="workbench-home" type="button">作品工作台</button><button id="advanced-canvas" type="button">高级画布</button><button id="tutorials" type="button">教程</button><button id="product-feedback" type="button">反馈</button><button id="api-access" type="button">API access</button><button id="rename-project">Rename</button><button id="archive-project">Archive</button><button id="logout" type="button">Sign out</button><div class="status"><span></span> Secure workspace</div></div>
+        <div class="project-actions"><label class="language-picker">Language<select data-language-selector aria-label="Language"><option value="en">English</option><option value="zh-CN">简体中文</option></select></label><button id="workbench-home" type="button">作品工作台</button><button id="advanced-canvas" type="button">高级画布</button><button id="tutorials" type="button">教程</button><button id="product-feedback" type="button">反馈</button><button id="api-access" type="button">API access</button><button id="rename-project">Rename</button><button id="archive-project">Archive</button><button id="logout" type="button">Sign out</button><div class="status"><span></span> Secure workspace</div></div>
       </header>
       <section id="collaboration-conflict" class="collaboration-conflict" role="alert" hidden>
         <div><strong id="collaboration-conflict-title"></strong><p id="collaboration-conflict-message"></p></div>

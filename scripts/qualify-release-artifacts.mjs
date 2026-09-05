@@ -62,6 +62,7 @@ export const releaseArtifactPaths = [
   "src/export-evidence.js",
   "src/export-ui.js",
   "src/h3-qualification-batch-guard.js",
+  "src/i18n.js",
   "src/model-catalog.js",
   "src/model-controls.js",
   "src/model.js",

@@ -1,0 +1,137 @@
+const STORAGE_KEY = "openreel.locale";
+const SUPPORTED = new Set(["en", "zh-CN"]);
+
+const pairs = [
+  ["语言", "Language"],
+  ["作品工作台", "Creator workspace"], ["高级画布", "Advanced canvas"], ["教程", "Tutorials"], ["反馈", "Feedback"],
+  ["我的作品", "My projects"], ["作品与草稿", "Projects and drafts"], ["新建作品", "New project"], ["作品名称", "Project name"],
+  ["例如：咖啡小技巧", "For example: Better coffee tips"], ["创建空白草稿", "Create blank draft"], ["取消", "Cancel"],
+  ["正在加载作品…", "Loading projects…"], ["OPENREEL 短视频工作台", "OPENREEL SHORT VIDEO WORKSPACE"],
+  ["一个想法，变成可以发布的短视频", "Turn one idea into a publishable short video"],
+  ["不用学习节点和模型。告诉我们你想做什么，OpenReel 会带你完成脚本、分镜、画面、配音、字幕和成片。", "No nodes or models to learn. Tell OpenReel what you want to make and it will guide you through the script, storyboard, visuals, voice-over, captions, and final cut."],
+  ["发布账号", "Publishing accounts"], ["连接发布平台", "Connect publishing platforms"],
+  ["先绑定发布账号，之后可在任意作品的成片步骤选择。无需先创建脚本或成片。", "Connect an account now, then select it from the final-cut step of any project. No script or finished video is required."],
+  ["正在检查账号状态…", "Checking account status…"], ["连接账号", "Connect account"],
+  ["连接账号只会启动平台官方授权，不会发布任何内容。", "Connecting starts the platform's official authorization flow and never publishes content."],
+  ["推荐", "Recommended"], ["TikTok / 抖音 竖屏短视频", "TikTok / Douyin vertical short video"],
+  ["30–60 秒 · 9:16 · 自动 Hook、字幕、配音与 B-roll", "30–60 sec · 9:16 · Automatic hook, captions, voice-over, and B-roll"], ["开始创作", "Start creating"],
+  ["创作步骤", "Creation steps"], ["1 创意", "1 Idea"], ["2 脚本", "2 Script"], ["3 分镜", "3 Storyboard"], ["4 生成", "4 Generate"], ["5 成片", "5 Final cut"],
+  ["第 1 步 · 告诉我们你要做什么", "Step 1 · Tell us what you want to make"], ["描述你的短视频", "Describe your short video"],
+  ["一句话、商品卖点、知识主题或网页内容都可以。", "Start with one sentence, product benefits, a topic, or a web page."],
+  ["保存到哪个作品？", "Which project should this use?"], ["创建独立新作品（推荐）", "Create a separate project (recommended)"], ["继续当前作品", "Continue the current project"],
+  ["我确认用这个新创意改写当前作品", "I confirm this idea may rewrite the current project"],
+  ["选择新作品不会覆盖当前脚本、分镜或素材。继续当前作品必须在本次提交前明确确认。", "A new project will not overwrite the current script, storyboard, or assets. Continuing the current project requires explicit confirmation."],
+  ["已创建独立作品", "Created a separate project"], ["已确认继续当前作品", "Confirmed continuing the current project"],
+  ["从哪里开始？", "Where do you want to start?"], ["一句话", "An idea"], ["文案", "Copy"], ["商品链接", "Product URL"], ["上传素材", "Upload an asset"],
+  ["视频主题", "Video topic"], ["例如：用轻松有趣的方式，介绍三种让咖啡更好喝的小技巧", "For example: Share three fun, simple ways to make better coffee"],
+  ["参考素材", "Reference asset"], ["素材通过现有安全上传链路保存到当前作品，不会自动调用模型。", "The asset is stored in the current project through the secure upload path. No model runs automatically."],
+  ["作品类型", "Project type"], ["知识分享", "Educational"], ["商品种草", "Product showcase"], ["故事叙述", "Story"], ["口播观点", "Talking head"], ["资讯解读", "News explainer"],
+  ["目标时长", "Target duration"], ["约 5 秒", "About 5 seconds"], ["约 30 秒", "About 30 seconds"], ["约 60 秒", "About 60 seconds"],
+  ["生成脚本与分镜", "Create script and storyboard"], ["此步骤只创建可审阅的创作方案，不会调用付费模型。", "This step only creates a reviewable plan and will not call paid models."],
+  ["第 2 步 · 脚本", "Step 2 · Script"], ["选择 Hook，打磨完整脚本", "Choose a hook and refine the full script"], ["自动保存到当前作品", "Saved automatically to this project"], ["3 个开场 Hook", "3 opening hooks"], ["完整口播脚本", "Full voice-over script"],
+  ["第 3 步 · 分镜", "Step 3 · Storyboard"], ["逐镜调整台词、画面和时长", "Refine dialogue, visuals, and timing shot by shot"], ["总时长", "Total duration"],
+  ["生成前检查", "Pre-generation review"], ["简化时间线", "Simple timeline"], ["正在估算…", "Estimating…"], ["成本为生成前估算，确认生成前不会产生付费调用。", "Costs are estimates. No paid call occurs before confirmation."],
+  ["声音、字幕与平台安全区", "Audio, captions, and platform safe areas"], ["配音风格", "Voice style"], ["自然", "Natural"], ["活力", "Energetic"], ["沉稳", "Calm"],
+  ["背景音乐", "Background music"], ["无音乐", "No music"], ["轻柔", "Light"], ["动感", "Upbeat"], ["使用 SeedAudio 1.0 生成背景音乐（服务默认禁用）", "Generate background music with SeedAudio 1.0 (disabled by default)"],
+  ["音乐提示词", "Music prompt"], ["轻快、无歌词的海滩舞蹈配乐", "Upbeat instrumental beach dance music"], ["音乐时长", "Music duration"], ["上传字幕卡（PNG）", "Upload caption card (PNG)"],
+  ["字幕对应镜头", "Caption shot"], ["字幕文字", "Caption text"], ["上传背景音乐（WAV/MP3）", "Upload background music (WAV/MP3)"], ["音乐来源声明", "Music source declaration"],
+  ["例如：本人创作或已取得许可", "For example: Original work or licensed"], ["上传后将绑定当前分镜版本并标记为已审核。", "Uploads are bound to the current storyboard version and marked reviewed."],
+  ["已审核音乐素材", "Reviewed music asset"], ["不使用素材库音乐", "Do not use library music"],
+  ["我确认已取得所需音乐权利，并自行承担上传、生成、使用与发布责任；OpenReel 不替我判定授权状态。", "I confirm I hold the required music rights and accept responsibility for uploading, generating, using, and publishing it. OpenReel does not determine licensing status for me."],
+  ["字幕卡素材", "Caption-card assets"], ["安全区", "Safe area"], ["自动字幕", "Automatic captions"], ["保存脚本与分镜", "Save script and storyboard"],
+  ["TikTok / 抖音", "TikTok / Douyin"], ["阶段", "Stage"], ["发布资格", "Publishing eligibility"], ["禁止", "Blocked"],
+  ["尚未绑定账号", "Account not connected"], ["已连接，但暂无发布权限", "Connected, but publishing permission is unavailable"],
+  ["尚无具备发布权限的绑定账号；不会自动授权或对外发布。", "No connected account currently has publishing permission. Nothing will be authorized or published automatically."],
+  ["还没有可导出的时间线；此状态不会启动生成或付费调用。", "There is no exportable timeline yet. This state will not start generation or any paid call."],
+  ["快速模式已就绪，生成时将自动选择合适模型。", "Fast mode is ready. OpenReel will automatically choose suitable models when generation starts."],
+  ["当前作品还没有素材，可从上方安全上传。", "This project has no assets yet. Upload one safely above."],
+  ["开场 Hook", "Opening hook"], ["核心内容", "Core content"], ["结尾行动", "Closing action"],
+  ["证据", "Evidence"], ["门禁", "Gate"], ["费用上限", "Cost limit"], ["重试", "Retries"], ["未设置", "not set"],
+  ["所有内容都可以修改；保存不会调用付费模型。", "Everything remains editable. Saving does not call paid models."],
+  ["第 4 步 · 生成", "Step 4 · Generate"], ["费用预检、确认与生成进度", "Cost review, confirmation, and generation progress"], ["确认前不会调用付费模型", "No paid model is called before confirmation"],
+  ["保存最新脚本与分镜后获取费用预检。", "Save the latest script and storyboard to get a cost estimate."], ["商业安全与参考图证据", "Commercial safety and reference evidence"],
+  ["人物/物体参考图", "Person/object reference image"], ["选择分镜已绑定的参考图", "Select a reference image bound to the storyboard"], ["主体类型", "Subject type"], ["虚构成人", "Fictional adult"], ["纯物体", "Object only"],
+  ["我确认拥有或已取得该参考图的使用许可", "I confirm I own or have permission to use this reference image"], ["我确认素材与要求不含未经许可的品牌", "I confirm the assets and request contain no unlicensed brands"], ["我确认素材与要求不含公众人物", "I confirm the assets and request contain no public figures"],
+  ["报价时会读取所选图片的真实字节，核验实际尺寸并计算 SHA-256；不会产生模型费用。", "The quote reads the selected image bytes, verifies its dimensions, and calculates SHA-256 without incurring model costs."],
+  ["导演质量责任", "Director quality responsibility"], ["生成与合格状态分离", "Generation and qualification are separate"], ["实际视频感知证据", "Perceptual evidence from actual video"], ["未通过", "Not passed"], ["通过", "Passed"],
+  ["人物视觉身份一致性 / 表演自然度", "Visual identity consistency / performance naturalness"], ["等待实际视频字节质量评估", "Waiting for quality evaluation of actual video bytes"],
+  ["获取费用预检", "Get cost estimate"], ["我确认按当前报价与版本开始真实生成", "I confirm real generation at the current quote and version"], ["确认并开始生成", "Confirm and generate"], ["重试失败任务", "Retry failed jobs"], ["仅重做失败镜头", "Redo failed shots only"], ["我确认按单镜头报价创建重做任务", "I confirm the per-shot quote and redo job"], ["确认重做", "Confirm redo"], ["取消未开始任务", "Cancel unstarted jobs"], ["尚未创建生成任务。", "No generation job has been created."],
+  ["第 5 步 · 成片", "Step 5 · Final cut"], ["预览、导出与发布文案", "Preview, export, and publishing copy"], ["导出前需确认时间线", "Review the timeline before export"],
+  ["尚无成片。生成镜头并加入时间线后即可预览和导出。", "No final cut yet. Generate shots and add them to the timeline to preview and export."], ["作品标题", "Project title"], ["发布文案", "Publishing copy"], ["保存标题与文案", "Save title and copy"],
+  ["我已检查时间线与成片内容", "I reviewed the timeline and final cut"], ["导出 MP4", "Export MP4"], ["下载 MP4 成片", "Download final MP4"], ["一键发布", "One-click publishing"],
+  ["选择已绑定账号与目标平台", "Choose connected accounts and platforms"], ["发布前逐平台校验并再次最终确认；单个平台失败不会隐藏其他平台结果。", "Each platform is validated before a final confirmation. One platform failure never hides the others."],
+  ["发布目标", "Publishing destinations"], ["未绑定账号", "Account not connected"], ["校验并进入最终确认", "Validate and continue to final confirmation"], ["恢复最近批次", "Recover latest batch"], ["最终确认并发布", "Final confirmation and publish"], ["逐平台发布状态", "Per-platform publishing status"],
+  ["绑定账号后可用；此处不会自动授权或对外发布。", "Available after connecting an account. Nothing is authorized or published automatically."], ["导出使用本地预览渲染，不会调用付费模型。", "Export uses local preview rendering and does not call paid models."],
+  ["自动模型路由", "Automatic model routing"], ["选择生成偏好", "Choose a generation preference"], ["无需选择具体模型", "No individual model selection needed"], ["OpenReel 会按画面、视频和声音任务自动匹配模型", "OpenReel automatically matches models to image, video, and audio tasks"],
+  ["快速", "Fast"], ["优先速度与低成本，适合草稿和试做", "Prioritizes speed and lower cost for drafts and experiments"], ["高质量", "High quality"], ["优先成片质量，适合最终生成", "Prioritizes final quality for production renders"], ["正在检查可用生成能力…", "Checking available generation capabilities…"],
+  ["作品素材", "Project assets"], ["素材库", "Asset library"], ["筛选", "Filter"], ["全部", "All"], ["图片", "Images"], ["视频", "Videos"], ["音频", "Audio"], ["绑定到分镜", "Bind to storyboard"], ["先创建分镜", "Create a storyboard first"], ["绑定选中素材", "Bind selected asset"], ["正在加载素材…", "Loading assets…"],
+  ["更多工作流", "More workflows"], ["你想制作哪种作品？", "What would you like to create?"], ["即将开放", "Coming soon"], ["商品种草视频", "Product showcase"], ["从商品卖点生成 Hook、口播和场景化素材。", "Turn product benefits into a hook, voice-over, and contextual visuals."], ["知识分享视频", "Educational video"], ["把复杂主题讲成清晰、有节奏的竖屏短片。", "Explain a complex topic in a clear, well-paced vertical video."], ["观点口播视频", "Talking-head opinion"], ["优化表达结构，自动匹配字幕与辅助画面。", "Refine the narrative and automatically match captions and supporting visuals."], ["故事短片", "Short story"], ["从故事梗概生成分镜、角色和连续镜头。", "Turn a synopsis into a storyboard, characters, and continuous shots."],
+  ["从经典类型开始创作", "Start with a classic format"], ["选择一个案例，把完整节点蓝图放到当前画布。教程不会自动调用付费模型。", "Choose an example and place its complete node blueprint on the canvas. Tutorials never call paid models automatically."],
+  ["告诉我们哪里需要改进", "Tell us what we can improve"], ["类别", "Category"], ["生成", "Generation"], ["编辑", "Editing"], ["导出", "Export"], ["发布", "Publishing"], ["稳定性", "Reliability"], ["其他", "Other"], ["评分", "Rating"], ["很满意", "Very satisfied"], ["很不满意", "Very dissatisfied"], ["补充说明", "Additional details"], ["提交反馈", "Submit feedback"],
+  ["已归档", "Archived"], ["空白草稿", "Blank draft"], ["脚本草稿", "Script draft"], ["镜 · 编辑中", "shots · Editing"], ["重命名", "Rename"], ["更新于", "Updated"], ["恢复", "Restore"], ["归档", "Archive"], ["共", "Total"], ["个作品", "projects"], ["还没有作品，创建第一个空白草稿。", "No projects yet. Create your first blank draft."],
+  ["镜头", "Shot"], ["本镜台词", "Shot dialogue"], ["画面描述", "Visual description"], ["风格连续性锁定", "Style continuity lock"], ["例如：暖金色高端产品广告，柔光，统一颗粒与色调", "For example: premium warm-gold product ad, soft light, consistent grain and color"], ["可选：本镜头需要的辅助画面", "Optional supporting visuals for this shot"], ["时长（秒）", "Duration (seconds)"], ["局部重做此镜头", "Redo this shot"], ["保留其他镜头，只清除此镜头的生成结果", "Keep other shots and clear only this shot's generated result"],
+  ["秒", "sec"], ["正在保存", "Saving"], ["已保存", "Saved"], ["失败", "failed"], ["成功", "succeeded"], ["正在上传", "Uploading"], ["上传失败", "Upload failed"], ["已选择", "Selected"], ["选择", "Select"], ["下载", "Download"], ["绑定失败", "Binding failed"], ["请求失败", "Request failed"], ["服务器返回了无法识别的响应", "The server returned an unrecognized response"], ["已收到，谢谢你的反馈。", "Thanks, we received your feedback."],
+  ["登录", "Sign in"], ["创建账号", "Create account"], ["邮箱", "Email"], ["密码", "Password"], ["登录或创建账号以继续。", "Sign in or create an account to continue."], ["加载中…", "Loading…"], ["API 访问", "API access"], ["退出登录", "Sign out"], ["安全工作区", "Secure workspace"], ["加载最新版本", "Load latest version"],
+  ["节点工具箱", "Node toolbox"], ["连接所选节点", "Connect selected nodes"], ["组合所选节点", "Group selected nodes"], ["拖动画布平移", "Drag space to pan"], ["滚轮缩放", "Wheel to zoom"], ["无限画布", "Infinite canvas"], ["节点检查器", "Node inspector"], ["创建故事与镜头", "Create story + shot"], ["开始分镜批次", "Start storyboard batch"], ["推进", "Advance"], ["重试失败镜头", "Retry failed shot"], ["导出时间线清单", "Export timeline manifest"], ["本地预览导出", "Local preview export"], ["格式", "Format"], ["质量", "Quality"], ["我已检查时间线", "I reviewed the timeline"], ["渲染本地 MP4 预览", "Render local MP4 preview"], ["空白：创建故事、生成媒体，然后导出。", "Empty: create a story, generate media, then export."], ["选择节点以编辑详情。", "Select a node to edit its details."], ["标题", "Title"], ["内容", "Content"], ["本地生成", "Generate locally"], ["就绪", "Ready"], ["搜索", "Search"], ["关闭", "Close"]
+];
+
+const byChinese = new Map(pairs.map(([zh, en]) => [zh, en]));
+const byEnglish = new Map(pairs.map(([zh, en]) => [en, zh]));
+const originals = new WeakMap();
+let locale = SUPPORTED.has(localStorage.getItem(STORAGE_KEY)) ? localStorage.getItem(STORAGE_KEY) : "en";
+
+function translate(value, target = locale) {
+  if (!value?.trim()) return value;
+  const map = target === "en" ? byChinese : byEnglish;
+  if (map.has(value)) return map.get(value);
+  let output = value;
+  const entries = [...map.entries()].sort((a, b) => b[0].length - a[0].length);
+  for (const [source, translated] of entries) if (output.includes(source)) output = output.split(source).join(translated);
+  return output;
+}
+
+function applyNode(node) {
+  if (node.nodeType === Node.TEXT_NODE) {
+    if (!originals.has(node)) originals.set(node, node.nodeValue);
+    node.nodeValue = translate(originals.get(node));
+    return;
+  }
+  if (!(node instanceof Element)) return;
+  for (const attr of ["placeholder", "aria-label", "title"]) {
+    if (!node.hasAttribute(attr)) continue;
+    const key = `${attr}:${node.getAttribute(attr)}`;
+    if (!originals.has(node)) originals.set(node, new Map());
+    const values = originals.get(node);
+    if (values instanceof Map && !values.has(attr)) values.set(attr, node.getAttribute(attr));
+    if (values instanceof Map) node.setAttribute(attr, translate(values.get(attr)));
+  }
+  node.childNodes.forEach(applyNode);
+}
+
+function applyDocument() {
+  document.documentElement.lang = locale;
+  document.title = locale === "en" ? "OpenReel Workspace" : "OpenReel 创作空间";
+  document.querySelectorAll("[data-language-selector]").forEach(select => { select.value = locale; });
+  applyNode(document.body);
+}
+
+export function setLocale(next) {
+  if (!SUPPORTED.has(next)) return;
+  locale = next;
+  localStorage.setItem(STORAGE_KEY, locale);
+  applyDocument();
+  window.dispatchEvent(new CustomEvent("openreel:localechange", { detail: { locale } }));
+}
+
+export function localeCode() { return locale === "zh-CN" ? "zh-CN" : "en-US"; }
+export function currentLocale() { return locale; }
+
+export function initializeI18n() {
+  document.querySelectorAll("[data-language-selector]").forEach(select => select.addEventListener("change", event => setLocale(event.currentTarget.value)));
+  applyDocument();
+  const observer = new MutationObserver(records => {
+    for (const record of records) for (const node of record.addedNodes) applyNode(node);
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+  return () => observer.disconnect();
+}
