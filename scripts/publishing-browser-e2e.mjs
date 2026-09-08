@@ -92,7 +92,7 @@ async function exercise(browser, name, viewport) {
   await page.waitForFunction(() => document.querySelectorAll("#publishing-results li").length === 4);
   assert.equal(await page.locator('#publishing-results li').filter({ hasText: "awaiting_confirmation" }).count(), 4, "all four destinations must pass validation");
   assert.equal(await page.locator("#publishing-confirm").isDisabled(), true, "final publication must stay disabled");
-  assert.match(await page.locator("#publishing-progress").textContent(), /真实发布仍需主人/);
+  assert.match(await page.locator("#publishing-progress").textContent(), /Real publishing still requires explicit approval/);
   assert.equal(calls.create, 1, "duplicate preflight clicks must create one batch");
   assert.equal(calls.validate, 1, "duplicate preflight clicks must validate once");
   if (viewport.width <= 760) assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth), false, "mobile publishing UI has horizontal overflow");

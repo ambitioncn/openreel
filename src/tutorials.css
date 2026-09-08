@@ -1,4 +1,5 @@
 .tutorial-dialog { width:min(900px,calc(100% - 32px)); max-height:calc(100vh - 48px); max-height:calc(100dvh - 48px); overflow:auto; overscroll-behavior:contain; border:1px solid #343741; border-radius:18px; padding:28px; background:#14151a; color:#f2f3f7; box-shadow:0 24px 70px #000b }
+.tutorials-page { min-height:100%; padding:28px; border:1px solid #30333c; border-radius:18px; background:#14151a }
 .tutorial-dialog::backdrop { background:#000c }
 .tutorial-dialog header>p:last-child,.tutorial-outcome { color:#a9acb6; line-height:1.6 }
 .tutorial-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:22px }

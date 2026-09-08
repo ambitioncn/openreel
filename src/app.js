@@ -1,6 +1,7 @@
-import { initializeI18n, localeCode } from "./i18n.js";
+import { currentLocale, initializeI18n, localeCode } from "./i18n.js";
 import { NODE_TYPES } from "./model.js";
-import { TUTORIALS, tutorialById, tutorialProgress } from "./tutorials.js";
+import { tutorialProgress } from "./tutorials.js";
+import { tutorialForLocale, tutorialsForLocale } from "./tutorial-locales.js";
 import { activeStoryboardJob, retryableStoryboardJob, storyboardBatchView } from "./storyboard-batch-ui.js";
 import { modelControlView, selectedModelControls } from "./model-controls.js";
 import { collaborationConflictView } from "./collaboration-ui.js";
@@ -15,7 +16,7 @@ import { directorPerceptualUiRows, directorRuntimeUiState, directorRuntimeUiSumm
 import { byteBackedIdentityReference, commercialDeclarations } from "./commercial-policy-ui.js";
 
 const icons = { text: "T", image: "▧", video: "▶", audio: "♪", script: "≡" };
-let snapshot = { nodes: [], edges: [], groups: [] }, models = [], selected = [], selectedGraph = null, storyboardBatch = null, selectedWorkbenchAsset = null, commercialQuote = null, commercialJob = null, view = { x: 0, y: 0, scale: 1 }, projectId, sessionId, csrfToken = "", workspaceStarted = false;
+let snapshot = { nodes: [], edges: [], groups: [] }, models = [], selected = [], selectedGraph = null, storyboardBatch = null, selectedWorkbenchAsset = null, commercialQuote = null, commercialJob = null, view = { x: 0, y: 0, scale: 1 }, projectId, sessionId, csrfToken = "", workspaceStarted = false, workspacePage = "home";
 const $ = selector => document.querySelector(selector), viewport = $("#viewport"), canvas = $("#canvas"), nodeForm = $("#node-form"), graphForm = $("#graph-form");
 initializeI18n();
 
@@ -26,16 +27,31 @@ function refreshWorkbenchModelRoute() {
 }
 document.querySelectorAll('input[name="workbench-quality"]').forEach(input => input.onchange = () => { refreshWorkbenchModelRoute(); if (!$("#storyboard-editor").hidden) renderSimpleTimeline(); });
 
-function setWorkspaceMode(mode) {
-  const workbench = mode === "workbench";
-  $("#workspace-shell").classList.toggle("workbench-mode", workbench);
-  $("#creator-workbench").hidden = !workbench;
-  $("#workbench-home").classList.toggle("active", workbench);
-  $("#advanced-canvas").classList.toggle("active", !workbench);
+const WORKSPACE_PAGES = new Set(["home", "creator", "projects", "connections", "canvas", "tutorials"]);
+const ui = (english, chinese) => currentLocale() === "en" ? english : chinese;
+function routeFromHash() { const route = location.hash.slice(1); return WORKSPACE_PAGES.has(route) ? route : "home"; }
+function setWorkspacePage(page, { replace = false } = {}) {
+  workspacePage = WORKSPACE_PAGES.has(page) ? page : "home";
+  const canvasMode = workspacePage === "canvas";
+  $("#workspace-shell").classList.toggle("workbench-mode", !canvasMode);
+  $("#creator-workbench").hidden = canvasMode;
+  document.querySelectorAll("[data-workspace-page]").forEach(panel => { panel.hidden = panel.dataset.workspacePage !== workspacePage; });
+  if (workspacePage === "creator") $("#short-video-flow").hidden = false;
+  if (workspacePage === "tutorials" && projectId) renderTutorialList();
+  document.querySelectorAll("[data-route]").forEach(button => {
+    const active = button.dataset.route === workspacePage;
+    button.classList.toggle("active", active);
+    if (active) button.setAttribute("aria-current", "page"); else button.removeAttribute("aria-current");
+  });
+  const hash = `#${workspacePage}`;
+  if (location.hash !== hash) history[replace ? "replaceState" : "pushState"]({}, "", hash);
 }
-
-$("#workbench-home").onclick = () => setWorkspaceMode("workbench");
-$("#advanced-canvas").onclick = () => setWorkspaceMode("canvas");
+document.querySelectorAll("[data-route]").forEach(button => { button.onclick = () => setWorkspacePage(button.dataset.route); });
+window.addEventListener("hashchange", () => { if (workspaceStarted) setWorkspacePage(routeFromHash(), { replace: true }); });
+window.addEventListener("openreel:localechange", () => {
+  setIntakeSource(document.querySelector('input[name="intake-source"]:checked')?.value || "idea");
+  if (workspacePage === "tutorials" && projectId) renderTutorialList();
+});
 $("#toggle-new-project").onclick = () => { $("#new-project-form").hidden = false; $("#new-project-name").focus(); };
 $("#cancel-new-project").onclick = () => { $("#new-project-form").hidden = true; };
 function draftState(project) { if (project.status === "archived") return "已归档"; if (!project.story) return "空白草稿"; if (!project.storyboard?.shots?.length) return "脚本草稿"; return `${project.storyboard.shots.length} 镜 · 编辑中`; }
@@ -48,6 +64,7 @@ async function renameWorkbenchProject(project) { const name = prompt("作品名�
 async function setProjectStatus(project, status) { await api(`/api/v1/projects/${project.id}`, json("PATCH", { status, version: project.version })); if (project.id === projectId && status === "archived") { const next = (await api("/api/v1/projects?status=active")).find(item => item.id !== project.id); if (next) await openProject(next.id); } await refreshProjectShelf(); }
 $("#new-project-form").addEventListener("submit", async event => { event.preventDefault(); const button = event.submitter; button.disabled = true; try { const project = await api("/api/v1/projects", json("POST", { name: $("#new-project-name").value.trim() })); event.currentTarget.reset(); event.currentTarget.hidden = true; await openProject(project.id); } finally { button.disabled = false; } });
 $("#start-short-video").onclick = () => {
+  setWorkspacePage("creator");
   $("#short-video-flow").hidden = false;
   $("#short-video-flow").scrollIntoView({ behavior: "smooth", block: "start" });
   $("#short-video-brief").focus();
@@ -102,7 +119,7 @@ function updateStoryboardDuration() { const total = [...document.querySelectorAl
 async function redoWorkbenchShot(shotId) { const target = snapshot.storyboard.shots.find(shot => shot.id === shotId); if (!target) return; $("#editor-state").textContent = "正在保存局部重做请求（不会调用付费模型）…"; const shots = snapshot.storyboard.shots.map(shot => shot.id === shotId ? { ...shot, generatedAssetId: null } : shot); try { const storyboard = await api(`/api/v1/projects/${projectId}/storyboard`, json("PUT", { shots })); await refresh(); renderScriptStoryboard(snapshot.story, storyboard); $("#editor-state").textContent = "已保留其他镜头并清除此镜头的生成结果，可在确认后单独重做。"; } catch (error) { $("#editor-state").textContent = `局部重做失败：${error.message}`; } }
 $("#short-video-flow").addEventListener("input", event => { if (event.target.closest("#script-editor, #storyboard-editor")) scheduleEditorDraftSave(); });
 $("#storyboard-shots").addEventListener("input", updateStoryboardDuration);
-function setIntakeSource(source) { const url = source === "url", asset = source === "asset"; $("#product-url-field").hidden = !url; $("#intake-asset-field").hidden = !asset; $("#short-video-url").required = url; $("#short-video-asset").required = asset; $("#short-video-brief-label").firstChild.textContent = source === "copy" ? "原始文案" : source === "url" ? "商品卖点或创作要求" : source === "asset" ? "素材说明" : "视频主题"; }
+function setIntakeSource(source) { const url = source === "url", asset = source === "asset"; $("#product-url-field").hidden = !url; $("#intake-asset-field").hidden = !asset; $("#short-video-url").required = url; $("#short-video-asset").required = asset; $("#short-video-brief-label").firstChild.textContent = source === "copy" ? ui("Existing script or copy", "已有脚本或文案") : source === "url" ? ui("Product benefits or creative direction", "商品卖点或创作要求") : source === "asset" ? ui("Asset notes", "素材说明") : ui("Video topic", "视频主题"); }
 document.querySelectorAll('input[name="intake-source"]').forEach(input => input.onchange = () => setIntakeSource(input.value));
 $("#short-video-brief-form").addEventListener("submit", async event => {
   event.preventDefault();
@@ -179,7 +196,7 @@ function renderPublishingBatch(batch) {
   let cancel = $("#publishing-cancel");
   if (!cancel) { cancel = Object.assign(document.createElement("button"), { id: "publishing-cancel", type: "button", textContent: "取消未完成发布" }); $("#publishing-results").after(cancel); cancel.onclick = () => runPublishingAction("cancel"); }
   cancel.hidden = !batch.canCancel;
-  $("#publishing-progress").textContent = batch.confirmationRequired ? "平台校验已通过。真实发布仍需主人针对平台、账号、资产和文案明确授权。" : batch.summary?.status === "attention_required" ? "平台远端状态未知，需要人工核对后再恢复。" : "批次已恢复；请查看各平台状态。";
+  $("#publishing-progress").textContent = batch.confirmationRequired ? ui("Platform validation passed. Real publishing still requires explicit approval for the platforms, accounts, asset, and publishing copy.", "平台校验已通过。真实发布仍需主人针对平台、账号、资产和文案明确授权。") : batch.summary?.status === "attention_required" ? ui("Remote platform state is unknown. Review it before recovery.", "平台远端状态未知，需要人工核对后再恢复。") : ui("Batch recovered. Review each platform state.", "批次已恢复；请查看各平台状态。");
 }
 function publishingAction(label, action, platform) { const button = Object.assign(document.createElement("button"), { type: "button", textContent: label }); button.dataset.publishingAction = action; button.dataset.platform = platform; button.onclick = () => runPublishingAction(action, platform); return button; }
 async function runPublishingAction(action, platform = null) { if (!publishingBatchId) return; const body = platform ? { platform } : {}; try { $("#publishing-progress").textContent = action === "reconcile" ? "正在只读核对平台远端状态…" : action === "retry" ? "正在重新进入校验流程…" : "正在取消尚未完成的发布…"; renderPublishingBatch(await api(`/api/v1/publishing/batches/${publishingBatchId}/${action}`, json("POST", body))); } catch (error) { $("#publishing-progress").textContent = `操作失败：${error.message}`; } }
@@ -294,6 +311,13 @@ $("#create-edge").addEventListener("click", async () => { if (selected.length !=
 $("#create-group").addEventListener("click", async () => { if (selected.length < 1) return showError(new Error("Select one or more nodes")); await api(`/api/v1/projects/${projectId}/groups`, json("POST", { title: "New group", nodeIds: selected })); await refresh(); });
 nodeForm.addEventListener("change", async event => { if (!event.target.matches("#node-title, #node-content")) return; const node = snapshot.nodes.find(item => item.id === selected.at(-1)); if (!node) return; await api(`/api/v1/nodes/${node.id}`, json("PATCH", { title: $("#node-title").value, content: $("#node-content").value, version: node.version })); await refresh(node.id); });
 graphForm.addEventListener("change", async () => { const graph = selectedGraph; await api(`/api/v1/${graph.kind}s/${graph.value.id}`, json("PATCH", { title: $("#graph-title").value, version: graph.value.version })); snapshot = await api(`/api/v1/projects/${projectId}`); selectedGraph = { kind: graph.kind, value: snapshot[`${graph.kind}s`].find(item => item.id === graph.value.id) }; render(); });
+$("#delete-node").onclick = async () => {
+  const node = snapshot.nodes.find(item => item.id === selected.at(-1));
+  if (!node || !confirm(ui(`Delete “${node.title}” from this canvas? Generated assets and run history will be preserved.`, `从画布删除“${node.title}”？已生成素材和运行历史会保留。`))) return;
+  await api(`/api/v1/nodes/${node.id}`, json("DELETE", { version: node.version }));
+  selected = []; await refresh();
+  $("#workflow-state").textContent = ui("Node deleted. Run history and generated assets were preserved.", "节点已删除；运行历史与已生成素材已保留。");
+};
 
 viewport.addEventListener("pointerdown", event => { if (event.target !== viewport && event.target !== canvas) return; selected = []; selectedGraph = null; const start = { clientX: event.clientX, clientY: event.clientY, ...view }; const move = next => { view.x = start.x + next.clientX-start.clientX; view.y = start.y + next.clientY-start.clientY; render(); }; const end = () => window.removeEventListener("pointermove", move); window.addEventListener("pointermove", move); window.addEventListener("pointerup", end, { once: true }); render(); });
 viewport.addEventListener("wheel", event => { event.preventDefault(); setScale(view.scale * (event.deltaY < 0 ? 1.1 : .9)); }, { passive: false });
@@ -302,41 +326,39 @@ $("#reload-collaboration").onclick = async () => { await refresh(); $("#collabor
 $("#rename-project").onclick = () => renameWorkbenchProject(snapshot.project).catch(showError);
 $("#archive-project").onclick = () => setProjectStatus(snapshot.project, "archived").catch(showError);
 $("#api-access").onclick = async () => { $("#api-access-dialog").showModal(); await refreshKeyApplications(); };
-$("#tutorials").onclick = () => { renderTutorialList(); $("#tutorial-dialog").showModal(); };
 function renderTutorialList() {
   $("#tutorial-detail").hidden = true; $("#tutorial-list").hidden = false;
-  $("#tutorial-list").replaceChildren(...TUTORIALS.map(tutorial => {
+  $("#tutorial-list").replaceChildren(...tutorialsForLocale(currentLocale()).map(tutorial => {
     const card = document.createElement("button"); card.type = "button"; card.className = "tutorial-card";
     card.innerHTML = `<span>${escapeHtml(tutorial.category)} · ${escapeHtml(tutorial.level)}</span><strong>${escapeHtml(tutorial.title)}</strong><small>${escapeHtml(tutorial.duration)} · ${escapeHtml(tutorial.calls)}</small><p>${escapeHtml(tutorial.outcome)}</p>`;
     card.onclick = () => renderTutorial(tutorial.id); return card;
   }));
 }
 async function renderTutorial(id) {
-  const tutorial = tutorialById(id), detail = $("#tutorial-detail"); $("#tutorial-list").hidden = true; detail.hidden = false;
+  const tutorial = tutorialForLocale(id, currentLocale()), detail = $("#tutorial-detail"); $("#tutorial-list").hidden = true; detail.hidden = false;
   const key = `openreel:tutorial:${projectId}:${tutorial.id}:v${tutorial.version}`; let saved = [];
   try { saved = JSON.parse(localStorage.getItem(key) || "[]"); } catch { localStorage.removeItem(key); }
   try { tutorialProgress(tutorial.id, saved); } catch { localStorage.removeItem(key); saved = []; }
   let progress = await api(`/api/v1/projects/${projectId}/tutorials/${tutorial.id}/progress`);
   if (saved.length && !progress.completedSteps.length) { progress = await api(`/api/v1/projects/${projectId}/tutorials/${tutorial.id}/progress`, json("PUT", { completedSteps: saved })); localStorage.removeItem(key); }
   const references = snapshot.assets.filter(asset => asset.sessionId === sessionId && asset.kind === "image" && asset.role === "reference"), shortcuts = (await api("/api/v1/workflow-shortcuts")).templates;
-  detail.innerHTML = `<button class="tutorial-back" type="button">← 全部教程</button><p class="eyebrow">${escapeHtml(tutorial.category)} · ${escapeHtml(tutorial.level)}</p><h2>${escapeHtml(tutorial.title)}</h2><p class="tutorial-outcome">${escapeHtml(tutorial.outcome)}</p><div class="tutorial-meta"><span>${escapeHtml(tutorial.duration)}</span><span>${escapeHtml(tutorial.calls)}</span><span>${tutorial.nodes.length} 个节点</span><span>v${tutorial.version}</span></div><h3>操作步骤</h3><ol class="tutorial-steps">${tutorial.steps.map((step, index) => `<li><label><input type="checkbox" value="${index}"${progress.completedSteps.includes(index) ? " checked" : ""}>${escapeHtml(step)}</label></li>`).join("")}</ol><p class="tutorial-progress" role="status">${progress.completedCount}/${progress.totalSteps} 步完成 · ${progress.status}</p><h3>验收清单</h3><ul>${tutorial.checks.map(check => `<li>${escapeHtml(check)}</li>`).join("")}</ul><section class="tutorial-shortcut"><h3>经审查的快捷模板</h3><label>模板<select>${shortcuts.map(item => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.label)}</option>`).join("")}</select></label><label>参考图<select class="tutorial-reference"><option value="">选择已上传参考图</option>${references.map(asset => `<option value="${escapeHtml(asset.id)}">${escapeHtml(asset.filename)}</option>`).join("")}</select></label><label>创作要求<textarea rows="3"></textarea></label><button type="button"${references.length ? "" : " disabled"}>创建待审阅节点</button><p role="status">${references.length ? "不会自动生成或产生费用。" : "请先上传一张图片参考素材。"}</p></section><p class="tutorial-safety">开始教程只会创建并连接节点，不会提交模型任务或产生费用。请在生成前检查模型、参数和管理员额度。</p><button class="tutorial-start" type="button">把教程蓝图放到当前画布</button>`;
+  detail.innerHTML = `<button class="tutorial-back" type="button">← ${ui("All tutorials", "全部教程")}</button><p class="eyebrow">${escapeHtml(tutorial.category)} · ${escapeHtml(tutorial.level)}</p><h2>${escapeHtml(tutorial.title)}</h2><p class="tutorial-outcome">${escapeHtml(tutorial.outcome)}</p><div class="tutorial-meta"><span>${escapeHtml(tutorial.duration)}</span><span>${escapeHtml(tutorial.calls)}</span><span>${tutorial.nodes.length} ${ui("nodes", "个节点")}</span><span>v${tutorial.version}</span></div><h3>${ui("Steps", "操作步骤")}</h3><ol class="tutorial-steps">${tutorial.steps.map((step, index) => `<li><label><input type="checkbox" value="${index}"${progress.completedSteps.includes(index) ? " checked" : ""}>${escapeHtml(step)}</label></li>`).join("")}</ol><p class="tutorial-progress" role="status">${progress.completedCount}/${progress.totalSteps} ${ui("steps complete", "步完成")} · ${progress.status}</p><h3>${ui("Acceptance checklist", "验收清单")}</h3><ul>${tutorial.checks.map(check => `<li>${escapeHtml(check)}</li>`).join("")}</ul><section class="tutorial-shortcut"><h3>${ui("Reviewed shortcut", "经审查的快捷模板")}</h3><label>${ui("Template", "模板")}<select>${shortcuts.map(item => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.label)}</option>`).join("")}</select></label><label>${ui("Reference image", "参考图")}<select class="tutorial-reference"><option value="">${ui("Choose an uploaded reference image", "选择已上传参考图")}</option>${references.map(asset => `<option value="${escapeHtml(asset.id)}">${escapeHtml(asset.filename)}</option>`).join("")}</select></label><label>${ui("Creative direction", "创作要求")}<textarea rows="3"></textarea></label><button type="button"${references.length ? "" : " disabled"}>${ui("Create reviewable node", "创建待审阅节点")}</button><p role="status">${references.length ? ui("No generation or cost occurs automatically.", "不会自动生成或产生费用。") : ui("Upload an image reference first.", "请先上传一张图片参考素材。")}</p></section><p class="tutorial-safety">${ui("Starting a tutorial only creates and connects nodes. It never submits a model job or incurs cost. Review models, parameters, and limits before generation.", "开始教程只会创建并连接节点，不会提交模型任务或产生费用。请在生成前检查模型、参数和管理员额度。")}</p><button class="tutorial-start" type="button">${ui("Add tutorial blueprint to canvas", "把教程蓝图放到当前画布")}</button>`;
   detail.querySelector(".tutorial-back").onclick = renderTutorialList;
-  detail.querySelector(".tutorial-steps").onchange = async () => { const completedSteps = [...detail.querySelectorAll(".tutorial-steps input:checked")].map(input => Number(input.value)), next = await api(`/api/v1/projects/${projectId}/tutorials/${tutorial.id}/progress`, json("PUT", { completedSteps })); detail.querySelector(".tutorial-progress").textContent = `${next.completedCount}/${next.totalSteps} 步完成 · ${next.status}`; };
+  detail.querySelector(".tutorial-steps").onchange = async () => { const completedSteps = [...detail.querySelectorAll(".tutorial-steps input:checked")].map(input => Number(input.value)), next = await api(`/api/v1/projects/${projectId}/tutorials/${tutorial.id}/progress`, json("PUT", { completedSteps })); detail.querySelector(".tutorial-progress").textContent = `${next.completedCount}/${next.totalSteps} ${ui("steps complete", "步完成")} · ${next.status}`; };
   detail.querySelector(".tutorial-shortcut button").onclick = async event => { const section = event.currentTarget.closest(".tutorial-shortcut"), shortcutId = section.querySelector("select").value, referenceAssetId = section.querySelector(".tutorial-reference").value, prompt = section.querySelector("textarea").value; event.currentTarget.disabled = true; try { const node = await api(`/api/v1/projects/${projectId}/sessions/${sessionId}/workflow-shortcuts/${shortcutId}/apply`, json("POST", { prompt, referenceAssetIds: [referenceAssetId] })); await refresh(node.id); section.querySelector("[role=status]").textContent = "待审阅节点已创建；尚未运行。"; } finally { event.currentTarget.disabled = false; } };
   detail.querySelector(".tutorial-start").onclick = event => startTutorial(tutorial, event.currentTarget).catch(showError);
 }
 async function startTutorial(tutorial, trigger) {
   trigger.disabled = true;
   try {
-    const workflow = await api(`/api/v1/tutorials/${tutorial.id}/workflow`);
     const created = [];
-    for (const spec of workflow.nodes) {
+    for (const spec of tutorial.nodes) {
       const node = await api(`/api/v1/sessions/${sessionId}/nodes`, json("POST", { type: spec.type, position: spec.position }));
       created.push(await api(`/api/v1/nodes/${node.id}`, json("PATCH", { title: spec.title, content: spec.content, version: node.version })));
     }
     for (let index = 1; index < created.length; index += 1) await api(`/api/v1/projects/${projectId}/edges`, json("POST", { fromNodeId: created[index - 1].id, toNodeId: created[index].id }));
     await api(`/api/v1/projects/${projectId}/groups`, json("POST", { title: `Tutorial · ${tutorial.title}`, nodeIds: created.map(node => node.id) }));
-    await refresh(created[0].id); $("#tutorial-dialog").close(); $("#workflow-state").textContent = `Tutorial ready: ${tutorial.title}. Review each prompt before generating.`;
+    await refresh(created[0].id); setWorkspacePage("canvas"); $("#workflow-state").textContent = `Tutorial ready: ${tutorial.title}. Review each prompt before generating.`;
   } finally { trigger.disabled = false; }
 }
 $("#create-api-key").onclick = async () => { const issued = await api("/api/v1/api-keys", json("POST", { name: "primary" })); $("#issued-key").textContent = `Copy now — this external API key will not be shown again: ${issued.key}`; await refreshKeyApplications(); };
@@ -432,7 +454,7 @@ async function openProject(nextProjectId) {
 }
 async function bootstrap() { $("#workflow-state").textContent = "Loading: recovering workspace…"; [models] = await Promise.all([api("/api/v1/models"), refreshPublishingAccounts()]); refreshWorkbenchModelRoute(); const projects = await api("/api/v1/projects"), remembered = localStorage.getItem("openreel:current-project"); const project = projects.find(item => item.id === remembered && item.status === "active") || projects.find(item => item.status === "active") || await api("/api/v1/projects", json("POST", { name: "Local demo" })); await openProject(project.id); }
 function showAuth(mode = "login", message = "") { $("#auth-shell").hidden = false; $("#workspace-shell").hidden = true; $("#login-form").hidden = mode !== "login"; $("#register-form").hidden = mode !== "register"; $("#show-login").classList.toggle("active", mode === "login"); $("#show-register").classList.toggle("active", mode === "register"); $("#auth-state").textContent = message || (mode === "login" ? "Sign in to continue." : "Create an account to start a workspace."); }
-async function showWorkspace() { $("#auth-shell").hidden = true; $("#workspace-shell").hidden = false; setWorkspaceMode("workbench"); if (!workspaceStarted) { workspaceStarted = true; try { await bootstrap(); } catch (error) { workspaceStarted = false; throw error; } } }
+async function showWorkspace() { $("#auth-shell").hidden = true; $("#workspace-shell").hidden = false; if (!workspaceStarted) { workspaceStarted = true; try { await bootstrap(); } catch (error) { workspaceStarted = false; throw error; } } setWorkspacePage(routeFromHash(), { replace: true }); }
 async function establishSession(email, password) { const value = await api("/api/v1/auth/login", json("POST", { email, password })); csrfToken = value.csrfToken; await showWorkspace(); }
 $("#show-login").onclick = () => showAuth("login");
 $("#show-register").onclick = () => showAuth("register");

@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { TUTORIALS, tutorialById, tutorialProgress, tutorialWorkflow, validateTutorial } from "../src/tutorials.js";
+import { tutorialForLocale, tutorialsForLocale } from "../src/tutorial-locales.js";
 import { createPlatform } from "../src/platform.js";
 
 test("tutorial catalog contains distinct, actionable classic workflows", () => {
@@ -17,6 +18,18 @@ test("tutorial blueprints contain generation nodes without paid auto-run instruc
   }
   assert.equal(tutorialById("missing"), null);
   assert.equal(tutorialById("noir-trailer")?.title, "30 秒黑色电影预告片");
+});
+
+test("tutorial catalog has complete English and Simplified Chinese variants", () => {
+  const english = tutorialsForLocale("en"), chinese = tutorialsForLocale("zh-CN");
+  assert.equal(english.length, 8);
+  assert.equal(chinese, TUTORIALS);
+  for (const tutorial of english) {
+    assert.ok(validateTutorial(tutorial));
+    assert.doesNotMatch(JSON.stringify(tutorial), /[\u3400-\u9fff]/);
+  }
+  assert.match(tutorialForLocale("noir-trailer", "zh-CN").title, /黑色电影/);
+  assert.equal(tutorialForLocale("noir-trailer", "en").title, "30-second film noir trailer");
 });
 
 test("tutorial blueprints replay through the validated workflow import path", () => {

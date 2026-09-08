@@ -29,7 +29,7 @@
     <main id="workspace-shell" class="app-shell" hidden>
       <header class="topbar">
         <div><span class="mark">OR</span><strong>OpenReel</strong><span id="project-name" class="crumb">/ Loading…</span></div>
-        <div class="project-actions"><label class="language-picker">Language<select data-language-selector aria-label="Language"><option value="en">English</option><option value="zh-CN">简体中文</option></select></label><button id="workbench-home" type="button">作品工作台</button><button id="advanced-canvas" type="button">高级画布</button><button id="tutorials" type="button">教程</button><button id="product-feedback" type="button">反馈</button><button id="api-access" type="button">API access</button><button id="rename-project">Rename</button><button id="archive-project">Archive</button><button id="logout" type="button">Sign out</button><div class="status"><span></span> Secure workspace</div></div>
+        <nav class="project-actions" aria-label="Primary navigation"><label class="language-picker">Language<select data-language-selector aria-label="Language"><option value="en">English</option><option value="zh-CN">简体中文</option></select></label><button id="workbench-home" data-route="home" type="button">Home</button><button id="creator-workspace" data-route="creator" type="button">Creator Workspace</button><button id="projects-page-nav" data-route="projects" type="button">Projects</button><button id="connections-page-nav" data-route="connections" type="button">Connections</button><button id="advanced-canvas" data-route="canvas" type="button">Advanced Canvas</button><button id="tutorials" data-route="tutorials" type="button">Tutorials</button><button id="product-feedback" type="button">Feedback</button><button id="api-access" type="button">API access</button><button id="rename-project">Rename</button><button id="archive-project">Archive</button><button id="logout" type="button">Sign out</button><div class="status"><span></span> Secure workspace</div></nav>
       </header>
       <section id="collaboration-conflict" class="collaboration-conflict" role="alert" hidden>
         <div><strong id="collaboration-conflict-title"></strong><p id="collaboration-conflict-message"></p></div>
@@ -37,28 +37,31 @@
       </section>
       <section id="creator-workbench" class="creator-workbench" aria-label="短视频作品工作台">
         <div class="workbench-wrap">
-          <section class="project-shelf" aria-labelledby="project-shelf-title">
+          <section class="page-panel project-shelf" data-workspace-page="projects" aria-labelledby="project-shelf-title">
+            <header class="page-heading"><p class="eyebrow">PROJECT LIBRARY</p><h1>Projects and drafts</h1><p>Open, rename, archive, or create a project without leaving your library.</p></header>
             <div class="section-title"><div><p class="eyebrow">我的作品</p><h2 id="project-shelf-title">作品与草稿</h2></div><button id="toggle-new-project" type="button">新建作品</button></div>
             <form id="new-project-form" hidden><label>作品名称<input id="new-project-name" maxlength="120" placeholder="例如：咖啡小技巧" required /></label><button type="submit">创建空白草稿</button><button id="cancel-new-project" type="button">取消</button></form>
             <div id="workbench-projects" class="workbench-projects" aria-live="polite"></div>
             <p id="project-shelf-state" role="status">正在加载作品…</p>
           </section>
-          <header class="workbench-hero">
+          <header class="page-panel workbench-hero" data-workspace-page="home">
             <p class="eyebrow">OPENREEL 短视频工作台</p>
             <h1>一个想法，变成可以发布的短视频</h1>
             <p>不用学习节点和模型。告诉我们你想做什么，OpenReel 会带你完成脚本、分镜、画面、配音、字幕和成片。</p>
           </header>
-          <section id="publishing-accounts" class="publishing-accounts" aria-labelledby="publishing-accounts-title">
+          <section id="publishing-accounts" class="page-panel publishing-accounts" data-workspace-page="connections" aria-labelledby="publishing-accounts-title">
+            <header class="page-heading"><p class="eyebrow">ACCOUNT CONNECTIONS</p><h1>Platform connections</h1><p>Manage official publishing account connections separately from your creative projects.</p></header>
             <div><p class="eyebrow">发布账号</p><h2 id="publishing-accounts-title">连接发布平台</h2><p>先绑定发布账号，之后可在任意作品的成片步骤选择。无需先创建脚本或成片。</p></div>
             <div class="publishing-account-card"><div><strong>TikTok</strong><small id="tiktok-publishing-account-state">正在检查账号状态…</small></div><button id="tiktok-publishing-account-action" type="button" class="secondary" disabled>连接账号</button></div>
             <div class="publishing-account-card"><div><strong>YouTube Shorts</strong><small id="youtube-publishing-account-state">正在检查账号状态…</small></div><button id="youtube-publishing-account-action" type="button" class="secondary" disabled>连接账号</button></div>
             <p id="publishing-account-progress" role="status">连接账号只会启动平台官方授权，不会发布任何内容。</p>
           </section>
-          <section class="quick-start" aria-labelledby="quick-start-title">
+          <section class="page-panel quick-start" data-workspace-page="home" aria-labelledby="quick-start-title">
             <div><span>推荐</span><h2 id="quick-start-title">TikTok / 抖音 竖屏短视频</h2><p>30–60 秒 · 9:16 · 自动 Hook、字幕、配音与 B-roll</p></div>
             <button id="start-short-video" type="button">开始创作</button>
           </section>
-          <section id="short-video-flow" class="short-video-flow" hidden>
+          <section id="short-video-flow" class="page-panel short-video-flow" data-workspace-page="creator" hidden>
+            <header class="page-heading creator-heading"><p class="eyebrow">CREATOR WORKSPACE</p><h1>Creator Workspace</h1><p>Develop one project from idea through script, storyboard, generation, and final cut.</p></header>
             <ol class="flow-steps" aria-label="创作步骤">
               <li class="active">1 创意</li><li>2 脚本</li><li>3 分镜</li><li>4 生成</li><li>5 成片</li>
             </ol>
@@ -66,7 +69,7 @@
               <div><p class="eyebrow">第 1 步 · 告诉我们你要做什么</p><h2>描述你的短视频</h2><p>一句话、商品卖点、知识主题或网页内容都可以。</p></div>
               <form id="short-video-brief-form">
                 <fieldset class="creative-targets"><legend>保存到哪个作品？</legend><label><input type="radio" name="creative-target" value="new" checked />创建独立新作品（推荐）</label><label><input type="radio" name="creative-target" value="current" />继续当前作品 <strong id="creative-current-project"></strong></label><label id="creative-current-confirm-field" hidden><input id="creative-current-confirm" type="checkbox" />我确认用这个新创意改写当前作品</label><small>选择新作品不会覆盖当前脚本、分镜或素材。继续当前作品必须在本次提交前明确确认。</small></fieldset>
-                <fieldset class="intake-sources"><legend>从哪里开始？</legend><label><input type="radio" name="intake-source" value="idea" checked />一句话</label><label><input type="radio" name="intake-source" value="copy" />文案</label><label><input type="radio" name="intake-source" value="url" />商品链接</label><label><input type="radio" name="intake-source" value="asset" />上传素材</label></fieldset>
+                <fieldset class="intake-sources"><legend>从哪里开始？</legend><label><input type="radio" name="intake-source" value="idea" checked />一句话</label><label><input type="radio" name="intake-source" value="copy" />粘贴已有文案</label><label><input type="radio" name="intake-source" value="url" />商品链接</label><label><input type="radio" name="intake-source" value="asset" />上传素材</label><small id="intake-source-help">Choose an idea, paste an existing script, add a product URL, or upload a reference asset.</small></fieldset>
                 <label id="short-video-brief-label">视频主题<textarea id="short-video-brief" rows="5" maxlength="6000" placeholder="例如：用轻松有趣的方式，介绍三种让咖啡更好喝的小技巧" required></textarea></label>
                 <label id="product-url-field" hidden>商品链接<input id="short-video-url" type="url" maxlength="2000" placeholder="https://example.com/product" /></label>
                 <label id="intake-asset-field" hidden>参考素材<input id="short-video-asset" type="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,audio/mpeg,audio/wav" /><small>素材通过现有安全上传链路保存到当前作品，不会自动调用模型。</small></label>
@@ -107,18 +110,18 @@
               <p id="workbench-final-state" role="status">导出使用本地预览渲染，不会调用付费模型。</p>
             </section>
           </section>
-          <section id="workbench-model-router" class="model-router" aria-labelledby="model-router-title">
+          <section id="workbench-model-router" class="page-panel model-router" data-workspace-page="creator" aria-labelledby="model-router-title">
             <div class="section-title"><div><p class="eyebrow">自动模型路由</p><h2 id="model-router-title">选择生成偏好</h2></div><span>无需选择具体模型</span></div>
             <fieldset><legend>OpenReel 会按画面、视频和声音任务自动匹配模型</legend><label><input type="radio" name="workbench-quality" value="fast" checked /><strong>快速</strong><small>优先速度与低成本，适合草稿和试做</small></label><label><input type="radio" name="workbench-quality" value="quality" /><strong>高质量</strong><small>优先成片质量，适合最终生成</small></label></fieldset>
             <p id="workbench-route-state" role="status">正在检查可用生成能力…</p>
           </section>
-          <section id="asset-manager" class="asset-manager" aria-labelledby="asset-manager-title">
+          <section id="asset-manager" class="page-panel asset-manager" data-workspace-page="creator" aria-labelledby="asset-manager-title">
             <div class="section-title"><div><p class="eyebrow">作品素材</p><h2 id="asset-manager-title">素材库</h2></div><label>筛选<select id="workbench-asset-kind"><option value="">全部</option><option value="image">图片</option><option value="video">视频</option><option value="audio">音频</option></select></label></div>
             <div class="asset-toolbar"><label>上传素材<input id="workbench-asset-upload" type="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,audio/mpeg,audio/wav" /></label><label>绑定到分镜<select id="asset-shot-target"><option value="">先创建分镜</option></select></label><button id="bind-workbench-asset" type="button" disabled>绑定选中素材</button></div>
             <div id="workbench-assets" class="workbench-assets"></div>
             <p id="workbench-asset-state" role="status">正在加载素材…</p>
           </section>
-          <section class="workflow-gallery" aria-labelledby="workflow-gallery-title">
+          <section class="page-panel workflow-gallery" data-workspace-page="home" aria-labelledby="workflow-gallery-title">
             <div class="section-title"><div><p class="eyebrow">更多工作流</p><h2 id="workflow-gallery-title">你想制作哪种作品？</h2></div><small>即将开放</small></div>
             <div class="workflow-cards">
               <article><b>🛍️</b><h3>商品种草视频</h3><p>从商品卖点生成 Hook、口播和场景化素材。</p></article>
@@ -126,6 +129,11 @@
               <article><b>🎙️</b><h3>观点口播视频</h3><p>优化表达结构，自动匹配字幕与辅助画面。</p></article>
               <article><b>📖</b><h3>故事短片</h3><p>从故事梗概生成分镜、角色和连续镜头。</p></article>
             </div>
+          </section>
+          <section id="tutorials-page" class="page-panel tutorials-page" data-workspace-page="tutorials" aria-labelledby="tutorials-page-title">
+            <header class="page-heading"><p class="eyebrow">OPENREEL ACADEMY</p><h1 id="tutorials-page-title">Tutorials</h1><p>Choose a guided example. Tutorials create reviewable canvas blueprints and never run paid models automatically.</p></header>
+            <div id="tutorial-list" class="tutorial-list"></div>
+            <article id="tutorial-detail" class="tutorial-detail" hidden></article>
           </section>
         </div>
       </section>
@@ -138,6 +146,7 @@
         <p class="hint">Drag space to pan<br />Wheel to zoom</p>
       </aside>
       <section id="viewport" class="viewport" aria-label="Infinite canvas">
+        <section class="canvas-guide" aria-labelledby="canvas-guide-title"><strong id="canvas-guide-title">Advanced Canvas quick guide</strong><ol><li>Add a node from the toolbox.</li><li>Select nodes; Shift-click selects more than one.</li><li>Connect, group, edit, or delete the selection.</li></ol></section>
         <div id="canvas" class="canvas"></div>
         <div class="zoom"><button id="zoom-out" aria-label="Zoom out">−</button><output id="zoom-label">100%</output><button id="zoom-in" aria-label="Zoom in">+</button></div>
       </section>
@@ -173,6 +182,7 @@
           <label>Title<input id="node-title" name="title" /></label>
           <label>Content<textarea id="node-content" name="content" rows="8"></textarea></label>
           <p id="node-meta"></p>
+          <button id="delete-node" class="danger-action" type="button">Delete selected node</button>
           <section><p class="eyebrow">RUN / RESULT HISTORY</p><ol id="node-history"></ol></section>
           <section id="generation-panel" class="generation" hidden>
             <label>Multimodal reference<input id="reference-upload" type="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,audio/mpeg,audio/wav" /></label>
@@ -201,12 +211,6 @@
         <p id="issued-key" role="status">The full key is shown once after creation.</p>
         <ol id="api-key-list"></ol>
       </section>
-    </dialog>
-    <dialog id="tutorial-dialog" class="tutorial-dialog">
-      <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
-      <header><p class="eyebrow">OPENREEL ACADEMY</p><h2>从经典类型开始创作</h2><p>选择一个案例，把完整节点蓝图放到当前画布。教程不会自动调用付费模型。</p></header>
-      <div id="tutorial-list" class="tutorial-list"></div>
-      <article id="tutorial-detail" class="tutorial-detail" hidden></article>
     </dialog>
     <dialog id="feedback-dialog" class="access-dialog">
       <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>

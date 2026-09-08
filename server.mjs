@@ -1,4 +1,5 @@
 import { createServer } from "node:http";
+import { isIP } from "node:net";
 import { readFile, stat } from "node:fs/promises";
 import { realpathSync } from "node:fs";
 import { dirname, extname, join, normalize } from "node:path";
@@ -34,6 +35,7 @@ import { createFileAgentFilmStore, createMemoryAgentFilmStore } from "./src/agen
 import { createSeedAudioMusicService } from "./src/seedaudio-music-service.js";
 import { createDirectorSystemStore } from "./src/director-system-store.js";
 import { createProductFeedbackStore } from "./src/product-analytics.js";
+import { commercialVideoModelForQuality, commercialVideoModels } from "./src/commercial-model-selection.js";
 
 const root = fileURLToPath(new URL("./", import.meta.url));
 const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".md": "text/markdown" };
@@ -53,7 +55,13 @@ function verifyAdminPassword(password, encoded) {
 function sniffMime(bytes) { if (bytes.length >= 8 && bytes.subarray(0, 8).equals(Buffer.from("89504e470d0a1a0a", "hex"))) return "image/png"; if (bytes.length >= 3 && bytes.subarray(0, 3).equals(Buffer.from("ffd8ff", "hex"))) return "image/jpeg"; if (bytes.length >= 12 && bytes.subarray(0, 4).toString() === "RIFF" && bytes.subarray(8, 12).toString() === "WEBP") return "image/webp"; if (bytes.length >= 12 && bytes.subarray(4, 8).toString() === "ftyp") return "video/mp4"; if (bytes.length >= 4 && bytes.subarray(0, 4).equals(Buffer.from("1a45dfa3", "hex"))) return "video/webm"; if (bytes.length >= 3 && (bytes.subarray(0, 3).toString() === "ID3" || (bytes[0] === 0xff && (bytes[1] & 0xe0) === 0xe0))) return "audio/mpeg"; if (bytes.length >= 12 && bytes.subarray(0, 4).toString() === "RIFF" && bytes.subarray(8, 12).toString() === "WAVE") return "audio/wav"; return null; }
 function uploadFilename(value, extension) { if (typeof value !== "string" || !value.trim() || value.length > 128 || value.includes("/") || value.includes("\\") || value.includes("\0") || [".", ".."].includes(value.trim())) throw new DomainError("INVALID_FILENAME", "a safe filename is required"); const name = value.trim(); if (!new RegExp(`\\.${extension}$`, "i").test(name)) throw new DomainError("INVALID_FILENAME", `filename must end in .${extension}`); return name; }
 function uploadText(value, field) { try { const text = decodeURIComponent(String(value || "")).trim(); if (!text || text.length > 500) throw new Error(); return text; } catch { throw new DomainError("INVALID_INPUT", `${field} is required and must be at most 500 characters`); } }
-function createRateLimiter({ max = 60, windowMs = 60_000, now = Date.now, key = req => req.socket.remoteAddress || "unknown" } = {}) { const entries = new Map(); return req => { const id = key(req), time = Number(now()), old = entries.get(id); const entry = !old || time - old.startedAt >= windowMs ? { startedAt: time, count: 0 } : old; entry.count += 1; entries.set(id, entry); if (entry.count > max) throw new DomainError("RATE_LIMITED", "request rate limit exceeded", 429, { retryAfterSeconds: Math.max(1, Math.ceil((windowMs - (time - entry.startedAt)) / 1000)) }); }; }
+function networkRateLimitKey(req) {
+  const remote = String(req.socket.remoteAddress || "unknown").replace(/^::ffff:/, "");
+  const forwarded = String(req.headers["x-real-ip"] || "").trim();
+  const client = ["127.0.0.1", "::1"].includes(remote) && isIP(forwarded) ? forwarded : remote;
+  return `network:${client}`;
+}
+function createRateLimiter({ max = 60, windowMs = 60_000, now = Date.now, key = networkRateLimitKey } = {}) { const entries = new Map(); return (req, identity = null) => { const id = identity || key(req), time = Number(now()), old = entries.get(id); const entry = !old || time - old.startedAt >= windowMs ? { startedAt: time, count: 0 } : old; entry.count += 1; entries.set(id, entry); if (entry.count > max) throw new DomainError("RATE_LIMITED", "request rate limit exceeded", 429, { retryAfterSeconds: Math.max(1, Math.ceil((windowMs - (time - entry.startedAt)) / 1000)) }); }; }
 
 async function runPlanningModel(arkService, principal, { model, prompt, duration, language, idempotencyKey }) {
   let invalidOutput = null;
@@ -70,8 +78,13 @@ async function runPlanningModel(arkService, principal, { model, prompt, duration
   throw invalidOutput;
 }
 
-export function createOpenReelServer(store = createMemoryStore(), platform = createPlatform(), { production = false, secureCookies = production, enforceCommercialPolicySafety = production, jsonLimit = 1024 * 1024, rateLimit = {}, logger = () => {}, readiness = () => ({ database: "ok", assets: "ok" }), metrics = createMetrics(), feedbackStore = createProductFeedbackStore(), adminToken = null, adminPasswordHash = null, arkService = null, workbenchPlanningModel = null, qwenTtsService = null, authorizeQwenTts = () => false, productUrlFetcher = createProductUrlFetcher(), publishingOrchestrator = null, publishingAccounts = () => [], publishingOAuth = null, commercialLifecycle = null, commercialJobs = null, commercialEstimate = null, agentFilmStore = createMemoryAgentFilmStore(), directorSystemStore = createDirectorSystemStore() } = {}) {
-  const limit = createRateLimiter(rateLimit), log = (event, fields) => logger(event, redact(fields)), adminSessions = new Map();
+export function createOpenReelServer(store = createMemoryStore(), platform = createPlatform(), { production = false, secureCookies = production, enforceCommercialPolicySafety = production, jsonLimit = 1024 * 1024, rateLimit = {}, logger = () => {}, readiness = () => ({ database: "ok", assets: "ok" }), metrics = createMetrics(), feedbackStore = createProductFeedbackStore(), adminToken = null, adminPasswordHash = null, arkService = null, workbenchPlanningModel = null, qwenTtsService = null, authorizeQwenTts = () => false, productUrlFetcher = createProductUrlFetcher(), publishingOrchestrator = null, publishingAccounts = () => [], publishingOAuth = null, commercialLifecycle = null, commercialJobs = null, commercialEstimate = null, agentFilmStore = createMemoryAgentFilmStore(), directorSystemStore = createDirectorSystemStore(), capabilityBaselineNow = () => new Date() } = {}) {
+  const anonymousLimit = createRateLimiter(rateLimit);
+  const authenticatedLimit = createRateLimiter({
+    ...rateLimit,
+    max: rateLimit.authenticatedMax ?? (rateLimit.max === undefined ? 300 : rateLimit.max)
+  });
+  const log = (event, fields) => logger(event, redact(fields)), adminSessions = new Map();
   const understandProductUrl = createProductUnderstandingService(productUrlFetcher, arkService);
   const commercial = commercialLifecycle && commercialEstimate ? createWorkbenchCommercialService({ lifecycle: commercialLifecycle, snapshot: (projectId, actorId) => store.snapshot(projectId, actorId), estimate: commercialEstimate }) : null;
   const canvasModels = () => { const models = store.listModels(); if (arkService) models.push(...arkService.models().filter(x => ["image", "video", "audio"].includes(x.capability)).map(x => ({ id: x.name, kind: x.capability, adapterId: "ark", schema: { modes: [], aspects: [], resolutions: [], durations: x.capability === "video" ? [5, 10] : [], audio: x.capability === "video", maxReferences: 0 } }))); if (qwenTtsService) models.push({ id: "qwen-tts-tailnet", kind: "audio", adapterId: "qwen-tts", schema: { modes: ["text-to-audio"], aspects: [], resolutions: [], durations: [1, 2, 3, 4, 5, 10], controls: ["voice", "audio-format"], maxReferences: 0, execution: "server-authorized-only" } }); return models; };
@@ -91,13 +104,15 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       const adminRoute = api[0] === "admin";
       const arkRoute = api[0] === "inference";
       const publicRoute = (api[0] === "auth" && ["register", "login"].includes(api[1])) || keyRoute || adminRoute || arkRoute;
-      if (production && url.pathname.startsWith("/api/")) limit(req);
+      let authenticatedPrincipal = null;
       if (production && url.pathname.startsWith("/api/") && !publicRoute && req.method !== "OPTIONS") {
+        try { authenticatedPrincipal = platform.authenticate(token); } catch (error) { anonymousLimit(req); throw error; }
+        authenticatedLimit(req, `account:${authenticatedPrincipal.id}`);
         if (jar.openreel_session && !["GET", "HEAD", "OPTIONS"].includes(req.method) && !safeEqual(req.headers["x-csrf-token"], jar.openreel_csrf)) throw new DomainError("CSRF_REJECTED", "valid CSRF token required", 403);
-        platform.authenticate(token);
       }
+      else if (production && url.pathname.startsWith("/api/")) anonymousLimit(req);
       const protectedApi = production && url.pathname.startsWith("/api/") && !publicRoute;
-      const who = protectedApi ? platform.authenticate(token).id : "local-owner";
+      const who = protectedApi ? (authenticatedPrincipal || platform.authenticate(token)).id : "local-owner";
       let out;
       if (keyRoute) { const keySecret = req.headers["x-openreel-api-key"] || req.headers.authorization?.replace(/^Bearer\s+/i, ""); const auth = platform.authenticateApiKey(keySecret); out = { key: auth.apiKey, accountId: auth.account.id, plan: auth.subscription.plan, hardLimitMicros: auth.subscription.hardLimitMicros, spentMicros: auth.subscription.spentMicros, reservedMicros: auth.subscription.reservedMicros, remainingMicros: Math.max(0, auth.subscription.hardLimitMicros - auth.subscription.spentMicros - auth.subscription.reservedMicros), periodEndsAt: auth.subscription.periodEndsAt }; }
       else if (arkRoute) {
@@ -114,7 +129,7 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       else if (req.method === "POST" && api[0] === "product-url" && api[1] === "extract" && api.length === 2) out = await productUrlFetcher(await input());
       else if (req.method === "POST" && api[0] === "product-url" && api[1] === "understand" && api.length === 2) out = await understandProductUrl({ ...(await input()), principal: { kind: "account", accountId: who } });
       else if (req.method === "GET" && api[0] === "model-catalog" && api.length === 1) out = createModelCatalog(catalogModels());
-      else if (req.method === "GET" && api[0] === "model-catalog" && api[1] === "coverage" && api.length === 2) out = compareCapabilityBaseline(createModelCatalog(catalogModels()));
+      else if (req.method === "GET" && api[0] === "model-catalog" && api[1] === "coverage" && api.length === 2) out = compareCapabilityBaseline(createModelCatalog(catalogModels()), undefined, { now: capabilityBaselineNow() });
       else if (req.method === "GET" && api[0] === "model-catalog" && api[1] === "reference" && api.length === 2) out = referenceCapabilityCatalog();
       else if (req.method === "GET" && api[0] === "model-catalog" && api[1] === "mapping-validation" && api.length === 2) out = validateProviderMappings(createModelCatalog(catalogModels()));
       else if (req.method === "GET" && api[0] === "workflow-shortcuts" && api.length === 1) out = workflowShortcutCatalog();
@@ -328,6 +343,7 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       else if (req.method === "POST" && api[0] === "sessions" && api[2] === "close") out = store.closeSession(api[1], await input(), who);
       else if (req.method === "POST" && api[0] === "sessions" && api[2] === "nodes") out = store.createNode(api[1], await input(), who);
       else if (req.method === "PATCH" && api[0] === "nodes" && api.length === 2) out = store.updateNode(api[1], await input(), who);
+      else if (req.method === "DELETE" && api[0] === "nodes" && api.length === 2) out = store.deleteNode(api[1], await input(), who);
       else if (req.method === "POST" && api[0] === "sessions" && api[2] === "jobs") out = store.createJob(api[1], await input(), who);
       else if (req.method === "POST" && api[0] === "sessions" && api[2] === "qwen-tts-jobs") out = store.createQwenTtsCanvasJob(api[1], await input(), who);
       else if (req.method === "POST" && api[0] === "jobs" && api[2] === "qwen-tts-run") { if (!qwenTtsService) throw new DomainError("QWEN_TTS_UNAVAILABLE", "Qwen TTS is not configured", 503); const job = store.qwenTtsCanvasJob(api[1], who); if (await authorizeQwenTts({ job, actorId: who, request: req }) !== true) throw new DomainError("QWEN_TTS_CALL_GATED", "a precise real-generation authorization is required", 403); const output = await qwenTtsService.synthesize({ input: job.prompt, response_format: "wav", ...(job.parameters.language && { language: job.parameters.language }), ...(job.parameters.audioSpec.voice && { voice: job.parameters.audioSpec.voice }), ...(job.parameters.instruct && { instruct: job.parameters.instruct }) }, { authorized: true }); out = store.reconcileQwenTtsCanvasJob(job.id, output, who); }
@@ -370,9 +386,9 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const publishingOAuth = Object.keys(providers).length ? createPublishingOAuthRouter(providers) : null, databaseStore = createDatabaseStore(backend);
   const commercialJobStore = createFileCommercialJobStore(process.env.OPENREEL_COMMERCIAL_JOBS || join(dirname(config.databaseFile), "commercial-jobs.json"));
   const publishingOrchestrator = publishingOAuth ? createProductionPublishingRuntime({ stateRoot, store: databaseStore, oauth: publishingOAuth, commercialJobs: commercialJobStore, request: publishingRequest }) : null;
-  const audioMaxCostCny = Number(process.env.OPENREEL_COMMERCIAL_AUDIO_MAX_CNY || 0), evaluationMaxCostCnyPerCall = Number(process.env.OPENREEL_COMMERCIAL_EVALUATION_MAX_CNY_PER_CALL || 0), cnyPerUsd = Number(process.env.OPENREEL_CNY_PER_USD || 7.2), imageModel = process.env.OPENREEL_COMMERCIAL_IMAGE_MODEL || arkService?.models().find(item => item.capability === "image")?.name, videoModel = process.env.OPENREEL_COMMERCIAL_VIDEO_MODEL || arkService?.models().find(item => item.capability === "video")?.name;
+  const audioMaxCostCny = Number(process.env.OPENREEL_COMMERCIAL_AUDIO_MAX_CNY || 0), evaluationMaxCostCnyPerCall = Number(process.env.OPENREEL_COMMERCIAL_EVALUATION_MAX_CNY_PER_CALL || 0), cnyPerUsd = Number(process.env.OPENREEL_CNY_PER_USD || 7.2), imageModel = process.env.OPENREEL_COMMERCIAL_IMAGE_MODEL || arkService?.models().find(item => item.capability === "image")?.name, videoModels = commercialVideoModels(arkService?.models() || [], process.env);
   let commercialLifecycle = null, commercialEstimate = null;
-  if (arkService && qwenTtsService && audioMaxCostCny > 0 && imageModel && videoModel) {
+  if (arkService && qwenTtsService && audioMaxCostCny > 0 && imageModel && videoModels.fast && videoModels.quality) {
     const musicService = createSeedAudioMusicService();
     const artifactReader = (principal, projectId, assetId) => databaseStore.assetContent(projectId, assetId, undefined, principal.accountId);
     const perceptualEvaluator = createArkCommercialPerceptualEvaluator({ arkService, artifactReader, model: process.env.OPENREEL_COMMERCIAL_EVALUATION_MODEL, maximumCostCnyPerCall: evaluationMaxCostCnyPerCall, cnyPerUsd });
@@ -381,7 +397,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     const commercialOrchestrator = createCommercialProviderOrchestrator({ arkService, qwenTtsService, musicService, qualityInspector, masterImageInspector, audioMaxCostCny, audioSettledCny: 0, cnyPerUsd, maxPolls: Number(process.env.OPENREEL_COMMERCIAL_MAX_POLLS || 120), wait: () => new Promise(resolve => setTimeout(resolve, 2_000)), artifactSink: (principal, artifact) => databaseStore.retainCommercialArtifact(artifact.projectId, artifact, principal.accountId), referenceArtifactSource: (principal, request) => request.assetIds.map(assetId => { const content = databaseStore.assetContent(request.projectId, assetId, undefined, principal.accountId); return { ...content.manifest, bytes: content.bytes }; }), preservedArtifactSource: (principal, request) => request.assetIds.map(assetId => databaseStore.assetContent(request.projectId, assetId, undefined, principal.accountId).manifest), productionArtifactSource: (principal, request) => request.assetIds.map(assetId => databaseStore.assetContent(request.projectId, assetId, undefined, principal.accountId).manifest), compositionSink: (principal, composition) => databaseStore.composeCommercialProject(composition.projectId, composition, principal.accountId) });
     commercialLifecycle = createCommercialJobLifecycle({ orchestrator: commercialOrchestrator, store: commercialJobStore });
     commercialLifecycle.recover();
-    commercialEstimate = ({ shotCount, production }) => { const catalog = new Map(arkService.models().map(item => [item.name, item])), maximum = name => { const item = catalog.get(name), rate = item?.currency === "CNY" ? 1 : item?.currency === "USD" ? cnyPerUsd : NaN; return Number(item?.maxCostMicros) / Number(item?.unitScale) * rate; }, musicMaximum = production?.musicGeneration ? musicService.route.maximumCostCny : 0, evaluationModel = process.env.OPENREEL_COMMERCIAL_EVALUATION_MODEL, nativeThreeShotMasterGate = catalog.get(videoModel)?.provider === "modelclaw-comfyui" && shotCount === 3 ? 1 : 0, evaluationMaximum = evaluationMaxCostCnyPerCall * (shotCount + 1 + nativeThreeShotMasterGate), generationMaximum = shotCount * (maximum(imageModel) + maximum(videoModel)) + audioMaxCostCny + musicMaximum; return { estimatedCny: generationMaximum + evaluationMaximum, generationEstimatedCny: generationMaximum, evaluationEstimatedCny: evaluationMaximum, models: { image: imageModel, video: videoModel, evaluation: evaluationModel }, music: { enabled: musicService.enabled, model: musicService.route.model, maximumCostCny: musicMaximum } }; };
+    commercialEstimate = ({ quality, shotCount, production }) => { const catalog = new Map(arkService.models().map(item => [item.name, item])), videoModel = commercialVideoModelForQuality(videoModels, quality), maximum = name => { const item = catalog.get(name), rate = item?.currency === "CNY" ? 1 : item?.currency === "USD" ? cnyPerUsd : NaN; return Number(item?.maxCostMicros) / Number(item?.unitScale) * rate; }, musicMaximum = production?.musicGeneration ? musicService.route.maximumCostCny : 0, evaluationModel = process.env.OPENREEL_COMMERCIAL_EVALUATION_MODEL, nativeThreeShotMasterGate = catalog.get(videoModel)?.provider === "modelclaw-comfyui" && shotCount === 3 ? 1 : 0, evaluationMaximum = evaluationMaxCostCnyPerCall * (shotCount + 1 + nativeThreeShotMasterGate), generationMaximum = shotCount * (maximum(imageModel) + maximum(videoModel)) + audioMaxCostCny + musicMaximum; return { estimatedCny: generationMaximum + evaluationMaximum, generationEstimatedCny: generationMaximum, evaluationEstimatedCny: evaluationMaximum, models: { image: imageModel, video: videoModel, evaluation: evaluationModel }, music: { enabled: musicService.enabled, model: musicService.route.model, maximumCostCny: musicMaximum } }; };
   }
   const agentFilmStore = createFileAgentFilmStore(process.env.OPENREEL_AGENT_FILMS || join(dirname(config.databaseFile), "agent-films.json"));
   const feedbackStore = createProductFeedbackStore({ file: process.env.OPENREEL_FEEDBACK_STATE || join(dirname(config.databaseFile), "product-feedback.json") });

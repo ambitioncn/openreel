@@ -43,6 +43,23 @@ test("HTTP errors have stable codes", async (t) => {
   assert.equal(missing.body.error.code, "NOT_FOUND");
 });
 
+test("HTTP node deletion removes the canvas node and keeps completed history", async (t) => {
+  const server = createOpenReelServer();
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const project = (await request(base, "/api/v1/projects", { method: "POST", body: JSON.stringify({ name: "Delete node" }) })).body;
+  const session = (await request(base, `/api/v1/projects/${project.id}/sessions`, { method: "POST", body: JSON.stringify({ name: "Main" }) })).body;
+  const node = (await request(base, `/api/v1/sessions/${session.id}/nodes`, { method: "POST", body: JSON.stringify({ type: "image" }) })).body;
+  const deleted = await request(base, `/api/v1/nodes/${node.id}`, { method: "DELETE", body: JSON.stringify({ version: node.version }) });
+  assert.equal(deleted.status, 200);
+  assert.equal(deleted.body.deleted, true);
+  assert.equal((await request(base, `/api/v1/projects/${project.id}`)).body.nodes.length, 0);
+  const repeated = await request(base, `/api/v1/nodes/${node.id}`, { method: "DELETE", body: JSON.stringify({ version: node.version }) });
+  assert.equal(repeated.status, 404);
+  assert.equal(repeated.body.error.code, "NOT_FOUND");
+});
+
 test("HTTP product URL extraction stays server-side and returns bounded provenance", async (t) => {
   const productUrlFetcher = async input => ({ schema: "openreel-product-page/v1", source: { requestedUrl: input.url, finalUrl: input.url, redirects: [], contentType: "text/html", byteLength: 10, sha256: "a".repeat(64), fetchedAt: "2026-08-20T00:00:00.000Z" }, extracted: { title: "Item", description: "", text: "Item" } });
   const server = createOpenReelServer(undefined, undefined, { productUrlFetcher });
@@ -107,7 +124,7 @@ test("versioned model catalog exposes a stable drift fingerprint without breakin
 });
 
 test("model catalog coverage exposes authenticated target gaps without claiming configured models", async (t) => {
-  const server = createOpenReelServer();
+  const server = createOpenReelServer(undefined, undefined, { capabilityBaselineNow: () => new Date("2026-08-08T00:00:00.000Z") });
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   t.after(() => new Promise(resolve => server.close(resolve)));
   const base = `http://127.0.0.1:${server.address().port}`;
@@ -391,7 +408,7 @@ test("production protected-route matrix rejects anonymous, bad cookie, bad beare
   const routes = [
     ["POST", "/api/v1/users"], ["GET", "/api/v1/models"], ["GET", "/api/v1/workflow-shortcuts"], ["POST", "/api/v1/auth/logout"], ["POST", "/api/v1/auth/rotate"], ["GET", "/api/v1/auth/me"],
     ["POST", "/api/v1/teams"], ["POST", "/api/v1/teams/x/invites"], ["POST", "/api/v1/invites/x/accept"], ["PUT", "/api/v1/teams/x/presence"], ["GET", "/api/v1/teams/x/presence?documentId=canvas"], ["GET", "/api/v1/teams/x/documents/canvas"], ["PUT", "/api/v1/teams/x/documents/canvas"], ["POST", "/api/v1/teams/x/budget/quote"], ["POST", "/api/v1/teams/x/budget/reserve"], ["POST", "/api/v1/teams/x/budget/settle"], ["GET", "/api/v1/teams/x/budget"], ["POST", "/api/v1/teams/x/workflows/import"], ["POST", "/api/v1/teams/x/automations/plan"], ["POST", "/api/v1/teams/x/automations/run"], ["GET", "/api/v1/security-boundary"],
-    ["GET", "/api/v1/projects"], ["POST", "/api/v1/projects"], ["GET", "/api/v1/projects/x"], ["PATCH", "/api/v1/projects/x"], ["POST", "/api/v1/projects/x/members"], ["POST", "/api/v1/projects/x/edges"], ["PATCH", "/api/v1/edges/x"], ["POST", "/api/v1/projects/x/groups"], ["PATCH", "/api/v1/groups/x"], ["POST", "/api/v1/projects/x/sessions"], ["GET", "/api/v1/projects/x/assets"], ["GET", "/api/v1/projects/x/history"], ["POST", "/api/v1/projects/x/assets/y/copy"], ["GET", "/api/v1/projects/x/continuity"], ["POST", "/api/v1/projects/x/continuity"], ["PATCH", "/api/v1/projects/x/continuity/y"], ["PUT", "/api/v1/projects/x/story"], ["PUT", "/api/v1/projects/x/storyboard"], ["GET", "/api/v1/projects/x/storyboard-batches"], ["POST", "/api/v1/projects/x/storyboard-batches"], ["GET", "/api/v1/projects/x/storyboard-batches/y"], ["POST", "/api/v1/projects/x/storyboard-batches/y/tick"], ["PUT", "/api/v1/projects/x/timeline"], ["GET", "/api/v1/projects/x/exports/manifest"], ["POST", "/api/v1/projects/x/exports/render"], ["POST", "/api/v1/sessions/x/close"], ["POST", "/api/v1/sessions/x/nodes"], ["PATCH", "/api/v1/nodes/x"], ["POST", "/api/v1/sessions/x/jobs"], ["POST", "/api/v1/jobs/x/tick"], ["POST", "/api/v1/jobs/x/cancel"], ["POST", "/api/v1/jobs/x/retry"], ["GET", "/api/v1/jobs/x/progress"], ["POST", "/api/v1/projects/x/sessions/y/assets/references"], ["GET", "/api/v1/projects/x/assets/y/manifest"], ["GET", "/api/v1/projects/x/assets/y/content"]
+    ["GET", "/api/v1/projects"], ["POST", "/api/v1/projects"], ["GET", "/api/v1/projects/x"], ["PATCH", "/api/v1/projects/x"], ["POST", "/api/v1/projects/x/members"], ["POST", "/api/v1/projects/x/edges"], ["PATCH", "/api/v1/edges/x"], ["POST", "/api/v1/projects/x/groups"], ["PATCH", "/api/v1/groups/x"], ["POST", "/api/v1/projects/x/sessions"], ["GET", "/api/v1/projects/x/assets"], ["GET", "/api/v1/projects/x/history"], ["POST", "/api/v1/projects/x/assets/y/copy"], ["GET", "/api/v1/projects/x/continuity"], ["POST", "/api/v1/projects/x/continuity"], ["PATCH", "/api/v1/projects/x/continuity/y"], ["PUT", "/api/v1/projects/x/story"], ["PUT", "/api/v1/projects/x/storyboard"], ["GET", "/api/v1/projects/x/storyboard-batches"], ["POST", "/api/v1/projects/x/storyboard-batches"], ["GET", "/api/v1/projects/x/storyboard-batches/y"], ["POST", "/api/v1/projects/x/storyboard-batches/y/tick"], ["PUT", "/api/v1/projects/x/timeline"], ["GET", "/api/v1/projects/x/exports/manifest"], ["POST", "/api/v1/projects/x/exports/render"], ["POST", "/api/v1/sessions/x/close"], ["POST", "/api/v1/sessions/x/nodes"], ["PATCH", "/api/v1/nodes/x"], ["DELETE", "/api/v1/nodes/x"], ["POST", "/api/v1/sessions/x/jobs"], ["POST", "/api/v1/jobs/x/tick"], ["POST", "/api/v1/jobs/x/cancel"], ["POST", "/api/v1/jobs/x/retry"], ["GET", "/api/v1/jobs/x/progress"], ["POST", "/api/v1/projects/x/sessions/y/assets/references"], ["GET", "/api/v1/projects/x/assets/y/manifest"], ["GET", "/api/v1/projects/x/assets/y/content"]
   ];
   for (const [method, path] of routes) {
     for (const headers of [{ "x-openreel-user": "spoof" }, { cookie: "openreel_session=bad; openreel_csrf=x", "x-csrf-token": "x" }, { authorization: "Bearer bad", "x-openreel-user": "spoof" }]) {
@@ -431,6 +448,40 @@ test("production session rotation, bearer CSRF exemption, cookies, limits, and s
   for (let i = 0; i < 20; i++) await fetch(`${base}/api/v1/auth/login`, { method: "POST", headers: { "content-type": "application/json" }, body: "{}" });
   const limited = await fetch(`${base}/api/v1/auth/login`, { method: "POST", headers: { "content-type": "application/json" }, body: "{}" });
   assert.equal(limited.status, 429); assert.equal((await limited.json()).error.code, "RATE_LIMITED");
+});
+
+test("production authenticated rate limits are isolated per session", async (t) => {
+  const server = createOpenReelServer(undefined, undefined, { production: true, secureCookies: false, rateLimit: { max: 100, authenticatedMax: 2 } });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const login = async (email) => {
+    const password = "secure-pass-123";
+    assert.equal((await fetch(`${base}/api/v1/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, password }) })).status, 201);
+    const response = await fetch(`${base}/api/v1/auth/login`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, password }) });
+    assert.equal(response.status, 200);
+    return decodeURIComponent(response.headers.getSetCookie().find(value => value.startsWith("openreel_session=")).split(";", 1)[0].split("=")[1]);
+  };
+  const first = await login("rate-first@example.test"), second = await login("rate-second@example.test");
+  const request = token => fetch(`${base}/api/v1/projects`, { headers: { authorization: `Bearer ${token}` } });
+  assert.equal((await request(first)).status, 200);
+  assert.equal((await request(first)).status, 200);
+  assert.equal((await request(first)).status, 429);
+  assert.equal((await request(second)).status, 200);
+  assert.equal((await request(second)).status, 200);
+});
+
+test("production anonymous rate limits honor nginx client IP only from loopback", async (t) => {
+  const server = createOpenReelServer(undefined, undefined, { production: true, secureCookies: false, rateLimit: { max: 2 } });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const request = address => fetch(`${base}/api/v1/auth/login`, { method: "POST", headers: { "content-type": "application/json", "x-real-ip": address }, body: "{}" });
+  assert.equal((await request("198.51.100.10")).status, 401);
+  assert.equal((await request("198.51.100.10")).status, 401);
+  assert.equal((await request("198.51.100.10")).status, 429);
+  assert.equal((await request("203.0.113.20")).status, 401);
+  assert.equal((await request("203.0.113.20")).status, 401);
 });
 
 test("production job routes enforce project authorization for bearer identities", async (t) => {

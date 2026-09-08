@@ -36,6 +36,15 @@ test("E-01 canvas acceptance uses the canonical asset byteLength field", () => {
   assert.doesNotMatch(source, /asset\.size\b/);
 });
 
+test("standard Ark Seedance proof persists terminal evidence and never uses the obsolete asset size field", () => {
+  const source = readFileSync(new URL("../scripts/standard-ark-seedance-canvas-proof.mjs", import.meta.url), "utf8");
+  assert.match(source, /persistTerminalPacket/);
+  assert.match(source, /await record\(\)/);
+  assert.match(source, /artifact\.byteLength/);
+  assert.doesNotMatch(source, /artifact\.size\b/);
+  assert.match(source, /SUBMIT_ONE_STANDARD_ARK_PAID_PROOF/);
+});
+
 test("retained-video browser acceptance uses the authenticated asset URL and keeps Blob playback diagnostic", () => {
   const source = readFileSync(new URL("../scripts/e01-cp312-graphical-browser.mjs", import.meta.url), "utf8");
   assert.match(source, /directVideo\.src = assetUrl/);

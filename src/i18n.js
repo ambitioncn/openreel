@@ -3,7 +3,13 @@ const SUPPORTED = new Set(["en", "zh-CN"]);
 
 const pairs = [
   ["语言", "Language"],
-  ["作品工作台", "Creator workspace"], ["高级画布", "Advanced canvas"], ["教程", "Tutorials"], ["反馈", "Feedback"],
+  ["首页", "Home"], ["作品工作台", "Creator Workspace"], ["高级画布", "Advanced Canvas"], ["教程", "Tutorials"], ["反馈", "Feedback"], ["作品", "Projects"], ["平台连接", "Connections"],
+  ["项目库", "PROJECT LIBRARY"], ["打开、重命名、归档或新建作品，无需离开作品库。", "Open, rename, archive, or create a project without leaving your library."],
+  ["账号连接", "ACCOUNT CONNECTIONS"], ["平台连接管理", "Platform connections"], ["把官方发布账号连接与创作项目分开管理。", "Manage official publishing account connections separately from your creative projects."],
+  ["创作者工作区", "CREATOR WORKSPACE"], ["从创意、脚本、分镜、生成一路完成一个项目直到成片。", "Develop one project from idea through script, storyboard, generation, and final cut."],
+  ["粘贴已有文案", "Paste existing script"], ["选择创意、粘贴已有脚本、添加商品链接或上传参考素材。", "Choose an idea, paste an existing script, add a product URL, or upload a reference asset."],
+  ["高级画布快速指南", "Advanced Canvas quick guide"], ["从工具箱添加节点。", "Add a node from the toolbox."], ["选择节点；按住 Shift 可多选。", "Select nodes; Shift-click selects more than one."], ["连接、分组、编辑或删除所选节点。", "Connect, group, edit, or delete the selection."], ["删除所选节点", "Delete selected node"],
+  ["选择一个引导案例。教程会创建可审阅的画布蓝图，绝不会自动运行付费模型。", "Choose a guided example. Tutorials create reviewable canvas blueprints and never run paid models automatically."],
   ["我的作品", "My projects"], ["作品与草稿", "Projects and drafts"], ["新建作品", "New project"], ["作品名称", "Project name"],
   ["例如：咖啡小技巧", "For example: Better coffee tips"], ["创建空白草稿", "Create blank draft"], ["取消", "Cancel"],
   ["正在加载作品…", "Loading projects…"], ["OPENREEL 短视频工作台", "OPENREEL SHORT VIDEO WORKSPACE"],

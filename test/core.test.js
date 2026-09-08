@@ -55,6 +55,35 @@ test("project and session lifecycle preserves isolation and closes once", () => 
   assert.throws(() => store.closeSession(session.id), /already closed/);
 });
 
+test("node deletion removes canvas references and preserves historical jobs and assets", () => {
+  const { store, project, session, node } = fixture();
+  const other = store.createNode(session.id, { type: "video", title: "keep" });
+  const edge = store.createEdge(project.id, { fromNodeId: node.id, toNodeId: other.id });
+  const group = store.createGroup(project.id, { title: "pair", nodeIds: [node.id, other.id] });
+  const job = store.createJob(session.id, { nodeId: node.id, prompt: "historical result" });
+  store.tickJob(job.id); const completed = store.tickJob(job.id);
+  const result = store.deleteNode(node.id, { version: store.snapshot(project.id).nodes.find(item => item.id === node.id).version });
+  const state = store.snapshot(project.id);
+  assert.equal(result.deleted, true);
+  assert.deepEqual(result.removedEdgeIds, [edge.id]);
+  assert.deepEqual(result.updatedGroupIds, [group.id]);
+  assert.deepEqual(state.nodes.map(item => item.id), [other.id]);
+  assert.equal(state.edges.length, 0);
+  assert.deepEqual(state.groups[0].nodeIds, [other.id]);
+  assert.equal(state.jobs.find(item => item.id === job.id).nodeId, node.id);
+  assert.equal(state.assets.find(item => item.id === completed.assetId).nodeId, node.id);
+  assert.throws(() => store.deleteNode(node.id), error => error.code === "NOT_FOUND");
+});
+
+test("node deletion enforces authorization and optimistic version checks", () => {
+  const { store, project, node } = fixture();
+  const viewer = store.createUser({ name: "viewer" });
+  store.addMember(project.id, { userId: viewer.id, role: "viewer" });
+  assert.throws(() => store.deleteNode(node.id, { version: node.version }, viewer.id), error => error.code === "FORBIDDEN");
+  assert.throws(() => store.deleteNode(node.id, { version: node.version + 1 }), error => error.code === "VERSION_CONFLICT");
+  assert.equal(store.snapshot(project.id).nodes.length, 1);
+});
+
 test("job state machine exposes states, legal transitions, cancellation, and errors", () => {
   assert.deepEqual(JOB_STATES, ["queued", "running", "succeeded", "failed", "canceled"]);
   const { store, session, node } = fixture();

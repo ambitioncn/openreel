@@ -390,8 +390,9 @@ test("provider authentication failures retain a safe distinct error code", async
 test("Ark canvas jobs persist validated output as a tenant asset and append video to the timeline", () => {
   const store = createMemoryStore(); store.createUser({ id: "owner", name: "Owner" }); store.createUser({ id: "other", name: "Other" });
   const project = store.createProject({ name: "Ark canvas" }, "owner"), session = store.createSession(project.id, { name: "Main" }, "owner"), node = store.createNode(session.id, { type: "video" }, "owner");
-  const arkJob = { id: "ark-1", model: "seedance-2-fast", capability: "video", status: "running" };
+  const arkJob = { id: "ark-1", providerTaskId: "provider-task-1", model: "seedance-2-fast", capability: "video", status: "running" };
   const local = store.createArkCanvasJob(session.id, { nodeId: node.id, prompt: "ocean", parameters: { duration: 7 } }, arkJob, "owner");
+  assert.equal(local.providerTaskId, "provider-task-1");
   assert.equal(store.createArkCanvasJob(session.id, { nodeId: node.id, prompt: "duplicate" }, arkJob, "owner").id, local.id);
   const done = store.reconcileArkCanvasJob(local.id, { ...arkJob, status: "succeeded" }, { mimeType: "video/mp4", bytes: Buffer.from("video-fixture") }, "owner");
   const snapshot = store.snapshot(project.id, "owner"); assert.equal(done.state, "succeeded"); assert.equal(snapshot.assets[0].metadata.arkJobId, "ark-1"); assert.equal(snapshot.timeline.tracks[0].clips[0].assetId, done.assetId); assert.equal(snapshot.timeline.tracks[0].clips[0].outPoint, 7);
