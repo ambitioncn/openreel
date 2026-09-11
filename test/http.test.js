@@ -60,6 +60,24 @@ test("HTTP node deletion removes the canvas node and keeps completed history", a
   assert.equal(repeated.body.error.code, "NOT_FOUND");
 });
 
+test("HTTP project deletion fails closed until exact confirmation and removes stored project state", async (t) => {
+  const server = createOpenReelServer();
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const project = (await request(base, "/api/v1/projects", { method: "POST", body: JSON.stringify({ name: "Delete project safely" }) })).body;
+  await request(base, `/api/v1/projects/${project.id}/sessions`, { method: "POST", body: JSON.stringify({ name: "Main" }) });
+  const current = (await request(base, `/api/v1/projects/${project.id}`)).body.project;
+  const mismatch = await request(base, `/api/v1/projects/${project.id}`, { method: "DELETE", body: JSON.stringify({ version: current.version + 1, confirmName: current.name }) });
+  assert.equal(mismatch.status, 409); assert.equal(mismatch.body.error.code, "VERSION_CONFLICT");
+  const unconfirmed = await request(base, `/api/v1/projects/${project.id}`, { method: "DELETE", body: JSON.stringify({ version: current.version, confirmName: "wrong" }) });
+  assert.equal(unconfirmed.status, 409); assert.equal(unconfirmed.body.error.code, "CONFIRMATION_REQUIRED");
+  const deleted = await request(base, `/api/v1/projects/${project.id}`, { method: "DELETE", body: JSON.stringify({ version: current.version, confirmName: current.name }) });
+  assert.equal(deleted.status, 200); assert.equal(deleted.body.deleted, true); assert.equal(deleted.body.counts.sessions, 1);
+  const missing = await request(base, `/api/v1/projects/${project.id}`);
+  assert.equal(missing.status, 404); assert.equal(missing.body.error.code, "NOT_FOUND");
+});
+
 test("HTTP product URL extraction stays server-side and returns bounded provenance", async (t) => {
   const productUrlFetcher = async input => ({ schema: "openreel-product-page/v1", source: { requestedUrl: input.url, finalUrl: input.url, redirects: [], contentType: "text/html", byteLength: 10, sha256: "a".repeat(64), fetchedAt: "2026-08-20T00:00:00.000Z" }, extracted: { title: "Item", description: "", text: "Item" } });
   const server = createOpenReelServer(undefined, undefined, { productUrlFetcher });
@@ -408,7 +426,7 @@ test("production protected-route matrix rejects anonymous, bad cookie, bad beare
   const routes = [
     ["POST", "/api/v1/users"], ["GET", "/api/v1/models"], ["GET", "/api/v1/workflow-shortcuts"], ["POST", "/api/v1/auth/logout"], ["POST", "/api/v1/auth/rotate"], ["GET", "/api/v1/auth/me"],
     ["POST", "/api/v1/teams"], ["POST", "/api/v1/teams/x/invites"], ["POST", "/api/v1/invites/x/accept"], ["PUT", "/api/v1/teams/x/presence"], ["GET", "/api/v1/teams/x/presence?documentId=canvas"], ["GET", "/api/v1/teams/x/documents/canvas"], ["PUT", "/api/v1/teams/x/documents/canvas"], ["POST", "/api/v1/teams/x/budget/quote"], ["POST", "/api/v1/teams/x/budget/reserve"], ["POST", "/api/v1/teams/x/budget/settle"], ["GET", "/api/v1/teams/x/budget"], ["POST", "/api/v1/teams/x/workflows/import"], ["POST", "/api/v1/teams/x/automations/plan"], ["POST", "/api/v1/teams/x/automations/run"], ["GET", "/api/v1/security-boundary"],
-    ["GET", "/api/v1/projects"], ["POST", "/api/v1/projects"], ["GET", "/api/v1/projects/x"], ["PATCH", "/api/v1/projects/x"], ["POST", "/api/v1/projects/x/members"], ["POST", "/api/v1/projects/x/edges"], ["PATCH", "/api/v1/edges/x"], ["POST", "/api/v1/projects/x/groups"], ["PATCH", "/api/v1/groups/x"], ["POST", "/api/v1/projects/x/sessions"], ["GET", "/api/v1/projects/x/assets"], ["GET", "/api/v1/projects/x/history"], ["POST", "/api/v1/projects/x/assets/y/copy"], ["GET", "/api/v1/projects/x/continuity"], ["POST", "/api/v1/projects/x/continuity"], ["PATCH", "/api/v1/projects/x/continuity/y"], ["PUT", "/api/v1/projects/x/story"], ["PUT", "/api/v1/projects/x/storyboard"], ["GET", "/api/v1/projects/x/storyboard-batches"], ["POST", "/api/v1/projects/x/storyboard-batches"], ["GET", "/api/v1/projects/x/storyboard-batches/y"], ["POST", "/api/v1/projects/x/storyboard-batches/y/tick"], ["PUT", "/api/v1/projects/x/timeline"], ["GET", "/api/v1/projects/x/exports/manifest"], ["POST", "/api/v1/projects/x/exports/render"], ["POST", "/api/v1/sessions/x/close"], ["POST", "/api/v1/sessions/x/nodes"], ["PATCH", "/api/v1/nodes/x"], ["DELETE", "/api/v1/nodes/x"], ["POST", "/api/v1/sessions/x/jobs"], ["POST", "/api/v1/jobs/x/tick"], ["POST", "/api/v1/jobs/x/cancel"], ["POST", "/api/v1/jobs/x/retry"], ["GET", "/api/v1/jobs/x/progress"], ["POST", "/api/v1/projects/x/sessions/y/assets/references"], ["GET", "/api/v1/projects/x/assets/y/manifest"], ["GET", "/api/v1/projects/x/assets/y/content"]
+    ["GET", "/api/v1/projects"], ["POST", "/api/v1/projects"], ["GET", "/api/v1/projects/x"], ["PATCH", "/api/v1/projects/x"], ["DELETE", "/api/v1/projects/x"], ["POST", "/api/v1/projects/x/members"], ["POST", "/api/v1/projects/x/edges"], ["PATCH", "/api/v1/edges/x"], ["POST", "/api/v1/projects/x/groups"], ["PATCH", "/api/v1/groups/x"], ["POST", "/api/v1/projects/x/sessions"], ["GET", "/api/v1/projects/x/assets"], ["GET", "/api/v1/projects/x/history"], ["POST", "/api/v1/projects/x/assets/y/copy"], ["GET", "/api/v1/projects/x/continuity"], ["POST", "/api/v1/projects/x/continuity"], ["PATCH", "/api/v1/projects/x/continuity/y"], ["PUT", "/api/v1/projects/x/story"], ["PUT", "/api/v1/projects/x/storyboard"], ["GET", "/api/v1/projects/x/storyboard-batches"], ["POST", "/api/v1/projects/x/storyboard-batches"], ["GET", "/api/v1/projects/x/storyboard-batches/y"], ["POST", "/api/v1/projects/x/storyboard-batches/y/tick"], ["PUT", "/api/v1/projects/x/timeline"], ["GET", "/api/v1/projects/x/exports/manifest"], ["POST", "/api/v1/projects/x/exports/render"], ["POST", "/api/v1/sessions/x/close"], ["POST", "/api/v1/sessions/x/nodes"], ["PATCH", "/api/v1/nodes/x"], ["DELETE", "/api/v1/nodes/x"], ["POST", "/api/v1/sessions/x/jobs"], ["POST", "/api/v1/jobs/x/tick"], ["POST", "/api/v1/jobs/x/cancel"], ["POST", "/api/v1/jobs/x/retry"], ["GET", "/api/v1/jobs/x/progress"], ["POST", "/api/v1/projects/x/sessions/y/assets/references"], ["GET", "/api/v1/projects/x/assets/y/manifest"], ["GET", "/api/v1/projects/x/assets/y/content"]
   ];
   for (const [method, path] of routes) {
     for (const headers of [{ "x-openreel-user": "spoof" }, { cookie: "openreel_session=bad; openreel_csrf=x", "x-csrf-token": "x" }, { authorization: "Bearer bad", "x-openreel-user": "spoof" }]) {

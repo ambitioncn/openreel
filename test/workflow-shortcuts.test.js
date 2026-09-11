@@ -12,6 +12,7 @@ test("authenticated image shortcuts map to versioned local review-only templates
   assert.ok(first.templates.every(item => item.input.kind === "image-reference"));
   assert.ok(first.templates.every(item => item.plan[0].promptSource === "user"));
   assert.ok(first.templates.every(item => item.autoRun === false));
+  assert.ok(first.templates.every(item => item.labelEn && !/[\u3400-\u9fff]/u.test(item.labelEn)));
   assert.ok(first.templates.some(item => item.id === "continuous_storyboard_grid_25" && item.output === "grid-25"));
   assert.ok(first.templates.some(item => item.id === "frame_prediction_minus_5s" && item.output === "minus-5s"));
 });

@@ -3,6 +3,13 @@
 .tutorial-dialog::backdrop { background:#000c }
 .tutorial-dialog header>p:last-child,.tutorial-outcome { color:#a9acb6; line-height:1.6 }
 .tutorial-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:22px }
+.tutorial-walkthrough { margin:0 0 26px; padding:20px; border:1px solid #343741; border-radius:14px; background:#191a20 }
+.tutorial-walkthrough h2 { margin:0 0 16px; font-size:22px; line-height:1.25 }
+.tutorial-walkthrough ol { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:0; padding:0; counter-reset:tutorial-step; list-style:none }
+.tutorial-walkthrough li { display:grid; align-content:start; gap:7px; min-width:0; padding:14px; border:1px solid #30333c; border-radius:11px; background:#131419; counter-increment:tutorial-step }
+.tutorial-walkthrough li::before { content:counter(tutorial-step); display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:#ff6a3d; color:#fff; font-weight:800 }
+.tutorial-walkthrough strong { font-size:15px; line-height:1.35 }
+.tutorial-walkthrough span { color:#b2b5bf; font-size:13px; line-height:1.55 }
 .tutorial-card { display:grid; gap:8px; min-height:180px; padding:20px; border:1px solid #343741; border-radius:14px; background:linear-gradient(145deg,#20222a,#17181d); color:#f2f3f7; text-align:left; cursor:pointer }
 .tutorial-card:hover { border-color:#ff7047; transform:translateY(-1px) }
 .tutorial-card span,.tutorial-card small { color:#ff916f; font-size:11px }
@@ -22,5 +29,5 @@
 .tutorial-safety { padding:12px; border-left:3px solid #e5af53; background:#26231b; color:#c9bd9d; font-size:12px; line-height:1.5 }
 .tutorial-shortcut { display:grid; gap:10px; margin:20px 0; padding:16px; border:1px solid #343741; border-radius:12px; background:#1b1c22 }
 .tutorial-shortcut label { display:grid; gap:6px; color:#c7c9d1; font-size:12px }
-@media (max-width:760px) { .tutorial-dialog { padding:20px }.tutorial-list { grid-template-columns:1fr } }
-@media (max-width:480px) { .tutorial-dialog { width:calc(100% - 16px); max-height:calc(100dvh - 16px); padding:16px }.tutorial-card { min-height:0; padding:16px }.tutorial-detail ol,.tutorial-detail ul { padding-left:20px } }
+@media (max-width:760px) { .tutorial-dialog { padding:20px }.tutorial-list { grid-template-columns:1fr }.tutorial-walkthrough ol { grid-template-columns:1fr 1fr } }
+@media (max-width:480px) { .tutorial-dialog { width:calc(100% - 16px); max-height:calc(100dvh - 16px); padding:16px }.tutorial-card { min-height:0; padding:16px }.tutorial-detail ol,.tutorial-detail ul { padding-left:20px }.tutorial-walkthrough ol { grid-template-columns:1fr } }

@@ -50,12 +50,37 @@ async function exercise(browser, name, viewport) {
   assert.ok(await page.locator("#workspace-shell").evaluate(element => element.classList.contains("workbench-mode")), "beginner workbench is not the default signed-in mode");
   assert.equal(new URL(page.url()).hash, "#home");
   assert.equal(await page.locator('[data-route][aria-current="page"]').textContent(), "Home");
-  const navHeights = await page.locator("[data-route]").evaluateAll(buttons => buttons.map(button => button.getBoundingClientRect().height));
+  assert.ok(await page.locator(".topbar-brand strong").isVisible(), "OpenReel title is obscured");
+  assert.equal(await page.locator(".topbar").evaluate(element => element.scrollWidth <= element.clientWidth), true, "topbar overflows horizontally");
+  const navHeights = await page.locator(".primary-tabs [data-route]").evaluateAll(buttons => buttons.map(button => button.getBoundingClientRect().height));
   assert.ok(Math.max(...navHeights) - Math.min(...navHeights) <= 1, "primary navigation buttons are not consistently sized");
+  const languageAlignment = async () => page.locator(".topbar .language-picker").evaluate(label => { const a = label.getBoundingClientRect(), b = label.querySelector("select").getBoundingClientRect(); return Math.abs((a.top + a.bottom) / 2 - (b.top + b.bottom) / 2); });
+  assert.ok(await languageAlignment() <= 1, "English language selector is not vertically aligned");
   await page.click("#projects-page-nav");
   await page.waitForSelector('[data-workspace-page="projects"]:not([hidden])');
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth), false, "Projects page has horizontal overflow");
   assert.doesNotMatch(await page.locator('[data-workspace-page="projects"] .page-heading').innerText(), /[\u3400-\u9fff]/, "English Projects page heading still contains Chinese");
+  const typography = await page.locator('[data-workspace-page="projects"]').evaluate(section => ({ heading: parseFloat(getComputedStyle(section.querySelector("h1")).fontSize), body: parseFloat(getComputedStyle(section.querySelector(".page-heading > p:last-child")).fontSize), metadata: parseFloat(getComputedStyle(section.querySelector(".project-open small")).fontSize) }));
+  assert.ok(typography.heading >= 28 && typography.body >= 14 && typography.metadata >= 13, `Projects typography is not legible: ${JSON.stringify(typography)}`);
+  const projectActionHeights = await page.locator("#workbench-projects article:first-child > div button").evaluateAll(buttons => buttons.map(button => button.getBoundingClientRect().height));
+  assert.ok(Math.max(...projectActionHeights) - Math.min(...projectActionHeights) <= 1, "English project actions are not vertically aligned");
+  await page.click("#projects-back");
+  assert.equal(new URL(page.url()).hash, "#home", "Projects Back button did not return home");
+  await page.click("#projects-page-nav");
+  await page.click("#toggle-new-project");
+  await page.fill("#new-project-name", "Disposable browser project");
+  await page.click("#new-project-form button[type=submit]");
+  try { await page.waitForFunction(() => document.querySelector("#workbench-projects article.current strong")?.textContent === "Disposable browser project", null, { timeout: 5000 }); }
+  catch (error) { throw new Error(`disposable project did not become current: ${JSON.stringify({ cards: await page.locator("#workbench-projects article strong").allTextContents(), state: await page.locator("#workflow-state").textContent(), shelf: await page.locator("#project-shelf-state").textContent(), failures })}`, { cause: error }); }
+  assert.equal(await page.locator("#workbench-projects article").count(), initialProjectCount + 1, "creating a disposable project did not add exactly one card");
+  page.once("dialog", dialog => dialog.dismiss());
+  await page.click("#workbench-projects article.current .project-delete");
+  assert.equal(await page.locator("#workbench-projects article").count(), initialProjectCount + 1, "canceling deletion removed the project");
+  page.once("dialog", dialog => dialog.accept("Disposable browser project"));
+  await page.click("#workbench-projects article.current .project-delete");
+  await page.waitForFunction(count => document.querySelectorAll("#workbench-projects article").length === count, initialProjectCount);
+  assert.match(await page.locator("#project-shelf-state").textContent(), /Deleted/);
+  await page.click("#workspace-menu summary");
   await page.click("#connections-page-nav");
   await page.waitForSelector('[data-workspace-page="connections"]:not([hidden])');
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth), false, "Connections page has horizontal overflow");
@@ -95,11 +120,17 @@ async function exercise(browser, name, viewport) {
   await page.fill("#storyboard-shots article:first-child .shot-line", `${name} 第一镜台词`);
   await page.click("#save-script-storyboard");
   await page.waitForFunction(expected => document.querySelector("#editor-state")?.textContent?.includes("Saved") && document.querySelector("#short-video-script")?.value === expected, `${name} 可编辑脚本正文`);
+  for (const target of ["brief-panel", "script-editor", "storyboard-editor", "generation-workbench", "final-workbench"]) {
+    await page.click(`[data-step-target="${target}"]`);
+    assert.equal(await page.evaluate(id => document.activeElement?.id === id, target), true, `step navigation did not focus ${target}`);
+    assert.equal(await page.locator(`[data-step-target="${target}"]`).evaluate(button => button.closest("li").classList.contains("active")), true, `step navigation did not activate ${target}`);
+  }
   if (viewport.width <= 760) {
     const layout = await page.locator("#storyboard-shots article:first-child").evaluate(element => ({ columns: getComputedStyle(element).gridTemplateColumns.split(" ").length, overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth }));
     assert.equal(layout.columns, 1, "mobile storyboard editor must stack to one column");
     assert.equal(layout.overflow, false, "mobile workbench has horizontal overflow");
   }
+  await page.click("#workspace-menu summary");
   await page.click("#advanced-canvas");
   assert.ok(await page.locator("#creator-workbench").isHidden(), "advanced canvas toggle did not leave the workbench");
   assert.ok(await page.locator(".canvas-guide").isVisible(), "advanced canvas guidance is missing");
@@ -111,10 +142,15 @@ async function exercise(browser, name, viewport) {
   await page.waitForFunction(count => document.querySelectorAll(".node").length === count, nodesBeforeDelete);
   await page.click("#tutorials");
   await page.waitForSelector("#tutorials-page:not([hidden])");
+  assert.equal(await page.locator("#tutorial-walkthrough li").count(), 4, "tutorial walkthrough does not expose four ordered steps");
+  assert.doesNotMatch(await page.locator("#tutorial-walkthrough").innerText(), /[\u3400-\u9fff]/, "English tutorial walkthrough contains Chinese");
   await page.locator(".tutorial-card").first().click();
   const englishTutorial = await page.locator("#tutorials-page").innerText();
   assert.doesNotMatch(englishTutorial, /[\u3400-\u9fff]/, "English tutorial page still contains Chinese");
+  assert.ok((await page.locator(".tutorial-shortcut option").allTextContents()).every(label => !/[\u3400-\u9fff]/u.test(label)), "English Reviewed Shortcut labels still contain Chinese");
   await page.locator("[data-language-selector]").last().selectOption("zh-CN");
+  assert.ok(await languageAlignment() <= 1, "Chinese language selector is not vertically aligned");
+  assert.match(await page.locator("#tutorial-walkthrough").innerText(), /四步使用教程/, "Chinese tutorial walkthrough is missing");
   await page.locator(".tutorial-card").first().click();
   assert.match(await page.locator("#tutorials-page").innerText(), /[\u3400-\u9fff]/, "Simplified Chinese tutorial content is missing");
   await page.locator("[data-language-selector]").last().selectOption("en");
@@ -130,7 +166,7 @@ async function exercise(browser, name, viewport) {
   assert.equal(await page.locator("#short-video-script").inputValue(), `${name} 可编辑脚本正文`);
   assert.equal(failures.length, 0, failures.join("\n"));
   await page.close();
-  return { viewport: `${viewport.width}x${viewport.height}`, defaultEnglish: true, simplifiedChineseSwitch: true, localePersistenceReload: true, dedicatedRoutes: true, browserHistory: true, distinctWorkDefault: true, explicitCurrentWorkConfirmation: true, editableScript: true, editableStoryboard: true, persistenceReload: true, advancedCanvasGuidance: true, nodeDeletion: true, englishTutorials: true };
+  return { viewport: `${viewport.width}x${viewport.height}`, defaultEnglish: true, simplifiedChineseSwitch: true, localePersistenceReload: true, dedicatedRoutes: true, browserHistory: true, projectsBack: true, safeProjectDeletion: true, stepNavigation: true, structuredHeader: true, languageAlignment: true, tutorialWalkthrough: true, distinctWorkDefault: true, explicitCurrentWorkConfirmation: true, editableScript: true, editableStoryboard: true, persistenceReload: true, advancedCanvasGuidance: true, nodeDeletion: true, englishTutorials: true, localizedShortcuts: true };
 }
 
 async function installLocalPlanningFixture(page) {

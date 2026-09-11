@@ -239,6 +239,7 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
       else if (req.method === "GET" && api[0] === "projects" && api.length === 1) out = store.listProjects(who, Object.fromEntries(url.searchParams));
       else if (req.method === "POST" && api[0] === "projects" && api.length === 1) { out = store.createProject(await input(), who); metrics.funnel?.("project_created", "success"); }
       else if (req.method === "GET" && api[0] === "projects" && api.length === 2) out = store.snapshot(api[1], who);
+      else if (req.method === "DELETE" && api[0] === "projects" && api.length === 2) out = store.deleteProject(api[1], await input(), who);
       else if (api[0] === "projects" && api[2] === "director" && api[3] === "records") {
         const principal = { tenantId: who, actorId: who };
         if (req.method === "POST" && api.length === 4) out = directorSystemStore.put(principal, api[1], await input());

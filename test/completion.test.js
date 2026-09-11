@@ -46,6 +46,24 @@ test("project management, isolation, roles, and optimistic conflict are enforced
   assert.throws(() => store.snapshot(project.id, hidden.id), (e) => e instanceof DomainError && e.code === "FORBIDDEN");
 });
 
+test("project deletion requires owner role, current version, and exact-name confirmation", () => {
+  const { store, project, session } = base();
+  const editor = store.createUser({ id: "delete-editor", name: "Editor" });
+  const viewer = store.createUser({ id: "delete-viewer", name: "Viewer" });
+  store.addMember(project.id, { userId: editor.id, role: "editor" });
+  store.addMember(project.id, { userId: viewer.id, role: "viewer" });
+  const current = store.snapshot(project.id).project;
+  assert.throws(() => store.deleteProject(project.id, { version: current.version, confirmName: current.name }, editor.id), error => error.code === "FORBIDDEN");
+  assert.throws(() => store.deleteProject(project.id, { version: current.version, confirmName: current.name }, viewer.id), error => error.code === "FORBIDDEN");
+  assert.throws(() => store.deleteProject(project.id, { version: current.version - 1, confirmName: current.name }), error => error.code === "VERSION_CONFLICT");
+  assert.throws(() => store.deleteProject(project.id, { version: current.version, confirmName: "wrong" }), error => error.code === "CONFIRMATION_REQUIRED");
+  const deleted = store.deleteProject(project.id, { version: current.version, confirmName: current.name });
+  assert.deepEqual(deleted.counts, { sessions: 1, nodes: 0, edges: 0, groups: 0, jobs: 0, assets: 0 });
+  assert.equal(deleted.deleted, true);
+  assert.throws(() => store.snapshot(project.id), error => error.code === "NOT_FOUND");
+  assert.throws(() => store.closeSession(session.id), error => error.code === "NOT_FOUND");
+});
+
 test("story, storyboard, multimodal routing, timeline, and export form one workflow", () => {
   const { store, project, session } = base();
   const story = store.upsertStory(project.id, { title: "Launch", synopsis: "A reveal", scenes: [{ title: "Opening", summary: "Dark stage" }, { title: "Reveal" }] });

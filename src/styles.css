@@ -75,3 +75,67 @@ label { display: grid; gap: 7px; margin-bottom: 16px; color: #888b96; font-size:
 .language-picker select{width:auto;min-width:7.25rem;padding:.42rem .6rem;border:1px solid var(--line,#d8dee9);border-radius:.55rem;background:var(--surface,#fff);color:inherit}
 .auth-card>.language-picker{float:right;margin-bottom:.75rem}
 #node-form > section,#node-meta { grid-column:1/-1 }
+
+/* 2026-09 information hierarchy and navigation pass */
+body { font-size:15px; line-height:1.5 }
+.app-shell { grid-template-rows:auto minmax(0,1fr) }
+.topbar { min-height:64px; padding:9px 18px; overflow:visible }
+.topbar-brand { min-width:180px; max-width:300px; flex:0 1 300px; display:flex; align-items:center; overflow:hidden }
+.topbar-brand strong { flex:none; font-size:16px; letter-spacing:-.01em }
+.topbar .crumb { min-width:0; font-size:13px }
+.project-actions { justify-content:flex-end; overflow:visible; gap:8px }
+.primary-tabs { display:flex; align-items:center; gap:4px; padding:4px; border:1px solid #30333c; border-radius:10px; background:#101116 }
+.project-actions button,.nav-menu summary { min-height:38px; padding:8px 11px; font-size:13px; line-height:1.2 }
+.nav-menu { position:relative; flex:none }
+.nav-menu summary { display:flex; align-items:center; gap:6px; border:1px solid #343741; border-radius:8px; background:#1b1d24; color:#c7c9d1; cursor:pointer; list-style:none; white-space:nowrap }
+.nav-menu summary::-webkit-details-marker { display:none }
+.nav-menu summary::after { content:"▾"; color:#858893; font-size:10px }
+.nav-menu[open] summary { border-color:#ff6a3d; color:#fff }
+.nav-menu > div { position:absolute; z-index:30; top:calc(100% + 8px); right:0; display:grid; min-width:190px; gap:6px; padding:8px; border:1px solid #3b3e48; border-radius:10px; background:#17181e; box-shadow:0 16px 42px #000b }
+.nav-menu > div button { width:100%; justify-content:flex-start }
+.nav-menu .status { padding:8px 10px; font-size:13px; white-space:nowrap }
+.topbar .language-picker { flex:none; min-height:38px; margin:0; padding-left:9px; border-left:1px solid #30333c; color:#b9bbc4; font-size:13px; line-height:1 }
+.topbar .language-picker select { min-width:7.4rem; height:38px; padding:.45rem 1.7rem .45rem .65rem; border-color:#3b3e48; background:#1b1d24; color:#f2f3f7; line-height:1.2 }
+.page-back { margin:0 0 16px; border:0; padding:6px 0; background:transparent; color:#ff916f; cursor:pointer; font-size:14px }
+.page-heading h1,.creator-heading h1 { font-size:clamp(30px,4vw,42px); line-height:1.12; letter-spacing:-.025em }
+.page-heading > p:last-child,.workbench-hero > p:last-child { font-size:15px; line-height:1.65 }
+.section-title h2,.brief-panel h2,.editor-heading h2 { font-size:24px; line-height:1.25 }
+.eyebrow { font-size:12px; line-height:1.3 }
+.project-open span,.project-open small,#project-shelf-state,.brief-panel [role=status],#workbench-final-state,.simple-timeline > p { font-size:13px; line-height:1.5 }
+.workbench-projects article > div button { min-height:36px; font-size:13px }
+.workbench-projects article > div .danger { border-color:#733c3c; color:#ff9b9b }
+.flow-steps li { padding:0; font-size:14px }
+.flow-steps li button { width:100%; min-height:48px; border:0; border-radius:0; padding:12px 8px; background:transparent; color:#8d909b; cursor:pointer }
+.flow-steps li.active button,.flow-steps li button:hover,.flow-steps li button:focus-visible { color:#fff; background:#ff6a3d18; box-shadow:inset 0 -2px #ff6a3d }
+[data-step-target]:focus-visible,.page-back:focus-visible,.nav-menu summary:focus-visible { outline:3px solid #ff916f; outline-offset:2px }
+
+@media (max-width:1050px) {
+  .topbar-brand { flex-basis:190px; max-width:190px }
+  .topbar .crumb { display:none }
+  .project-actions { gap:5px }
+  .project-actions button,.nav-menu summary { padding-inline:8px }
+}
+@media (max-width:760px) {
+  .app-shell { grid-template-rows:auto minmax(0,1fr); grid-template-columns:64px minmax(0,1fr) }
+  .topbar { min-height:0; align-items:center; flex-wrap:wrap; gap:8px; padding:8px 10px }
+  .topbar-brand { flex:1 0 100%; width:100%; max-width:none; min-width:0 }
+  .topbar-brand strong { font-size:15px }
+  .project-actions { flex:1 0 100%; width:100%; display:grid; grid-template-columns:minmax(0,1fr) auto auto auto; gap:6px; overflow:visible }
+  .primary-tabs { min-width:0; overflow-x:auto }
+  .primary-tabs button { flex:1 0 auto; min-height:36px; padding:7px 9px; font-size:12px }
+  .nav-menu summary { min-height:36px; padding:7px 8px; font-size:12px }
+  #project-menu { display:none }
+  .topbar .language-picker { min-height:36px; padding-left:6px; font-size:0 }
+  .topbar .language-picker select { min-width:6.7rem; height:36px; font-size:12px }
+  .nav-menu > div { position:fixed; top:auto; right:10px; left:10px; min-width:0 }
+  .creator-workbench { padding-top:28px }
+  .flow-steps { overflow-x:auto; grid-template-columns:repeat(5,minmax(82px,1fr)) }
+  .flow-steps li button { min-height:44px; font-size:12px }
+  .page-heading h1,.creator-heading h1 { font-size:30px }
+  .section-title h2,.brief-panel h2,.editor-heading h2 { font-size:21px }
+}
+@media (max-width:480px) {
+  .tutorial-walkthrough ol { grid-template-columns:1fr }
+  .project-actions { grid-template-columns:minmax(0,1fr) auto auto }
+  #account-menu { display:none }
+}
