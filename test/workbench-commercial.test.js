@@ -38,6 +38,22 @@ test("project refresh repopulates production shot choices before a caption uploa
   assert.match(app, /selectedCaptionIds\.has\(asset\.id\)/, "refresh must preserve reviewed caption selections while another production asset uploads");
 });
 
+test("commercial cost review defaults to text-to-video and gates references only in consistency mode", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  const app = readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
+  assert.match(html, /id="commercial-identity-reference" disabled/);
+  assert.match(html, /name="commercial-generation-mode" value="text_to_video" checked/);
+  assert.match(html, /name="commercial-generation-mode" value="reference_consistency"/);
+  assert.match(html, /id="commercial-quote" type="button">/);
+  assert.match(html, /id="commercial-reference-action"/);
+  assert.match(app, /const referenceImages = .*asset\.kind === "image".*asset\.role === "reference"/);
+  assert.match(app, /else if \(assets\.length === 1\) select\.value = assets\[0\]\.id/);
+  assert.match(app, /referenceMode && !ready/);
+  assert.match(app, /if \(generationMode === "text_to_video"\) return \{ generationMode \}/);
+  assert.match(app, /Upload an image and bind it to at least one storyboard shot before requesting a cost estimate/);
+  assert.match(app, /\$\("#asset-manager"\)\.scrollIntoView/);
+});
+
 test("commercial execution is monitored independently from the long execute response", () => {
   const app = readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
   const startHandler = app.slice(app.indexOf('$("#commercial-start").onclick'), app.indexOf('$("#commercial-retry").onclick'));
@@ -111,7 +127,7 @@ test("Agent film progress rejects a mismatched preparation before provider execu
   assert.equal(mismatch.status, 409); assert.equal(mismatch.body.error.code, "AGENT_FILM_PREPARATION_MISMATCH"); assert.equal(providerCalls, 0);
 });
 
-test("commercial workbench requires a bound quote and explicit confirmation before provider execution", async t => {
+test("commercial workbench allows text-to-video while preserving reference-mode safety gates", async t => {
   let providerCalls = 0;
   const lifecycle = createCommercialJobLifecycle({ orchestrator: { run: async principal => { assert.deepEqual(principal, { kind: "account", accountId: "local-owner" }); providerCalls += 1; return qualifiedRun(); } } });
   const server = createOpenReelServer(undefined, undefined, { enforceCommercialPolicySafety: true, commercialLifecycle: lifecycle, commercialEstimate: ({ shotCount }) => ({ estimatedCny: shotCount * 2, models: { image: "seedream", video: "seedance" } }) });
@@ -122,11 +138,17 @@ test("commercial workbench requires a bound quote and explicit confirmation befo
   const storyboard = (await request(base, `/api/v1/projects/${project.id}/storyboard`, { method: "PUT", body: JSON.stringify({ shots: [{ sceneId: story.scenes[0].id, prompt: policyPrompt, duration: 5 }] }) })).body;
   const current = (await request(base, `/api/v1/projects/${project.id}`)).body;
   const binding = { projectVersion: current.project.version, storyVersion: story.version, storyboardVersion: storyboard.version };
-  const rejectedPlaceholder = await request(base, `/api/v1/projects/${project.id}/commercial/quote`, { method: "POST", body: JSON.stringify({ ...binding, ...policySafety, identityReference: { ...policySafety.identityReference, width: 1, height: 1 }, quality: "fast" }) });
+  const textQuote = await request(base, `/api/v1/projects/${project.id}/commercial/quote`, { method: "POST", body: JSON.stringify({ ...binding, generationMode: "text_to_video", quality: "fast" }) });
+  assert.equal(textQuote.status, 201); assert.equal(textQuote.body.generationMode, "text_to_video"); assert.equal(textQuote.body.director.mode, "text_to_video"); assert.equal(textQuote.body.policySafety, undefined); assert.equal(providerCalls, 0);
+  const unconfirmed = await request(base, `/api/v1/projects/${project.id}/commercial/jobs`, { method: "POST", body: JSON.stringify({ quoteId: textQuote.body.id, confirmed: false, idempotencyKey: "text-video-unconfirmed" }) });
+  assert.equal(unconfirmed.status, 409); assert.equal(providerCalls, 0);
+  const created = await request(base, `/api/v1/projects/${project.id}/commercial/jobs`, { method: "POST", body: JSON.stringify({ quoteId: textQuote.body.id, confirmed: true, idempotencyKey: "text-video-confirmed" }) });
+  assert.equal(created.status, 201); assert.equal(created.body.input.generationMode, "text_to_video"); assert.equal(created.body.input.policySafety, undefined); assert.equal(providerCalls, 0);
+  const rejectedPlaceholder = await request(base, `/api/v1/projects/${project.id}/commercial/quote`, { method: "POST", body: JSON.stringify({ ...binding, generationMode: "reference_consistency", ...policySafety, identityReference: { ...policySafety.identityReference, width: 1, height: 1 }, quality: "fast" }) });
   assert.equal(rejectedPlaceholder.status, 422); assert.equal(rejectedPlaceholder.body.error.code, "COMMERCIAL_STORYBOARD_POLICY_PREFLIGHT_INVALID"); assert.equal(providerCalls, 0);
-  const rejectedDeclaration = await request(base, `/api/v1/projects/${project.id}/commercial/quote`, { method: "POST", body: JSON.stringify({ ...binding, identityReference: policySafety.identityReference, quality: "fast" }) });
+  const rejectedDeclaration = await request(base, `/api/v1/projects/${project.id}/commercial/quote`, { method: "POST", body: JSON.stringify({ ...binding, generationMode: "reference_consistency", identityReference: policySafety.identityReference, quality: "fast" }) });
   assert.equal(rejectedDeclaration.status, 422); assert.equal(providerCalls, 0);
-  const quote = await request(base, `/api/v1/projects/${project.id}/commercial/quote`, { method: "POST", body: JSON.stringify({ ...binding, ...policySafety, quality: "fast" }) });
+  const quote = await request(base, `/api/v1/projects/${project.id}/commercial/quote`, { method: "POST", body: JSON.stringify({ ...binding, generationMode: "reference_consistency", ...policySafety, quality: "fast" }) });
   assert.equal(quote.status, 409); assert.equal(quote.body.error.code, "COMMERCIAL_DIRECTOR_BINDING_REQUIRED"); assert.equal(providerCalls, 0);
 });
 
@@ -135,7 +157,7 @@ test("production commercial quote rejects incomplete director bindings before es
   const lifecycle = createCommercialJobLifecycle({ orchestrator: { run: async () => qualifiedRun() } });
   const state = { project: { version: 1 }, story: { version: 1, scenes: [{ summary: "Dance" }], production: {} }, storyboard: { version: 1, shots: [{ id: "shot-1", prompt: policyPrompt, duration: 5, continuityEntityUsages: [], referenceAssetIds: [] }] }, assets: [], continuityEntities: [] };
   const service = createWorkbenchCommercialService({ lifecycle, snapshot: () => state, estimate: () => { estimates += 1; return { estimatedCny: 2, models: { image: "seedream", video: "seedance" } }; } });
-  assert.throws(() => service.quote({ accountId: "owner" }, "project", { projectVersion: 1, storyVersion: 1, storyboardVersion: 1, requirePolicySafety: true, ...policySafety }), error => error.code === "COMMERCIAL_DIRECTOR_BINDING_REQUIRED" && error.status === 409);
+  assert.throws(() => service.quote({ accountId: "owner" }, "project", { projectVersion: 1, storyVersion: 1, storyboardVersion: 1, generationMode: "reference_consistency", requirePolicySafety: true, ...policySafety }), error => error.code === "COMMERCIAL_DIRECTOR_BINDING_REQUIRED" && error.status === 409);
   assert.equal(estimates, 0);
 });
 
@@ -177,7 +199,7 @@ test("initial commercial quote records fresh candidate lineage and rejects prior
   const principal = { accountId: "local-owner" }, binding = { projectVersion: current.project.version, storyVersion: story.version, storyboardVersion: storyboard.version };
   for (const inherited of [{ sourceJobId: "cp69" }, { redo: {} }, { preservedShotIds: [] }, { preservedAssetIds: [] }]) assert.throws(() => service.quote(principal, project.id, { ...binding, ...inherited }), error => error.code === "COMMERCIAL_FRESH_CANDIDATE_REQUIRED" && error.status === 422);
   const quote = service.quote(principal, project.id, binding);
-  assert.deepEqual(quote.candidate, { schema: "openreel-commercial-candidate-lineage/v1", mode: "fresh", sourceJobId: null, inheritedShotIds: [], inheritedAssetIds: [] });
+  assert.deepEqual(quote.candidate, { schema: "openreel-commercial-candidate-lineage/v1", mode: "fresh", generationMode: "text_to_video", sourceJobId: null, inheritedShotIds: [], inheritedAssetIds: [] });
   const job = service.confirm(principal, project.id, { quoteId: quote.id, confirmed: true, idempotencyKey: "fresh-candidate-1" });
   assert.deepEqual(job.input.candidate, quote.candidate); assert.equal(job.input.redo, undefined); assert.equal(providerCalls, 0);
 });

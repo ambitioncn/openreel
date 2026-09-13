@@ -35,16 +35,17 @@ export function createCommercialQualityInspector({ artifactReader, perceptualEva
     const media = [];
     for (const shot of request.storyboard || []) {
       const director = request.director?.shots?.find(item => item.shotId === shot.id);
+      const textMode = request.director?.mode === "text_to_video";
       const video = request.artifacts?.find(item => item.kind === "video" && (item.shotId || item.metadata?.shotId) === shot.id);
       const content = video?.id ? await artifactReader(principal, request.binding.projectId, video.id) : null;
       const bytes = Buffer.from(content?.bytes || []);
       const checks = {
         playableMp4: mp4(bytes),
         durationBound: Number(shot.duration) >= 1 && Number(shot.duration) <= 10,
-        roleBound: Boolean(director?.roleEntityIds?.length),
-        sceneBound: Boolean(director?.sceneEntityIds?.length),
+        roleBound: textMode || Boolean(director?.roleEntityIds?.length),
+        sceneBound: textMode || Boolean(director?.sceneEntityIds?.length),
         styleBound: Boolean(director?.style?.trim()),
-        referencesBound: Boolean(director?.referenceAssetIds?.length)
+        referencesBound: textMode || Boolean(director?.referenceAssetIds?.length)
       };
       const metadata = video?.metadata || {};
       media.push({ shotId: shot.id, checks, assetId: video?.id, sha256: bytes.length ? digest(bytes) : null, byteLength: bytes.length, sharedSourceSha256: metadata.sharedSourceSha256 || video?.sharedSourceSha256 || null, sourceWindow: metadata.sourceWindow || video?.sourceWindow || null, continuityBytes: metadata.continuityBytes || video?.continuityBytes || null });

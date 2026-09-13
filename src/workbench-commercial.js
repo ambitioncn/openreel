@@ -44,7 +44,13 @@ function selectedProductionAssets(state, input = {}) {
   return { captionAssetIds: [...new Set(captionAssetIds)], musicAssetId, musicRightsConfirmation: musicAssetId || generation ? { accepted: true, disclaimerVersion: "music-rights-v1", confirmedAt: new Date(confirmation.confirmedAt).toISOString(), sourceDeclaration: typeof confirmation.sourceDeclaration === "string" ? confirmation.sourceDeclaration.trim() : "" } : null, ...(generation && { musicGeneration: { enabled: true, confirmed: true, model: "seed-audio-1.0", prompt: text(generation.prompt, "musicGeneration.prompt", 500), durationSeconds: Number(generation.durationSeconds) } }) };
 }
 
-function directorContext(state) {
+function generationMode(value) {
+  if (value == null || value === "") return "text_to_video";
+  if (!["text_to_video", "reference_consistency"].includes(value)) throw new DomainError("COMMERCIAL_INPUT_INVALID", "generationMode must be text_to_video or reference_consistency", 422);
+  return value;
+}
+
+function directorContext(state, mode) {
   const entities = new Map((state.continuityEntities || []).map(entity => [entity.id, entity]));
   const shots = state.storyboard.shots.map((shot, index) => {
     const usages = (shot.continuityEntityUsages || []).map(usage => ({
@@ -58,10 +64,11 @@ function directorContext(state) {
     const hasRole = bound.some(entity => ["character", "product"].includes(entity.kind));
     const hasScene = bound.some(entity => entity.kind === "scene");
     const style = typeof shot.styleContinuity === "string" ? shot.styleContinuity.trim() : typeof state.story?.style === "string" ? state.story.style.trim() : "";
-    const ready = hasRole && hasScene && Boolean(style) && referenced.length > 0 && usages.every(usage => Number.isSafeInteger(usage.version) && usage.version > 0 && usage.referenceAssetIds.length > 0);
-    return { shotId: shot.id, ready, roleEntityIds: bound.filter(entity => ["character", "product"].includes(entity.kind)).map(entity => entity.id), sceneEntityIds: bound.filter(entity => entity.kind === "scene").map(entity => entity.id), style, continuityEntityUsages: usages, referenceAssetIds: referenced };
+    const referenceReady = hasRole && hasScene && Boolean(style) && referenced.length > 0 && usages.every(usage => Number.isSafeInteger(usage.version) && usage.version > 0 && usage.referenceAssetIds.length > 0);
+    const ready = mode === "text_to_video" ? Boolean(shot.prompt?.trim()) : referenceReady;
+    return { shotId: shot.id, ready, roleEntityIds: mode === "text_to_video" ? [] : bound.filter(entity => ["character", "product"].includes(entity.kind)).map(entity => entity.id), sceneEntityIds: mode === "text_to_video" ? [] : bound.filter(entity => entity.kind === "scene").map(entity => entity.id), style: style || "Follow the storyboard prompt with a coherent visual style.", continuityEntityUsages: mode === "text_to_video" ? [] : usages, referenceAssetIds: mode === "text_to_video" ? [] : referenced };
   });
-  return { schema: "openreel-commercial-director-context/v1", ready: shots.every(shot => shot.ready), shots };
+  return { schema: "openreel-commercial-director-context/v1", mode, ready: shots.every(shot => shot.ready), shots };
 }
 
 function quotedCost(cost, message, shotCount) {
@@ -89,15 +96,15 @@ export function createWorkbenchCommercialService({ lifecycle, snapshot, estimate
   return Object.freeze({
     quote(principal, projectId, input = {}) {
       if (input.sourceJobId != null || input.redo != null || input.preservedShotIds != null || input.preservedAssetIds != null) throw new DomainError("COMMERCIAL_FRESH_CANDIDATE_REQUIRED", "initial commercial quotes cannot inherit or replay a prior job", 422);
-      const state = current(principal, projectId), versions = binding(state, input), quality = ["fast", "quality"].includes(input.quality) ? input.quality : "fast";
-      const policySafety = input.requirePolicySafety === true ? policyPreflight({ identityReference: input.identityReference, declarations: input.declarations, storyboard: state.storyboard }) : null;
-      const productionAssets = selectedProductionAssets(state, input), director = directorContext(state);
-      if (input.requirePolicySafety === true && director.ready !== true) throw new DomainError("COMMERCIAL_DIRECTOR_BINDING_REQUIRED", "complete director continuity and reference bindings before requesting a commercial quote", 409);
+      const state = current(principal, projectId), versions = binding(state, input), quality = ["fast", "quality"].includes(input.quality) ? input.quality : "fast", mode = generationMode(input.generationMode);
+      const policySafety = mode === "reference_consistency" && input.requirePolicySafety === true ? policyPreflight({ identityReference: input.identityReference, declarations: input.declarations, storyboard: state.storyboard }) : null;
+      const productionAssets = selectedProductionAssets(state, input), director = directorContext(state, mode);
+      if (director.ready !== true) throw new DomainError("COMMERCIAL_DIRECTOR_BINDING_REQUIRED", mode === "reference_consistency" ? "complete director continuity and reference bindings before requesting a commercial quote" : "every storyboard shot needs a prompt before requesting a commercial quote", 409);
       const cost = estimate({ quality, shotCount: state.storyboard.shots.length, duration: state.storyboard.shots.reduce((sum, shot) => sum + shot.duration, 0), production: { ...state.story.production, ...productionAssets } });
       const boundedCost = quotedCost(cost, "commercial quote exceeds the authorized per-action CNY limit", state.storyboard.shots.length);
       if (!cost?.models?.image || !cost?.models?.video) throw new DomainError("COMMERCIAL_MODEL_UNAVAILABLE", "commercial quote has no reviewed image/video models", 503);
-      const candidate = { schema: "openreel-commercial-candidate-lineage/v1", mode: "fresh", sourceJobId: null, inheritedShotIds: [], inheritedAssetIds: [] };
-      const quote = { schema: "openreel-commercial-quote/v1", id: id(), ownerId: principalId(principal), projectId, quality, candidate, models: { image: cost.models.image, video: cost.models.video }, binding: versions, productionAssets, director, ...(policySafety && { policySafety }), cost: boundedCost, confirmationRequired: true, paidActionStarted: false, createdAt: now() };
+      const candidate = { schema: "openreel-commercial-candidate-lineage/v1", mode: "fresh", generationMode: mode, sourceJobId: null, inheritedShotIds: [], inheritedAssetIds: [] };
+      const quote = { schema: "openreel-commercial-quote/v1", id: id(), ownerId: principalId(principal), projectId, quality, generationMode: mode, candidate, models: { image: cost.models.image, video: cost.models.video }, binding: versions, productionAssets, director, ...(policySafety && { policySafety }), cost: boundedCost, confirmationRequired: true, paidActionStarted: false, createdAt: now() };
       quotes.set(quote.id, quote);
       return structuredClone(quote);
     },
@@ -108,7 +115,7 @@ export function createWorkbenchCommercialService({ lifecycle, snapshot, estimate
       const state = current(principal, projectId); binding(state, quote.binding);
       const script = state.story.scenes.map(scene => scene.summary).filter(Boolean).join("\n");
       const storyboard = { ...state.storyboard, shots: state.storyboard.shots.map((shot, index) => ({ ...shot, caption: state.story.scenes[index]?.summary })) };
-      return lifecycle.create(principal, { projectId, ...quote.binding, quoteId: quote.id, quoteCost: quote.cost, estimatedCostCny: quote.cost.estimatedCny, candidate: quote.candidate, script, storyboard, director: quote.director, ...(quote.policySafety && { policySafety: quote.policySafety }), production: { ...state.story.production, ...quote.productionAssets }, models: quote.models, quality: quote.quality, idempotencyKey: text(input.idempotencyKey, "idempotencyKey") });
+      return lifecycle.create(principal, { projectId, ...quote.binding, quoteId: quote.id, quoteCost: quote.cost, estimatedCostCny: quote.cost.estimatedCny, generationMode: quote.generationMode, candidate: quote.candidate, script, storyboard, director: quote.director, ...(quote.policySafety && { policySafety: quote.policySafety }), production: { ...state.story.production, ...quote.productionAssets }, models: quote.models, quality: quote.quality, idempotencyKey: text(input.idempotencyKey, "idempotencyKey") });
     },
     redoQuote(principal, projectId, sourceJobId) {
       const source = lifecycle.get(principal, text(sourceJobId, "sourceJobId"));
@@ -120,7 +127,8 @@ export function createWorkbenchCommercialService({ lifecycle, snapshot, estimate
       const boundedCost = quotedCost(cost, "commercial redo quote exceeds the authorized per-action CNY limit", plan.shotIds.length);
       if (!cost?.models?.image || !cost?.models?.video) throw new DomainError("COMMERCIAL_MODEL_UNAVAILABLE", "commercial redo quote has no reviewed image/video models", 503);
       const preservedShots = plan.preservedAssets.map(shot => ({ shotId: shot.shotId, assetIds: [...shot.assetIds] }));
-      const quote = { schema: "openreel-commercial-redo-quote/v1", id: id(), ownerId: principalId(principal), projectId, sourceJobId: source.id, shotIds: plan.shotIds, reasons: plan.reasons, preservedShotIds: plan.preservedShotIds, preservedAssetIds: preservedShots.flatMap(shot => shot.assetIds), preservedShots, models: { image: cost.models.image, video: cost.models.video }, quality: source.input.quality || "fast", binding: versions, director: source.input.director, ...(source.input.policySafety && { policySafety: source.input.policySafety }), cost: boundedCost, confirmationRequired: true, paidActionStarted: false, createdAt: now() };
+      const mode = generationMode(source.input.generationMode || source.input.director?.mode || (source.input.policySafety ? "reference_consistency" : "text_to_video"));
+      const quote = { schema: "openreel-commercial-redo-quote/v1", id: id(), ownerId: principalId(principal), projectId, sourceJobId: source.id, shotIds: plan.shotIds, reasons: plan.reasons, preservedShotIds: plan.preservedShotIds, preservedAssetIds: preservedShots.flatMap(shot => shot.assetIds), preservedShots, models: { image: cost.models.image, video: cost.models.video }, quality: source.input.quality || "fast", generationMode: mode, binding: versions, director: source.input.director, ...(source.input.policySafety && { policySafety: source.input.policySafety }), cost: boundedCost, confirmationRequired: true, paidActionStarted: false, createdAt: now() };
       quotes.set(quote.id, quote);
       return structuredClone(quote);
     },
@@ -130,7 +138,7 @@ export function createWorkbenchCommercialService({ lifecycle, snapshot, estimate
       if (quote.schema !== "openreel-commercial-redo-quote/v1" || quote.projectId !== projectId || quote.sourceJobId !== sourceJobId) throw new DomainError("COMMERCIAL_QUOTE_NOT_FOUND", "commercial redo quote not found", 404);
       const state = current(principal, projectId); binding(state, quote.binding);
       const selected = new Set(quote.shotIds), storyboard = { ...state.storyboard, shots: state.storyboard.shots.filter(shot => selected.has(shot.id)) };
-      return lifecycle.create(principal, { projectId, ...quote.binding, quoteId: quote.id, quoteCost: quote.cost, estimatedCostCny: quote.cost.estimatedCny, script: state.story.scenes.map(scene => scene.summary).filter(Boolean).join("\n"), storyboard, director: quote.director, ...(quote.policySafety && { policySafety: quote.policySafety }), production: state.story.production, models: quote.models, quality: quote.quality, redo: { schema: "openreel-commercial-redo/v1", sourceJobId, shotIds: quote.shotIds, preservedShotIds: quote.preservedShotIds, preservedAssetIds: quote.preservedAssetIds, preservedShots: quote.preservedShots, compositionStoryboard: state.storyboard }, idempotencyKey: text(input.idempotencyKey, "idempotencyKey") });
+      return lifecycle.create(principal, { projectId, ...quote.binding, quoteId: quote.id, quoteCost: quote.cost, estimatedCostCny: quote.cost.estimatedCny, generationMode: quote.generationMode, script: state.story.scenes.map(scene => scene.summary).filter(Boolean).join("\n"), storyboard, director: quote.director, ...(quote.policySafety && { policySafety: quote.policySafety }), production: state.story.production, models: quote.models, quality: quote.quality, redo: { schema: "openreel-commercial-redo/v1", sourceJobId, shotIds: quote.shotIds, preservedShotIds: quote.preservedShotIds, preservedAssetIds: quote.preservedAssetIds, preservedShots: quote.preservedShots, compositionStoryboard: state.storyboard }, idempotencyKey: text(input.idempotencyKey, "idempotencyKey") });
     },
     get: (principal, projectId, jobId) => ownedJob(principal, projectId, jobId),
     execute: (principal, projectId, jobId) => (ownedJob(principal, projectId, jobId), lifecycle.execute(principal, jobId)),

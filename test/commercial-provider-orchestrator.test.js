@@ -32,6 +32,18 @@ test("commercial orchestration sends each shot through real image/video interfac
   assert.deepEqual(result.cost, { currency: "CNY", status: "unsettled", settledCny: null, generationSettledCny: null, evaluationSettledCny: 0 });
 });
 
+test("text-to-video orchestration generates first frames without reading or forwarding reference images", async () => {
+  const f = fixtures({ referenceArtifactSource: async () => { throw new Error("reference source must not be called"); } });
+  const director = { schema: "openreel-commercial-director-context/v1", mode: "text_to_video", ready: true, shots: input.storyboard.shots.map(shot => ({ shotId: shot.id, ready: true, roleEntityIds: [], sceneEntityIds: [], style: "cinematic documentary", continuityEntityUsages: [], referenceAssetIds: [] })) };
+  const result = await createCommercialProviderOrchestrator({ ...f, audioMaxCostCny: 10 }).run({ kind: "account", accountId: "owner" }, { ...input, generationMode: "text_to_video", director });
+  assert.equal(result.status, "qualified");
+  const imageRequests = f.submissions.filter(item => item.capability === "image"), videoRequests = f.submissions.filter(item => item.capability === "video");
+  assert.equal(imageRequests.length, 2); assert.equal(videoRequests.length, 2);
+  assert.ok(imageRequests.every(item => item.input.image === undefined));
+  assert.ok(videoRequests.every(item => item.input.reference_asset_ids === undefined));
+  assert.ok(videoRequests.every(item => item.input.content[1].role === "first_frame"));
+});
+
 test("commercial orchestration routes first-frame video generation through zero-cost ModelClaw H3", async () => {
   const f = fixtures(), originalModels = f.arkService.models;
   f.arkService.models = () => originalModels().map(item => item.capability === "video" ? { ...item, name: "minimax-h3-fl2va-q5-turbo-v4", provider: "modelclaw-comfyui", costed: false, maxCostMicros: 0, schema: { modes: ["image-to-video"], durations: [5], maxReferences: 1 } } : item);

@@ -51,6 +51,7 @@ window.addEventListener("hashchange", () => { if (workspaceStarted) setWorkspace
 window.addEventListener("openreel:localechange", () => {
   setIntakeSource(document.querySelector('input[name="intake-source"]:checked')?.value || "idea");
   if (workspacePage === "tutorials" && projectId) renderTutorialList();
+  if (projectId) refreshCommercialPolicyReferences();
 });
 $("#toggle-new-project").onclick = () => { $("#new-project-form").hidden = false; $("#new-project-name").focus(); };
 $("#cancel-new-project").onclick = () => { $("#new-project-form").hidden = true; };
@@ -109,23 +110,49 @@ function renderScriptStoryboard(story, storyboard) {
   $("#storyboard-shots").replaceChildren(...story.scenes.map((scene, index) => { const shot = storyboard.shots[index], article = document.createElement("article"); article.dataset.sceneId = scene.id; article.dataset.shotId = shot.id; article.innerHTML = `<header><b>镜头 ${index + 1}</b><span>${scene.title}</span></header><label>本镜台词<textarea class="shot-line" rows="3" maxlength="1200"></textarea></label><label>画面描述<textarea class="shot-visual" rows="3" maxlength="1200"></textarea></label><label>风格连续性锁定<textarea class="shot-style" rows="2" maxlength="500" placeholder="例如：暖金色高端产品广告，柔光，统一颗粒与色调"></textarea></label><label>B-roll 建议<textarea class="shot-broll" rows="3" maxlength="1200" placeholder="可选：本镜头需要的辅助画面"></textarea></label><label>时长（秒）<input class="shot-duration" type="number" min="1" max="60" step="1"></label><button class="redo-shot" type="button">局部重做此镜头</button><small class="redo-state">保留其他镜头，只清除此镜头的生成结果</small>`; article.querySelector(".shot-line").value = scene.summary || ""; article.querySelector(".shot-visual").value = shot.prompt; article.querySelector(".shot-style").value = shot.styleContinuity || ""; article.querySelector(".shot-broll").value = shot.broll || ""; article.querySelector(".shot-duration").value = shot.duration; article.querySelector(".redo-shot").onclick = () => redoWorkbenchShot(shot.id); return article; }));
   snapshot.story = story; snapshot.storyboard = storyboard; updateStoryboardDuration(); refreshAssetShotTargets(); $("#script-editor").scrollIntoView({ behavior: "smooth", block: "start" });
 }
+function commercialGenerationMode() { return document.querySelector('input[name="commercial-generation-mode"]:checked')?.value || "text_to_video"; }
 function refreshCommercialPolicyReferences() {
   const select = $("#commercial-identity-reference"), previous = select.value;
   const referenced = new Set((snapshot.storyboard?.shots || []).flatMap(shot => shot.referenceAssetIds || []));
-  const assets = (snapshot.assets || []).filter(asset => asset.kind === "image" && asset.role === "reference" && referenced.has(asset.id));
+  const referenceImages = (snapshot.assets || []).filter(asset => asset.kind === "image" && asset.role === "reference");
+  const assets = referenceImages.filter(asset => referenced.has(asset.id));
   select.replaceChildren(Object.assign(document.createElement("option"), { value: "", textContent: "选择分镜已绑定的参考图" }), ...assets.map(asset => Object.assign(document.createElement("option"), { value: asset.id, textContent: asset.filename })));
   if (previous && assets.some(asset => asset.id === previous)) select.value = previous;
+  else if (assets.length === 1) select.value = assets[0].id;
+  const referenceMode = commercialGenerationMode() === "reference_consistency", ready = assets.length > 0;
+  $("#commercial-reference-controls").hidden = !referenceMode;
+  $("#commercial-mode-help").textContent = referenceMode
+    ? ui("Choose an uploaded image bound to the storyboard. Image rights and identity-safety declarations are required in this mode.", "请选择已上传并绑定到分镜的图片。此模式需要确认图片权利与身份安全声明。")
+    : ui("No image is required. OpenReel creates a first frame from each storyboard prompt, then generates the video.", "无需上传图片。系统会根据每个分镜的文字描述生成首帧，再生成视频。");
+  select.disabled = !ready;
+  $("#commercial-quote").disabled = referenceMode && !ready;
+  $("#commercial-reference-action").hidden = ready;
+  $("#commercial-reference-help").textContent = ready
+    ? ui(`${assets.length} bound reference image${assets.length === 1 ? " is" : "s are"} ready for cost review.`, `已有 ${assets.length} 张参考图绑定到分镜，可以获取费用预检。`)
+    : referenceImages.length
+      ? ui("An uploaded image is available, but it is not bound to a storyboard shot. Bind it in the Asset library before cost review.", "已有上传图片，但尚未绑定到分镜。请先在素材库中完成绑定，再获取费用预检。")
+      : ui("Upload an image and bind it to at least one storyboard shot before requesting a cost estimate.", "请先上传一张图片，并把它绑定到至少一个分镜；完成前无法获取费用预检。");
+  if (referenceMode && !ready) $("#commercial-quote-state").textContent = $("#commercial-reference-help").textContent;
 }
 async function commercialPolicySafety() {
+  const generationMode = commercialGenerationMode();
+  if (generationMode === "text_to_video") return { generationMode };
   const asset = snapshot.assets.find(item => item.id === $("#commercial-identity-reference").value);
+  if (!asset) throw new Error(ui("Upload and bind a reference image before requesting a cost estimate.", "请先上传并绑定参考图，再获取费用预检。"));
   const identityReference = await byteBackedIdentityReference(asset, {
     fetchBytes: fetch,
     digest: bytes => crypto.subtle.digest("SHA-256", bytes),
     dimensions: async blob => { const bitmap = await createImageBitmap(blob); try { return { width: bitmap.width, height: bitmap.height }; } finally { bitmap.close(); } }
   });
   const declarations = commercialDeclarations({ rights: $("#commercial-reference-rights").checked, performer: $("#commercial-performer").value, noBrands: $("#commercial-no-brands").checked, noPublicFigures: $("#commercial-no-public-figures").checked });
-  return { identityReference, declarations };
+  return { generationMode, identityReference, declarations };
 }
+document.querySelectorAll('input[name="commercial-generation-mode"]').forEach(input => input.onchange = () => { commercialQuote = null; $("#commercial-confirmed").checked = false; $("#commercial-confirmed").disabled = true; $("#commercial-start").disabled = true; refreshCommercialPolicyReferences(); });
+$("#commercial-reference-action").onclick = () => {
+  setWorkspacePage("creator");
+  $("#asset-manager").scrollIntoView({ behavior: "smooth", block: "start" });
+  $("#workbench-asset-upload").focus({ preventScroll: true });
+};
 function editorStoryboard() { return { shots: [...document.querySelectorAll("#storyboard-shots article")].map((card, index) => ({ ...snapshot.storyboard.shots[index], duration: Number(card.querySelector(".shot-duration").value) || 0 })) }; }
 function editorDraft() {
   const cards = [...document.querySelectorAll("#storyboard-shots article")];

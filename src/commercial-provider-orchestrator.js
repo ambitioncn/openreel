@@ -33,14 +33,20 @@ function requestContract(input) {
   if (musicGeneration && (musicAssetId || musicGeneration.enabled !== true || musicGeneration.confirmed !== true || musicGeneration.model !== "seed-audio-1.0" || ![5, 10].includes(Number(musicGeneration.durationSeconds)))) throw new DomainError("COMMERCIAL_MUSIC_GENERATION_INVALID", "real music generation selection is invalid", 422);
   if (musicAssetId && (musicRightsConfirmation?.accepted !== true || musicRightsConfirmation?.disclaimerVersion !== "music-rights-v1" || typeof musicRightsConfirmation?.confirmedAt !== "string" || !musicRightsConfirmation.confirmedAt)) throw new DomainError("COMMERCIAL_MUSIC_RIGHTS_CONFIRMATION_REQUIRED", "music use requires an explicit rights-responsibility confirmation", 409);
   if (musicGeneration && (musicRightsConfirmation?.accepted !== true || musicRightsConfirmation?.disclaimerVersion !== "music-rights-v1" || typeof musicRightsConfirmation?.confirmedAt !== "string" || !musicRightsConfirmation.confirmedAt)) throw new DomainError("COMMERCIAL_MUSIC_RIGHTS_CONFIRMATION_REQUIRED", "generated music use requires an explicit rights-responsibility confirmation", 409);
+  const legacyReferenceBinding = Array.isArray(input?.director?.shots) && input.director.shots.some(shot => Array.isArray(shot?.referenceAssetIds) && shot.referenceAssetIds.length > 0);
+  const generationMode = input?.generationMode || input?.director?.mode || (input?.policySafety || legacyReferenceBinding ? "reference_consistency" : "text_to_video");
+  if (!["text_to_video", "reference_consistency"].includes(generationMode)) throw new DomainError("COMMERCIAL_INPUT_INVALID", "generationMode is invalid", 422);
   const directorShots = input?.director?.shots;
   if (input?.director?.schema !== "openreel-commercial-director-context/v1" || !Array.isArray(directorShots) || storyboard.some(shot => !directorShots.some(item => item?.shotId === shot.id))) throw new DomainError("COMMERCIAL_DIRECTOR_BINDING_REQUIRED", "director continuity and reference bindings are required before paid generation", 409);
-  const director = { schema: input.director.schema, ready: input.director.ready === true, shots: storyboard.map(shot => {
+  const director = { schema: input.director.schema, mode: generationMode, ready: input.director.ready === true, shots: storyboard.map(shot => {
     const bound = directorShots.find(item => item?.shotId === shot.id);
-    if (input.director.ready !== true || bound?.ready !== true || !Array.isArray(bound.roleEntityIds) || !bound.roleEntityIds.length || !Array.isArray(bound.sceneEntityIds) || !bound.sceneEntityIds.length || !text(bound.style, `director.shots.${shot.id}.style`, 500) || !Array.isArray(bound.referenceAssetIds) || !bound.referenceAssetIds.length || !Array.isArray(bound.continuityEntityUsages) || !bound.continuityEntityUsages.length) throw new DomainError("COMMERCIAL_DIRECTOR_BINDING_REQUIRED", `shot ${shot.id} has incomplete director bindings`, 409);
+    const arraysValid = Array.isArray(bound?.roleEntityIds) && Array.isArray(bound?.sceneEntityIds) && Array.isArray(bound?.referenceAssetIds) && Array.isArray(bound?.continuityEntityUsages);
+    const referenceReady = arraysValid && bound.roleEntityIds.length && bound.sceneEntityIds.length && bound.referenceAssetIds.length && bound.continuityEntityUsages.length;
+    if (input.director.ready !== true || bound?.ready !== true || !arraysValid || !text(bound.style, `director.shots.${shot.id}.style`, 500) || (generationMode === "reference_consistency" && !referenceReady)) throw new DomainError("COMMERCIAL_DIRECTOR_BINDING_REQUIRED", `shot ${shot.id} has incomplete director bindings`, 409);
+    if (generationMode === "text_to_video" && bound.referenceAssetIds.length) throw new DomainError("COMMERCIAL_DIRECTOR_BINDING_REQUIRED", `shot ${shot.id} cannot bind reference assets in text-to-video mode`, 409);
     return structuredClone(bound);
   }) };
-  return { script, storyboard, models, idempotencyKey, binding, director, production: { ...production, captionAssetIds: [...new Set(captionAssetIds)], musicAssetId, musicRightsConfirmation, ...(musicGeneration && { musicGeneration: { enabled: true, confirmed: true, model: "seed-audio-1.0", prompt: text(musicGeneration.prompt, "production.musicGeneration.prompt", 500), durationSeconds: Number(musicGeneration.durationSeconds) } }) }, redo, language: input?.language ? text(input.language, "language", 50) : "auto", voice: input?.voice ? text(input.voice, "voice", 100) : production.voice ? text(production.voice, "production.voice", 100) : undefined };
+  return { script, storyboard, models, idempotencyKey, binding, generationMode, director, production: { ...production, captionAssetIds: [...new Set(captionAssetIds)], musicAssetId, musicRightsConfirmation, ...(musicGeneration && { musicGeneration: { enabled: true, confirmed: true, model: "seed-audio-1.0", prompt: text(musicGeneration.prompt, "production.musicGeneration.prompt", 500), durationSeconds: Number(musicGeneration.durationSeconds) } }) }, redo, language: input?.language ? text(input.language, "language", 50) : "auto", voice: input?.voice ? text(input.voice, "voice", 100) : production.voice ? text(production.voice, "production.voice", 100) : undefined };
 }
 
 function assertAsset(asset, expected, stage) {
@@ -95,6 +101,7 @@ export function createCommercialProviderOrchestrator({ arkService, qwenTtsServic
     async run(principal, input = {}, { progress = async () => {} } = {}) {
       const request = requestContract(input), imageModel = model(request.models.image, "image"), videoModel = model(request.models.video, "video"), arkPrincipal = { kind: "account", accountId: text(principal?.accountId, "principal.accountId", 200) }, calls = [], artifacts = [];
       const h3Video = videoModel.provider === "modelclaw-comfyui";
+      if (h3Video && request.generationMode === "text_to_video") throw new DomainError("COMMERCIAL_MODEL_INCOMPATIBLE", "MiniMax H3 requires reference-consistency mode", 422);
       if (h3Video && request.storyboard.some(shot => shot.duration > 5)) throw new DomainError("COMMERCIAL_MODEL_INCOMPATIBLE", "MiniMax H3 commercial shots must be at most 5 seconds", 422);
       if (typeof progress !== "function") throw new DomainError("COMMERCIAL_INPUT_INVALID", "progress must be a function", 422);
       if (request.production.musicGeneration && musicService?.enabled !== true) throw new DomainError("COMMERCIAL_MUSIC_PROVIDER_UNAVAILABLE", "real music provider is disabled", 503);
@@ -117,9 +124,9 @@ export function createCommercialProviderOrchestrator({ arkService, qwenTtsServic
         const validIdentity = asset => { const value = identity(asset); return value?.projectId === request.binding.projectId && value.storyVersion === request.binding.storyVersion && value.storyboardVersion === request.binding.storyboardVersion; };
         if (actual.size !== expected.size || [...expected].some(assetId => !actual.has(assetId)) || preservedArtifacts.some(asset => !expected.has(asset.id) || !validIdentity(asset)) || request.redo.preservedShots.some(shot => !preservedArtifacts.some(asset => asset.kind === "video" && (asset.shotId || asset.metadata?.shotId || identity(asset)?.shotId) === shot.shotId))) throw new DomainError("COMMERCIAL_REDO_ASSET_INVALID", "preserved assets are missing, stale or unrelated", 409);
       }
-      if (typeof referenceArtifactSource !== "function") throw new DomainError("COMMERCIAL_REFERENCE_ASSET_INVALID", "director reference asset source is unavailable", 503);
       const referenceIds = [...new Set(request.director.shots.flatMap(shot => shot.referenceAssetIds))];
-      const referenceArtifacts = await referenceArtifactSource(principal, { ...request.binding, assetIds: referenceIds });
+      if (referenceIds.length && typeof referenceArtifactSource !== "function") throw new DomainError("COMMERCIAL_REFERENCE_ASSET_INVALID", "director reference asset source is unavailable", 503);
+      const referenceArtifacts = referenceIds.length ? await referenceArtifactSource(principal, { ...request.binding, assetIds: referenceIds }) : [];
       const referenceById = new Map(Array.isArray(referenceArtifacts) ? referenceArtifacts.map(asset => [asset?.id, asset]) : []);
       if (referenceById.size !== referenceIds.length || referenceIds.some(assetId => { const asset = referenceById.get(assetId), bytes = Buffer.from(asset?.bytes || []); return !asset || !["image/png", "image/jpeg", "image/webp"].includes(asset.mimeType) || !bytes.length || bytes.length > 10 * 1024 * 1024; })) throw new DomainError("COMMERCIAL_REFERENCE_ASSET_INVALID", "director reference assets are missing, invalid, or too large", 409);
       await progress("images");
@@ -161,7 +168,7 @@ export function createCommercialProviderOrchestrator({ arkService, qwenTtsServic
       }
       if (!nativeThreeMicroShot) for (const [index, shot] of request.storyboard.entries()) {
         const directorShot = request.director.shots.find(item => item.shotId === shot.id);
-        const lockedPrompt = `${shot.prompt}\nROLE CONTINUITY: ${directorShot.roleEntityIds.join(", ")}\nSCENE CONTINUITY: ${directorShot.sceneEntityIds.join(", ")}\nSTYLE CONTINUITY: ${directorShot.style}`;
+        const lockedPrompt = request.generationMode === "reference_consistency" ? `${shot.prompt}\nROLE CONTINUITY: ${directorShot.roleEntityIds.join(", ")}\nSCENE CONTINUITY: ${directorShot.sceneEntityIds.join(", ")}\nSTYLE CONTINUITY: ${directorShot.style}` : `${shot.prompt}\nSTYLE: ${directorShot.style}\nTEXT-TO-VIDEO MODE: create the subject and scene from this prompt without matching any uploaded person, product, or brand.`;
         const objectOnly = /\bobject[- ]only\b|\bno people\b|\bno faces\b/i.test(shot.prompt);
         const h3LockedPrompt = h3Video ? lockedPrompt
           .replace(/\b(fold(?:s|ed|ing)?|twist(?:s|ed|ing)?|flip(?:s|ped|ping)?|wrap(?:s|ped|ping)?|stretch(?:es|ed|ing)?|tear(?:s|ing)?|raise(?:s|d|ing)?)\b/gi, "hold and display")
@@ -180,15 +187,15 @@ export function createCommercialProviderOrchestrator({ arkService, qwenTtsServic
         const requestedCameraAction = directorShot.cameraAction;
         const h3Primitive = requestedCameraAction === "locked" ? "static_hold" : requestedCameraAction || (objectOnly ? (objectOnlyStaticBeat ? "static_hold" : "micro_turn") : "dolly_in");
         const promptDirector = h3Video ? compileH3PrimitivePrompt(createH3CreativeSpec({ shot: { ...shot, prompt: h3MotionPrompt }, directorShot, objectOnly }), h3Primitive) : null;
-        const reference = referenceById.get(directorShot.referenceAssetIds[0]), referenceDataUrl = `data:${reference.mimeType};base64,${Buffer.from(reference.bytes).toString("base64")}`;
-        const image = await completeArk(arkPrincipal, { model: imageModel.name, capability: "image", input: { prompt: firstFramePrompt, image: referenceDataUrl, size: "2K", response_format: "url" }, idempotencyKey: `${request.idempotencyKey}:shot:${index}:image` }, ["image/png", "image/jpeg", "image/webp"], calls);
+        const reference = referenceById.get(directorShot.referenceAssetIds[0]), referenceDataUrl = reference ? `data:${reference.mimeType};base64,${Buffer.from(reference.bytes).toString("base64")}` : null;
+        const image = await completeArk(arkPrincipal, { model: imageModel.name, capability: "image", input: { prompt: firstFramePrompt, ...(referenceDataUrl && { image: referenceDataUrl }), size: "2K", response_format: "url" }, idempotencyKey: `${request.idempotencyKey}:shot:${index}:image` }, ["image/png", "image/jpeg", "image/webp"], calls);
         artifacts.push(await artifactSink(principal, { ...request.binding, kind: "image", shotId: shot.id, stage: "image", provider: "volcengine-ark", model: image.job.model, providerJobId: image.job.id, ...image.asset }));
         const firstFrameUrl = image.job.result?.url;
         if (typeof firstFrameUrl !== "string" || !firstFrameUrl) throw new DomainError("COMMERCIAL_ASSET_INVALID", "image result has no provider-bound first frame URL", 502);
         await progress("videos", { shotId: shot.id, shotIndex: index });
         const videoInput = h3Video
           ? { content: [{ type: "text", text: promptDirector.model_prompt }, { type: "image_url", image_url: { url: firstFrameUrl }, role: "first_frame" }], reference_asset_ids: directorShot.referenceAssetIds, duration: 5, creative_spec: promptDirector.creative_spec, prompt_director: { schema: promptDirector.schema, adapter: promptDirector.adapter, primitive: promptDirector.primitive } }
-          : { content: [{ type: "text", text: lockedPrompt }, { type: "image_url", image_url: { url: firstFrameUrl }, role: "first_frame" }], reference_asset_ids: directorShot.referenceAssetIds, ratio: "9:16", duration: shot.duration, generate_audio: false };
+          : { content: [{ type: "text", text: lockedPrompt }, { type: "image_url", image_url: { url: firstFrameUrl }, role: "first_frame" }], ...(directorShot.referenceAssetIds.length && { reference_asset_ids: directorShot.referenceAssetIds }), ratio: "9:16", duration: shot.duration, generate_audio: false };
         const video = await completeArk(arkPrincipal, { model: videoModel.name, capability: "video", input: videoInput, idempotencyKey: `${request.idempotencyKey}:shot:${index}:video` }, ["video/mp4"], calls);
         artifacts.push(await artifactSink(principal, { ...request.binding, kind: "video", shotId: shot.id, stage: "video", provider: videoModel.provider || "volcengine-ark", model: video.job.model, providerJobId: video.job.id, duration: shot.duration, ...video.asset }));
       }

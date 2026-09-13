@@ -14,6 +14,14 @@ test("quality inspector records byte-backed shot and final evidence", async () =
   assert.equal(result.final.evidence.assetId, "render-1");
 });
 
+test("quality inspector accepts text-to-video shots without reference bindings", async () => {
+  const textRequest = { ...request, director: { mode: "text_to_video", shots: [{ shotId: "s1", roleEntityIds: [], sceneEntityIds: [], style: "cinematic", referenceAssetIds: [] }] } };
+  const inspector = createCommercialQualityInspector({ artifactReader: async (_principal, _projectId, assetId) => ({ bytes: mp4(), assetId }), perceptualEvaluator: evaluator() });
+  const result = await inspector({ accountId: "owner" }, textRequest);
+  assert.equal(result.releaseEligible, true);
+  assert.deepEqual(result.shots[0].checks, { playableMp4: true, durationBound: true, roleBound: true, sceneBound: true, styleBound: true, referencesBound: true });
+});
+
 test("quality inspector preserves a 1620-character perceptual observation through every dimension", async () => {
   const observed = "visible continuity evidence ".repeat(63).slice(0, 1_620);
   const inspector = createCommercialQualityInspector({ artifactReader: async (_principal, _projectId, assetId) => ({ bytes: mp4(), assetId }), perceptualEvaluator: evaluator({ observed }) });

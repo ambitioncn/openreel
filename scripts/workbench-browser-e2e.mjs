@@ -125,6 +125,15 @@ async function exercise(browser, name, viewport) {
     assert.equal(await page.evaluate(id => document.activeElement?.id === id, target), true, `step navigation did not focus ${target}`);
     assert.equal(await page.locator(`[data-step-target="${target}"]`).evaluate(button => button.closest("li").classList.contains("active")), true, `step navigation did not activate ${target}`);
   }
+  assert.equal(await page.locator('input[name="commercial-generation-mode"]:checked').inputValue(), "text_to_video", "commercial generation must default to text-to-video");
+  assert.equal(await page.locator("#commercial-reference-controls").isHidden(), true, "reference safety fields must stay hidden in text-to-video mode");
+  assert.equal(await page.locator("#commercial-quote").isEnabled(), true, "text-to-video cost review must not require an image");
+  assert.doesNotMatch(await page.locator("#commercial-mode-help").textContent(), /[\u3400-\u9fff]/, "English text-to-video guidance contains Chinese");
+  await page.check('input[name="commercial-generation-mode"][value="reference_consistency"]');
+  assert.equal(await page.locator("#commercial-reference-controls").isVisible(), true, "reference safety fields must appear in consistency mode");
+  assert.equal(await page.locator("#commercial-quote").isDisabled(), true, "reference mode must block cost review until an image is bound");
+  await page.check('input[name="commercial-generation-mode"][value="text_to_video"]');
+  assert.equal(await page.locator("#commercial-quote").isEnabled(), true, "switching back to text-to-video must restore cost review");
   if (viewport.width <= 760) {
     const layout = await page.locator("#storyboard-shots article:first-child").evaluate(element => ({ columns: getComputedStyle(element).gridTemplateColumns.split(" ").length, overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth }));
     assert.equal(layout.columns, 1, "mobile storyboard editor must stack to one column");
@@ -166,7 +175,7 @@ async function exercise(browser, name, viewport) {
   assert.equal(await page.locator("#short-video-script").inputValue(), `${name} 可编辑脚本正文`);
   assert.equal(failures.length, 0, failures.join("\n"));
   await page.close();
-  return { viewport: `${viewport.width}x${viewport.height}`, defaultEnglish: true, simplifiedChineseSwitch: true, localePersistenceReload: true, dedicatedRoutes: true, browserHistory: true, projectsBack: true, safeProjectDeletion: true, stepNavigation: true, structuredHeader: true, languageAlignment: true, tutorialWalkthrough: true, distinctWorkDefault: true, explicitCurrentWorkConfirmation: true, editableScript: true, editableStoryboard: true, persistenceReload: true, advancedCanvasGuidance: true, nodeDeletion: true, englishTutorials: true, localizedShortcuts: true };
+  return { viewport: `${viewport.width}x${viewport.height}`, defaultEnglish: true, simplifiedChineseSwitch: true, localePersistenceReload: true, dedicatedRoutes: true, browserHistory: true, projectsBack: true, safeProjectDeletion: true, stepNavigation: true, textToVideoDefault: true, optionalReferenceMode: true, structuredHeader: true, languageAlignment: true, tutorialWalkthrough: true, distinctWorkDefault: true, explicitCurrentWorkConfirmation: true, editableScript: true, editableStoryboard: true, persistenceReload: true, advancedCanvasGuidance: true, nodeDeletion: true, englishTutorials: true, localizedShortcuts: true };
 }
 
 async function installLocalPlanningFixture(page) {
