@@ -15,7 +15,8 @@ export function planningPrompt(input = {}) {
   if (!Number.isInteger(duration) || duration < 5 || duration > 180) throw new DomainError("INVALID_INPUT", "duration must be an integer from 5 to 180 seconds");
   const sourceContext = input.sourceContext === undefined ? brief : text(input.sourceContext, "sourceContext");
   const languageRule = planningLanguage(brief) === "zh-Hans" ? " User-facing title, synopsis, hooks, and every shot title and line must remain in Chinese; visual prompts may use another language." : "";
-  return `You are OpenReel's short-video planner. Return JSON only, without markdown.\nSchema: {"title":string,"synopsis":string,"hooks":[string,string,string],"selectedHook":0,"shots":[{"title":string,"line":string,"visual":string,"broll":string,"duration":integer}]}.\nRules: 1-12 shots; total shot duration exactly ${duration}; every shot duration must be 5 or 10 seconds; every string non-empty except broll; vertical-video visuals must be concrete; do not invent product facts.${languageRule}\nType: ${type}\nCreative brief: ${brief}\nSource context: ${sourceContext}`;
+  const structureRule = type === "product" && duration === 15 ? " Exactly three shots of 5 seconds each: reveal, detail, and final hold." : "";
+  return `You are OpenReel's short-video planner. Return JSON only, without markdown.\nSchema: {"title":string,"synopsis":string,"hooks":[string,string,string],"selectedHook":0,"shots":[{"title":string,"line":string,"visual":string,"broll":string,"duration":integer}]}.\nRules: 1-12 shots; total shot duration exactly ${duration}; every shot duration must be 5 or 10 seconds; every string non-empty except broll; vertical-video visuals must be concrete; do not invent product facts.${structureRule}${languageRule}\nType: ${type}\nCreative brief: ${brief}\nSource context: ${sourceContext}`;
 }
 
 export function parsePlanningResult(content, expectedDuration, expectedLanguage = null) {

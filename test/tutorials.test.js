@@ -20,6 +20,15 @@ test("tutorial blueprints contain generation nodes without paid auto-run instruc
   assert.equal(tutorialById("noir-trailer")?.title, "30 秒黑色电影预告片");
 });
 
+test("product tutorial is a native 15-second three-shot workflow", () => {
+  const tutorial = tutorialById("product-commercial");
+  assert.equal(tutorial.version, 2);
+  assert.equal(tutorial.nodes.filter(node => node.type === "video").length, 3);
+  assert.match(tutorial.calls, /规划/);
+  assert.match(tutorial.steps.join(" "), /15 秒/);
+  assert.match(tutorialForLocale("product-commercial", "en").steps.join(" "), /three 5-second shots/);
+});
+
 test("tutorial catalog has complete English and Simplified Chinese variants", () => {
   const english = tutorialsForLocale("en"), chinese = tutorialsForLocale("zh-CN");
   assert.equal(english.length, 8);

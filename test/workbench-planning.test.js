@@ -18,6 +18,11 @@ test("planning contract rejects malformed or duration-mismatched model output", 
   assert.throws(() => parsePlanningResult(result.replace('"duration":10', '"duration":1'), 6), error => error.code === "MODEL_OUTPUT_INVALID");
 });
 
+test("15-second product planning requires three five-second shots", () => {
+  const prompt = planningPrompt({ brief: "A premium bottle ad", type: "product", duration: 15 });
+  assert.match(prompt, /Exactly three shots of 5 seconds each: reveal, detail, and final hold/);
+});
+
 test("Chinese brief rejects English user-facing planning text", () => {
   assert.throws(() => parsePlanningResult(englishResult, 15, "zh-Hans"), error => error.code === "MODEL_OUTPUT_INVALID" && /Chinese brief/.test(error.message));
   assert.equal(parsePlanningResult(result, 15, "zh-Hans").shots[0].line, "舞蹈开始");
