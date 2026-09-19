@@ -150,6 +150,10 @@ test("commercial workbench allows text-to-video while preserving reference-mode 
   assert.equal(rejectedDeclaration.status, 422); assert.equal(providerCalls, 0);
   const quote = await request(base, `/api/v1/projects/${project.id}/commercial/quote`, { method: "POST", body: JSON.stringify({ ...binding, generationMode: "reference_consistency", ...policySafety, quality: "fast" }) });
   assert.equal(quote.status, 409); assert.equal(quote.body.error.code, "COMMERCIAL_DIRECTOR_BINDING_REQUIRED"); assert.equal(providerCalls, 0);
+  const accepted = await request(base, `/api/v1/projects/${project.id}/commercial/jobs/${created.body.id}/execute`, { method: "POST", body: "{}" });
+  assert.equal(accepted.status, 202); assert.equal(accepted.body.accepted, true); assert.equal(accepted.body.statusUrl, `/api/v1/projects/${project.id}/commercial/jobs/${created.body.id}`);
+  await new Promise(resolve => setTimeout(resolve, 10));
+  assert.equal(providerCalls, 1, "background execute must start exactly one provider run");
 });
 
 test("production commercial quote rejects incomplete director bindings before estimation or job creation", () => {

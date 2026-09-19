@@ -37,7 +37,8 @@ test("real commercial workflow renders through the director status panel", () =>
   const app = readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
   assert.match(html, /id="director-runtime-state"/);
   assert.match(html, /id="commercial-perceptual-evidence"/);
-  assert.match(html, /人物视觉身份一致性 \/ 表演自然度/);
+  assert.match(html, /高级质量细节（可选）/);
+  assert.doesNotMatch(html, /awaiting_director_workflow|director_workflow_required/);
   assert.match(app, /directorRuntimeUiState\(commercialQuote, commercialJob\)/);
   assert.match(app, /directorPerceptualUiRows\(state\)/);
   assert.match(app, /renderDirectorRuntime\(\)/);

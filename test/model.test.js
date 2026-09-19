@@ -54,9 +54,9 @@ test("responsive workflow exposes empty, loading, error, and success states", as
   assert.match(app, /素材已绑定到指定分镜/); assert.match(app, /\.download = asset\.filename/);
   for (const source of ["idea", "copy", "url", "asset"]) assert.match(html, new RegExp(`name="intake-source" value="${source}"`));
   assert.match(app, /workbench-plan/); assert.doesNotMatch(app, /SHORT_VIDEO_TEMPLATES|shortVideoDraft/);
-  assert.match(app, /referenceAssetIds: reference \? \[reference\.id\] : \[\]/); assert.doesNotMatch(app, /未抓取网页/);
+  assert.match(app, /const referenceAssetIds = \[\.\.\.new Set\(\[reference\?\.id, selectedWorkbenchAsset\]\.filter\(Boolean\)\)\]/); assert.doesNotMatch(app, /未抓取网页/);
   for (const behavior of ["refreshProjectShelf", "openProject", "renameWorkbenchProject", "setProjectStatus"]) assert.match(app, new RegExp(`function ${behavior}`));
-  assert.match(app, /planned\.planning\.model/); assert.match(app, /renderScriptStoryboard\(story, storyboard\)/);
+  assert.match(app, /Your \$\{duration\}-second plan is ready/); assert.match(app, /renderScriptStoryboard\(story, storyboard\)/);
   assert.match(app, /#generation-workbench"\)\.hidden = false/);
   assert.match(app, /shot-broll/); assert.match(app, /production, scenes:/);
   for (const behavior of ["renderFinalWorkbench", "publishingDraft", "finalPreview"]) assert.match(app, new RegExp(behavior));

@@ -329,7 +329,11 @@ export function createOpenReelServer(store = createMemoryStore(), platform = cre
         else if (req.method === "POST" && action === "jobs" && api[5] === "redo" && api[6] === "quote" && api.length === 7) out = commercial.redoQuote(principal, api[1], jobId);
         else if (req.method === "POST" && action === "jobs" && api[5] === "redo" && api[6] === "jobs" && api.length === 7) out = commercial.confirmRedo(principal, api[1], jobId, await input());
         else if (req.method === "GET" && action === "jobs" && api.length === 5) out = commercial.get(principal, api[1], jobId);
-        else if (req.method === "POST" && action === "jobs" && api[5] === "execute" && api.length === 6) out = await commercial.execute(principal, api[1], jobId);
+        else if (req.method === "POST" && action === "jobs" && api[5] === "execute" && api.length === 6) {
+          const accepted = commercial.get(principal, api[1], jobId);
+          void commercial.execute(principal, api[1], jobId).catch(error => log("commercial_background_execution_failed", { requestId, projectId: api[1], jobId, code: error?.code, error: error?.message }));
+          return json(res, 202, { ...accepted, accepted: true, statusUrl: `/api/v1/projects/${api[1]}/commercial/jobs/${jobId}` });
+        }
         else if (req.method === "POST" && action === "jobs" && api[5] === "retry" && api.length === 6) out = commercial.retry(principal, api[1], jobId);
         else if (req.method === "POST" && action === "jobs" && api[5] === "cancel" && api.length === 6) out = commercial.cancel(principal, api[1], jobId);
         else throw new DomainError("NOT_FOUND", "commercial workbench route not found", 404);

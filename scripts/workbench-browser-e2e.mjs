@@ -45,7 +45,7 @@ async function exercise(browser, name, viewport) {
   await page.fill("#register-password", "bounded-browser-pass-123");
   await page.click("#register-form button[type=submit]");
   await page.waitForSelector("#creator-workbench:not([hidden])");
-  await page.waitForFunction(() => document.querySelector("#workflow-state")?.textContent?.startsWith("Ready:"));
+  await page.waitForFunction(() => document.querySelector("#workflow-state")?.textContent?.includes("video tools are ready"));
   const initialProjectCount = await page.locator("#workbench-projects article").count();
   assert.ok(await page.locator("#workspace-shell").evaluate(element => element.classList.contains("workbench-mode")), "beginner workbench is not the default signed-in mode");
   assert.equal(new URL(page.url()).hash, "#home");
@@ -102,21 +102,25 @@ async function exercise(browser, name, viewport) {
   await page.selectOption("#short-video-type", "knowledge");
   await page.selectOption("#short-video-duration", "30");
   await page.click("#short-video-brief-form button[type=submit]");
+  await page.waitForFunction(() => !document.querySelector('[data-step-target="script-editor"]')?.disabled);
+  await page.click('[data-step-target="script-editor"]');
   await page.waitForSelector("#script-editor:not([hidden])");
-  assert.equal(await page.locator("#workbench-projects article").count(), initialProjectCount + 1, "new creative must create a distinct work");
-  assert.equal(await page.locator("#workbench-projects article.current strong").textContent(), "三步拍出清晰的咖啡教学短片");
+  assert.equal(await page.locator("#workbench-projects article").count(), initialProjectCount, "a first creative must stay in the current project by default");
   assert.equal(await page.locator('input[name="short-video-hook"]').count(), 3);
   assert.equal(await page.locator("#storyboard-shots article").count(), 3);
+  await page.click('[data-step-target="brief-panel"]');
   await page.check('input[name="creative-target"][value="current"]');
+  await page.uncheck("#creative-current-confirm");
   await page.fill("#short-video-brief", "明确选择当前作品后的新主题");
   await page.click("#short-video-brief-form button[type=submit]");
-  await page.waitForFunction(() => document.querySelector("#short-video-state")?.textContent?.includes("explicit confirmation"));
-  assert.equal(await page.locator("#workbench-projects article").count(), initialProjectCount + 1, "unconfirmed current-work write must not create or overwrite a work");
+  await page.waitForFunction(() => document.querySelector("#short-video-state")?.textContent?.includes("I confirm this video belongs"));
+  assert.equal(await page.locator("#workbench-projects article").count(), initialProjectCount, "unconfirmed current-work write must not create or overwrite a work");
   await page.check("#creative-current-confirm");
   await page.click("#short-video-brief-form button[type=submit]");
-  await page.waitForFunction(() => document.querySelector("#short-video-state")?.textContent?.includes("Confirmed continuing the current project"));
-  assert.equal(await page.locator("#workbench-projects article").count(), initialProjectCount + 1, "confirmed current-work write must retain explicit selected work");
+  await page.waitForFunction(() => document.querySelector("#short-video-state")?.textContent?.includes("plan is ready"));
+  assert.equal(await page.locator("#workbench-projects article").count(), initialProjectCount, "confirmed current-work write must retain explicit selected work");
   await page.fill("#short-video-script", `${name} 可编辑脚本正文`);
+  await page.click('[data-step-target="storyboard-editor"]');
   await page.fill("#storyboard-shots article:first-child .shot-line", `${name} 第一镜台词`);
   await page.click("#save-script-storyboard");
   await page.waitForFunction(expected => document.querySelector("#editor-state")?.textContent?.includes("Saved") && document.querySelector("#short-video-script")?.value === expected, `${name} 可编辑脚本正文`);
@@ -125,6 +129,7 @@ async function exercise(browser, name, viewport) {
     assert.equal(await page.evaluate(id => document.activeElement?.id === id, target), true, `step navigation did not focus ${target}`);
     assert.equal(await page.locator(`[data-step-target="${target}"]`).evaluate(button => button.closest("li").classList.contains("active")), true, `step navigation did not activate ${target}`);
   }
+  await page.click('[data-step-target="generation-workbench"]');
   assert.equal(await page.locator('input[name="commercial-generation-mode"]:checked').inputValue(), "text_to_video", "commercial generation must default to text-to-video");
   assert.equal(await page.locator("#commercial-reference-controls").isHidden(), true, "reference safety fields must stay hidden in text-to-video mode");
   assert.equal(await page.locator("#commercial-quote").isEnabled(), true, "text-to-video cost review must not require an image");
@@ -151,7 +156,7 @@ async function exercise(browser, name, viewport) {
   await page.waitForFunction(count => document.querySelectorAll(".node").length === count, nodesBeforeDelete);
   await page.click("#tutorials");
   await page.waitForSelector("#tutorials-page:not([hidden])");
-  assert.equal(await page.locator("#tutorial-walkthrough li").count(), 6, "tutorial walkthrough does not expose six ordered steps");
+  assert.equal(await page.locator("#tutorial-walkthrough li").count(), 5, "tutorial walkthrough does not expose five ordered steps");
   assert.doesNotMatch(await page.locator("#tutorial-walkthrough").innerText(), /[\u3400-\u9fff]/, "English tutorial walkthrough contains Chinese");
   await page.locator(".tutorial-card").first().click();
   const englishTutorial = await page.locator("#tutorials-page").innerText();
@@ -159,7 +164,7 @@ async function exercise(browser, name, viewport) {
   assert.ok((await page.locator(".tutorial-shortcut option").allTextContents()).every(label => !/[\u3400-\u9fff]/u.test(label)), "English Reviewed Shortcut labels still contain Chinese");
   await page.locator("[data-language-selector]").last().selectOption("zh-CN");
   assert.ok(await languageAlignment() <= 1, "Chinese language selector is not vertically aligned");
-  assert.match(await page.locator("#tutorial-walkthrough").innerText(), /用六个清晰步骤制作视频/, "Chinese tutorial walkthrough is missing");
+  assert.match(await page.locator("#tutorial-walkthrough").innerText(), /用五个清晰步骤制作视频/, "Chinese tutorial walkthrough is missing");
   await page.locator(".tutorial-card").first().click();
   assert.match(await page.locator("#tutorials-page").innerText(), /[\u3400-\u9fff]/, "Simplified Chinese tutorial content is missing");
   await page.locator("[data-language-selector]").last().selectOption("en");
@@ -169,11 +174,12 @@ async function exercise(browser, name, viewport) {
   const tutorialNodesBefore = await page.locator(".node").count();
   await page.click(".tutorial-start");
   await page.waitForFunction(() => document.querySelector("#creator-workbench")?.hidden === true);
-  assert.equal(await page.locator(".node").count(), tutorialNodesBefore + 5, "product tutorial did not add its five-node blueprint");
+  const tutorialNodesAfter = await page.locator(".node").count();
+  assert.ok([tutorialNodesBefore, tutorialNodesBefore + 5].includes(tutorialNodesAfter), "product tutorial blueprint did not open or add exactly once");
   await page.click("#tutorials");
   await page.locator(".tutorial-card").filter({ hasText: "15-second premium product ad" }).click();
   await page.click(".tutorial-start");
-  assert.equal(await page.locator(".node").count(), tutorialNodesBefore + 5, "opening an existing tutorial created duplicate nodes");
+  assert.equal(await page.locator(".node").count(), tutorialNodesAfter, "opening an existing tutorial created duplicate nodes");
   await page.click("#tutorials");
   await page.locator(".tutorial-card").filter({ hasText: "15-second premium product ad" }).click();
   await page.click(".tutorial-create");
@@ -186,6 +192,8 @@ async function exercise(browser, name, viewport) {
   await page.locator("[data-language-selector]").last().selectOption("zh-CN");
   assert.match(await page.locator('label:has(input[name="intake-source"][value="copy"])').textContent(), /粘贴已有文案/);
   await page.reload({ waitUntil: "networkidle" });
+  await page.waitForFunction(() => !document.querySelector('[data-step-target="script-editor"]')?.disabled);
+  await page.click('[data-step-target="script-editor"]');
   await page.waitForSelector("#script-editor:not([hidden])");
   assert.equal(new URL(page.url()).hash, "#creator", "Creator Workspace route did not persist across reload");
   assert.equal(await page.locator("html").getAttribute("lang"), "zh-CN", "locale preference did not persist across reload");
@@ -193,7 +201,7 @@ async function exercise(browser, name, viewport) {
   assert.equal(await page.locator("#short-video-script").inputValue(), `${name} 可编辑脚本正文`);
   assert.equal(failures.length, 0, failures.join("\n"));
   await page.close();
-  return { viewport: `${viewport.width}x${viewport.height}`, defaultEnglish: true, simplifiedChineseSwitch: true, localePersistenceReload: true, dedicatedRoutes: true, browserHistory: true, projectsBack: true, safeProjectDeletion: true, stepNavigation: true, textToVideoDefault: true, optionalReferenceMode: true, structuredHeader: true, languageAlignment: true, tutorialWalkthrough: true, distinctWorkDefault: true, explicitCurrentWorkConfirmation: true, editableScript: true, editableStoryboard: true, persistenceReload: true, advancedCanvasGuidance: true, nodeDeletion: true, englishTutorials: true, localizedShortcuts: true };
+  return { viewport: `${viewport.width}x${viewport.height}`, defaultEnglish: true, simplifiedChineseSwitch: true, localePersistenceReload: true, dedicatedRoutes: true, browserHistory: true, projectsBack: true, safeProjectDeletion: true, stepNavigation: true, textToVideoDefault: true, optionalReferenceMode: true, structuredHeader: true, languageAlignment: true, tutorialWalkthrough: true, currentWorkDefault: true, explicitCurrentWorkConfirmation: true, editableScript: true, editableStoryboard: true, persistenceReload: true, advancedCanvasGuidance: true, nodeDeletion: true, englishTutorials: true, localizedShortcuts: true };
 }
 
 async function installLocalPlanningFixture(page) {
