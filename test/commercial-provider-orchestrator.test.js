@@ -235,6 +235,12 @@ test("commercial orchestration stops after bounded polling instead of continuing
   await assert.rejects(service.run({ kind: "account", accountId: "owner" }, input), error => error.code === "COMMERCIAL_PROVIDER_TIMEOUT"); assert.equal(audioCalls, 0); assert.equal(f.submissions.length, 2);
 });
 
+test("commercial orchestration accepts a reviewed long-running polling window and keeps an upper bound", () => {
+  const f = fixtures();
+  assert.doesNotThrow(() => createCommercialProviderOrchestrator({ ...f, audioMaxCostCny: 10, maxPolls: 360 }));
+  assert.throws(() => createCommercialProviderOrchestrator({ ...f, audioMaxCostCny: 10, maxPolls: 601 }), error => error.code === "COMMERCIAL_CONFIG_INVALID");
+});
+
 test("commercial orchestration exposes only the retained safe Ark terminal diagnostic", async () => {
   const f = fixtures();
   f.arkService.poll = async (_principal, id) => ({ id, model: "video-real", capability: "video", status: "failed", error: { code: "ARK_TASK_FAILED", message: "Ark task did not complete", details: { providerDiagnostic: { code: "ContentGenerationFailed", message: "capacity unavailable", details: { reason: "capacity" } } } } });

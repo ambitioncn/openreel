@@ -81,7 +81,7 @@ export function createCommercialProviderOrchestrator({ arkService, qwenTtsServic
   if (!arkService || !qwenTtsService || typeof artifactSink !== "function" || typeof compositionSink !== "function" || typeof qualityInspector !== "function") throw new DomainError("COMMERCIAL_PROVIDER_UNAVAILABLE", "commercial provider and fail-closed quality dependencies are unavailable", 503);
   finite(perActionCnyLimit, "perActionCnyLimit", 0.01, 100); finite(audioMaxCostCny, "audioMaxCostCny", 0.01, perActionCnyLimit); finite(musicMaxCostCny, "musicMaxCostCny", 0.01, Math.min(10, perActionCnyLimit)); finite(cnyPerUsd, "cnyPerUsd", 0.01, 100);
   if (audioSettledCny !== null && (!Number.isFinite(audioSettledCny) || audioSettledCny < 0 || audioSettledCny > audioMaxCostCny)) throw new DomainError("COMMERCIAL_CONFIG_INVALID", "audioSettledCny must be null or within the reviewed audio cost bound", 503);
-  if (!Number.isInteger(maxPolls) || maxPolls < 1 || maxPolls > 120 || typeof wait !== "function") throw new DomainError("COMMERCIAL_CONFIG_INVALID", "commercial polling configuration is invalid", 503);
+  if (!Number.isInteger(maxPolls) || maxPolls < 1 || maxPolls > 600 || typeof wait !== "function") throw new DomainError("COMMERCIAL_CONFIG_INVALID", "commercial polling configuration is invalid", 503);
   const catalog = new Map(arkService.models().map(model => [model.name, model]));
   const model = (name, capability) => {
     const item = catalog.get(name), rate = item?.currency === "CNY" ? 1 : item?.currency === "USD" ? cnyPerUsd : NaN, scale = Number(item?.unitScale), maximum = item && Number(item.maxCostMicros) / scale * rate, roundingTolerance = rate / scale;
