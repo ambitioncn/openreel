@@ -127,7 +127,7 @@ test("Volcengine content generation uses a per-model key and normalizes async ta
   assert.equal(calls[1].method, "GET"); assert.match(calls[1].url, /tasks\/task-1$/); assert.equal(JSON.stringify(service.models()).includes("seedance-only-secret"), false);
 });
 
-test("Volcengine content generation preserves an explicit bounded first-frame content item", async () => {
+test("Volcengine content generation preserves first-frame content and omits incompatible ratio", async () => {
   const platform = createPlatform(), issued = issue(platform, "first-frame@example.test"), calls = [];
   const ark = loadArkConfig({
     ARK_ENABLED: "true", OPENREEL_PAID_INFERENCE_ENABLED: "true", ARK_ALLOWED_HOSTS: "ark.example.test,assets.example.test",
@@ -137,7 +137,7 @@ test("Volcengine content generation preserves an explicit bounded first-frame co
   const content = [{ type: "text", text: "continue the scene" }, { type: "image_url", image_url: { url: "data:image/jpeg;base64,YWJj" }, role: "first_frame" }];
   await service.submit(issued.key, { model: "seedance", capability: "video", input: { prompt: "continue the scene", content, duration: 5, ratio: "16:9", generate_audio: false }, idempotencyKey: "first-frame" });
   assert.deepEqual(calls[0].body.content, content);
-  assert.equal(calls[0].body.duration, 5); assert.equal(calls[0].body.ratio, "16:9"); assert.equal(calls[0].body.generate_audio, false);
+  assert.equal(calls[0].body.duration, 5); assert.equal(calls[0].body.ratio, undefined); assert.equal(calls[0].body.generate_audio, false);
 });
 
 test("Volcengine presets fall back to the shared provider key", () => {

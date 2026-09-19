@@ -26,6 +26,7 @@ test("commercial orchestration sends each shot through real image/video interfac
   assert.deepEqual(f.submissions.map(item => item.idempotencyKey), ["commercial-1:shot:0:image", "commercial-1:shot:0:video", "commercial-1:shot:1:image", "commercial-1:shot:1:video"]);
   assert.match(f.submissions[0].input.image, /^data:image\/png;base64,/);
   assert.equal(f.submissions[1].input.content[1].role, "first_frame"); assert.match(f.submissions[1].input.content[1].image_url.url, /^https:\/\/ark\.example\//);
+  assert.ok(f.submissions.filter(item => item.capability === "video").every(item => item.input.ratio === undefined));
   assert.deepEqual(result.artifacts.map(item => item.kind), ["image", "video", "image", "video", "audio"]); assert.equal(result.budget.perActionLimit, 100);
   assert.deepEqual(f.audioRequests, [{ input: input.script, response_format: "wav", language: "english" }]);
   assert.equal(result.composition.render.mimeType, "video/mp4"); assert.equal(result.composition.plan.timeline.length, 2);
@@ -42,6 +43,7 @@ test("text-to-video orchestration generates first frames without reading or forw
   assert.ok(imageRequests.every(item => item.input.image === undefined));
   assert.ok(videoRequests.every(item => item.input.reference_asset_ids === undefined));
   assert.ok(videoRequests.every(item => item.input.content[1].role === "first_frame"));
+  assert.ok(videoRequests.every(item => item.input.ratio === undefined));
 });
 
 test("commercial orchestration routes first-frame video generation through zero-cost ModelClaw H3", async () => {

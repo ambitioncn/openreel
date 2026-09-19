@@ -195,7 +195,7 @@ export function createCommercialProviderOrchestrator({ arkService, qwenTtsServic
         await progress("videos", { shotId: shot.id, shotIndex: index });
         const videoInput = h3Video
           ? { content: [{ type: "text", text: promptDirector.model_prompt }, { type: "image_url", image_url: { url: firstFrameUrl }, role: "first_frame" }], reference_asset_ids: directorShot.referenceAssetIds, duration: 5, creative_spec: promptDirector.creative_spec, prompt_director: { schema: promptDirector.schema, adapter: promptDirector.adapter, primitive: promptDirector.primitive } }
-          : { content: [{ type: "text", text: lockedPrompt }, { type: "image_url", image_url: { url: firstFrameUrl }, role: "first_frame" }], ...(directorShot.referenceAssetIds.length && { reference_asset_ids: directorShot.referenceAssetIds }), ratio: "9:16", duration: shot.duration, generate_audio: false };
+          : { content: [{ type: "text", text: lockedPrompt }, { type: "image_url", image_url: { url: firstFrameUrl }, role: "first_frame" }], ...(directorShot.referenceAssetIds.length && { reference_asset_ids: directorShot.referenceAssetIds }), duration: shot.duration, generate_audio: false };
         const video = await completeArk(arkPrincipal, { model: videoModel.name, capability: "video", input: videoInput, idempotencyKey: `${request.idempotencyKey}:shot:${index}:video` }, ["video/mp4"], calls);
         artifacts.push(await artifactSink(principal, { ...request.binding, kind: "video", shotId: shot.id, stage: "video", provider: videoModel.provider || "volcengine-ark", model: video.job.model, providerJobId: video.job.id, duration: shot.duration, ...video.asset }));
       }
